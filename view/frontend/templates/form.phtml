@@ -1,0 +1,19 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+use Yireo\LokiComponents\ViewModel\ComponentUtil;
+use Yireo\LokiCheckout\Factory\ViewModelFactory;
+
+/** @var Template $block */
+/** @var ViewModelFactory $viewModelFactory */
+/** @var ComponentUtil $componentUtil */
+$componentUtil = $viewModelFactory->create(ComponentUtil::class);
+$htmlId = $componentUtil->getDomIdByBlockName($block->getNameInLayout());
+?>
+<form x-target="<?= $componentUtil->getTargets($block) ?>" id="<?= $htmlId ?>" method="post" action="<?= $componentUtil->getPostUrl(); ?>" class="my-4">
+    <?= $block->getChildHtml() ?>
+    <input type="hidden" name="handles" value="<?= $componentUtil->getHandles($block) ?>"/>
+    <input type="hidden" name="block" value="<?= $block->getNameInLayout() ?>"/>
+    <?= $block->getBlockHtml('formkey') ?>
+</form>

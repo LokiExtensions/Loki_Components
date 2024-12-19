@@ -1,0 +1,24 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+use Yireo\LokiComponents\ViewModel\ComponentUtil;
+use Yireo\LokiCheckout\Factory\ViewModelFactory;
+
+/** @var Template $block */
+/** @var ViewModelFactory $viewModelFactory */
+/** @var ComponentUtil $componentUtil */
+$componentUtil = $viewModelFactory->create(ComponentUtil::class);
+$htmlId = $componentUtil->getDomIdByBlockName($block->getNameInLayout());
+?>
+<script x-sync id="<?= $htmlId ?>">
+    <?php if (false === $componentUtil->isAjax()): ?>
+    window.addEventListener('DOMContentLoaded', () => {
+    <?php endif; ?>
+        window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
+        hyva.initMessages();
+    <?php if (false === $componentUtil->isAjax()): ?>
+    })
+    <?php endif; ?>
+</script>
+

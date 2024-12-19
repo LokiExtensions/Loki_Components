@@ -1,0 +1,21 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+use Yireo\LokiComponents\ViewModel\ComponentUtil;
+use Yireo\LokiCheckout\Factory\ViewModelFactory;
+use Yireo\LokiComponents\ViewModel\Debugger;
+
+/** @var Template $block */
+/** @var ViewModelFactory $viewModelFactory */
+/** @var ComponentUtil $componentUtil */
+/** @var Debugger $debugger */
+$debugger = $viewModelFactory->create(Debugger::class);
+$componentUtil = $viewModelFactory->create(ComponentUtil::class);
+$htmlId = $componentUtil->getDomIdByBlockName($block->getNameInLayout());
+?>
+<div x-sync id="<?= $htmlId ?>" class="p-4">
+    <h3 class="text-xl my-4">LokiComponents Debugger</h3>
+    <pre><?php var_dump($debugger->getData()) ?></pre>
+</div>
+

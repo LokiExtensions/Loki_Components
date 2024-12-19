@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <body>
+        <referenceContainer name="after.body.start">
+            <block name="loki-alpine-ajax.component.generic" template="Yireo_LokiComponents::component/generic.phtml"/>
+        </referenceContainer>
+
+        <referenceContainer name="page.messages">
+            <block name="loki-alpine-ajax.messages" template="Yireo_LokiComponents::messages.phtml" before="-"/>
+        </referenceContainer>
+
+        <referenceContainer name="before.body.end">
+            <block name="loki-alpine-ajax.debugger" template="Yireo_LokiComponents::debugger.phtml" before="-"/>
+            <block name="loki-alpine-ajax.script" template="Yireo_LokiComponents::script.phtml" before="script-alpine-js"/>
+        </referenceContainer>
+
+        <block name="loki-alpine-ajax.form_html" template="Yireo_LokiComponents::form_html.phtml"/>
+    </body>
+</page>

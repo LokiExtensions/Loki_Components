@@ -13,7 +13,7 @@ $sourceBlock = $block->getSourceBlock();
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
-    const LokiGenericComponent = {
+    const LokiComponentType = {
         post(data) {
             this.$ajax('<?= $componentUtil->getPostUrl() ?>', {
                 method: 'post',

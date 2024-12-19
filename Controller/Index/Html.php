@@ -11,9 +11,10 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Element\BlockInterface;
-use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
 use RuntimeException;
+use Yireo\LokiCheckout\Util\Component\Hydrator;
+use Yireo\LokiCheckout\Util\SetterInjection;
 use Yireo\LokiComponents\Component\MutableComponentInterface;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
 use Yireo\LokiComponents\Controller\HtmlResult;
@@ -26,18 +27,20 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     private array $htmlParts = [];
 
     public function __construct(
-        private readonly LayoutFactory $layoutFactory,
+        private readonly LayoutInterface $layout,
         private readonly HtmlResultFactory $htmlResultFactory,
         private readonly RequestInterface $request,
         private readonly ComponentRegistry $componentRegistry,
         private readonly MessageManager $messageManager,
-        private readonly Debugger $debugger
+        private readonly Debugger $debugger,
+        private readonly Hydrator $hydrator, // @todo: De-couple this
     ) {
     }
 
     public function execute(): ResultInterface|ResponseInterface
     {
         $this->securityCheck();
+        $this->initializeLayout();
 
         $blockName = $this->request->getParam('block');
         if (empty($blockName)) {
@@ -72,6 +75,9 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             return;
         }
 
+        $block = $this->layout->getBlock($blockName);
+        $this->hydrator->hydrate($block, $component);
+
         if (false === $component instanceof MutableComponentInterface) {
             return;
         }
@@ -87,9 +93,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     private function renderBlocks(array $blockNames): void
     {
-        $layout = $this->getLayout();
         foreach ($blockNames as $blockName) {
-            $block = $layout->getBlock($blockName);
+            $block = $this->layout->getBlock($blockName);
             if ($block instanceof BlockInterface) {
                 $this->htmlParts[] = $block->toHtml();
             } else {
@@ -137,21 +142,17 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         return $blockNames;
     }
 
-    private function getLayout(): LayoutInterface
+    private function initializeLayout(): void
     {
-        $layout = $this->layoutFactory->create();
-
         $handles = explode(' ', (string)$this->request->getParam('handles'));
         if (!empty($handles)) {
             foreach ($handles as $handle) {
                 // @todo: Filter handle value
-                $layout->getUpdate()->addHandle($handle);
+                $this->layout->getUpdate()->addHandle($handle);
             }
         }
 
-        $layout->generateElements();
-
-        return $layout;
+        $this->layout->generateElements();
     }
 
     private function getHtmlResult(): HtmlResult

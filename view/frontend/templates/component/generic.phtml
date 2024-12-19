@@ -1,5 +1,31 @@
-<script>
-    const LokiComponents = {
+<?php
+declare(strict_types=1);
 
+use Magento\Framework\View\Element\Template;
+use Yireo\LokiComponents\ViewModel\ComponentUtil;
+use Yireo\LokiComponents\Factory\ViewModelFactory;
+
+/** @var Template $block */
+/** @var Template $sourceBlock */
+/** @var ViewModelFactory $viewModelFactory */
+/** @var ComponentUtil $componentUtil */
+$sourceBlock = $block->getSourceBlock();
+$componentUtil = $viewModelFactory->create(ComponentUtil::class);
+?>
+<script>
+    const LokiGenericComponent = {
+        post(data) {
+            this.$ajax('<?= $componentUtil->getPostUrl() ?>', {
+                method: 'post',
+                target: this.target,
+                sync: true,
+                body: {
+                    ...data,
+                    block: this.blockId,
+                    handles: '<?= $componentUtil->getHandles($block) ?>',
+                    form_key: hyva.getFormKey()
+                }
+            });
+        }
     }
 </script>

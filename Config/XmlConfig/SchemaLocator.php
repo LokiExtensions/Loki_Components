@@ -9,7 +9,7 @@ use Magento\Framework\Module\Dir\Reader;
 
 class SchemaLocator implements SchemaLocatorInterface
 {
-    const CONFIG_FILE_SCHEMA = 'loki_alpine_ajax.xsd';
+    const CONFIG_FILE_SCHEMA = 'loki_components.xsd';
 
     protected string $schema = '';
     protected string $perFileSchema = '';

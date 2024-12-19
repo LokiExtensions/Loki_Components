@@ -15,7 +15,7 @@ class FileReader extends Filesystem
         Converter $converter,
         SchemaLocator $schemaLocator,
         ValidationStateInterface $validationState,
-        $fileName = 'yireo_loki_components.xml',
+        $fileName = 'loki_components.xml',
         $idAttributes = [
             '/components/component/name' => 'id',
         ],

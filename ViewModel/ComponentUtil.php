@@ -54,12 +54,12 @@ class ComponentUtil implements ArgumentInterface
 
     public function getPostUrl(): string
     {
-        return $this->urlFactory->create()->getUrl('loki_alpine_ajax/index/html');
+        return $this->urlFactory->create()->getUrl('loki_components/index/html');
     }
 
     public function getFormHtml(AbstractBlock $block): string
     {
-        return (string)$block->getLayout()->getBlock('loki-alpine-ajax.form_html')
+        return (string)$block->getLayout()->getBlock('loki-components.form_html')
             ->setData('source_block', $block)
             ->toHtml();
     }

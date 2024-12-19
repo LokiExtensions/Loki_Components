@@ -102,8 +102,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         $blockNames = [
             $blockName,
-            'loki-alpine-ajax.messages',
-            'loki-alpine-ajax.debugger',
+            'loki-components.messages',
+            'loki-components.debugger',
         ]; // @todo: Another way to add default blocks to this list
 
         /** @var Http $request */

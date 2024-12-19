@@ -3,9 +3,8 @@
     <virtualType name="Yireo\LokiComponents\Config\XmlConfig\VirtualFileReader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
             <argument name="converter" xsi:type="object">Yireo\LokiComponents\Config\XmlConfig\Converter</argument>
-            <argument name="schemaLocator" xsi:type="object">Yireo\LokiComponents\Config\XmlConfig\SchemaLocator
-            </argument>
-            <argument name="fileName" xsi:type="string">yireo_loki_components.xml</argument>
+            <argument name="schemaLocator" xsi:type="object">Yireo\LokiComponents\Config\XmlConfig\SchemaLocator</argument>
+            <argument name="fileName" xsi:type="string">loki_components.xml</argument>
             <argument name="idAttributes" xsi:type="array">
                 <item name="/components/component" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
@@ -17,7 +16,7 @@
     <type name="Yireo\LokiComponents\Config\XmlConfig">
         <arguments>
             <argument name="reader" xsi:type="object">Yireo\LokiComponents\Config\XmlConfig\VirtualFileReader</argument>
-            <argument name="cacheId" xsi:type="string">yireo_loki_components</argument>
+            <argument name="cacheId" xsi:type="string">loki_components</argument>
         </arguments>
     </type>
 </config>

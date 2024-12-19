@@ -1,5 +1,5 @@
 {
-  "name": "yireo/magento2-loki-alpine-ajax",
+  "name": "yireo/magento2-loki-components",
   "version": "0.0.1",
   "description": "N/A",
   "type": "magento2-module",

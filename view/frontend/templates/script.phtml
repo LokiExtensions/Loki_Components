@@ -1,1 +1,14 @@
-<script defer src="https://cdn.jsdelivr.net/npm/@imacrayon/alpine-ajax@0.10.5/dist/cdn.min.js"></script>
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+?>
+<script type="module"
+        src="<?= $escaper->escapeUrl($block->getViewFileUrl("Yireo_LokiComponents::js/alpine-ajax.min.js")) ?>"
+        defer
+        crossorigin
+></script>

@@ -3,12 +3,12 @@
   <xs:element name="components">
     <xs:complexType>
       <xs:sequence minOccurs="0" maxOccurs="unbounded">
-        <xs:element name="component" type="lokiAlpineAjaxComponentType" minOccurs="0" />
+        <xs:element name="component" type="lokiComponentType" minOccurs="0" />
       </xs:sequence>
     </xs:complexType>
   </xs:element>
 
-  <xs:complexType name="lokiAlpineAjaxComponentType">
+  <xs:complexType name="lokiComponentType">
     <xs:attribute name="name" type="xs:string" use="required"/>
     <xs:attribute name="domId" type="xs:string" use="required"/>
     <xs:attribute name="className" type="xs:string" use="optional"/>

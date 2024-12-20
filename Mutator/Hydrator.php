@@ -7,13 +7,17 @@ use Yireo\LokiComponents\Component\ComponentInterface;
 
 class Hydrator
 {
-    public function hydrate(AbstractBlock $block, ComponentInterface $component): void
-    {
-        $block->setComponent($component);
-        $block->assign('component', $component);
+    public function hydrate(
+        MutatorInterface $mutator,
+        AbstractBlock $block,
+        ComponentInterface $component
+    ): void {
+        if (method_exists($mutator, 'setComponent')) {
+            $mutator->setComponent($component);
+        }
 
-        if (method_exists($component, 'setBlock')) {
-            $component->setBlock($block);
+        if (method_exists($mutator, 'setBlock')) {
+            $mutator->setBlock($block);
         }
     }
 }

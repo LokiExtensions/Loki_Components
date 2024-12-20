@@ -3,8 +3,8 @@
 namespace Yireo\LokiComponents\Config\XmlConfig\Definition;
 
 use Magento\Framework\App\ObjectManager;
-use Yireo\LokiComponents\Component\MutatorInterface;
 use Yireo\LokiComponents\Component\ComponentInterface;
+use Yireo\LokiComponents\Mutator\MutatorInterface;
 
 class ComponentDefinition
 {

@@ -36,7 +36,6 @@ class XmlConfig extends DataConfig
             foreach ($componentData['blocks'] as $blockData) {
                 $blockDefinitions[] = new BlockDefinition(
                     $blockData['name'],
-                    $blockData['elementId'],
                 );
             }
         }

@@ -16,11 +16,12 @@ use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use RuntimeException;
 use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Component\Hydrator;
 use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Component\MutatorInterface;
+use Yireo\LokiComponents\Component\Hydrator as ComponentHydrator;
+use Yireo\LokiComponents\Mutator\Hydrator as MutatorHydrator;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
+use Yireo\LokiComponents\Mutator\MutatorInterface;
 use Yireo\LokiComponents\ViewModel\Debugger;
 
 class Html implements HttpPostActionInterface, HttpGetActionInterface
@@ -34,7 +35,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly ComponentRegistry $componentRegistry,
         private readonly MessageManager $messageManager,
         private readonly Debugger $debugger,
-        private readonly Hydrator $hydrator,
+        private readonly ComponentHydrator $componentHydrator,
+        private readonly MutatorHydrator $mutatorHydrator,
     ) {
     }
 
@@ -76,7 +78,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         if ($viewModel instanceof ComponentInterface) {
             $block = $this->layout->getBlock($blockName);
             if ($block instanceof AbstractBlock) {
-                $this->hydrator->hydrate($block, $viewModel);
+                $this->componentHydrator->hydrate($block, $viewModel);
             }
         }
 
@@ -86,11 +88,17 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         }
 
         $this->debugger->add('mutator', get_class($mutator));
+        $this->mutatorHydrator->hydrate($mutator, $block, $viewModel);
 
         try {
             // @todo: Possibly sanitize values first?
-            $data = $this->request->getParam('data');
-            $data = json_decode($data, true);
+            $data = $this->request->getParams();
+            $message = $this->request->getParam('message');
+            if ($message) {
+                $message = json_decode($message, true);
+                $data = array_merge($data, $message);
+            }
+
             $this->debugger->add('mutator data', $data);
 
             $mutator->mutate($data);

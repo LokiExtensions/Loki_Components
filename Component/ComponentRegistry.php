@@ -7,6 +7,7 @@ use Magento\Framework\View\LayoutInterface;
 use RuntimeException;
 use Yireo\LokiComponents\Config\XmlConfig;
 use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
+use Yireo\LokiComponents\Mutator\MutatorInterface;
 
 // @todo: Split this up in "ComponentFinders"
 class ComponentRegistry

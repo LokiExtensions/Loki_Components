@@ -6,7 +6,6 @@ class BlockDefinition
 {
     public function __construct(
         private string $name,
-        private string $elementId,
     ) {
     }
 
@@ -17,6 +16,6 @@ class BlockDefinition
 
     public function getElementId(): string
     {
-        return $this->elementId;
+        return preg_replace('/([^a-z\-]+)/', '-', $this->name);
     }
 }

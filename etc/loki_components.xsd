@@ -13,15 +13,13 @@
             <xs:element name="block" type="lokiBlockType"/>
         </xs:sequence>
 
-        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="name" type="xs:string" use="optional"/>
         <xs:attribute name="viewModel" type="xs:string" use="optional"/>
         <xs:attribute name="mutator" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="lokiBlockType">
         <xs:attribute name="name" type="xs:string" use="required"/>
-        <xs:attribute name="elementId" type="xs:string" use="required"/>
-        <xs:attribute name="componentId" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <!-- @todo Why can't we just re-use this from config.xsd? -->

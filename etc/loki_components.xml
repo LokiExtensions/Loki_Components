@@ -2,12 +2,12 @@
 <components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Yireo_LokiComponents:etc/loki_components.xsd">
     <component
         name="Yireo_LokiComponents::messages">
-        <block name="loki-components.messages" elementId="loki-components-messages"/>
+        <block name="loki-components.messages"/>
     </component>
 
     <component
         name="Yireo_LokiComponents::debugger"
         viewModel="Yireo\LokiComponents\ViewModel\Debugger">
-        <block name="loki-components.debugger" elementId="loki-components-debugger"/>
+        <block name="loki-components.debugger"/>
     </component>
 </components>

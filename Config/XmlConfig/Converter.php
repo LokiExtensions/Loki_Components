@@ -33,7 +33,6 @@ class Converter implements ConverterInterface
             foreach ($blockElements as $blockElement) {
                 $blockDefinitions[] = [
                     'name' => (string)$blockElement->getAttribute('name'),
-                    'elementId' => (string)$blockElement->getAttribute('elementId'),
                 ];
             }
 

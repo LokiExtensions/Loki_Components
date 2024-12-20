@@ -5,6 +5,7 @@ namespace Yireo\LokiComponents\Config;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Data as DataConfig;
+use Yireo\LokiComponents\Config\XmlConfig\Definition\BlockDefinition;
 use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
 
 class XmlConfig extends DataConfig
@@ -16,7 +17,7 @@ class XmlConfig extends DataConfig
     {
         $componentDefinitions = [];
         $componentsData = $this->get('components');
-        foreach($componentsData as $componentData) {
+        foreach ($componentsData as $componentData) {
             $name = $componentData['name'];
             $componentDefinitions[$name] = $this->createComponentDefinition($componentData);
         }
@@ -30,15 +31,21 @@ class XmlConfig extends DataConfig
      */
     private function createComponentDefinition(array $componentData): ComponentDefinition
     {
-        $componentInstance = null;
-        if (!empty($componentData['className'])) {
-            $componentInstance = ObjectManager::getInstance()->get($componentData['className']);
+        $blockDefinitions = [];
+        if (!empty($componentData['blocks'])) {
+            foreach ($componentData['blocks'] as $blockData) {
+                $blockDefinitions[] = new BlockDefinition(
+                    $blockData['name'],
+                    $blockData['elementId'],
+                );
+            }
         }
 
         return new ComponentDefinition(
             $componentData['name'],
-            $componentData['domId'],
-            $componentInstance,
+            $componentData['viewModel'],
+            $componentData['mutator'],
+            $blockDefinitions
         );
     }
 }

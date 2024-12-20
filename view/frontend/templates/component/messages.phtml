@@ -9,7 +9,7 @@ use Yireo\LokiCheckout\Factory\ViewModelFactory;
 /** @var ViewModelFactory $viewModelFactory */
 /** @var ComponentUtil $componentUtil */
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
-$htmlId = $componentUtil->getDomIdByBlockName($block->getNameInLayout());
+$htmlId = $componentUtil->getElementIdByBlockName($block->getNameInLayout());
 ?>
 <script x-sync id="<?= $htmlId ?>">
     <?php if (false === $componentUtil->isAjax()): ?>

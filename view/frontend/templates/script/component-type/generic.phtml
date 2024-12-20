@@ -20,7 +20,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 target: this.target,
                 sync: true,
                 body: {
-                    ...data,
+                    data: JSON.stringify(data),
                     block: this.blockId,
                     handles: '<?= $componentUtil->getHandles($block) ?>',
                     form_key: hyva.getFormKey()

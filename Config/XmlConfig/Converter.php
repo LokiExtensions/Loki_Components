@@ -14,27 +14,37 @@ class Converter implements ConverterInterface
     public function convert($source)
     {
         return [
-            'components' => $this->getComponents($source),
+            'components' => $this->getComponentDefinitions($source),
         ];
     }
 
-    private function getComponents(DOMDocument $source): array
+    private function getComponentDefinitions(DOMDocument $source): array
     {
-        $components = [];
+        $componentDefinitions = [];
         $componentElements = $source->getElementsByTagName('component');
 
         foreach ($componentElements as $componentElement) {
             $name = (string)$componentElement->getAttribute('name');
-            $domId = (string)$componentElement->getAttribute('domId');
-            $className = (string)$componentElement->getAttribute('className');
+            $viewModel = (string)$componentElement->getAttribute('viewModel');
+            $mutator = (string)$componentElement->getAttribute('mutator');
 
-            $components[$name] = [
+            $blockDefinitions = [];
+            $blockElements = $componentElement->getElementsByTagName('block');
+            foreach ($blockElements as $blockElement) {
+                $blockDefinitions[] = [
+                    'name' => (string)$blockElement->getAttribute('name'),
+                    'elementId' => (string)$blockElement->getAttribute('elementId'),
+                ];
+            }
+
+            $componentDefinitions[$name] = [
                 'name' => $name,
-                'domId' => $domId,
-                'className' => $className,
+                'viewModel' => $viewModel,
+                'mutator' => $mutator,
+                'blocks' => $blockDefinitions,
             ];
         }
 
-        return $components;
+        return $componentDefinitions;
     }
 }

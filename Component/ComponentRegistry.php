@@ -21,23 +21,25 @@ class ComponentRegistry
      * @param string $blockName
      * @return ComponentInterface
      */
-    public function getComponentFromBlockName(string $blockName): ComponentInterface
+    public function getViewModelFromBlock(AbstractBlock $block): ComponentInterface
     {
         try {
-            return $this->getComponentFromDefinition($blockName);
+            return $this->getViewModelFromDefinition($block);
         } catch (RuntimeException $e) {
         }
 
         try {
-            return $this->getComponentFromLayout($blockName);
+            return $this->getViewModelFromLayout($block);
         } catch (RuntimeException $e) {
         }
 
+        $blockName = $block->getNameInLayout();
         throw new RuntimeException((string)__('Unknown component "%1"', $blockName));
     }
 
-    private function getComponentFromDefinition(string $blockName): ComponentInterface
+    private function getViewModelFromDefinition(AbstractBlock $block): ComponentInterface
     {
+        $blockName = $block->getNameInLayout();
         $componentDefinitions = $this->xmlConfig->getComponentDefinitions();
         if (!isset($componentDefinitions[$blockName])) {
             throw new RuntimeException((string)__('Unknown component "%1"', $blockName));
@@ -45,67 +47,144 @@ class ComponentRegistry
 
         /** @var ComponentDefinition $componentDefinition */
         $componentDefinition = $componentDefinitions[$blockName];
-        $component = $componentDefinition->getComponent();
-        if (false === $component instanceof ComponentInterface) {
+        $viewModel = $componentDefinition->getViewModel();
+        if (false === $viewModel instanceof ComponentInterface) {
+            throw new RuntimeException((string)__('ViewModel "%1" is not a component', $blockName));
+        }
+
+        return $viewModel;
+    }
+
+    private function getViewModelFromLayout(AbstractBlock $block): ComponentInterface
+    {
+        $blockName = $block->getNameInLayout();
+
+        if (false === $block instanceof AbstractBlock) {
+            throw new RuntimeException((string)__('Not such block "%1"', $blockName));
+        }
+
+        $viewModel = $block->getData('component');
+        if (false === $viewModel instanceof ComponentInterface) {
+            throw new RuntimeException((string)__('ViewModel inside block "%1" is not a component', $blockName));
+        }
+
+        return $viewModel;
+    }
+
+    /**
+     * @param string $blockName
+     * @return MutatorInterface
+     */
+    public function getMutatorFromBlock(AbstractBlock $block): MutatorInterface
+    {
+        $blockName = $block->getNameInLayout();
+
+        try {
+            return $this->getMutatorFromDefinition($block);
+        } catch (RuntimeException $e) {
+        }
+
+        try {
+            return $this->getMutatorFromLayout($block);
+        } catch (RuntimeException $e) {
+        }
+
+        throw new RuntimeException((string)__('Unknown component "%1"', $blockName));
+    }
+
+    private function getMutatorFromDefinition(AbstractBlock $block): MutatorInterface
+    {
+        $blockName = $block->getNameInLayout();
+
+        $componentDefinitions = $this->xmlConfig->getComponentDefinitions();
+        if (!isset($componentDefinitions[$blockName])) {
             throw new RuntimeException((string)__('Unknown component "%1"', $blockName));
         }
 
-        return $component;
+        /** @var ComponentDefinition $componentDefinition */
+        $componentDefinition = $componentDefinitions[$blockName];
+        $mutator = $componentDefinition->getMutator();
+        if (false === $mutator instanceof MutatorInterface) {
+            throw new RuntimeException((string)__('No mutator found for "%1"', $blockName));
+        }
+
+        return $mutator;
     }
 
-    private function getComponentFromLayout(string $blockName): ComponentInterface
+    private function getMutatorFromLayout(AbstractBlock $block): MutatorInterface
     {
+        $blockName = $block->getNameInLayout();
+
         $block = $this->layout->getBlock($blockName);
         if (false === $block instanceof AbstractBlock) {
             throw new RuntimeException((string)__('Not such block "%1"', $blockName));
         }
 
-        $component = $block->getData('component');
-        if (false === $component instanceof ComponentInterface) {
-            throw new RuntimeException((string)__('No component inside block "%1"', $blockName));
+        $mutator = $block->getData('mutator');
+        if (false === $mutator instanceof MutatorInterface) {
+            throw new RuntimeException((string)__('Mutator inside block "%1" is not a mutator', $blockName));
         }
 
-        return $component;
+        return $mutator;
     }
 
-    public function getDomIdFromComponentName(string $componentName): string
+    public function getElementIdByBlockName(string $blockName): string
     {
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
-            if ($componentDefinition->getName() === $componentName) {
-                return $componentDefinition->getDomId();
+            foreach ($componentDefinition->getBlockDefinitions() as $blockDefinition) {
+                if ($blockDefinition->getName() === $blockName) {
+                    return $blockDefinition->getElementId();
+                }
             }
         }
 
-        throw new RuntimeException((string)__('Unknown component "%1"', $componentName));
+        throw new RuntimeException((string)__('Block name "%1" could not be resolved', $blockName));
     }
 
-    public function getComponentNameFromDomId(string $domId): string
+    public function getComponentDefinitionFromBlock(AbstractBlock $block): ComponentDefinition
+    {
+        return $this->getComponentDefinitionFromBlockName((string)$block->getNameInLayout());
+    }
+
+    /**
+     * @param string $blockName
+     * @return ComponentDefinition
+     */
+    public function getComponentDefinitionFromBlockName(string $blockName): ComponentDefinition
     {
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
-            if ($componentDefinition->getDomId() === $domId) {
-                return $componentDefinition->getName();
+            foreach ($componentDefinition->getBlockDefinitions() as $blockDefinition) {
+                if ($blockDefinition->getName() === $blockName) {
+                    return $componentDefinition;
+                }
             }
         }
 
-        foreach ($this->layout->getAllBlocks() as $block) {
-            $possibleMatch = preg_replace('/([^a-z\-]+)/', '-', $block->getNameInLayout());
-            if ($possibleMatch === $domId) {
-                return $block->getNameInLayout();
-            }
-        }
-
-        throw new RuntimeException((string)__('Unknown DOM ID "%1"', $domId));
+        throw new RuntimeException((string)__('Block name does not resolve to component "%1"', $blockName));
     }
 
-    public function getComponentDefinitionByComponent(ComponentInterface $component): ComponentDefinition
+    public function getBlockNameFromElementId(string $elementId): string
+    {
+        foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
+            foreach ($componentDefinition->getBlockDefinitions() as $blockDefinition) {
+                if ($blockDefinition->getElementId() === $elementId) {
+                    return $blockDefinition->getName();
+                }
+            }
+        }
+
+        throw new RuntimeException((string)__('Unknown element ID "%1"', $elementId));
+    }
+
+    public function getComponentDefinitionByViewModel(ComponentInterface $viewModel): ComponentDefinition
     {
         $componentDefinitions = $this->xmlConfig->getComponentDefinitions();
         foreach ($componentDefinitions as $componentDefinition) {
-            if ($componentDefinition->getComponent() instanceof $component) {
+            if ($componentDefinition->getViewModel() instanceof $viewModel) {
                 return $componentDefinition;
             }
         }
 
-        throw new RuntimeException((string)__('Unknown component "%1"', get_class($component)));
+        throw new RuntimeException((string)__('Unknown component "%1"', get_class($viewModel)));
     }
 }

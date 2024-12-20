@@ -2,14 +2,17 @@
 
 namespace Yireo\LokiComponents\Config\XmlConfig\Definition;
 
+use Magento\Framework\App\ObjectManager;
+use Yireo\LokiComponents\Component\MutatorInterface;
 use Yireo\LokiComponents\Component\ComponentInterface;
 
 class ComponentDefinition
 {
     public function __construct(
         private string $name,
-        private string $domId,
-        private ?ComponentInterface $component,
+        private string $viewModel = '',
+        private string $mutator = '',
+        private array $blockDefinitions = []
     ) {
     }
 
@@ -18,13 +21,29 @@ class ComponentDefinition
         return $this->name;
     }
 
-    public function getDomId(): string
+    public function getViewModel(): ?ComponentInterface
     {
-        return $this->domId;
+        if (empty($this->viewModel)) {
+            return null;
+        }
+
+        return ObjectManager::getInstance()->get($this->viewModel);
     }
 
-    public function getComponent(): ?ComponentInterface
+    public function getMutator(): ?MutatorInterface
     {
-        return $this->component;
+        if (empty($this->mutator)) {
+            return null;
+        }
+
+        return ObjectManager::getInstance()->get($this->mutator);
+    }
+
+    /**
+     * @return BlockDefinition[]
+     */
+    public function getBlockDefinitions(): array
+    {
+        return $this->blockDefinitions;
     }
 }

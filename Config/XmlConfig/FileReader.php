@@ -18,6 +18,7 @@ class FileReader extends Filesystem
         $fileName = 'loki_components.xml',
         $idAttributes = [
             '/components/component/name' => 'id',
+            '/components/component/blocks/block/name' => 'id',
         ],
         $domDocumentClass = Dom::class,
         $defaultScope = 'global'

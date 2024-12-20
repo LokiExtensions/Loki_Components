@@ -10,16 +10,17 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Message\ManagerInterface as MessageManager;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use RuntimeException;
-use Yireo\LokiCheckout\Util\Component\Hydrator;
-use Yireo\LokiCheckout\Util\SetterInjection;
-use Yireo\LokiComponents\Component\MutableComponentInterface;
-use Yireo\LokiComponents\Controller\HtmlResultFactory;
-use Yireo\LokiComponents\Controller\HtmlResult;
+use Yireo\LokiComponents\Component\ComponentInterface;
+use Yireo\LokiComponents\Component\Hydrator;
 use Yireo\LokiComponents\Component\ComponentRegistry;
-use Magento\Framework\Message\ManagerInterface as MessageManager;
+use Yireo\LokiComponents\Component\MutatorInterface;
+use Yireo\LokiComponents\Controller\HtmlResult;
+use Yireo\LokiComponents\Controller\HtmlResultFactory;
 use Yireo\LokiComponents\ViewModel\Debugger;
 
 class Html implements HttpPostActionInterface, HttpGetActionInterface
@@ -33,7 +34,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly ComponentRegistry $componentRegistry,
         private readonly MessageManager $messageManager,
         private readonly Debugger $debugger,
-        private readonly Hydrator $hydrator, // @todo: De-couple this
+        private readonly Hydrator $hydrator,
     ) {
     }
 
@@ -66,27 +67,34 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     private function modifyData(string $blockName): void
     {
         try {
-            $component = $this->componentRegistry->getComponentFromBlockName($blockName);
-        } catch (\RuntimeException $e) {
-            //$this->messageManager->addErrorMessage($e->getMessage());
+            $componentDefinition = $this->componentRegistry->getComponentDefinitionFromBlockName($blockName);
+        } catch (RuntimeException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
         }
 
-        if (empty($component)) {
+        $viewModel = $componentDefinition->getViewModel();
+        if ($viewModel instanceof ComponentInterface) {
+            $block = $this->layout->getBlock($blockName);
+            if ($block instanceof AbstractBlock) {
+                $this->hydrator->hydrate($block, $viewModel);
+            }
+        }
+
+        $mutator = $componentDefinition->getMutator();
+        if (false === $mutator instanceof MutatorInterface) {
             return;
         }
 
-        $block = $this->layout->getBlock($blockName);
-        $this->hydrator->hydrate($block, $component);
-
-        if (false === $component instanceof MutableComponentInterface) {
-            return;
-        }
-
-        $this->debugger->add('componentClass', get_class($component));
+        $this->debugger->add('mutator', get_class($mutator));
 
         try {
-            $component->mutate($this->request->getParams());
-        } catch (\RuntimeException $e) {
+            // @todo: Possibly sanitize values first?
+            $data = $this->request->getParam('data');
+            $data = json_decode($data, true);
+            $this->debugger->add('mutator data', $data);
+
+            $mutator->mutate($data);
+        } catch (RuntimeException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
     }
@@ -136,7 +144,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         $blockNames = [];
         foreach ($targets as $target) {
-            $blockNames[] = $this->componentRegistry->getComponentNameFromDomId($target);
+            $blockNames[] = $this->componentRegistry->getBlockNameFromElementId($target);
         }
 
         return $blockNames;

@@ -17,14 +17,14 @@ class ComponentUtil implements ArgumentInterface
         private ComponentRegistry $componentRegistry
     ) {
     }
-
-    public function getDomIdByBlock(AbstractBlock $block): string
+    public function getElementIdByBlock(AbstractBlock $block): string
     {
-        return $this->getDomIdByBlockName($block->getNameInLayout());
+        return $this->getElementIdByBlockName($block->getNameInLayout());
     }
-    public function getDomIdByBlockName(string $blockName): string
+
+    public function getElementIdByBlockName(string $blockName): string
     {
-        return $this->componentRegistry->getDomIdFromComponentName($blockName);
+        return $this->componentRegistry->getElementIdByBlockName($blockName);
     }
     public function getHandles(AbstractBlock $block): string
     {
@@ -41,6 +41,12 @@ class ComponentUtil implements ArgumentInterface
             $targetNames[] = $target;
         }
 
+        $componentDefinition = $this->componentRegistry->getComponentDefinitionFromBlockName($block->getNameInLayout());
+        foreach ($componentDefinition->getBlockDefinitions() as $blockDefinition) {
+            $targetNames[] = $blockDefinition->getElementId();
+        }
+
+        $targetNames = array_unique($targetNames);
         return implode(' ', $targetNames);
     }
 

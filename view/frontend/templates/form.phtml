@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
 use Yireo\LokiComponents\ViewModel\ComponentUtil;
-use Yireo\LokiCheckout\Factory\ViewModelFactory;
+use Yireo\LokiComponents\Factory\ViewModelFactory;
 
 /** @var Template $block */
 /** @var ViewModelFactory $viewModelFactory */
 /** @var ComponentUtil $componentUtil */
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
-$htmlId = $componentUtil->getDomIdByBlockName($block->getNameInLayout());
+$htmlId = $componentUtil->getElementIdByBlockName($block->getNameInLayout());
 ?>
 <form x-target="<?= $componentUtil->getTargets($block) ?>" id="<?= $htmlId ?>" method="post" action="<?= $componentUtil->getPostUrl(); ?>" class="my-4">
     <?= $block->getChildHtml() ?>

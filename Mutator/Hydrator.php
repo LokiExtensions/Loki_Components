@@ -12,12 +12,5 @@ class Hydrator
         AbstractBlock $block,
         ComponentInterface $component
     ): void {
-        if (method_exists($mutator, 'setComponent')) {
-            $mutator->setComponent($component);
-        }
-
-        if (method_exists($mutator, 'setBlock')) {
-            $mutator->setBlock($block);
-        }
     }
 }

@@ -24,6 +24,7 @@
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="role" type="xs:string" use="required"/>
         <!-- @todo Allow only roles source and target -->
+        <!-- @todo There should only be one block with role=source -->
     </xs:complexType>
 
     <!-- @todo Why can't we just re-use this from config.xsd? -->

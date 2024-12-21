@@ -23,6 +23,7 @@
     <xs:complexType name="lokiBlockType">
         <xs:attribute name="name" type="xs:string" use="required"/>
         <xs:attribute name="role" type="xs:string" use="required"/>
+        <!-- @todo Allow only roles source and target -->
     </xs:complexType>
 
     <!-- @todo Why can't we just re-use this from config.xsd? -->

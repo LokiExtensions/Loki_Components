@@ -3,10 +3,9 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Config;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Config\Data as DataConfig;
-use Yireo\LokiComponents\Config\XmlConfig\Definition\BlockDefinition;
 use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
+use Yireo\LokiComponents\Exception\XmlConfigException;
 
 class XmlConfig extends DataConfig
 {
@@ -27,24 +26,38 @@ class XmlConfig extends DataConfig
 
     /**
      * @param array $componentData
+     *
      * @return ComponentDefinition
      */
     private function createComponentDefinition(array $componentData): ComponentDefinition
     {
-        $blockDefinitions = [];
+        $componentName = $componentData['name'];
+        $viewModel = $componentData['viewModel'];
+        $mutator = $componentData['mutator'];
+        $sourceBlock = null;
+        $targetBlocks = [];
+
         if (!empty($componentData['blocks'])) {
             foreach ($componentData['blocks'] as $blockData) {
-                $blockDefinitions[] = new BlockDefinition(
-                    $blockData['name'],
-                );
+                if (isset($blockData['role']) && $blockData['role'] === 'source') {
+                    $sourceBlock = $blockData['name'];
+                    continue;
+                }
+
+                $targetBlocks[] = $blockData['name'];
             }
         }
 
+        if (empty($sourceBlock)) {
+            throw new XmlConfigException('Component "' . $componentName . '" does not have block with role "source" defined');
+        }
+
         return new ComponentDefinition(
-            $componentData['name'],
-            $componentData['viewModel'],
-            $componentData['mutator'],
-            $blockDefinitions
+            $componentName,
+            $viewModel,
+            $mutator,
+            $sourceBlock,
+            $targetBlocks
         );
     }
 }

@@ -14,9 +14,9 @@ class ComponentUtil implements ArgumentInterface
     public function __construct(
         private UrlFactory $urlFactory,
         private RequestInterface $request,
-        private ComponentRegistry $componentRegistry
     ) {
     }
+
     public function getElementIdByBlock(AbstractBlock $block): string
     {
         return $this->getElementIdByBlockName($block->getNameInLayout());
@@ -24,8 +24,9 @@ class ComponentUtil implements ArgumentInterface
 
     public function getElementIdByBlockName(string $blockName): string
     {
-        return $this->componentRegistry->getElementIdByBlockName($blockName);
+        return preg_replace('/([^a-z0-9\-]+)/', '-', $blockName);
     }
+
     public function getHandles(AbstractBlock $block): string
     {
         $handles = $block->getLayout()->getUpdate()->getHandles();
@@ -33,22 +34,6 @@ class ComponentUtil implements ArgumentInterface
         return implode(' ', $handles);
     }
 
-    public function getTargets(AbstractBlock $block): string
-    {
-        $targetNames = [];
-        $targets = (array)$block->getTargets();
-        foreach ($targets as $target) {
-            $targetNames[] = $target;
-        }
-
-        $componentDefinition = $this->componentRegistry->getComponentDefinitionFromBlockName($block->getNameInLayout());
-        foreach ($componentDefinition->getBlockDefinitions() as $blockDefinition) {
-            $targetNames[] = $blockDefinition->getElementId();
-        }
-
-        $targetNames = array_unique($targetNames);
-        return implode(' ', $targetNames);
-    }
 
     public function isAjax(): bool
     {

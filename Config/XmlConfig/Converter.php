@@ -4,6 +4,7 @@ namespace Yireo\LokiComponents\Config\XmlConfig;
 
 use DOMDocument;
 use Magento\Framework\Config\ConverterInterface;
+use Yireo\LokiComponents\Exception\XmlConfigException;
 
 class Converter implements ConverterInterface
 {
@@ -31,8 +32,14 @@ class Converter implements ConverterInterface
             $blockDefinitions = [];
             $blockElements = $componentElement->getElementsByTagName('block');
             foreach ($blockElements as $blockElement) {
+                $role = (string)$blockElement->getAttribute('role');
+                if (empty($role)) {
+                    throw new XmlConfigException('Block in component "' . $name . '" does not have "role" attribute');
+                }
+
                 $blockDefinitions[] = [
                     'name' => (string)$blockElement->getAttribute('name'),
+                    'role' => $role,
                 ];
             }
 

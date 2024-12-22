@@ -15,13 +15,13 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use RuntimeException;
-use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Component\Hydrator as ComponentHydrator;
+use Yireo\LokiComponents\Component\ComponentHydrator;
+use Yireo\LokiComponents\Component\ViewModel\ViewModelInterface;
 use Yireo\LokiComponents\Mutator\Hydrator as MutatorHydrator;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
-use Yireo\LokiComponents\Mutator\MutatorInterface;
+use Yireo\LokiComponents\Component\Mutator\MutatorInterface;
 use Yireo\LokiComponents\ViewModel\Debugger;
 
 class Html implements HttpPostActionInterface, HttpGetActionInterface
@@ -36,7 +36,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly MessageManager $messageManager,
         private readonly Debugger $debugger,
         private readonly ComponentHydrator $componentHydrator,
-        private readonly MutatorHydrator $mutatorHydrator,
     ) {
     }
 
@@ -51,7 +50,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         }
 
         $this->debugger->add('block', $blockName);
-        $this->modifyData($blockName);
+        $this->mutateData($blockName);
 
         $this->renderBlocks($this->getTargetBlockNames($blockName));
         return $this->getHtmlResult();
@@ -66,29 +65,29 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         }
     }
 
-    private function modifyData(string $blockName): void
+    private function mutateData(string $blockName): void
     {
         try {
-            $componentDefinition = $this->componentRegistry->getComponentDefinitionFromBlockName($blockName);
+            $component = $this->componentRegistry->getComponentFromBlockName($blockName);
         } catch (RuntimeException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 
-        $viewModel = $componentDefinition->getViewModel();
-        if ($viewModel instanceof ComponentInterface) {
+        $viewModel = $component->getViewModel();
+        if ($viewModel instanceof ViewModelInterface) {
             $block = $this->layout->getBlock($blockName);
             if ($block instanceof AbstractBlock) {
-                $this->componentHydrator->hydrate($block, $viewModel);
+                $this->componentHydrator->hydrateBlock($block, $component);
             }
         }
 
-        $mutator = $componentDefinition->getMutator();
+        $mutator = $component->getMutator();
         if (false === $mutator instanceof MutatorInterface) {
             return;
         }
 
         $this->debugger->add('mutator', get_class($mutator));
-        $this->mutatorHydrator->hydrate($mutator, $block, $viewModel);
+        $this->componentHydrator->hydrateMutator($component);
 
         try {
             // @todo: Possibly sanitize values first?

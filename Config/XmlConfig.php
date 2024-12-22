@@ -36,12 +36,13 @@ class XmlConfig extends DataConfig
         $mutator = $componentData['mutator'];
         $sourceBlock = null;
         $targetBlocks = [];
+        $validators = [];
+        $filters = [];
 
         if (!empty($componentData['blocks'])) {
             foreach ($componentData['blocks'] as $blockData) {
                 if (isset($blockData['role']) && $blockData['role'] === 'source') {
                     $sourceBlock = $blockData['name'];
-                    continue;
                 }
 
                 $targetBlocks[] = $blockData['name'];
@@ -52,12 +53,31 @@ class XmlConfig extends DataConfig
             throw new XmlConfigException('Component "' . $componentName . '" does not have block with role "source" defined');
         }
 
+
+        if (!empty($componentData['validators'])) {
+            foreach ($componentData['validators'] as $validatorData) {
+                if (!isset($validatorData['disabled']) || $validatorData['disabled'] === 'false') {
+                    $validators[] = $validatorData['name'];
+                }
+            }
+        }
+
+        if (!empty($componentData['filters'])) {
+            foreach ($componentData['filters'] as $filterData) {
+                if (!isset($filterData['disabled']) || $filterData['disabled'] === 'false') {
+                    $filters[] = $filterData['name'];
+                }
+            }
+        }
+
         return new ComponentDefinition(
             $componentName,
             $viewModel,
             $mutator,
             $sourceBlock,
-            $targetBlocks
+            $targetBlocks,
+            $validators,
+            $filters
         );
     }
 }

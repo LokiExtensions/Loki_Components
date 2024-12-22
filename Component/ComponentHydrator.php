@@ -2,16 +2,33 @@
 
 namespace Yireo\LokiComponents\Component;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
+use Yireo\LokiComponents\Component\Mutator\MutatorInterface;
 use Yireo\LokiComponents\Component\ViewModel\ViewModelInterface;
 
 class ComponentHydrator
 {
-    public function hydrateBlock(AbstractBlock $block, Component $component): void
+    public function __construct(
+        private LayoutInterface $layout
+    ) {
+    }
+
+    public function hydrate(Component $component): void
+    {
+        $this->hydrateViewModel($component);
+        $this->hydrateMutator($component);
+    }
+
+    private function hydrateViewModel(Component $component): void
     {
         $viewModel = $component->getViewModel();
         if (false === $viewModel instanceof ViewModelInterface) {
+            return;
+        }
+
+        $block = $this->layout->getBlock($component->getSourceBlock());
+        if (false === $block instanceof AbstractBlock) {
             return;
         }
 
@@ -23,7 +40,14 @@ class ComponentHydrator
         }
     }
 
-    public function hydrateMutator(Component $component): void
+    private function hydrateMutator(MutableComponentInterface $component): void
     {
+        $mutator = $component->getMutator();
+        if (false === $mutator instanceof MutatorInterface) {
+            return;
+        }
+
+        $mutator->setComponent($component);
     }
+
 }

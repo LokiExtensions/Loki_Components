@@ -6,7 +6,7 @@ use Magento\Framework\Config\Dom;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\Reader\Filesystem;
 use Magento\Framework\Config\ValidationStateInterface;
-use Yireo\LokiCheckout\Config\XmlConfig\Converter;
+use Yireo\LokiComponents\Config\XmlConfig\Converter;
 
 class FileReader extends Filesystem
 {

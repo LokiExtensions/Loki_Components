@@ -22,4 +22,27 @@
             <argument name="cacheId" xsi:type="string">loki_components</argument>
         </arguments>
     </type>
+
+    <type name="Yireo\LokiComponents\Component\Validator\ValidatorRegistry">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="required" xsi:type="object">Yireo\LokiComponents\Validator\Component\RequiredValidator</item>
+                <item name="number" xsi:type="object">Yireo\LokiComponents\Validator\Component\NumberValidator</item>
+                <item name="length" xsi:type="object">Yireo\LokiComponents\Validator\Component\LengthValidator</item>
+                <item name="email" xsi:type="object">Yireo\LokiComponents\Validator\Component\EmailValidator</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Yireo\LokiComponents\Component\Filter\FilterRegistry">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="trim" xsi:type="object">Yireo\LokiComponents\Component\Filter\Trim</item>
+                <item name="capitalize" xsi:type="object">Yireo\LokiComponents\Component\Filter\Capitalize</item>
+                <item name="lowercase" xsi:type="object">Yireo\LokiComponents\Component\Filter\Lowercase</item>
+                <item name="numeric" xsi:type="object">Yireo\LokiComponents\Component\Filter\Numeric</item>
+                <item name="uppercase" xsi:type="object">Yireo\LokiComponents\Component\Filter\Uppercase</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

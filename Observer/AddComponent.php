@@ -37,6 +37,6 @@ class AddComponent implements ObserverInterface
             return;
         }
 
-        $this->componentHydrator->hydrateBlock($block, $component);
+        $this->componentHydrator->hydrate($component);
     }
 }

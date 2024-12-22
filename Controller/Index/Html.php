@@ -11,14 +11,12 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use RuntimeException;
 use Yireo\LokiComponents\Component\ComponentRegistry;
 use Yireo\LokiComponents\Component\ComponentHydrator;
-use Yireo\LokiComponents\Component\ViewModel\ViewModelInterface;
-use Yireo\LokiComponents\Mutator\Hydrator as MutatorHydrator;
+use Yireo\LokiComponents\Component\MutableComponentInterface;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
 use Yireo\LokiComponents\Component\Mutator\MutatorInterface;
@@ -73,13 +71,11 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             $this->messageManager->addErrorMessage($e->getMessage());
         }
 
-        $viewModel = $component->getViewModel();
-        if ($viewModel instanceof ViewModelInterface) {
-            $block = $this->layout->getBlock($blockName);
-            if ($block instanceof AbstractBlock) {
-                $this->componentHydrator->hydrateBlock($block, $component);
-            }
+        if (false === $component instanceof MutableComponentInterface) {
+            return;
         }
+
+        $this->componentHydrator->hydrate($component);
 
         $mutator = $component->getMutator();
         if (false === $mutator instanceof MutatorInterface) {
@@ -87,7 +83,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         }
 
         $this->debugger->add('mutator', get_class($mutator));
-        $this->componentHydrator->hydrateMutator($component);
 
         try {
             // @todo: Possibly sanitize values first?

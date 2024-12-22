@@ -62,7 +62,7 @@ class ComponentRegistry
     }
 
     /**
-     * @param string $blockName
+     * @param AbstractBlock $block
      *
      * @return ViewModelInterface
      */
@@ -72,7 +72,7 @@ class ComponentRegistry
     }
 
     /**
-     * @param string $blockName
+     * @param AbstractBlock $block
      *
      * @return MutatorInterface
      */
@@ -82,6 +82,11 @@ class ComponentRegistry
     }
 
 
+    /**
+     * @param string $elementId
+     *
+     * @return string
+     */
     public function getBlockNameFromElementId(string $elementId): string
     {
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
@@ -93,6 +98,11 @@ class ComponentRegistry
         throw new NoComponentFoundException((string)__('Unknown element ID "%1"', $elementId));
     }
 
+    /**
+     * @param string $componentName
+     *
+     * @return Component
+     */
     private function createComponentByName(string $componentName): Component
     {
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {

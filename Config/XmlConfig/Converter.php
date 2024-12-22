@@ -43,11 +43,31 @@ class Converter implements ConverterInterface
                 ];
             }
 
+            $validatorDefinitions = [];
+            $validatorElements = $componentElement->getElementsByTagName('validator');
+            foreach ($validatorElements as $validatorElement) {
+                $validatorDefinitions[] = [
+                    'name' => (string)$validatorElement->getAttribute('name'),
+                    'disabled' => (bool)$validatorElement->getAttribute('disabled'),
+                ];
+            }
+
+            $filterDefinitions = [];
+            $filterElements = $componentElement->getElementsByTagName('filter');
+            foreach ($filterElements as $filterElement) {
+                $filterDefinitions[] = [
+                    'name' => (string)$filterElement->getAttribute('name'),
+                    'disabled' => (bool)$filterElement->getAttribute('disabled'),
+                ];
+            }
+
             $componentDefinitions[$name] = [
                 'name' => $name,
                 'viewModel' => $viewModel,
                 'mutator' => $mutator,
                 'blocks' => $blockDefinitions,
+                'validators' => $validatorDefinitions,
+                'filters' => $filterDefinitions,
             ];
         }
 

@@ -29,17 +29,30 @@ class ComponentFactory
             $arguments['viewModel'] = $this->getViewModel($viewModel);
         }
 
-
-        $mutator = $componentDefinition->getMutator();
-        if (!empty($mutator)) {
-            $arguments['mutator'] = $this->getMutator($mutator);
-        }
-
         try {
-            return $this->objectManager->create(Component::class, $arguments);
+            if ($componentDefinition->getMutator() instanceof MutatorInterface) {
+                return $this->createMutableComponent($componentDefinition,$arguments);
+            }
+
+            return $this->createComponent($componentDefinition,$arguments);
         } catch(UnexpectedValueException $exception) {
             throw new UnexpectedValueException('Failed to create component: '.var_export($arguments, true));
         }
+    }
+
+    private function createComponent(ComponentDefinition $componentDefinition, array $arguments)
+    {
+        return $this->objectManager->create(Component::class, $arguments);
+    }
+
+    private function createMutableComponent(ComponentDefinition $componentDefinition, array $arguments)
+    {
+        $arguments['validators'] = $componentDefinition->getValidators();
+        $arguments['filters'] = $componentDefinition->getFilters();
+        $arguments['mutator'] = $componentDefinition->getMutator();
+        $arguments['messages'] = $this->objectManager->get(Messages::class);
+
+        return $this->objectManager->create(MutableComponent::class, $arguments);
     }
 
     private function getViewModel(string $viewModelClass): ViewModelInterface

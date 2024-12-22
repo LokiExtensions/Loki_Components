@@ -9,7 +9,9 @@ class ComponentDefinition
         private string $viewModel = '',
         private string $mutator = '',
         private string $sourceBlock = '',
-        private array $targetBlocks = []
+        private array $targetBlocks = [],
+        private array $validators = [],
+        private array $filters = [],
     ) {
     }
 
@@ -44,5 +46,15 @@ class ComponentDefinition
     public function getTargetBlocks(): array
     {
         return $this->targetBlocks;
+    }
+
+    public function getValidators(): array
+    {
+        return $this->validators;
+    }
+
+    public function getFilters(): array
+    {
+        return $this->filters;
     }
 }

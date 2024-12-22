@@ -3,18 +3,16 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Component;
 
-use Yireo\LokiComponents\Component\Mutator\MutatorInterface;
 use Yireo\LokiComponents\Component\ViewModel\ViewModelInterface;
 
 // @todo: Lazyload mutator and ViewModel
-class Component
+class Component implements ComponentInterface
 {
     public function __construct(
-        private string $name,
-        private string $sourceBlock,
-        private ?ViewModelInterface $viewModel = null,
-        private ?MutatorInterface $mutator = null,
-        private array $targetBlocks = []
+        protected string              $name,
+        protected string              $sourceBlock,
+        protected array               $targetBlocks,
+        protected ?ViewModelInterface $viewModel = null,
     ) {
     }
 
@@ -31,11 +29,6 @@ class Component
     public function getViewModel(): ?ViewModelInterface
     {
         return $this->viewModel;
-    }
-
-    public function getMutator(): ?MutatorInterface
-    {
-        return $this->mutator;
     }
 
     public function getTargetBlocks(): array

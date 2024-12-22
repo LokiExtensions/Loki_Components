@@ -2,9 +2,9 @@
 
 namespace Yireo\LokiComponents\ViewModel;
 
-use Yireo\LokiComponents\Component\ViewModel\ViewModelInterface;
+use Yireo\LokiComponents\Component\ViewModel\ViewModel;
 
-class Debugger implements ViewModelInterface
+class Debugger extends ViewModel
 {
     private array $data = [];
 

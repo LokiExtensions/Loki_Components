@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Component;
 
+use Magento\Framework\View\Element\AbstractBlock;
+
 interface ComponentInterface
 {
     public function getContext(): ComponentContextInterface;
@@ -10,6 +12,8 @@ interface ComponentInterface
     public function getViewModel(): ?ComponentViewModelInterface;
 
     public function getRepository(): ?ComponentRepositoryInterface;
+
+    public function getCurrentSource(): AbstractBlock;
 
     public function getSources(): array;
 

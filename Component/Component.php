@@ -48,6 +48,7 @@ class Component implements ComponentInterface
         $targets = [];
         $targets[] = $this->currentSource->getNameInLayout();
         $targets = array_merge($targets, $this->sources, $this->targets);
+
         return array_unique($targets);
     }
 
@@ -92,5 +93,10 @@ class Component implements ComponentInterface
     public function getContext(): ComponentContextInterface
     {
         return $this->context;
+    }
+
+    public function getCurrentSource(): AbstractBlock
+    {
+        return $this->currentSource;
     }
 }

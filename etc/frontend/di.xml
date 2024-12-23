@@ -3,4 +3,12 @@
     <type name="Magento\Framework\View\Element\Template">
         <plugin name="Yireo_LokiComponents::addCspInlineScripts" type="Yireo\LokiComponents\Plugin\AddCspInlineScripts"/>
     </type>
+
+    <type name="Yireo\LokiComponents\Util\DefaultTargets">
+        <arguments>
+            <argument name="targets" xsi:type="array">
+                <item name="messages" xsi:type="string">loki-components.messages</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

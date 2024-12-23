@@ -31,53 +31,16 @@ class XmlConfig extends DataConfig
      */
     private function createComponentDefinition(array $componentData): ComponentDefinition
     {
-        $componentName = $componentData['name'];
-        $viewModel = $componentData['viewModel'];
-        $mutator = $componentData['mutator'];
-        $sourceBlock = null;
-        $targetBlocks = [];
-        $validators = [];
-        $filters = [];
-
-        if (!empty($componentData['blocks'])) {
-            foreach ($componentData['blocks'] as $blockData) {
-                if (isset($blockData['role']) && $blockData['role'] === 'source') {
-                    $sourceBlock = $blockData['name'];
-                }
-
-                $targetBlocks[] = $blockData['name'];
-            }
-        }
-
-        if (empty($sourceBlock)) {
-            throw new XmlConfigException('Component "' . $componentName . '" does not have block with role "source" defined');
-        }
-
-
-        if (!empty($componentData['validators'])) {
-            foreach ($componentData['validators'] as $validatorData) {
-                if (!isset($validatorData['disabled']) || $validatorData['disabled'] === 'false') {
-                    $validators[] = $validatorData['name'];
-                }
-            }
-        }
-
-        if (!empty($componentData['filters'])) {
-            foreach ($componentData['filters'] as $filterData) {
-                if (!isset($filterData['disabled']) || $filterData['disabled'] === 'false') {
-                    $filters[] = $filterData['name'];
-                }
-            }
-        }
-
         return new ComponentDefinition(
-            $componentName,
-            $viewModel,
-            $mutator,
-            $sourceBlock,
-            $targetBlocks,
-            $validators,
-            $filters
+            $componentData['name'],
+            $componentData['class'],
+            $componentData['context'],
+            $componentData['viewModel'],
+            $componentData['repository'],
+            $componentData['sources'],
+            $componentData['targets'],
+            $componentData['validators'],
+            $componentData['filters']
         );
     }
 }

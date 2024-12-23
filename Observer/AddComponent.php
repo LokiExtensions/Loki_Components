@@ -8,14 +8,16 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\Template;
 use Yireo\LokiComponents\Component\Component;
 use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Component\ComponentHydrator;
+use Yireo\LokiComponents\Component\ComponentViewModelInterface;
+use Yireo\LokiComponents\Component\ViewModelInterface;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
+use Yireo\LokiComponents\Util\ComponentUtil;
 
 class AddComponent implements ObserverInterface
 {
     public function __construct(
         private ComponentRegistry $componentRegistry,
-        private ComponentHydrator $componentHydrator
+        private ComponentUtil $componentUtil,
     ) {
     }
 
@@ -26,17 +28,20 @@ class AddComponent implements ObserverInterface
             return;
         }
 
-
         try {
             $component = $this->componentRegistry->getComponentFromBlock($block);
         } catch (NoComponentFoundException $exception) {
             return;
         }
 
-        if (false === $component instanceof Component) {
+        $component->setCurrentSource($block);
+        $viewModel = $component->getViewModel();
+        if (false === $viewModel instanceof ComponentViewModelInterface) {
             return;
         }
 
-        $this->componentHydrator->hydrate($component);
+        $block->setViewModel($viewModel);
+        $block->assign('viewModel', $viewModel);
+        $block->assign('componentUtil', $this->componentUtil);
     }
 }

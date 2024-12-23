@@ -2,16 +2,16 @@
 declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
-use Yireo\LokiComponents\ViewModel\ComponentUtil;
-use Yireo\LokiComponents\Factory\ViewModelFactory;
+use Yireo\LokiComponents\Component\ComponentViewModel;
+use Yireo\LokiComponents\Util\ComponentUtil;
 
 /** @var Template $block */
-/** @var ViewModelFactory $viewModelFactory */
+/** @var ComponentViewModel $viewModel */
 /** @var ComponentUtil $componentUtil */
-$componentUtil = $viewModelFactory->create(ComponentUtil::class);
-$htmlId = $componentUtil->getElementIdByBlockName($block->getNameInLayout());
+$htmlId = $componentUtil->getElementIdByBlock($block);
+// @todo: Why is data-source is added in the HTML tree? By Hyva?
 ?>
-<form x-target="<?= $componentUtil->getTargets($block) ?>" id="<?= $htmlId ?>" method="post" action="<?= $componentUtil->getPostUrl(); ?>" class="my-4">
+<form x-target="<?= $viewModel->getTargetString() ?>" id="<?= $htmlId ?>" method="post" action="<?= $componentUtil->getPostUrl(); ?>" class="my-4">
     <?= $block->getChildHtml() ?>
     <input type="hidden" name="handles" value="<?= $componentUtil->getHandles($block) ?>"/>
     <input type="hidden" name="block" value="<?= $block->getNameInLayout() ?>"/>

@@ -1,13 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Yireo_LokiComponents:etc/loki_components.xsd">
     <component
-        name="Yireo_LokiComponents::messages">
-        <block name="loki-components.messages" role="source"/>
+        name="loki.messages"
+        viewModel="Yireo\LokiComponents\Component\Messages\MessagesViewModel">
+        <source name="loki-components.messages"/>
     </component>
 
     <component
-        name="Yireo_LokiComponents::debugger"
-        viewModel="Yireo\LokiComponents\ViewModel\Debugger">
-        <block name="loki-components.debugger" role="source"/>
+        name="loki.debugger"
+        viewModel="Yireo\LokiComponents\Component\Debugger\DebuggerViewModel">
+        <source name="loki-components.debugger"/>
     </component>
 </components>

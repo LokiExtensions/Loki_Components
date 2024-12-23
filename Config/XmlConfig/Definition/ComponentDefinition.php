@@ -6,10 +6,12 @@ class ComponentDefinition
 {
     public function __construct(
         private string $name,
+        private string $className,
+        private string $context = '',
         private string $viewModel = '',
-        private string $mutator = '',
-        private string $sourceBlock = '',
-        private array $targetBlocks = [],
+        private string $repository = '',
+        private array $sources = [],
+        private array $targets = [],
         private array $validators = [],
         private array $filters = [],
     ) {
@@ -20,6 +22,19 @@ class ComponentDefinition
         return $this->name;
     }
 
+    public function getClassName(): string
+    {
+        return $this->className;
+    }
+
+    public function getContext(): ?string
+    {
+        if (!empty($this->context)) {
+            return $this->context;
+        }
+
+        return null;
+    }
     public function getViewModel(): ?string
     {
         if (!empty($this->viewModel)) {
@@ -29,23 +44,23 @@ class ComponentDefinition
         return null;
     }
 
-    public function getMutator(): ?string
+    public function getRepository(): ?string
     {
-        if (!empty($this->mutator)) {
-            return $this->mutator;
+        if (!empty($this->repository)) {
+            return $this->repository;
         }
 
         return null;
     }
 
-    public function getSourceBlock(): string
+    public function getSources(): array
     {
-        return $this->sourceBlock;
+        return $this->sources;
     }
 
-    public function getTargetBlocks(): array
+    public function getTargets(): array
     {
-        return $this->targetBlocks;
+        return array_unique(array_merge($this->sources, $this->targets));
     }
 
     public function getValidators(): array
@@ -57,4 +72,5 @@ class ComponentDefinition
     {
         return $this->filters;
     }
+
 }

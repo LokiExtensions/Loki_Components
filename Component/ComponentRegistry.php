@@ -3,18 +3,16 @@
 namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
-use Yireo\LokiComponents\Component\ViewModel\ViewModelInterface;
 use Yireo\LokiComponents\Config\XmlConfig;
-use Yireo\LokiComponents\Component\Mutator\MutatorInterface;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
-use Yireo\LokiComponents\ViewModel\ComponentUtil;
+use Yireo\LokiComponents\Util\ComponentUtil;
 
 class ComponentRegistry
 {
     private array $components = [];
 
     public function __construct(
-        private XmlConfig        $xmlConfig,
+        private XmlConfig $xmlConfig,
         private ComponentFactory $componentFactory,
         private ComponentUtil $componentUtil
     ) {
@@ -37,8 +35,10 @@ class ComponentRegistry
     public function getComponentFromBlockName(string $blockName): Component
     {
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
-            if ($componentDefinition->getSourceBlock() === $blockName) {
-                return $this->getComponentByName($componentDefinition->getName());
+            foreach($componentDefinition->getTargets() as $target) {
+                if ($target === $blockName) {
+                    return $this->getComponentByName($componentDefinition->getName());
+                }
             }
         }
 
@@ -61,26 +61,6 @@ class ComponentRegistry
         return $this->getComponentFromBlockName($blockName);
     }
 
-    /**
-     * @param AbstractBlock $block
-     *
-     * @return ViewModelInterface
-     */
-    public function getViewModelFromBlock(AbstractBlock $block): ViewModelInterface
-    {
-        return $this->getComponentFromBlock($block)->getViewModel();
-    }
-
-    /**
-     * @param AbstractBlock $block
-     *
-     * @return MutatorInterface
-     */
-    public function getMutatorFromBlock(AbstractBlock $block): MutatorInterface
-    {
-        return $this->getComponentFromBlock($block)->getMutator();
-    }
-
 
     /**
      * @param string $elementId
@@ -90,13 +70,20 @@ class ComponentRegistry
     public function getBlockNameFromElementId(string $elementId): string
     {
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
-            if ($this->componentUtil->getElementIdByBlockName($componentDefinition->getSourceBlock()) === $elementId) {
-                return $componentDefinition->getSourceBlock();
+            foreach ($componentDefinition->getTargets() as $target) {
+                if ($target === $elementId) {
+                    return $target;
+                }
+
+                if ($this->componentUtil->getElementIdByBlockName($target) === $elementId) {
+                    return $target;
+                }
             }
         }
 
         throw new NoComponentFoundException((string)__('Unknown element ID "%1"', $elementId));
     }
+
 
     /**
      * @param string $componentName
@@ -111,6 +98,6 @@ class ComponentRegistry
             }
         }
 
-        throw new \RuntimeException('Could not create component "' . $componentName . '"');
+        throw new \RuntimeException('Could not create component "'.$componentName.'"');
     }
 }

@@ -3,8 +3,10 @@
 namespace Yireo\LokiComponents\Config\XmlConfig;
 
 use DOMDocument;
+use DOMNode;
 use Magento\Framework\Config\ConverterInterface;
-use Yireo\LokiComponents\Exception\XmlConfigException;
+use Yireo\LokiComponents\Component\Component;
+use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
 
 class Converter implements ConverterInterface
 {
@@ -19,58 +21,88 @@ class Converter implements ConverterInterface
         ];
     }
 
+    /**
+     * @param DOMDocument $source
+     * @return ComponentDefinition[]
+     */
     private function getComponentDefinitions(DOMDocument $source): array
     {
-        $componentDefinitions = [];
         $componentElements = $source->getElementsByTagName('component');
+        $componentClass = Component::class;
 
         foreach ($componentElements as $componentElement) {
             $name = (string)$componentElement->getAttribute('name');
+            $context = (string)$componentElement->getAttribute('context');
             $viewModel = (string)$componentElement->getAttribute('viewModel');
-            $mutator = (string)$componentElement->getAttribute('mutator');
-
-            $blockDefinitions = [];
-            $blockElements = $componentElement->getElementsByTagName('block');
-            foreach ($blockElements as $blockElement) {
-                $role = (string)$blockElement->getAttribute('role');
-                if (empty($role)) {
-                    throw new XmlConfigException('Block in component "' . $name . '" does not have "role" attribute');
-                }
-
-                $blockDefinitions[] = [
-                    'name' => (string)$blockElement->getAttribute('name'),
-                    'role' => $role,
-                ];
-            }
-
-            $validatorDefinitions = [];
-            $validatorElements = $componentElement->getElementsByTagName('validator');
-            foreach ($validatorElements as $validatorElement) {
-                $validatorDefinitions[] = [
-                    'name' => (string)$validatorElement->getAttribute('name'),
-                    'disabled' => (bool)$validatorElement->getAttribute('disabled'),
-                ];
-            }
-
-            $filterDefinitions = [];
-            $filterElements = $componentElement->getElementsByTagName('filter');
-            foreach ($filterElements as $filterElement) {
-                $filterDefinitions[] = [
-                    'name' => (string)$filterElement->getAttribute('name'),
-                    'disabled' => (bool)$filterElement->getAttribute('disabled'),
-                ];
-            }
+            $repository = (string)$componentElement->getAttribute('repository');
 
             $componentDefinitions[$name] = [
+                'class' => $componentClass,
                 'name' => $name,
+                'context' => $context,
                 'viewModel' => $viewModel,
-                'mutator' => $mutator,
-                'blocks' => $blockDefinitions,
-                'validators' => $validatorDefinitions,
-                'filters' => $filterDefinitions,
+                'repository' => $repository,
+                'sources' => $this->getSources($componentElement),
+                'targets' => $this->getTargets($componentElement),
+                'validators' => $this->getValidators($componentElement),
+                'filters' => $this->getFilters($componentElement),
             ];
         }
 
         return $componentDefinitions;
+    }
+
+    private function getSources(DOMNode $componentElement): array
+    {
+        $sources = [];
+        $sourceElements = $componentElement->getElementsByTagName('source');
+        foreach ($sourceElements as $sourceElement) {
+            $sources[] = (string)$sourceElement->getAttribute('name');
+        }
+
+        return $sources;
+    }
+
+    private function getTargets(DOMNode $componentElement): array
+    {
+        $targets = [];
+        $targetElements = $componentElement->getElementsByTagName('target');
+        foreach ($targetElements as $targetElement) {
+            $targets[] = (string)$targetElement->getAttribute('name');
+        }
+
+        return $targets;
+    }
+
+    private function getValidators(DOMNode $componentElement): array
+    {
+        $validators = [];
+        $validatorElements = $componentElement->getElementsByTagName('validator');
+        foreach ($validatorElements as $validatorElement) {
+            $disabled = (bool)$validatorElement->getAttribute('disabled');
+            if ($disabled) {
+                continue;
+            }
+
+            $validators[] = (string)$validatorElement->getAttribute('name');
+        }
+
+        return $validators;
+    }
+
+    private function getFilters(DOMNode $componentElement): array
+    {
+        $filters = [];
+        $filterElements = $componentElement->getElementsByTagName('filter');
+        foreach ($filterElements as $filterElement) {
+            $disabled = (bool)$filterElement->getAttribute('disabled');
+            if ($disabled) {
+                continue;
+            }
+
+            $filters[] = (string)$filterElement->getAttribute('name');
+        }
+
+        return $filters;
     }
 }

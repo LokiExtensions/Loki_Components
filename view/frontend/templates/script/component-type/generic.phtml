@@ -2,14 +2,11 @@
 declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
-use Yireo\LokiComponents\ViewModel\ComponentUtil;
 use Yireo\LokiComponents\Factory\ViewModelFactory;
+use Yireo\LokiComponents\Util\ComponentUtil;
 
 /** @var Template $block */
-/** @var Template $sourceBlock */
 /** @var ViewModelFactory $viewModelFactory */
-/** @var ComponentUtil $componentUtil */
-$sourceBlock = $block->getSourceBlock();
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
@@ -20,7 +17,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 target: this.target,
                 sync: true,
                 body: {
-                    message: JSON.stringify(data),
+                    json: JSON.stringify(data),
                     block: this.blockId,
                     handles: '<?= $componentUtil->getHandles($block) ?>',
                     form_key: hyva.getFormKey()

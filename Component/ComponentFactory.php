@@ -5,8 +5,6 @@ namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\ObjectManagerInterface;
 use UnexpectedValueException;
-use Yireo\LokiComponents\Component\Mutator\MutatorInterface;
-use Yireo\LokiComponents\Component\ViewModel\ViewModelInterface;
 use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
 
 class ComponentFactory
@@ -18,50 +16,32 @@ class ComponentFactory
 
     public function createFromDefinition(ComponentDefinition $componentDefinition): Component
     {
+        $contextClass = $componentDefinition->getContext();
+        if (empty($contextClass)) {
+            $contextClass = ComponentContext::class;
+        }
+
+        $context = $this->objectManager->get($contextClass);
+
         $arguments = [
             'name' => $componentDefinition->getName(),
-            'sourceBlock' => $componentDefinition->getSourceBlock(),
-            'targetBlocks' => $componentDefinition->getTargetBlocks(),
+            'context' => $context,
+            'sources' => $componentDefinition->getSources(),
+            'targets' => $componentDefinition->getTargets(),
+            'viewModelClass' => $componentDefinition->getViewModel(),
+            'repositoryClass' => $componentDefinition->getRepository(),
+            'validators' => $componentDefinition->getValidators(),
+            'filters' => $componentDefinition->getFilters(),
         ];
 
-        $viewModel = $componentDefinition->getViewModel();
-        if (!empty($viewModel)) {
-            $arguments['viewModel'] = $this->getViewModel($viewModel);
-        }
-
+        $componentClass = $componentDefinition->getClassName();
         try {
-            if ($componentDefinition->getMutator() instanceof MutatorInterface) {
-                return $this->createMutableComponent($componentDefinition,$arguments);
-            }
-
-            return $this->createComponent($componentDefinition,$arguments);
+            return $this->objectManager->create($componentClass, $arguments);
         } catch(UnexpectedValueException $exception) {
-            throw new UnexpectedValueException('Failed to create component: '.var_export($arguments, true));
+            throw new UnexpectedValueException(
+                "Failed to create component: \n"
+                .json_encode($arguments)."\n"
+                .$exception->getMessage());
         }
-    }
-
-    private function createComponent(ComponentDefinition $componentDefinition, array $arguments)
-    {
-        return $this->objectManager->create(Component::class, $arguments);
-    }
-
-    private function createMutableComponent(ComponentDefinition $componentDefinition, array $arguments)
-    {
-        $arguments['validators'] = $componentDefinition->getValidators();
-        $arguments['filters'] = $componentDefinition->getFilters();
-        $arguments['mutator'] = $componentDefinition->getMutator();
-        $arguments['messages'] = $this->objectManager->get(Messages::class);
-
-        return $this->objectManager->create(MutableComponent::class, $arguments);
-    }
-
-    private function getViewModel(string $viewModelClass): ViewModelInterface
-    {
-        return $this->objectManager->get($viewModelClass);
-    }
-
-    private function getMutator(string $mutator): MutatorInterface
-    {
-        return $this->objectManager->get($mutator);
     }
 }

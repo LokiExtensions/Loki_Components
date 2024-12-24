@@ -38,12 +38,6 @@ class ComponentRegistry
             if ($componentDefinition->getName() === $blockName) {
                 return $this->getComponentByName($componentDefinition->getName());
             }
-
-            foreach($componentDefinition->getTargets() as $target) {
-                if ($target === $blockName) {
-                    return $this->getComponentByName($componentDefinition->getName());
-                }
-            }
         }
 
         throw new NoComponentFoundException((string)__('Unknown component "%1"', $blockName));

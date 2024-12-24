@@ -5,6 +5,7 @@ namespace Yireo\LokiComponents\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
 use Yireo\LokiComponents\Component\Component;
 use Yireo\LokiComponents\Component\ComponentRegistry;
@@ -24,7 +25,7 @@ class AddComponent implements ObserverInterface
     public function execute(Observer $observer)
     {
         $block = $observer->getEvent()->getBlock();
-        if (false === $block instanceof Template) {
+        if (false === $block instanceof AbstractBlock) {
             return;
         }
 

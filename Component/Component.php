@@ -6,6 +6,7 @@ namespace Yireo\LokiComponents\Component;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
+use Yireo\ExtensionChecker\Exception\ComponentNotFoundException;
 
 class Component implements ComponentInterface
 {
@@ -85,7 +86,13 @@ class Component implements ComponentInterface
             return $this->block;
         }
 
-        $this->block = $this->layout->getBlock($this->getName());;
+        $block = $this->layout->getBlock($this->getName());
+        if (false === $block instanceof AbstractBlock) {
+            throw new ComponentNotFoundException('Component refers to unknown block "'.$this->getName().'"');
+        }
+
+        $this->block = $block;
+
         return $this->block;
     }
 }

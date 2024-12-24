@@ -82,8 +82,17 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         }
 
         $this->debug('component', $component->getName());
+
+        $viewModel = $component->getViewModel();
+        if (is_object($viewModel)) {
+            $this->debug('viewModel', get_class($viewModel));
+        }
+
         $repository = $component->getRepository();
-        $this->debug('repository', get_class($repository));
+        if (is_object($repository)) {
+            $this->debug('repository', get_class($repository));
+        }
+
         $this->debug('validators', $component->getValidators());
         $this->debug('filters', $component->getFilters());
 

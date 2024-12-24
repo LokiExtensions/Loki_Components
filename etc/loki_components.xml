@@ -5,8 +5,6 @@
             name="loki-components.messages"
             viewModel="Yireo\LokiComponents\Component\Messages\MessagesViewModel"/>
 
-        <component
-            name="loki-components.debugger"
-            viewModel="Yireo\LokiComponents\Component\Debugger\DebuggerViewModel"/>
+        <component name="loki-components.debugger"/>
     </componentGroup>
 </components>

@@ -2,13 +2,17 @@
 declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
-use Yireo\LokiComponents\Component\Debugger\DebuggerViewModel;
+use Yireo\LokiComponents\Factory\ViewModelFactory;
 use Yireo\LokiComponents\Util\ComponentUtil;
+use Yireo\LokiComponents\Util\Debugger;
 
 /** @var Template $block */
-/** @var DebuggerViewModel $viewModel */
+/** @var ViewModelFactory $viewModelFactory */
+/** @var Debugger $viewModel */
 /** @var ComponentUtil $componentUtil */
 
+$viewModel = $viewModelFactory->create(Debugger::class);
+$componentUtil = $viewModelFactory->create(ComponentUtil::class);
 $htmlId = $componentUtil->getElementIdByBlockName($block->getNameInLayout());
 ?>
 <div id="<?= $htmlId ?>" class="p-4" x-sync>

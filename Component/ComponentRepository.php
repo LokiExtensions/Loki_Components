@@ -65,7 +65,7 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
     {
         if (is_array($data)) {
             foreach ($data as $value) {
-                if ($this->validate($value)) {
+                if (false === $this->validate($value)) {
                     return false;
                 }
             }

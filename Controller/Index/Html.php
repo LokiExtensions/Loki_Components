@@ -18,6 +18,7 @@ use RuntimeException;
 use Yireo\LokiComponents\Component\ComponentRegistry;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
+use Yireo\LokiComponents\Util\Debugger;
 
 class Html implements HttpPostActionInterface, HttpGetActionInterface
 {
@@ -29,6 +30,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly RequestInterface $request,
         private readonly ComponentRegistry $componentRegistry,
         private readonly MessageManager $messageManager,
+        private readonly Debugger $debugger
     ) {
     }
 
@@ -79,12 +81,15 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             die($e->getMessage());
         }
 
+        $this->debug('component', $component->getName());
         $repository = $component->getRepository();
         $this->debug('repository', get_class($repository));
+        $this->debug('validators', $component->getValidators());
+        $this->debug('filters', $component->getFilters());
 
         try {
             $data = $this->getRequestData();
-            $this->debug('mutator data', $data);
+            $this->debug('save data', $data);
             $repository->save($data);
         } catch (RuntimeException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
@@ -177,8 +182,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     private function debug(string $name, $value): void
     {
-        return;
-        $debugger = $this->componentRegistry->getComponentByName('debugger');
-        $debugger->getViewModel()->add($name, $value);
+        $this->debugger->add($name, $value);
     }
 }

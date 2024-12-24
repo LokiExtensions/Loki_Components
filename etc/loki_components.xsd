@@ -13,6 +13,7 @@
     <xs:complexType name="lokiComponentGroupType">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="component" type="lokiComponentType"/>
+            <xs:element name="target" type="lokiTargetType"/>
         </xs:choice>
 
         <xs:attribute name="name" type="xs:string" use="optional"/>

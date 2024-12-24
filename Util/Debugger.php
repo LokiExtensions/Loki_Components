@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component\Debugger;
+namespace Yireo\LokiComponents\Util;
 
-use Yireo\LokiComponents\Component\ComponentViewModel;
+use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-class DebuggerViewModel extends ComponentViewModel
+class Debugger implements ArgumentInterface
 {
     private array $data = [];
 

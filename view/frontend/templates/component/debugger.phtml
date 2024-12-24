@@ -11,7 +11,7 @@ use Yireo\LokiComponents\Util\ComponentUtil;
 
 $htmlId = $componentUtil->getElementIdByBlockName($block->getNameInLayout());
 ?>
-<div x-sync id="<?= $htmlId ?>" class="p-4">
+<div id="<?= $htmlId ?>" class="p-4" x-sync>
     <h3 class="text-xl my-4">LokiComponents Debugger</h3>
     <pre><?php var_dump($viewModel->getData()) ?></pre>
 </div>

@@ -10,7 +10,7 @@ use Yireo\LokiComponents\Util\ComponentUtil;
 /** @var ComponentUtil $componentUtil */
 
 ?>
-<script x-sync id="<?= $componentUtil->getElementIdByBlock($block) ?>">
+<script id="<?= $componentUtil->getElementIdByBlock($block) ?>" x-sync>
     <?php if (false === $componentUtil->isAjax()): ?>
     window.addEventListener('DOMContentLoaded', () => {
     <?php endif; ?>

@@ -35,6 +35,7 @@ class Converter implements ConverterInterface
             $defaultContext = (string)$componentGroupElement->getAttribute('defaultContext');
             $defaultViewModel = (string)$componentGroupElement->getAttribute('defaultViewModel');
             $defaultRepository = (string)$componentGroupElement->getAttribute('defaultRepository');
+            $defaultTargets = $this->getTargets($componentGroupElement);
 
             if (empty($defaultComponentClass)) {
                 $defaultComponentClass = Component::class;
@@ -55,7 +56,7 @@ class Converter implements ConverterInterface
                     'context' => !empty($context) ? $context : $defaultContext,
                     'viewModel' => !empty($viewModel) ? $viewModel : $defaultViewModel,
                     'repository' => !empty($repository) ? $repository : $defaultRepository,
-                    'targets' => $this->getTargets($componentElement),
+                    'targets' => array_merge($defaultTargets, $this->getTargets($componentElement)),
                     'validators' => $this->getValidators($componentElement),
                     'filters' => $this->getFilters($componentElement),
                 ];
@@ -65,10 +66,10 @@ class Converter implements ConverterInterface
         return $componentDefinitions;
     }
 
-    private function getTargets(DOMNode $componentElement): array
+    private function getTargets(DOMNode $element): array
     {
         $targets = [];
-        $targetElements = $componentElement->getElementsByTagName('target');
+        $targetElements = $element->getElementsByTagName('target');
         foreach ($targetElements as $targetElement) {
             $targets[] = (string)$targetElement->getAttribute('name');
         }
@@ -76,10 +77,10 @@ class Converter implements ConverterInterface
         return $targets;
     }
 
-    private function getValidators(DOMNode $componentElement): array
+    private function getValidators(DOMNode $element): array
     {
         $validators = [];
-        $validatorElements = $componentElement->getElementsByTagName('validator');
+        $validatorElements = $element->getElementsByTagName('validator');
         foreach ($validatorElements as $validatorElement) {
             $disabled = (bool)$validatorElement->getAttribute('disabled');
             if ($disabled) {
@@ -92,10 +93,10 @@ class Converter implements ConverterInterface
         return $validators;
     }
 
-    private function getFilters(DOMNode $componentElement): array
+    private function getFilters(DOMNode $element): array
     {
         $filters = [];
-        $filterElements = $componentElement->getElementsByTagName('filter');
+        $filterElements = $element->getElementsByTagName('filter');
         foreach ($filterElements as $filterElement) {
             $disabled = (bool)$filterElement->getAttribute('disabled');
             if ($disabled) {

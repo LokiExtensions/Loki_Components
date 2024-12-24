@@ -11,8 +11,10 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
     const LokiComponentType = {
-        post(data) {
-            this.$ajax('<?= $componentUtil->getPostUrl() ?>', {
+        loading: false,
+        async post(data) {
+            this.loading = true;
+            await this.$ajax('<?= $componentUtil->getPostUrl() ?>', {
                 method: 'post',
                 target: this.target,
                 sync: true,
@@ -23,6 +25,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     form_key: hyva.getFormKey()
                 }
             });
+            this.loading = false;
         }
     }
 </script>

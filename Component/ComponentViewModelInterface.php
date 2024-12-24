@@ -9,9 +9,19 @@ use Yireo\LokiComponents\Messages\MessageManager;
 
 interface ComponentViewModelInterface extends ArgumentInterface
 {
-    public function getData(): mixed;
+    public function getElementId(): string;
 
     public function getBlock(): AbstractBlock;
 
+    public function getData(): mixed;
+
+
+    public function getTargets(): array;
+
+    public function getTargetString(): string;
+    public function getValidators(): array;
+    public function getFilters(): array;
+
     public function getMessageManager(): MessageManager;
+    public function getContext(): ComponentContextInterface;
 }

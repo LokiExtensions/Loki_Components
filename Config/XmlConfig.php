@@ -37,7 +37,6 @@ class XmlConfig extends DataConfig
             $componentData['context'],
             $componentData['viewModel'],
             $componentData['repository'],
-            $componentData['sources'],
             $componentData['targets'],
             $componentData['validators'],
             $componentData['filters']

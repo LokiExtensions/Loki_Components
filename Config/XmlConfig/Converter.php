@@ -27,40 +27,42 @@ class Converter implements ConverterInterface
      */
     private function getComponentDefinitions(DOMDocument $source): array
     {
-        $componentElements = $source->getElementsByTagName('component');
-        $componentClass = Component::class;
+        $componentDefinitions = [];
+        $componentGroupElements = $source->getElementsByTagName('componentGroup');
 
-        foreach ($componentElements as $componentElement) {
-            $name = (string)$componentElement->getAttribute('name');
-            $context = (string)$componentElement->getAttribute('context');
-            $viewModel = (string)$componentElement->getAttribute('viewModel');
-            $repository = (string)$componentElement->getAttribute('repository');
+        foreach ($componentGroupElements as $componentGroupElement) {
+            $defaultComponentClass = (string)$componentGroupElement->getAttribute('defaultClass');
+            $defaultContext = (string)$componentGroupElement->getAttribute('defaultContext');
+            $defaultViewModel = (string)$componentGroupElement->getAttribute('defaultViewModel');
+            $defaultRepository = (string)$componentGroupElement->getAttribute('defaultRepository');
 
-            $componentDefinitions[$name] = [
-                'class' => $componentClass,
-                'name' => $name,
-                'context' => $context,
-                'viewModel' => $viewModel,
-                'repository' => $repository,
-                'sources' => $this->getSources($componentElement),
-                'targets' => $this->getTargets($componentElement),
-                'validators' => $this->getValidators($componentElement),
-                'filters' => $this->getFilters($componentElement),
-            ];
+            if (empty($defaultComponentClass)) {
+                $defaultComponentClass = Component::class;
+            }
+
+            $componentElements = $componentGroupElement->getElementsByTagName('component');
+
+            foreach ($componentElements as $componentElement) {
+                $name = (string)$componentElement->getAttribute('name');
+                $componentClass = (string)$componentElement->getAttribute('class');
+                $context = (string)$componentElement->getAttribute('context');
+                $viewModel = (string)$componentElement->getAttribute('viewModel');
+                $repository = (string)$componentElement->getAttribute('repository');
+
+                $componentDefinitions[$name] = [
+                    'name' => $name,
+                    'class' => !empty($componentClass) ? $componentClass : $defaultComponentClass,
+                    'context' => !empty($context) ? $context : $defaultContext,
+                    'viewModel' => !empty($viewModel) ? $viewModel : $defaultViewModel,
+                    'repository' => !empty($repository) ? $repository : $defaultRepository,
+                    'targets' => $this->getTargets($componentElement),
+                    'validators' => $this->getValidators($componentElement),
+                    'filters' => $this->getFilters($componentElement),
+                ];
+            }
         }
 
         return $componentDefinitions;
-    }
-
-    private function getSources(DOMNode $componentElement): array
-    {
-        $sources = [];
-        $sourceElements = $componentElement->getElementsByTagName('source');
-        foreach ($sourceElements as $sourceElement) {
-            $sources[] = (string)$sourceElement->getAttribute('name');
-        }
-
-        return $sources;
     }
 
     private function getTargets(DOMNode $componentElement): array

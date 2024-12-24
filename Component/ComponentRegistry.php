@@ -35,6 +35,10 @@ class ComponentRegistry
     public function getComponentFromBlockName(string $blockName): Component
     {
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
+            if ($componentDefinition->getName() === $blockName) {
+                return $this->getComponentByName($componentDefinition->getName());
+            }
+
             foreach($componentDefinition->getTargets() as $target) {
                 if ($target === $blockName) {
                     return $this->getComponentByName($componentDefinition->getName());

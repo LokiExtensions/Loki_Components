@@ -34,7 +34,6 @@ class AddComponent implements ObserverInterface
             return;
         }
 
-        $component->setCurrentSource($block);
         $viewModel = $component->getViewModel();
         if (false === $viewModel instanceof ComponentViewModelInterface) {
             return;

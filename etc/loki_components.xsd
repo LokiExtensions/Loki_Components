@@ -1,31 +1,43 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema">
+    <xs:include schemaLocation="urn:magento:framework:View/Layout/etc/elements.xsd"/>
+
     <xs:element name="components">
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element name="component" type="lokiComponentType" minOccurs="0"/>
+                <xs:element name="componentGroup" type="lokiComponentGroupType" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
+    <xs:complexType name="lokiComponentGroupType">
+        <xs:choice minOccurs="0" maxOccurs="unbounded">
+            <xs:element name="component" type="lokiComponentType"/>
+        </xs:choice>
+
+        <xs:attribute name="name" type="xs:string" use="optional"/>
+        <xs:attribute name="defaultClass" type="phpClassName" use="optional"/>
+        <xs:attribute name="defaultContext" type="phpClassName" use="optional"/>
+        <xs:attribute name="defaultViewModel" type="phpClassName" use="optional"/>
+        <xs:attribute name="defaultRepository" type="phpClassName" use="optional"/>
+    </xs:complexType>
+
     <xs:complexType name="lokiComponentType">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="source" type="lokiBlockType"/>
-            <xs:element name="target" type="lokiBlockType"/>
+            <xs:element name="target" type="lokiTargetType"/>
             <xs:element name="validator" type="lokiValidatorType"/>
             <xs:element name="filter" type="lokiFilterType"/>
         </xs:choice>
 
-        <xs:attribute name="name" type="xs:string" use="optional"/>
-        <xs:attribute name="context" type="xs:string" use="optional"/>
-        <xs:attribute name="viewModel" type="xs:string" use="optional"/>
-        <xs:attribute name="repository" type="xs:string" use="optional"/>
+        <xs:attribute name="name" type="elementNameType" use="optional"/>
+        <xs:attribute name="class" type="phpClassName" use="optional"/>
+        <xs:attribute name="context" type="phpClassName" use="optional"/>
+        <xs:attribute name="viewModel" type="phpClassName" use="optional"/>
+        <xs:attribute name="repository" type="phpClassName" use="optional"/>
     </xs:complexType>
 
-    <xs:complexType name="lokiBlockType">
-        <xs:attribute name="name" type="xs:string" use="required"/>
-        <!-- @todo Allow only roles source and target -->
-        <!-- @todo There should only be one block with role=source -->
+    <xs:complexType name="lokiTargetType">
+        <xs:attribute name="name" type="elementNameType" use="required"/>
     </xs:complexType>
 
     <xs:complexType name="lokiValidatorType">

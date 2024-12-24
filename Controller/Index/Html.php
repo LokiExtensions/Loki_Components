@@ -79,8 +79,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             die($e->getMessage());
         }
 
-        $component->setCurrentSource($block);
-
         $repository = $component->getRepository();
         $this->debug('repository', get_class($repository));
 

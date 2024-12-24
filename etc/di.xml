@@ -6,10 +6,13 @@
             <argument name="schemaLocator" xsi:type="object">Yireo\LokiComponents\Config\XmlConfig\SchemaLocator</argument>
             <argument name="fileName" xsi:type="string">loki_components.xml</argument>
             <argument name="idAttributes" xsi:type="array">
-                <item name="/components/component" xsi:type="array">
+                <item name="/components/componentGroup" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
-                <item name="/components/component/blocks/block" xsi:type="array">
+                <item name="/components/componentGroup/component" xsi:type="array">
+                    <item name="name" xsi:type="string">name</item>
+                </item>
+                <item name="/components/componentGroup/component/blocks/block" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
             </argument>

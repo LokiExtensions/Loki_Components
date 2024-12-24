@@ -10,11 +10,11 @@ class ComponentDefinition
         private string $context = '',
         private string $viewModel = '',
         private string $repository = '',
-        private array $sources = [],
         private array $targets = [],
         private array $validators = [],
         private array $filters = [],
     ) {
+        $this->targets[] = $this->getName();
     }
 
     public function getName(): string
@@ -52,15 +52,9 @@ class ComponentDefinition
 
         return null;
     }
-
-    public function getSources(): array
-    {
-        return $this->sources;
-    }
-
     public function getTargets(): array
     {
-        return array_unique(array_merge($this->sources, $this->targets));
+        return array_unique($this->targets);
     }
 
     public function getValidators(): array

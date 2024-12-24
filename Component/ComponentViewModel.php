@@ -5,7 +5,6 @@ namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
 use Yireo\LokiComponents\Messages\MessageManager;
-use Yireo\LokiComponents\Util\ComponentUtil;
 
 abstract class ComponentViewModel implements ComponentViewModelInterface
 {
@@ -14,6 +13,11 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
         protected MessageManager $messageManager,
         protected AbstractBlock $block,
     ) {
+    }
+
+    public function getElementId(): string
+    {
+        return preg_replace('/([^a-zA-Z0-9\-]+)/', '-', $this->block->getNameInLayout());
     }
 
     public function getData(): mixed
@@ -25,9 +29,25 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
     {
         return $this->block;
     }
+
+    public function getTargets(): array
+    {
+        return $this->getComponent()->getTargets();
+    }
+
     public function getTargetString(): string
     {
         return $this->getComponent()->getTargetString();
+    }
+
+    public function getValidators(): array
+    {
+        return $this->getComponent()->getValidators();
+    }
+
+    public function getFilters(): array
+    {
+        return $this->getComponent()->getFilters();
     }
 
     public function getMessageManager(): MessageManager
@@ -35,13 +55,18 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
         return $this->messageManager;
     }
 
+    public function getContext(): ComponentContextInterface
+    {
+        return $this->component->getContext();
+    }
+
     protected function getComponent(): ComponentInterface
     {
         return $this->component;
     }
 
-    protected function getContext(): ComponentContextInterface
+    protected function getRepository(): ?ComponentRepositoryInterface
     {
-        return $this->getComponent()->getContext();
+        return $this->component->getRepository();
     }
 }

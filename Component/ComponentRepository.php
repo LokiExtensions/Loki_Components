@@ -63,8 +63,6 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
 
     protected function validate(mixed $data): bool
     {
-        print_r($data);
-        return true;
         if (is_array($data)) {
             foreach ($data as $value) {
                 if ($this->validate($value)) {

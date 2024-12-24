@@ -11,14 +11,13 @@ class Component implements ComponentInterface
 {
     protected ?ComponentViewModelInterface $viewModel = null;
     protected ?ComponentRepositoryInterface $repository = null;
-    protected ?AbstractBlock $currentSource = null;
+    protected ?AbstractBlock $block = null;
 
     public function __construct(
         protected ObjectManagerInterface $objectManager,
         protected LayoutInterface $layout,
         protected ComponentContextInterface $context,
         protected string $name,
-        protected array $sources = [],
         protected array $targets = [],
         protected array $validators = [],
         protected array $filters = [],
@@ -32,24 +31,9 @@ class Component implements ComponentInterface
         return $this->name;
     }
 
-    public function setCurrentSource(AbstractBlock $block): void
-    {
-        $this->currentSource = $block;
-    }
-
-    public function getSources(): array
-    {
-        return $this->sources;
-    }
-
     public function getTargets(): array
     {
-        // @todo: Is this the right place for this?
-        $targets = [];
-        $targets[] = $this->currentSource->getNameInLayout();
-        $targets = array_merge($targets, $this->sources, $this->targets);
-
-        return array_unique($targets);
+        return array_unique(array_merge([$this->getName()], $this->targets));
     }
 
     public function getTargetString(): string
@@ -65,7 +49,7 @@ class Component implements ComponentInterface
 
         $this->viewModel = $this->objectManager->create($this->viewModelClass, [
             'component' => $this,
-            'block' => $this->currentSource,
+            'block' => $this->getBlock(),
         ]);
 
         return $this->viewModel;
@@ -95,8 +79,13 @@ class Component implements ComponentInterface
         return $this->context;
     }
 
-    public function getCurrentSource(): AbstractBlock
+    public function getBlock(): AbstractBlock
     {
-        return $this->currentSource;
+        if ($this->block instanceof AbstractBlock) {
+            return $this->block;
+        }
+
+        $this->block = $this->layout->getBlock($this->getName());;
+        return $this->block;
     }
 }

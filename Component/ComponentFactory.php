@@ -21,12 +21,9 @@ class ComponentFactory
             $contextClass = ComponentContext::class;
         }
 
-        $context = $this->objectManager->get($contextClass);
-
         $arguments = [
             'name' => $componentDefinition->getName(),
-            'context' => $context,
-            'sources' => $componentDefinition->getSources(),
+            'context' => $this->objectManager->get($contextClass),
             'targets' => $componentDefinition->getTargets(),
             'viewModelClass' => $componentDefinition->getViewModel(),
             'repositoryClass' => $componentDefinition->getRepository(),

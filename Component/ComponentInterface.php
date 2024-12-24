@@ -13,9 +13,7 @@ interface ComponentInterface
 
     public function getRepository(): ?ComponentRepositoryInterface;
 
-    public function getCurrentSource(): AbstractBlock;
-
-    public function getSources(): array;
+    public function getBlock(): AbstractBlock;
 
     public function getTargets(): array;
 

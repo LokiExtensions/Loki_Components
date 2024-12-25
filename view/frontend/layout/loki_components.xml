@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="after.body.start">
-            <block name="loki-components.script.component-type.generic" template="Yireo_LokiComponents::script/component-type/generic.phtml"/>
+            <block name="loki-components.script.component-type.default" template="Yireo_LokiComponents::script/component-type/default.phtml"/>
         </referenceContainer>
 
         <referenceContainer name="page.messages">
@@ -10,7 +10,10 @@
         </referenceContainer>
 
         <referenceContainer name="before.body.end">
+            <block name="loki-components.script.component.default" template="Yireo_LokiComponents::script/component/default.phtml"/>
+
             <block name="loki-components.debugger" template="Yireo_LokiComponents::component/debugger.phtml" before="-"/>
+
             <block name="loki-components.script.alpine-ajax" template="Yireo_LokiComponents::script/alpine-ajax.phtml" before="script-alpine-js"/>
         </referenceContainer>
 

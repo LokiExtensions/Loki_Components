@@ -1,14 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiCheckout\Util\Component;
+namespace Yireo\LokiComponents\Util\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Yireo\LokiCheckout\Component\Base\Generic\GenericViewModelInterface;
-use Yireo\LokiCheckout\Component\Checkout\Step\StepViewModelInterface;
-use Yireo\LokiCheckout\Component\Base\Field\FieldViewModelInterface;
-use Yireo\LokiCheckout\Util\CamelCaseConvertor;
-use Yireo\LokiCheckout\Util\IdConvertor;
+use Yireo\LokiComponents\Util\CamelCaseConvertor;
+use Yireo\LokiComponents\Util\IdConvertor;
 use Yireo\LokiComponents\Component\ComponentViewModelInterface;
 use Yireo\LokiComponents\Util\ComponentUtil;
 
@@ -28,7 +25,8 @@ class JsDataProvider implements ArgumentInterface
         $data = [];
         $block = $viewModel->getBlock();
 
-        $data['name'] = $this->getName($block);
+        $data['title'] = $this->getComponentTitle($block);
+        $data['name'] = $this->getComponentName($block);
         $data['blockId'] = $block->getNameInLayout();
         $data['target'] = $this->getTargets($viewModel);
 
@@ -51,20 +49,8 @@ class JsDataProvider implements ArgumentInterface
 
         $data['filters'] = $filters;
 
-        if ($viewModel instanceof FieldViewModelInterface) {
-            $data['value'] = $viewModel->getValue();
-            $data['valid'] = $viewModel->isValid();
-            $data['disabled'] = $viewModel->isDisabled();
-            $data['step'] = $viewModel->getStep();
-        }
-
-        if ($viewModel instanceof StepViewModelInterface) {
-            $data['step'] = $viewModel->getCode();
-            $data['visible'] = $viewModel->isVisible();
-        }
-
-        if (method_exists($viewModel, 'getAlpineData')) {
-            $data = array_merge($data, $viewModel->getAlpineData());
+        if (method_exists($viewModel, 'getJsData')) {
+            $data = array_merge($data, $viewModel->getJsData());
         }
 
         return $data;

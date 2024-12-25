@@ -11,10 +11,10 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
     const LokiComponentType = {
-        data: null,
+        value: null,
         loading: false,
         getPostData() {
-            return this.data;
+            return this.value;
         },
         async post() {
             this.loading = true;

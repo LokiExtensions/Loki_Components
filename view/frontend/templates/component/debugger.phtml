@@ -15,7 +15,7 @@ $viewModel = $viewModelFactory->create(Debugger::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 $htmlId = $componentUtil->getElementIdByBlockName($block->getNameInLayout());
 ?>
-<div id="<?= $htmlId ?>" class="p-4" x-sync>
+<div x-sync id="<?= $htmlId ?>" class="p-4">
     <h3 class="text-xl my-4">LokiComponents Debugger</h3>
     <pre><?php var_dump($viewModel->getData()) ?></pre>
 </div>

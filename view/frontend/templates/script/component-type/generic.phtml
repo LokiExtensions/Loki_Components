@@ -11,15 +11,19 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
     const LokiComponentType = {
+        data: null,
         loading: false,
-        async post(data) {
+        getPostData() {
+            return this.data;
+        },
+        async post() {
             this.loading = true;
             await this.$ajax('<?= $componentUtil->getPostUrl() ?>', {
                 method: 'post',
                 target: this.target,
                 sync: true,
                 body: {
-                    json: JSON.stringify(data),
+                    json: JSON.stringify(this.getPostData()),
                     block: this.blockId,
                     handles: '<?= $componentUtil->getHandles($block) ?>',
                     form_key: hyva.getFormKey()

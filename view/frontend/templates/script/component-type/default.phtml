@@ -13,6 +13,27 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
     const LokiComponentType = {
         value: null,
         loading: false,
+        initActions: {
+            loadInitialData: function() {
+                const jsonData = JSON.parse(this.$el.getAttribute('x-init-data'));
+                for ([key, value] of Object.entries(jsonData)) {
+                    this[key] = value;
+                }
+            }
+        },
+        beforeInit() {
+        },
+        init() {
+            this.beforeInit();
+
+            for ([key, callback] of Object.entries(this.initActions)) {
+                callback.apply(this);
+            }
+
+            this.afterInit();
+        },
+        afterInit() {
+        },
         getPostData() {
             return this.value;
         },

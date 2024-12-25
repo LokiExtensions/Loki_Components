@@ -7,6 +7,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
+use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Util\Component\JsDataProvider;
 use Yireo\LokiComponents\Component\ComponentRegistry;
 use Yireo\LokiComponents\Component\ComponentViewModelInterface;
@@ -16,7 +17,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
 {
     public function __construct(
         private readonly ComponentRegistry $componentRegistry,
-        private readonly JsDataProvider $jsDataProvider
+        private readonly JsDataProvider    $jsDataProvider
     ) {
     }
 
@@ -47,11 +48,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
             return;
         }
 
-        if (false === $component->getViewModel() instanceof ComponentViewModelInterface) {
-            return;
-        }
-
-        $htmlAttributes = $this->getHtmlAttributes($component->getViewModel());
+        $htmlAttributes = $this->getHtmlAttributes($component);
         if (empty($htmlAttributes)) {
             return;
         }
@@ -61,22 +58,39 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
         $transport->setHtml($html);
     }
 
-    private function getHtmlAttributes(ComponentViewModelInterface $componentViewModel): string
+    private function getHtmlAttributes(ComponentInterface $component): string
     {
-        $block = $componentViewModel->getBlock();
+        $block = $component->getBlock();
 
         $attributes = (array)$block->getData('html_attributes');
         $attributes['id'] = $this->getElementId($block); // @todo: Double-check that ID has not been added yet
         $attributes['x-data'] = $this->jsDataProvider->getComponentName($block);
         $attributes['x-title'] = $this->jsDataProvider->getComponentTitle($block);
-        $attributes['x-init-data'] = $this->jsDataProvider->getJson($componentViewModel);
         $attributes['x-target'] = true; // @todo: Is this needed?
 
         $htmlAttribute = '';
-        foreach ($attributes as $attributeName => $attributeValue) {            $htmlAttribute .= ' ' . $attributeName . '="' . $attributeValue . '"';
+        foreach ($attributes as $attributeName => $attributeValue) {
+            $htmlAttribute .= ' ' . $attributeName . '="' . $attributeValue . '"';
         }
 
+        $htmlAttribute .= " x-init-data='" . $this->getJsonData($component) . "'";
+
         return trim($htmlAttribute);
+    }
+
+    private function getJsonData(ComponentInterface $component): string
+    {
+        $block = $component->getBlock();
+        $viewModel = $component->getViewModel();
+
+        if ($viewModel instanceof ComponentViewModelInterface) {
+            return $this->jsDataProvider->getJson($viewModel);
+        }
+
+        return json_encode([
+            'blockId' => $block->getNameInLayout(),
+            'target' => $this->getElementId($block)
+        ]);
     }
 
     private function getElementId(AbstractBlock $block): string

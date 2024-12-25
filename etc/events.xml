@@ -3,6 +3,10 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd"
 >
     <event name="view_block_abstract_to_html_before">
-        <observer name="Yireo_LokiComponents::addComponent" instance="Yireo\LokiComponents\Observer\AddComponent"/>
+        <observer name="Yireo_LokiComponents::addComponentToBlock" instance="Yireo\LokiComponents\Observer\AddComponentToBlock"/>
+    </event>
+
+    <event name="view_block_abstract_to_html_after">
+        <observer name="Yireo_LokiComponents::addHtmlAttributesToComponentBlock" instance="Yireo\LokiComponents\Observer\AddHtmlAttributesToComponentBlock"/>
     </event>
 </config>

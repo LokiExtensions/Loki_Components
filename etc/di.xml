@@ -26,6 +26,10 @@
         </arguments>
     </type>
 
+    <type name="Magento\Framework\View\Element\Template">
+        <plugin name="Yireo_LokiComponents::addCspInlineScripts" type="Yireo\LokiComponents\Plugin\AddCspInlineScripts"/>
+    </type>
+
     <type name="Yireo\LokiComponents\Validator\ValidatorRegistry">
         <arguments>
             <argument name="validators" xsi:type="array">

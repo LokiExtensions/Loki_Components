@@ -1,0 +1,11 @@
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('LokiComponentToggle', () => ({
+            ...LokiComponentType,
+            toggle() {
+                this.value = !this.value;
+                this.post();
+            }
+        }));
+    });
+</script>

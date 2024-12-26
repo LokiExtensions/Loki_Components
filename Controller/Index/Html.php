@@ -15,7 +15,9 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use RuntimeException;
+use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Component\ComponentRegistry;
+use Yireo\LokiComponents\Component\ComponentRepositoryInterface;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
 use Yireo\LokiComponents\Util\Debugger;
@@ -81,6 +83,24 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             die($e->getMessage());
         }
 
+        $this->debugComponent($component);
+
+        $repository = $component->getRepository();
+        if (false === $repository instanceof ComponentRepositoryInterface) {
+            return;
+        }
+
+        try {
+            $data = $this->getRequestData();
+            $this->debug('data', $data);
+            $repository->save($data);
+        } catch (RuntimeException $e) {
+            $this->messageManager->addErrorMessage($e->getMessage());
+        }
+    }
+
+    private function debugComponent(ComponentInterface $component): void
+    {
         $this->debug('component', $component->getName());
 
         $viewModel = $component->getViewModel();
@@ -96,13 +116,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $this->debug('validators', $component->getValidators());
         $this->debug('filters', $component->getFilters());
 
-        try {
-            $data = $this->getRequestData();
-            $this->debug('save data', $data);
-            $repository->save($data);
-        } catch (RuntimeException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
-        }
     }
 
     private function getRequestData(): mixed

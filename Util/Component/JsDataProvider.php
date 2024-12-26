@@ -27,6 +27,7 @@ class JsDataProvider implements ArgumentInterface
 
         $data['title'] = $this->getComponentTitle($block);
         $data['name'] = $this->getComponentName($block);
+        $data['value'] = $viewModel->getValue();
         $data['blockId'] = $block->getNameInLayout();
         $data['target'] = $this->getTargets($viewModel);
 

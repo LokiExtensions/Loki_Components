@@ -20,8 +20,12 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
         return preg_replace('/([^a-zA-Z0-9\-]+)/', '-', $this->block->getNameInLayout());
     }
 
-    public function getData(): mixed
+    public function getValue(): mixed
     {
+        if (false === $this->getComponent()->hasRepository()) {
+            return null;
+        }
+
         return $this->getComponent()->getRepository()->get();
     }
 
@@ -68,5 +72,10 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
     protected function getRepository(): ?ComponentRepositoryInterface
     {
         return $this->component->getRepository();
+    }
+
+    public function getTemplate(): ?string
+    {
+        return null;
     }
 }

@@ -9,6 +9,9 @@ use Yireo\LokiComponents\Util\ComponentUtil;
 /** @var MessagesViewModel $viewModel */
 /** @var ComponentUtil $componentUtil */
 
+if (false === $viewModel->getMessageManager()->hasGlobalMessages()) {
+    return;
+}
 ?>
 <script id="<?= $componentUtil->getElementIdByBlock($block) ?>" x-sync>
     <?php if (false === $componentUtil->isAjax()): ?>

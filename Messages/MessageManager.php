@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Messages;
 
+use Magento\Framework\Message\Collection as MessageCollection;
 use Magento\Framework\Message\ManagerInterface as CoreMessageManager;
 
 class MessageManager
@@ -58,5 +59,10 @@ class MessageManager
     public function clearLocalMessages(): void
     {
         $this->messages = [];
+    }
+
+    public function hasGlobalMessages(): bool
+    {
+        return true; // @todo: Hook into the real message manager with DI plugin and toggle an internal flag here
     }
 }

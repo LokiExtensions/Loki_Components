@@ -37,6 +37,10 @@ class AddComponentToBlock implements ObserverInterface
             return;
         }
 
+        if (!empty($viewModel->getTemplate())) {
+            $block->setTemplate($viewModel->getTemplate());
+        }
+
         $block->setViewModel($viewModel);
         $block->assign('viewModel', $viewModel);
         $block->assign('componentUtil', $this->componentUtil);

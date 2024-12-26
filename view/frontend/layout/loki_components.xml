@@ -1,22 +1,23 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="after.body.start">
-            <block name="loki-components.script.component-type.default" template="Yireo_LokiComponents::script/component-type/default.phtml"/>
-        </referenceContainer>
-
         <referenceContainer name="page.messages">
             <block name="loki-components.messages" template="Yireo_LokiComponents::component/messages.phtml" before="-"/>
         </referenceContainer>
 
         <referenceContainer name="before.body.end">
-            <block name="loki-components.script.component.default" template="Yireo_LokiComponents::script/component/default.phtml"/>
+            <container name="loki-component-types">
+                <block name="loki-components.script.component-type.base" template="Yireo_LokiComponents::script/component-type/base-component-type.phtml"/>
+            </container>
+
+            <container name="loki-components">
+                <block name="loki-components.script.component.base" template="Yireo_LokiComponents::script/component/base-component.phtml"/>
+                <block name="loki-components.script.component.toggle" template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
+            </container>
 
             <block name="loki-components.debugger" template="Yireo_LokiComponents::component/debugger.phtml" before="-"/>
 
             <block name="loki-components.script.alpine-ajax" template="Yireo_LokiComponents::script/alpine-ajax.phtml" before="script-alpine-js"/>
         </referenceContainer>
-
-        <block name="loki-components.form_html" template="Yireo_LokiComponents::form_html.phtml"/>
     </body>
 </page>

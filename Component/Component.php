@@ -42,6 +42,11 @@ class Component implements ComponentInterface
         return preg_replace('/([^a-z0-9\-\ ]+)/', '-', implode(' ', $this->getTargets()));
     }
 
+    public function hasViewModel(): bool
+    {
+        return $this->getViewModel() instanceof ComponentViewModelInterface;
+    }
+
     public function getViewModel(): ?ComponentViewModelInterface
     {
         if (empty($this->viewModelClass)) {
@@ -56,8 +61,17 @@ class Component implements ComponentInterface
         return $this->viewModel;
     }
 
+    public function hasRepository(): bool
+    {
+        return $this->getRepository() instanceof ComponentRepositoryInterface;
+    }
+
     public function getRepository(): ?ComponentRepositoryInterface
     {
+        if (empty($this->repositoryClass)) {
+            return null;
+        }
+
         $this->repository = $this->objectManager->create($this->repositoryClass, [
             'component' => $this,
         ]);

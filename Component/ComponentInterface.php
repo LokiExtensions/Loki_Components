@@ -10,8 +10,10 @@ interface ComponentInterface
     public function getContext(): ComponentContextInterface;
 
     public function getViewModel(): ?ComponentViewModelInterface;
+    public function hasViewModel(): bool;
 
     public function getRepository(): ?ComponentRepositoryInterface;
+    public function hasRepository(): bool;
 
     public function getBlock(): AbstractBlock;
 

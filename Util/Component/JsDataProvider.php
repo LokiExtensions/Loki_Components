@@ -4,6 +4,7 @@ namespace Yireo\LokiComponents\Util\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Util\CamelCaseConvertor;
 use Yireo\LokiComponents\Util\IdConvertor;
 use Yireo\LokiComponents\Component\ComponentViewModelInterface;
@@ -62,11 +63,20 @@ class JsDataProvider implements ArgumentInterface
         return json_encode($this->getData($viewModel));
     }
 
-    public function getComponentName(AbstractBlock $block): string
+    public function getComponentName(ComponentInterface $component): string
     {
+        $block = $component->getBlock();
         $componentName = $block->getJsComponentName();
         if (!empty($componentName)) {
             return $componentName;
+        }
+
+        $viewModel = $component->getViewModel();
+        if ($viewModel) {
+            $componentName = $viewModel->getJsComponentName();
+            if (!empty($componentName)) {
+                return $componentName;
+            }
         }
 
         return 'LokiComponent';

@@ -24,4 +24,6 @@ interface ComponentInterface
     public function getValidators(): array;
 
     public function getFilters(): array;
+
+    public function getJsComponentName(): ?string;
 }

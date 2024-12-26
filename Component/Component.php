@@ -109,4 +109,9 @@ class Component implements ComponentInterface
 
         return $this->block;
     }
+
+    public function getJsComponentName(): ?string
+    {
+        return null;
+    }
 }

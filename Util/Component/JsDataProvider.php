@@ -72,7 +72,7 @@ class JsDataProvider implements ArgumentInterface
         }
 
         $viewModel = $component->getViewModel();
-        if ($viewModel) {
+        if ($viewModel instanceof ComponentViewModelInterface) {
             $componentName = $viewModel->getJsComponentName();
             if (!empty($componentName)) {
                 return $componentName;

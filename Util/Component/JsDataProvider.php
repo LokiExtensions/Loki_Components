@@ -21,13 +21,14 @@ class JsDataProvider implements ArgumentInterface
     ) {
     }
 
+    // @todo: Rename to getJsData()
     public function getData(ComponentViewModelInterface $viewModel): array
     {
         $data = [];
         $block = $viewModel->getBlock();
 
-        $data['title'] = $this->getComponentTitle($block);
-        $data['name'] = $this->getComponentName($block);
+        $data['title'] = $this->getComponentTitle($viewModel);
+        $data['name'] = $this->getComponentName($viewModel);
         $data['value'] = $viewModel->getValue();
         $data['blockId'] = $block->getNameInLayout();
         $data['target'] = $this->getTargets($viewModel);
@@ -51,8 +52,16 @@ class JsDataProvider implements ArgumentInterface
 
         $data['filters'] = $filters;
 
-        if (method_exists($viewModel, 'getJsData')) {
-            $data = array_merge($data, $viewModel->getJsData());
+        // @doc
+        $viewModelData = $viewModel->getJsData();
+        if (is_array($viewModelData)) {
+            $data = array_merge($data, $viewModelData);
+        }
+
+        // @doc
+        $blockData = $block->getJsData();
+        if (is_array($blockData)) {
+            $data = array_merge($data, $blockData);
         }
 
         return $data;
@@ -63,17 +72,16 @@ class JsDataProvider implements ArgumentInterface
         return json_encode($this->getData($viewModel));
     }
 
-    public function getComponentName(ComponentInterface $component): string
+    public function getComponentName(ComponentViewModelInterface $componentViewModel): string
     {
-        $block = $component->getBlock();
+        $block = $componentViewModel->getBlock();
         $componentName = $block->getJsComponentName();
         if (!empty($componentName)) {
             return $componentName;
         }
 
-        $viewModel = $component->getViewModel();
-        if ($viewModel instanceof ComponentViewModelInterface) {
-            $componentName = $viewModel->getJsComponentName();
+        if ($componentViewModel instanceof ComponentViewModelInterface) {
+            $componentName = $componentViewModel->getJsComponentName();
             if (!empty($componentName)) {
                 return $componentName;
             }
@@ -82,8 +90,9 @@ class JsDataProvider implements ArgumentInterface
         return 'LokiComponent';
     }
 
-    public function getComponentTitle(AbstractBlock $block): string
+    public function getComponentTitle(ComponentViewModelInterface $componentViewModel): string
     {
+        $block = $componentViewModel->getBlock();
         return $this->camelCaseConvertor->toCamelCase($block->getNameInLayout());
     }
 

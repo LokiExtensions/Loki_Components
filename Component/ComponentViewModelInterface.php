@@ -19,10 +19,16 @@ interface ComponentViewModelInterface extends ArgumentInterface
     public function getTargets(): array;
 
     public function getTargetString(): string;
+
     public function getValidators(): array;
+
     public function getFilters(): array;
 
     public function getMessageManager(): MessageManager;
+
     public function getContext(): ComponentContextInterface;
+
     public function getTemplate(): ?string;
+
+    public function getJsComponentName(): ?string;
 }

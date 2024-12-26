@@ -78,4 +78,9 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
     {
         return null;
     }
+
+    public function getJsComponentName(): ?string
+    {
+        return null;
+    }
 }

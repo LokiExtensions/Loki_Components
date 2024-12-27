@@ -9,6 +9,9 @@
                 <item name="/components/componentGroup" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
+                <item name="/components/componentGroup/defaultTarget" xsi:type="array">
+                    <item name="name" xsi:type="string">name</item>
+                </item>
                 <item name="/components/componentGroup/component" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>

@@ -1,21 +1,21 @@
 {
-  "name": "yireo/magento2-loki-components",
-  "version": "0.0.1",
-  "description": "N/A",
-  "type": "magento2-module",
-  "require": {
-    "magento/framework": "*",
-      "ext-dom": "*"
-  },
-  "license": [
-    "Open Software License (OSL)"
-  ],
-  "autoload": {
-    "files": [
-      "registration.php"
+    "name": "yireo/magento2-loki-components",
+    "version": "0.0.1",
+    "description": "N/A",
+    "type": "magento2-module",
+    "require": {
+        "magento/framework": "*",
+        "ext-dom": "*"
+    },
+    "license": [
+        "Open Software License (OSL)"
     ],
-    "psr-4": {
-      "Yireo\\LokiComponents\\": ""
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Yireo\\LokiComponents\\": ""
+        }
     }
-  }
 }

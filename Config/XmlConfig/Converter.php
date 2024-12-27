@@ -35,7 +35,7 @@ class Converter implements ConverterInterface
             $defaultContext = (string)$componentGroupElement->getAttribute('defaultContext');
             $defaultViewModel = (string)$componentGroupElement->getAttribute('defaultViewModel');
             $defaultRepository = (string)$componentGroupElement->getAttribute('defaultRepository');
-            $defaultTargets = $this->getTargets($componentGroupElement);
+            $defaultTargets = $this->getDefaultTargets($componentGroupElement);
 
             if (empty($defaultComponentClass)) {
                 $defaultComponentClass = Component::class;
@@ -64,6 +64,17 @@ class Converter implements ConverterInterface
         }
 
         return $componentDefinitions;
+    }
+
+    private function getDefaultTargets(DOMNode $element): array
+    {
+        $targets = [];
+        $targetElements = $element->getElementsByTagName('defaultTarget');
+        foreach ($targetElements as $targetElement) {
+            $targets[] = (string)$targetElement->getAttribute('name');
+        }
+
+        return $targets;
     }
 
     private function getTargets(DOMNode $element): array

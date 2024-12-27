@@ -5,12 +5,15 @@ namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
 use Yireo\LokiComponents\Messages\MessageManager;
+use Yireo\LokiComponents\Messages\MessageManagerFactory;
 
 abstract class ComponentViewModel implements ComponentViewModelInterface
 {
+    protected ?MessageManager $messageManager = null;
+
     public function __construct(
         protected ComponentInterface $component,
-        protected MessageManager $messageManager,
+        protected MessageManagerFactory $messageManagerFactory,
         protected AbstractBlock $block,
     ) {
     }
@@ -56,6 +59,10 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
 
     public function getMessageManager(): MessageManager
     {
+        if (false === $this->messageManager instanceof MessageManager) {
+            $this->messageManager = $this->messageManagerFactory->create();
+        }
+
         return $this->messageManager;
     }
 

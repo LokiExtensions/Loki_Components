@@ -19,8 +19,9 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
 
     public function get(): mixed
     {
-        // @todo: Add validation here as well?
-        return $this->filter($this->getData());
+        $data = $this->filter($this->getData());
+        $this->validate($data);
+        return $data;
     }
 
     public function save(mixed $data): void

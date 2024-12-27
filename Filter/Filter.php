@@ -11,7 +11,7 @@ class Filter
 
     public function filter(array $requestedFilters = [], mixed $data = null): mixed
     {
-        if (empty($data)) {
+        if (empty($data) || is_bool($data) || is_int($data)) {
             return $data;
         }
 

@@ -81,23 +81,28 @@ class Component implements ComponentInterface
 
     public function getValidators(array $validators = []): array
     {
-        return array_unique(
-            array_merge(
-                $this->validators,
-                $validators,
-                array_values((array)$this->block->getValidators())
+        return array_values(
+            array_unique(
+                array_merge(
+                    $this->validators,
+                    $validators,
+                    (array)$this->block->getValidators()
+                )
             )
         );
     }
 
     public function getFilters(array $filters = []): array
     {
-        return array_unique(
-            array_merge(
-                $this->filters,
-                $filters,
-                ['security'],
-                array_values((array)$this->block->getFilters())
+        return array_values(
+            array_unique(
+                array_merge(
+                    $this->filters,
+                    $filters,
+                    ['security'],
+                    ((array)$this->block->getFilters()
+                    )
+                )
             )
         );
     }

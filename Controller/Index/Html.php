@@ -89,7 +89,9 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         if (false === $repository instanceof ComponentRepositoryInterface) {
             return;
         }
-        
+
+        sleep(5);
+
         try {
             $data = $this->getRequestData();
             $this->debug('data', $data);

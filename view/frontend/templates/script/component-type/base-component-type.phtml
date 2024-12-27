@@ -16,7 +16,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         elementId: '',
         blockId: '',
         target: '',
-        loading: false,
         value: null,
         initActions: {
             loadInitialData: function () {
@@ -44,7 +43,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 data = this.value;
             }
 
-            this.loading = true;
             await this.$ajax('<?= $componentUtil->getPostUrl() ?>', {
                 method: 'post',
                 target: this.target,
@@ -56,7 +54,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     form_key: hyva.getFormKey()
                 }
             });
-            this.loading = false;
         }
     }
 </script>

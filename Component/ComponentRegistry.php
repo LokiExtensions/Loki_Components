@@ -34,6 +34,7 @@ class ComponentRegistry
      */
     public function getComponentFromBlockName(string $blockName): Component
     {
+        // @todo: Rewrite this to array_filter function
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
             if ($componentDefinition->getName() === $blockName) {
                 return $this->getComponentByName($componentDefinition->getName());
@@ -67,6 +68,7 @@ class ComponentRegistry
      */
     public function getBlockNameFromElementId(string $elementId): string
     {
+        // @todo: Rewrite this to array_filter function
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
             foreach ($componentDefinition->getTargets() as $target) {
                 if ($target === $elementId) {
@@ -90,6 +92,7 @@ class ComponentRegistry
      */
     private function createComponentByName(string $componentName): Component
     {
+        // @todo: Rewrite this to array_filter function
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
             if ($componentDefinition->getName() === $componentName) {
                 return $this->componentFactory->createFromDefinition($componentDefinition);

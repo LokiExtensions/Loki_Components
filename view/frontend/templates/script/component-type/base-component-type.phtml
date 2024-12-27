@@ -38,12 +38,13 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         },
         afterInit() {
         },
-        async post(data) {
+        post(data) {
             if (!data) {
                 data = this.value;
             }
 
-            await this.$ajax('<?= $componentUtil->getPostUrl() ?>', {
+            console.log('AJAX call', this.id, data, this.target);
+            this.$ajax('<?= $componentUtil->getPostUrl() ?>', {
                 method: 'post',
                 target: this.target,
                 sync: true,

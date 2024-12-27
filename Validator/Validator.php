@@ -21,7 +21,7 @@ class Validator
 
         if (is_array($data)) {
             foreach ($data as $value) {
-                if (false === $this->validate($value)) {
+                if (false === $this->validate($component, $value)) {
                     return false;
                 }
             }

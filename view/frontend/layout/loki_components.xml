@@ -12,6 +12,7 @@
 
             <container name="loki-components">
                 <block name="loki-components.script.component.base" template="Yireo_LokiComponents::script/component/base-component.phtml"/>
+                <block name="loki-components.script.component.messages" template="Yireo_LokiComponents::script/component/messages-component.phtml"/>
                 <block name="loki-components.script.component.toggle" template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
             </container>
 

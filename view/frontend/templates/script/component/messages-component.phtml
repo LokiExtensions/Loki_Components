@@ -1,0 +1,20 @@
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('LokiComponentMessages', () => ({
+            ...LokiComponentType,
+            reload: false,
+            initActions: {
+                ...LokiComponentType.initActions,
+                reload() {
+                    if (this.reload) {
+                        this.reloadMessages();
+                    }
+                }
+            },
+            reloadMessages() {
+                window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
+                hyva.initMessages();
+            }
+        }));
+    });
+</script>

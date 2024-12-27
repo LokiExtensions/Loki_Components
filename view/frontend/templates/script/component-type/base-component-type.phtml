@@ -24,6 +24,10 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 for ([key, value] of Object.entries(jsonData)) {
                     this[key] = value;
                 }
+
+                console.log('targets of ' + this.title, this.target);
+                //console.log('validators of ' + this.title, Object.entries(this.validators));
+                //console.log('filters of ' + this.title, Object.entries(this.filters));
             }
         },
         beforeInit() {

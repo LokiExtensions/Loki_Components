@@ -3,24 +3,9 @@ declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
 use Yireo\LokiComponents\Component\Messages\MessagesViewModel;
-use Yireo\LokiComponents\Util\ComponentUtil;
 
 /** @var Template $block */
 /** @var MessagesViewModel $viewModel */
-/** @var ComponentUtil $componentUtil */
 
-if (false === $viewModel->getMessageManager()->hasGlobalMessages()) {
-    return;
-}
 ?>
-<script id="<?= $componentUtil->getElementIdByBlock($block) ?>" x-sync>
-    <?php if (false === $componentUtil->isAjax()): ?>
-    window.addEventListener('DOMContentLoaded', () => {
-    <?php endif; ?>
-        window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
-        hyva.initMessages();
-    <?php if (false === $componentUtil->isAjax()): ?>
-    })
-    <?php endif; ?>
-</script>
-
+<div></div>

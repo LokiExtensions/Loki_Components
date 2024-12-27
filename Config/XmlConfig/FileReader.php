@@ -19,7 +19,9 @@ class FileReader extends Filesystem
         $idAttributes = [
             '/components/componentGroup/name' => 'id',
             '/components/componentGroup/component/name' => 'id',
-            '/components/componentGroup/component/blocks/block/name' => 'id',
+            '/components/componentGroup/component/target/name' => 'id',
+            '/components/componentGroup/component/validator/name' => 'id',
+            '/components/componentGroup/component/filter/name' => 'id',
         ],
         $domDocumentClass = Dom::class,
         $defaultScope = 'global'

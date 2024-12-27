@@ -4,7 +4,8 @@
   "description": "N/A",
   "type": "magento2-module",
   "require": {
-    "magento/framework": "*"
+    "magento/framework": "*",
+      "ext-dom": "*"
   },
   "license": [
     "Open Software License (OSL)"

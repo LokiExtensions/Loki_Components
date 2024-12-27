@@ -12,7 +12,13 @@
                 <item name="/components/componentGroup/component" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
-                <item name="/components/componentGroup/component/blocks/block" xsi:type="array">
+                <item name="/components/componentGroup/component/target" xsi:type="array">
+                    <item name="name" xsi:type="string">name</item>
+                </item>
+                <item name="/components/componentGroup/component/validator" xsi:type="array">
+                    <item name="name" xsi:type="string">name</item>
+                </item>
+                <item name="/components/componentGroup/component/filter" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
             </argument>

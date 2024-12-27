@@ -41,7 +41,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         },
         async post(data) {
             if (!data) {
-                data = {value: this.value};
+                data = this.value;
             }
 
             this.loading = true;

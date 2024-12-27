@@ -19,6 +19,7 @@ class FilterRegistry
     /**
      * @param array $selectedFilters
      * @return FilterInterface[]
+     * @todo Rename to getApplicableFilters()
      */
     public function getSelectedFilters(array $selectedFilters = []): array
     {

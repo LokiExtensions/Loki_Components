@@ -6,6 +6,8 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use RuntimeException;
 use Yireo\LokiComponents\Component\ComponentInterface;
+use Yireo\LokiComponents\Filter\FilterRegistry;
+use Yireo\LokiComponents\Filter\Security;
 use Yireo\LokiComponents\Util\CamelCaseConvertor;
 use Yireo\LokiComponents\Util\IdConvertor;
 use Yireo\LokiComponents\Component\ComponentViewModelInterface;
@@ -18,7 +20,8 @@ class JsDataProvider implements ArgumentInterface
     public function __construct(
         private ComponentUtil $componentUtil,
         private IdConvertor $idConvertor,
-        private CamelCaseConvertor $camelCaseConvertor
+        private CamelCaseConvertor $camelCaseConvertor,
+        private Security $security
     ) {
     }
 
@@ -35,11 +38,13 @@ class JsDataProvider implements ArgumentInterface
         $data['elementId'] = $this->componentUtil->getElementIdByBlockName($block->getNameInLayout());
 
         $data['validators'] = [];
-        $data['filters'] = [];
+        $data['filters'] = $component->getFilters();
+        //$data['filters'] = [];
 
         $viewModel = $component->getViewModel();
         if ($viewModel instanceof ComponentViewModelInterface) {
             $data['value'] = $viewModel->getValue();
+            //$data['value'] = $this->getJsValue($viewModel->getValue());
 
             foreach ($viewModel->getValidators() as $validator) {
                 $data['validators'][] = $validator;
@@ -91,10 +96,20 @@ class JsDataProvider implements ArgumentInterface
         return $this->camelCaseConvertor->toCamelCase($block->getNameInLayout());
     }
 
-    // @todo: Is this still used anywhere?
-    public function getJsValue(string $value): string
+    public function getJsValue(mixed $value): mixed
     {
-        return str_replace("\n", '\n', $value); // @todo: Is this good enough?
+        if (is_array($value)) {
+            foreach ($value as $index => $subvalue) {
+                $value[$index] = $this->getJsValue($subvalue);
+            }
+        }
+
+        if (is_string($value)) {
+            $value = addslashes($value);
+            $value = str_replace("\n", '\n', $value);
+        }
+
+        return $value;
     }
 
     private function getTargets(ComponentInterface $component): string

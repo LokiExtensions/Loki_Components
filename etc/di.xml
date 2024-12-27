@@ -53,6 +53,7 @@
     <type name="Yireo\LokiComponents\Filter\FilterRegistry">
         <arguments>
             <argument name="filters" xsi:type="array">
+                <item name="security" xsi:type="object">Yireo\LokiComponents\Filter\Security</item>
                 <item name="trim" xsi:type="object">Yireo\LokiComponents\Filter\Trim</item>
                 <item name="capitalize" xsi:type="object">Yireo\LokiComponents\Filter\Capitalize</item>
                 <item name="lowercase" xsi:type="object">Yireo\LokiComponents\Filter\Lowercase</item>

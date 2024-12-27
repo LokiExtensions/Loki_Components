@@ -20,6 +20,7 @@ class ValidatorRegistry
      * @param array $selectedValidators
      *
      * @return ValidatorInterface[]
+     * @todo: Rename to getRequestedValidators()
      */
     public function getSelectedValidators(array $selectedValidators = []): array
     {

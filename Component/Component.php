@@ -81,11 +81,13 @@ class Component implements ComponentInterface
 
     public function getValidators(): array
     {
+        // @todo: Allow for validators from XML layout
         return $this->validators;
     }
 
     public function getFilters(): array
     {
+        // @todo: Allow for filters from XML layout
         return $this->filters;
     }
 

@@ -3,22 +3,23 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Component;
 
-use Yireo\LokiComponents\Filter\FilterRegistry;
+use Yireo\LokiComponents\Filter\Filter;
+use Yireo\LokiComponents\Validator\Validator;
 use Yireo\LokiComponents\Messages\MessageManager;
-use Yireo\LokiComponents\Validator\ValidatorRegistry;
 
 abstract class ComponentRepository implements ComponentRepositoryInterface
 {
     public function __construct(
         protected ComponentInterface $component,
-        protected ValidatorRegistry $validatorRegistry,
-        protected FilterRegistry $filterRegistry,
+        protected Validator $validator,
+        protected Filter $filter,
         protected MessageManager $messageManager,
     ) {
     }
 
     public function get(): mixed
     {
+        // @todo: Add validation here as well?
         return $this->filter($this->getData());
     }
 
@@ -42,47 +43,11 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
 
     protected function filter(mixed $data): mixed
     {
-        if (is_array($data)) {
-            foreach ($data as $name => $value) {
-                $data[$name] = $this->filter($value);
-            }
-
-            return $data;
-        }
-
-        $filters = $this->filterRegistry->getSelectedFilters(
-            $this->component->getFilters()
-        );
-
-        foreach ($filters as $filter) {
-            $data = $filter->filter($data);
-        }
-
-        return $data;
+        return $this->filter->filter($this->component->getFilters(), $data);
     }
 
     protected function validate(mixed $data): bool
     {
-        if (is_array($data)) {
-            foreach ($data as $value) {
-                if (false === $this->validate($value)) {
-                    return false;
-                }
-            }
-
-            return true;
-        }
-
-        $validators = $this->validatorRegistry->getSelectedValidators(
-            $this->component->getValidators()
-        );
-
-        foreach ($validators as $validator) {
-            if (false === $validator->validate($this->component, $data)) {
-                return false;
-            }
-        }
-
-        return true;
+        return $this->validator->validate($this->component, $data);
     }
 }

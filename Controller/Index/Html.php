@@ -90,8 +90,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             return;
         }
 
-        sleep(5);
-
         try {
             $data = $this->getRequestData();
             $this->debug('data', $data);

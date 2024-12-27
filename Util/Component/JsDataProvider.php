@@ -21,15 +21,13 @@ class JsDataProvider implements ArgumentInterface
         private ComponentUtil $componentUtil,
         private IdConvertor $idConvertor,
         private CamelCaseConvertor $camelCaseConvertor,
-        private Security $security
     ) {
     }
 
-    // @todo: Rename to getJsData()
     public function getComponentData(ComponentInterface $component): array
     {
         $data = [];
-        $data['title'] = $this->getComponentTitle($component);
+        $data['id'] = $this->getComponentId($component);
         $data['name'] = $this->getComponentName($component);
         $data['target'] = $this->getTargets($component);
 
@@ -79,7 +77,7 @@ class JsDataProvider implements ArgumentInterface
         return 'LokiComponent';
     }
 
-    public function getComponentTitle(ComponentInterface $component): string
+    public function getComponentId(ComponentInterface $component): string
     {
         $block = $component->getBlock();
 

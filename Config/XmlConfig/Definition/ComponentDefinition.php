@@ -66,5 +66,4 @@ class ComponentDefinition
     {
         return $this->filters;
     }
-
 }

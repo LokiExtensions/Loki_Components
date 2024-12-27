@@ -9,7 +9,6 @@ class Security implements FilterInterface
         $value = (string)$value;
         $value = strip_tags($value);
         $value = htmlentities($value);
-        $value = strtoupper($value);
         return $value;
     }
 }

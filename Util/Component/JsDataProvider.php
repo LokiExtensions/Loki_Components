@@ -37,22 +37,12 @@ class JsDataProvider implements ArgumentInterface
         $data['blockId'] = $block->getNameInLayout();
         $data['elementId'] = $this->componentUtil->getElementIdByBlockName($block->getNameInLayout());
 
-        $data['validators'] = [];
+        $data['validators'] = $component->getValidators();
         $data['filters'] = $component->getFilters();
-        //$data['filters'] = [];
 
         $viewModel = $component->getViewModel();
         if ($viewModel instanceof ComponentViewModelInterface) {
             $data['value'] = $viewModel->getValue();
-            //$data['value'] = $this->getJsValue($viewModel->getValue());
-
-            foreach ($viewModel->getValidators() as $validator) {
-                $data['validators'][] = $validator;
-            }
-
-            foreach ($viewModel->getFilters() as $filter) {
-                $data['filters'][] = $filter;
-            }
 
             // @doc
             $viewModelData = $viewModel->getJsData();
@@ -96,20 +86,10 @@ class JsDataProvider implements ArgumentInterface
         return $this->camelCaseConvertor->toCamelCase($block->getNameInLayout());
     }
 
+    // @todo: Where is this being used?
     public function getJsValue(mixed $value): mixed
     {
-        if (is_array($value)) {
-            foreach ($value as $index => $subvalue) {
-                $value[$index] = $this->getJsValue($subvalue);
-            }
-        }
-
-        if (is_string($value)) {
-            $value = addslashes($value);
-            $value = str_replace("\n", '\n', $value);
-        }
-
-        return $value;
+        return str_replace("\n", '\n', (string)$value);
     }
 
     private function getTargets(ComponentInterface $component): string

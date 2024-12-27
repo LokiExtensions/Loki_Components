@@ -6,7 +6,7 @@ namespace Yireo\LokiComponents\Component;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
-use Yireo\ExtensionChecker\Exception\ComponentNotFoundException;
+use Yireo\LokiComponents\Exception\NoComponentFoundException;
 
 class Component implements ComponentInterface
 {
@@ -79,16 +79,27 @@ class Component implements ComponentInterface
         return $this->repository;
     }
 
-    public function getValidators(): array
+    public function getValidators(array $validators = []): array
     {
-        // @todo: Allow for validators from XML layout
-        return $this->validators;
+        return array_unique(
+            array_merge(
+                $this->validators,
+                $validators,
+                array_values((array)$this->block->getValidators())
+            )
+        );
     }
 
-    public function getFilters(): array
+    public function getFilters(array $filters = []): array
     {
-        // @todo: Allow for filters from XML layout
-        return $this->filters;
+        return array_unique(
+            array_merge(
+                $this->filters,
+                $filters,
+                ['security'],
+                array_values((array)$this->block->getFilters())
+            )
+        );
     }
 
     public function getContext(): ComponentContextInterface
@@ -104,12 +115,11 @@ class Component implements ComponentInterface
 
         $block = $this->layout->getBlock($this->getName());
         if (false === $block instanceof AbstractBlock) {
-            throw new ComponentNotFoundException('Component refers to unknown block "'.$this->getName().'"');
+            throw new NoComponentFoundException('Component refers to unknown block "'.$this->getName().'"');
         }
 
         $this->block = $block;
 
         return $this->block;
     }
-
 }

@@ -21,7 +21,7 @@ interface ComponentInterface
 
     public function getTargetString(): string;
 
-    public function getValidators(): array;
+    public function getValidators(array $validators = []): array;
 
-    public function getFilters(): array;
+    public function getFilters(array $filters = []): array;
 }

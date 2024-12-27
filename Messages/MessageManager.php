@@ -48,7 +48,7 @@ class MessageManager
 
     public function getLocalMessages(): array
     {
-        return $this->messages;
+        return array_unique($this->messages, SORT_REGULAR);
     }
 
     public function hasLocalMessages(): bool

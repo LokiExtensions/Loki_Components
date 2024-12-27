@@ -49,6 +49,10 @@ class Component implements ComponentInterface
 
     public function getViewModel(): ?ComponentViewModelInterface
     {
+        if ($this->viewModel instanceof ComponentViewModelInterface) {
+            return $this->viewModel;
+        }
+
         if (empty($this->viewModelClass)) {
             return null;
         }
@@ -68,6 +72,10 @@ class Component implements ComponentInterface
 
     public function getRepository(): ?ComponentRepositoryInterface
     {
+        if ($this->repository instanceof ComponentRepositoryInterface) {
+            return $this->repository;
+        }
+
         if (empty($this->repositoryClass)) {
             return null;
         }

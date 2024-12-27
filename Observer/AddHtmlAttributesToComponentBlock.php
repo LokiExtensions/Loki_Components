@@ -65,7 +65,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
         $attributes = (array)$block->getData('html_attributes');
         $attributes['id'] = $this->getElementId($block); // @todo: Double-check that ID has not been added yet
         $attributes['x-data'] = $this->jsDataProvider->getComponentName($component);
-        $attributes['x-title'] = $this->jsDataProvider->getComponentTitle($block);
+        $attributes['x-title'] = $this->jsDataProvider->getComponentTitle($component);
         $attributes['x-target'] = true; // @todo: Is this needed?
 
         $htmlAttribute = '';
@@ -73,24 +73,15 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
             $htmlAttribute .= ' ' . $attributeName . '="' . $attributeValue . '"';
         }
 
-        $htmlAttribute .= " x-init-data='" . $this->getJsonData($component) . "'";
+        $htmlAttribute .= " x-init-data='" . $this->getJsData($component) . "'";
 
         return trim($htmlAttribute);
     }
 
-    private function getJsonData(ComponentInterface $component): string
+    private function getJsData(ComponentInterface $component): string
     {
-        $block = $component->getBlock();
-        $viewModel = $component->getViewModel();
-
-        if ($viewModel instanceof ComponentViewModelInterface) {
-            return $this->jsDataProvider->getJson($viewModel);
-        }
-
-        return json_encode([
-            'blockId' => $block->getNameInLayout(),
-            'target' => $this->getElementId($block)
-        ]);
+        $componentData = $this->jsDataProvider->getComponentData($component);
+        return json_encode($componentData);
     }
 
     private function getElementId(AbstractBlock $block): string

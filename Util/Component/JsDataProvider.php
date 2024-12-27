@@ -4,6 +4,7 @@ namespace Yireo\LokiComponents\Util\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use RuntimeException;
 use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Util\CamelCaseConvertor;
 use Yireo\LokiComponents\Util\IdConvertor;
@@ -22,40 +23,37 @@ class JsDataProvider implements ArgumentInterface
     }
 
     // @todo: Rename to getJsData()
-    public function getData(ComponentViewModelInterface $viewModel): array
+    public function getComponentData(ComponentInterface $component): array
     {
         $data = [];
-        $block = $viewModel->getBlock();
+        $data['title'] = $this->getComponentTitle($component);
+        $data['name'] = $this->getComponentName($component);
+        $data['target'] = $this->getTargets($component);
 
-        $data['title'] = $this->getComponentTitle($viewModel);
-        $data['name'] = $this->getComponentName($viewModel);
-        $data['value'] = $viewModel->getValue();
+        $block = $component->getBlock();
         $data['blockId'] = $block->getNameInLayout();
-        $data['target'] = $this->getTargets($viewModel);
+        $data['elementId'] = $this->componentUtil->getElementIdByBlockName($block->getNameInLayout());
 
-        try {
-            $data['elementId'] = $this->componentUtil->getElementIdByBlockName($block->getNameInLayout());
-        } catch (\RuntimeException $e) {
-        }
+        $data['validators'] = [];
+        $data['filters'] = [];
 
-        $validators = [];
-        foreach ($viewModel->getValidators() as $validator) {
-            $validators[] = $validator;
-        }
+        $viewModel = $component->getViewModel();
+        if ($viewModel instanceof ComponentViewModelInterface) {
+            $data['value'] = $viewModel->getValue();
 
-        $data['validators'] = $validators;
+            foreach ($viewModel->getValidators() as $validator) {
+                $data['validators'][] = $validator;
+            }
 
-        $filters = [];
-        foreach ($viewModel->getFilters() as $filter) {
-            $filters[] = $filter;
-        }
+            foreach ($viewModel->getFilters() as $filter) {
+                $data['filters'][] = $filter;
+            }
 
-        $data['filters'] = $filters;
-
-        // @doc
-        $viewModelData = $viewModel->getJsData();
-        if (is_array($viewModelData)) {
-            $data = array_merge($data, $viewModelData);
+            // @doc
+            $viewModelData = $viewModel->getJsData();
+            if (is_array($viewModelData)) {
+                $data = array_merge($data, $viewModelData);
+            }
         }
 
         // @doc
@@ -67,21 +65,17 @@ class JsDataProvider implements ArgumentInterface
         return $data;
     }
 
-    public function getJson(ComponentViewModelInterface $viewModel): string
+    public function getComponentName(ComponentInterface $component): string
     {
-        return json_encode($this->getData($viewModel));
-    }
-
-    public function getComponentName(ComponentViewModelInterface $componentViewModel): string
-    {
-        $block = $componentViewModel->getBlock();
+        $block = $component->getBlock();
         $componentName = $block->getJsComponentName();
         if (!empty($componentName)) {
             return $componentName;
         }
 
-        if ($componentViewModel instanceof ComponentViewModelInterface) {
-            $componentName = $componentViewModel->getJsComponentName();
+        $viewModel = $component->getViewModel();
+        if ($viewModel instanceof ComponentViewModelInterface) {
+            $componentName = $viewModel->getJsComponentName();
             if (!empty($componentName)) {
                 return $componentName;
             }
@@ -90,27 +84,31 @@ class JsDataProvider implements ArgumentInterface
         return 'LokiComponent';
     }
 
-    public function getComponentTitle(ComponentViewModelInterface $componentViewModel): string
+    public function getComponentTitle(ComponentInterface $component): string
     {
-        $block = $componentViewModel->getBlock();
+        $block = $component->getBlock();
+
         return $this->camelCaseConvertor->toCamelCase($block->getNameInLayout());
     }
 
+    // @todo: Is this still used anywhere?
     public function getJsValue(string $value): string
     {
         return str_replace("\n", '\n', $value); // @todo: Is this good enough?
     }
 
-    private function getTargets(ComponentViewModelInterface $viewModel): string
+    private function getTargets(ComponentInterface $component): string
     {
+        $block = $component->getBlock();
+
         $targetNames = [
-            ...$viewModel->getTargets(),
-            $viewModel->getBlock()->getNameInLayout(),
+            ...(array)$block->getTargets(),
+            $block->getNameInLayout(),
         ];
 
-        $targets = (array)$viewModel->getBlock()->getTargets();
-        foreach ($targets as $target) {
-            $targetNames[] = $target;
+        $viewModel = $component->getViewModel();
+        if ($viewModel instanceof ComponentViewModelInterface) {
+            $targetNames = array_merge($targetNames, (array)$viewModel->getTargets());
         }
 
         $targetNames = $this->convertDomIds($targetNames);

@@ -17,8 +17,6 @@
             </container>
 
             <block name="loki-components.debugger" template="Yireo_LokiComponents::component/debugger.phtml" before="-"/>
-
-            <block name="loki-components.script.alpine-ajax" template="Yireo_LokiComponents::script/alpine-ajax.phtml" before="script-alpine-js"/>
         </referenceContainer>
     </body>
 </page>

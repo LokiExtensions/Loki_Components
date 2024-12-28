@@ -38,20 +38,22 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     public function execute(): ResultInterface|ResponseInterface
     {
-        $this->securityCheck();
-        $this->initializeLayout();
 
-        $block = $this->getBlock();
-        $this->saveDataToComponent($block);
+        $data = json_decode($this->request->getContent(), true);
+
+        $this->sanityCheck($data);
+        $this->initializeLayout($data['handles']);
+
+        $block = $this->getBlock($data['block']);
+        $this->saveDataToComponent($block, $data['componentData']);
 
         $this->renderBlocks($this->getTargetBlockNames($block->getNameInLayout()));
 
         return $this->getHtmlResult();
     }
 
-    private function getBlock(): AbstractBlock
+    private function getBlock(string $blockName): AbstractBlock
     {
-        $blockName = $this->request->getParam('block');
         if (empty($blockName)) {
             throw new RuntimeException('Block name not specified');
         }
@@ -66,16 +68,23 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         return $block;
     }
 
-    private function securityCheck(): void
+    private function sanityCheck(array $requestData): void
     {
         /** @var Http $request */
         $request = $this->request;
         if ($request->getHeader('X-Alpine-Request') !== 'true') {
             throw new RuntimeException('Not an Alpine request');
         }
+
+        $requiredFields = ['targets', 'componentData', 'block', 'handles'];
+        foreach ($requiredFields as $requiredField) {
+            if (false === array_key_exists($requiredField, $requestData)) {
+                throw new RuntimeException('No '.$requiredField.' in request');
+            }
+        }
     }
 
-    private function saveDataToComponent(AbstractBlock $block): void
+    private function saveDataToComponent(AbstractBlock $block, mixed $componentData): void
     {
         try {
             $component = $this->componentRegistry->getComponentFromBlock($block);
@@ -91,9 +100,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         }
 
         try {
-            $data = $this->getRequestData();
-            $this->debug('data', $data);
-            $repository->save($data);
+            $this->debug('data', $componentData);
+            $repository->save($componentData);
         } catch (RuntimeException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
         }
@@ -142,21 +150,17 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     private function getTargetBlockNames(string $blockName): array
     {
-        $blockNames = [$blockName,];
+        $blockNames = [$blockName];
 
         /** @var Http $request */
         $request = $this->request;
-        $targets = $request->getHeader('X-Alpine-Target');
-        if (!empty($targets)) {
-            $targets = explode(' ', $targets);
-            $blockNames = array_merge($blockNames, $this->convertTargetsToBlockNames($targets));
-        }
-
         $targets = (string)$this->request->getParam('target');
         if (!empty($targets)) {
             $targets = explode(' ', $targets);
             $blockNames = array_merge($blockNames, $this->convertTargetsToBlockNames($targets));
         }
+
+        // @todo: Cross match this with the targets configured in the component?
 
         $blockNames = array_unique($blockNames);
 
@@ -175,11 +179,11 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         return $blockNames;
     }
 
-    private function initializeLayout(): void
+    private function initializeLayout(array $handles): void
     {
-        $handles = explode(' ', (string)$this->request->getParam('handles'));
         if (!empty($handles)) {
             foreach ($handles as $handle) {
+                $handle = trim($handle);
                 // @todo: Filter handle value
                 $this->layout->getUpdate()->addHandle($handle);
             }

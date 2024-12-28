@@ -29,7 +29,7 @@ class JsDataProvider implements ArgumentInterface
         $data = [];
         $data['id'] = $this->getComponentId($component);
         $data['name'] = $this->getComponentName($component);
-        $data['target'] = $this->getTargets($component);
+        $data['targets'] = $this->getTargets($component);
 
         $block = $component->getBlock();
         $data['blockId'] = $block->getNameInLayout();
@@ -90,7 +90,7 @@ class JsDataProvider implements ArgumentInterface
         return str_replace("\n", '\n', (string)$value);
     }
 
-    private function getTargets(ComponentInterface $component): string
+    private function getTargets(ComponentInterface $component): array
     {
         $block = $component->getBlock();
 
@@ -107,7 +107,7 @@ class JsDataProvider implements ArgumentInterface
         $targetNames = $this->convertDomIds($targetNames);
         $targetNames = array_unique($targetNames);
 
-        return implode(' ', $targetNames);
+        return array_values($targetNames);
     }
 
     private function convertDomIds(array $domIds): array

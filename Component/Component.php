@@ -94,7 +94,7 @@ class Component implements ComponentInterface
                 array_merge(
                     $this->validators,
                     $validators,
-                    (array)$this->block->getValidators()
+                    (array)$this->block?->getValidators()
                 )
             )
         );
@@ -108,7 +108,7 @@ class Component implements ComponentInterface
                     $this->filters,
                     $filters,
                     ['security'],
-                    ((array)$this->block->getFilters()
+                    ((array)$this->block?->getFilters()
                     )
                 )
             )

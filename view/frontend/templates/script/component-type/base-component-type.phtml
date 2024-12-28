@@ -15,7 +15,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         name: '',
         elementId: '',
         blockId: '',
-        target: '',
+        targets: [],
         value: null,
         initActions: {
             loadInitialData: function () {
@@ -39,22 +39,65 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         afterInit() {
         },
         post(data) {
+            if (data instanceof Event) {
+                data = null;
+            }
+
             if (!data) {
                 data = this.value;
             }
 
-            console.log('AJAX call', this.id, data, this.target);
-            this.$ajax('<?= $componentUtil->getPostUrl() ?>', {
-                method: 'post',
-                target: this.target,
-                sync: true,
-                body: {
-                    json: JSON.stringify(data),
-                    block: this.blockId,
-                    handles: '<?= $componentUtil->getHandles($block) ?>',
-                    form_key: hyva.getFormKey()
+            this.targets.forEach(target => {
+                const targetElement = document.getElementById(target);
+                if (targetElement) {
+                    targetElement.setAttribute('aria-busy', true);
+                } else {
+                    console.log('Target element "' + target + '" does not exist');
                 }
             });
+
+            fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + hyva.getFormKey() + '&isAjax=true', {
+                method: 'POST',
+                mode: 'same-origin',
+                headers: {
+                    'X-Alpine-Request': true,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    targets: this.targets,
+                    componentData: data,
+                    block: this.blockId,
+                    handles: <?= json_encode($componentUtil->getHandles($block)) ?>,
+                })
+            })
+                .then(response => {
+                    return response.text()
+                })
+                .then(html => {
+                    const parser = new DOMParser();
+                    const ajaxDocument = parser.parseFromString(html, "text/html");
+                    this.targets.forEach(target => {
+                        const targetElement = document.getElementById(target);
+                        const newTargetElement = ajaxDocument.getElementById(target);
+                        if (targetElement && newTargetElement) {
+                            targetElement.outerHTML = newTargetElement.outerHTML;
+                        } else {
+                            console.log('Target element "' + target + '" does not exist');
+                        }
+                    });
+
+                })
+                .catch(error => {
+                    console.log(error)
+                })
+                .finally(() => {
+                    this.targets.forEach(target => {
+                        const targetElement = document.getElementById(target);
+                        if (targetElement) {
+                            targetElement.removeAttribute('aria-busy', true);
+                        }
+                    });
+                })
         },
         afterAjax(event) {
             // @todo: This requires @ajax:success or something to be added to the element

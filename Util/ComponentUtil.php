@@ -26,11 +26,9 @@ class ComponentUtil implements ArgumentInterface
         return preg_replace('/([^a-z0-9\-]+)/', '-', $blockName);
     }
 
-    public function getHandles(AbstractBlock $block): string
+    public function getHandles(AbstractBlock $block): array
     {
-        $handles = $block->getLayout()->getUpdate()->getHandles();
-
-        return implode(' ', $handles);
+        return $block->getLayout()->getUpdate()->getHandles();
     }
 
     public function isAjax(): bool

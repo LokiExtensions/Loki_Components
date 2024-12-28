@@ -7,6 +7,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
+use Yireo\LokiComponents\Util\DefaultTargets;
 
 class Component implements ComponentInterface
 {
@@ -18,6 +19,7 @@ class Component implements ComponentInterface
         protected ObjectManagerInterface $objectManager,
         protected LayoutInterface $layout,
         protected ComponentContextInterface $context,
+        protected DefaultTargets $defaultTargets,
         protected string $name,
         protected array $targets = [],
         protected array $validators = [],
@@ -34,7 +36,11 @@ class Component implements ComponentInterface
 
     public function getTargets(): array
     {
-        return array_unique(array_merge([$this->getName()], $this->targets));
+        return array_unique(array_merge(
+            $this->defaultTargets->getTargets(),
+            [$this->getName()],
+            $this->targets
+        ));
     }
 
     public function getTargetString(): string

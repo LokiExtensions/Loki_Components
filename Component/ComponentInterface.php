@@ -7,6 +7,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 
 interface ComponentInterface
 {
+    public function getName(): string;
     public function getContext(): ComponentContextInterface;
 
     public function getViewModel(): ?ComponentViewModelInterface;

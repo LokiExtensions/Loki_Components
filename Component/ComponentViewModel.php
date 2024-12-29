@@ -60,6 +60,7 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
     public function getMessageManager(): MessageManager
     {
         if (false === $this->messageManager instanceof MessageManager) {
+            //echo "Create message manager for ".$this->component->getName();
             $this->messageManager = $this->messageManagerFactory->create();
         }
 

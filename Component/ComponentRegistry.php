@@ -96,6 +96,10 @@ class ComponentRegistry
      */
     private function createComponentByName(string $componentName): Component
     {
+        if (array_key_exists($componentName, $this->components)) {
+            return $this->components[$componentName];
+        }
+
         // @todo: Rewrite this to array_filter function
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
             if ($componentDefinition->getName() === $componentName) {

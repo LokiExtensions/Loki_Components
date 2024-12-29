@@ -63,6 +63,7 @@ class Component implements ComponentInterface
             return null;
         }
 
+
         $this->viewModel = $this->objectManager->create($this->viewModelClass, [
             'component' => $this,
             'block' => $this->getBlock(),

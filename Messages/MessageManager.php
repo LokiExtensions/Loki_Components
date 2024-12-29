@@ -33,6 +33,7 @@ class MessageManager
 
     public function addLocalWarning(string $message): void
     {
+        echo "MESSAGE: ".$message;
         $this->messages[] = new Message($message, Message::TYPE_WARNING);
     }
 

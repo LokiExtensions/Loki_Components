@@ -1,0 +1,40 @@
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('LokiComponentsDebugger', () => ({
+            ...LokiComponentType,
+            currentTab: '',
+            components: [],
+            init() {
+                try {
+                    this.components = Alpine.store('components').getComponents();
+                } catch (e) {
+                }
+
+                // @todo: Save currentTab in localStorage
+                this.currentTab = this.$root.querySelectorAll('[data-tab-name]')[0].getAttribute('data-tab-name');
+            },
+            isSelected(tabName) {
+                return tabName === this.currentTab;
+            },
+            buttonCssClass() {
+                const tabName = this.$el.getAttribute('data-tab-name');
+                if (this.isSelected(tabName)) {
+                    return 'border-transparent bg-white';
+                }
+
+                return 'border-gray-200 bg-zinc-200';
+            },
+            tabCssClass() {
+                const tabName = this.$el.getAttribute('data-tab-name');
+                if (this.isSelected(tabName)) {
+                    return '';
+                }
+
+                return 'hidden';
+            },
+            switchTab(event) {
+                this.currentTab = event.target.getAttribute('data-tab-name');
+            }
+        }));
+    });
+</script>

@@ -2,9 +2,7 @@
 
 namespace Yireo\LokiComponents\Util;
 
-use Magento\Framework\View\Element\Block\ArgumentInterface;
-
-class Debugger implements ArgumentInterface
+class Debugger
 {
     private array $data = [];
 

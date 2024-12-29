@@ -2,21 +2,84 @@
 declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
+use Yireo\LokiComponents\Component\Debugger\DebuggerViewModel;
 use Yireo\LokiComponents\Factory\ViewModelFactory;
 use Yireo\LokiComponents\Util\ComponentUtil;
 use Yireo\LokiComponents\Util\Debugger;
 
 /** @var Template $block */
 /** @var ViewModelFactory $viewModelFactory */
-/** @var Debugger $viewModel */
+/** @var DebuggerViewModel $viewModel */
 /** @var ComponentUtil $componentUtil */
 
-$viewModel = $viewModelFactory->create(Debugger::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 $htmlId = $componentUtil->getElementIdByBlockName($block->getNameInLayout());
 ?>
-<div x-sync id="<?= $htmlId ?>" class="p-4">
-    <h3 class="text-xl my-4">LokiComponents Debugger</h3>
-    <pre><?php var_dump($viewModel->getData()) ?></pre>
+<div class="w-full border-t border-gray-400">
+    <ul class="flex items-stretch overflow-x-auto" role="tablist">
+        <li class="p-4 border-b border-gray-300">
+            Loki Components Debugger
+        </li>
+        <li>
+            <button
+                data-tab-name="server"
+                type="button"
+                @click="switchTab"
+                :class="buttonCssClass"
+                class="inline-flex rounded-t-lg border-t border-l border-r p-4 border-gray-300 ">Server Dump
+            </button>
+        </li>
+        <li>
+            <button
+                data-tab-name="components"
+                type="button"
+                @click="switchTab"
+                :class="buttonCssClass"
+                class="inline-flex rounded-t-lg border-t border-l border-r p-4 border-gray-300 ">Registered Components
+            </button>
+        </li>
+    </ul>
+
+    <div>
+        <div role="tab" :class="tabCssClass" class="p-4" data-tab-name="server">
+            <h3 class="text-xl my-4">Server Dump</h3>
+            <pre><?php var_dump($viewModel->getData()) ?></pre>
+        </div>
+
+        <div role="tab" :class="tabCssClass" class="p-4"  data-tab-name="components">
+            <table class="text-xs">
+                <thead>
+                <tr>
+                    <th>Component ID</th>
+                    <th>Component name</th>
+                    <th>Element ID</th>
+                    <th>Block name</th>
+                    <th>Step</th>
+                </tr>
+                </thead>
+                <tbody>
+                <template x-for="component in components">
+                    <tr>
+                        <td>
+                            <code x-text="component.id"></code>
+                        </td>
+                        <td>
+                            <code x-text="component.name"></code>
+                        </td>
+                        <td>
+                            <code x-text="component.elementId"></code>
+                        </td>
+                        <td>
+                            <code x-text="component.blockId"></code>
+                        </td>
+                        <td>
+                            <code x-text="component.step"></code>
+                        </td>
+                    </tr>
+                </template>
+                </tbody>
+            </table>
+        </div>
+    </div>
 </div>
 

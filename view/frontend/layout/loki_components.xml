@@ -14,6 +14,7 @@
                 <block name="loki-components.script.component.base" template="Yireo_LokiComponents::script/component/base-component.phtml"/>
                 <block name="loki-components.script.component.messages" template="Yireo_LokiComponents::script/component/messages-component.phtml"/>
                 <block name="loki-components.script.component.toggle" template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
+                <block name="loki-components.script.component.debugger" template="Yireo_LokiComponents::script/component/debugger-component.phtml"/>
             </container>
 
             <block name="loki-components.debugger" template="Yireo_LokiComponents::component/debugger.phtml" before="-"/>

@@ -21,9 +21,17 @@ class ComponentUtil implements ArgumentInterface
         return $this->getElementIdByBlockName($block->getNameInLayout());
     }
 
-    public function getElementIdByBlockName(string $blockName): string
+    public function convertToElementId(string $blockName): string
     {
         return preg_replace('/([^a-z0-9\-]+)/', '-', $blockName);
+    }
+
+    /**
+     * @deprecated Use convertToElementId() instead
+     */
+    public function getElementIdByBlockName(string $blockName): string
+    {
+        return $this->convertToElementId($blockName);
     }
 
     public function getHandles(AbstractBlock $block): array

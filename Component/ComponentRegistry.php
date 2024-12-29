@@ -70,12 +70,16 @@ class ComponentRegistry
     {
         // @todo: Rewrite this to array_filter function
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
+            if ($this->componentUtil->convertToElementId($componentDefinition->getName()) === $elementId) {
+                return $componentDefinition->getName();
+            }
+
             foreach ($componentDefinition->getTargets() as $target) {
                 if ($target === $elementId) {
                     return $target;
                 }
 
-                if ($this->componentUtil->getElementIdByBlockName($target) === $elementId) {
+                if ($this->componentUtil->convertToElementId($target) === $elementId) {
                     return $target;
                 }
             }

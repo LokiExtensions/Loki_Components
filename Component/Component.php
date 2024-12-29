@@ -127,7 +127,7 @@ class Component implements ComponentInterface
         return $this->context;
     }
 
-    public function getBlock(): AbstractBlock
+    public function getBlock(): ?AbstractBlock
     {
         if ($this->block instanceof AbstractBlock) {
             return $this->block;
@@ -135,7 +135,7 @@ class Component implements ComponentInterface
 
         $block = $this->layout->getBlock($this->getName());
         if (false === $block instanceof AbstractBlock) {
-            throw new NoComponentFoundException('Component refers to unknown block "'.$this->getName().'"');
+            return null;
         }
 
         $this->block = $block;

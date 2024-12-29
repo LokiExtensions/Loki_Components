@@ -14,7 +14,7 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
     public function __construct(
         protected ComponentInterface $component,
         protected MessageManagerFactory $messageManagerFactory,
-        protected AbstractBlock $block,
+        protected ?AbstractBlock $block = null,
     ) {
     }
 

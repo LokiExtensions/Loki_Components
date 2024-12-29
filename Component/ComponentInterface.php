@@ -16,8 +16,7 @@ interface ComponentInterface
     public function getRepository(): ?ComponentRepositoryInterface;
     public function hasRepository(): bool;
 
-    public function getBlock(): AbstractBlock;
-
+    public function getBlock(): ?AbstractBlock;
     public function getTargets(): array;
 
     public function getTargetString(): string;

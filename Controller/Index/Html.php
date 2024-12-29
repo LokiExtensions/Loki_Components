@@ -156,8 +156,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             $blockNames = array_merge($blockNames, $this->convertTargetsToBlockNames($targets));
         }
 
-        // @todo: Cross match this with the targets configured in the component?
-
         $blockNames = array_unique($blockNames);
 
         $this->debug('targetBlocks', $blockNames);
@@ -179,7 +177,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         if (!empty($handles)) {
             foreach ($handles as $handle) {
-                $handle = trim($handle);
+                $handle = preg_replace('/([^a-z0-9\-\_]+)/', '', $handle);
                 // @todo: Filter handle value
                 $this->layout->getUpdate()->addHandle($handle);
             }

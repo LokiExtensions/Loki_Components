@@ -27,11 +27,7 @@
             currentTab: '',
             components: [],
             init() {
-                try {
-                    this.components = Alpine.store('components').getComponents();
-                } catch (e) {
-                    console.error(e);
-                }
+                this.loadComponents();
 
                 // @todo: Save currentTab in localStorage
                 this.currentTab = LokiComponentsStorage.load('debugger.tab');
@@ -39,6 +35,13 @@
                     this.currentTab = this.$root.querySelectorAll('[data-tab-name]')[0].getAttribute('data-tab-name');
                 }
 
+            },
+            loadComponents() {
+                try {
+                    this.components = Alpine.store('components').getComponents();
+                } catch (e) {
+                    console.error(e);
+                }
             },
             isSelected(tabName) {
                 return tabName === this.currentTab;
@@ -62,6 +65,10 @@
             switchTab(event) {
                 this.currentTab = event.target.getAttribute('data-tab-name');
                 LokiComponentsStorage.save('debugger.tab', this.currentTab);
+                this.reload();
+            },
+            reload() {
+                this.loadComponents();
             }
         }));
     });

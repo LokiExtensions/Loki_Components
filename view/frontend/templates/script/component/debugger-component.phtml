@@ -38,7 +38,7 @@
             },
             loadComponents() {
                 try {
-                    this.components = Alpine.store('components').getComponents();
+                    this.components = Alpine.store('checkout').getComponents();
                 } catch (e) {
                     console.error(e);
                 }

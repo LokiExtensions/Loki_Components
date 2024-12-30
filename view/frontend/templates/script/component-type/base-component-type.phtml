@@ -27,11 +27,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         },
         beforeInit() {
         },
-        init() {
+        async init() {
             this.beforeInit();
 
             for ([key, callback] of Object.entries(this.initActions)) {
-                callback.apply(this);
+                await callback.apply(this);
             }
 
             this.afterInit();

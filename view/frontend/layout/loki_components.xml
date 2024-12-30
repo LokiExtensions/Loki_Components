@@ -8,8 +8,6 @@
         <referenceBlock name="script-alpine-js" template="Yireo_LokiComponents::script/alpine.phtml"/>
 
         <referenceContainer name="before.body.end">
-            <block name="loki-components.script.alpine-morph" template="Yireo_LokiComponents::script/alpine-morph.phtml" before="script-alpine-js"/>
-
             <container name="loki-component-types">
                 <block name="loki-components.script.component-type.base" template="Yireo_LokiComponents::script/component-type/base-component-type.phtml"/>
             </container>

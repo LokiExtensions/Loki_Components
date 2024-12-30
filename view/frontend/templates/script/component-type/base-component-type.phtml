@@ -80,8 +80,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         const targetElement = document.getElementById(target);
                         const newTargetElement = ajaxDocument.getElementById(target);
                         if (targetElement && newTargetElement) {
-                            Alpine.morph(targetElement, newTargetElement.outerHTML);
-                            //targetElement.outerHTML = newTargetElement.outerHTML;
+                            targetElement.outerHTML = newTargetElement.outerHTML;
                         } else {
                             console.log('Target element "' + target + '" does not exist');
                         }

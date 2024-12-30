@@ -1,4 +1,26 @@
 <script>
+    // @todo: Move to separate template
+    const LokiCheckoutStorage = {
+        get() {
+            const lokiCheckoutJson = localStorage.getItem('loki-checkout');
+            if (!lokiCheckoutJson) {
+                return {};
+            }
+
+            return JSON.parse(lokiCheckoutJson);
+        },
+        load(key) {
+            const data = this.get();
+            return data[key];
+        },
+        save(key, value) {
+            const data = this.get();
+            data[key] = value;
+            const lokiCheckoutJson = JSON.stringify(data);
+            localStorage.setItem('loki-checkout', lokiCheckoutJson);
+        }
+    }
+
     document.addEventListener('alpine:init', () => {
         Alpine.data('LokiComponentsDebugger', () => ({
             ...LokiComponentType,
@@ -8,10 +30,15 @@
                 try {
                     this.components = Alpine.store('components').getComponents();
                 } catch (e) {
+                    console.error(e);
                 }
 
                 // @todo: Save currentTab in localStorage
-                this.currentTab = this.$root.querySelectorAll('[data-tab-name]')[0].getAttribute('data-tab-name');
+                this.currentTab = LokiCheckoutStorage.load('debugger.tab');
+                if (!this.currentTab) {
+                    this.currentTab = this.$root.querySelectorAll('[data-tab-name]')[0].getAttribute('data-tab-name');
+                }
+
             },
             isSelected(tabName) {
                 return tabName === this.currentTab;
@@ -34,6 +61,7 @@
             },
             switchTab(event) {
                 this.currentTab = event.target.getAttribute('data-tab-name');
+                LokiCheckoutStorage.save('debugger.tab', this.currentTab);
             }
         }));
     });

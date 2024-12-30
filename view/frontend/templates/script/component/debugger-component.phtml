@@ -1,6 +1,6 @@
 <script>
     // @todo: Move to separate template
-    const LokiCheckoutStorage = {
+    const LokiComponentsStorage = {
         get() {
             const lokiCheckoutJson = localStorage.getItem('loki-checkout');
             if (!lokiCheckoutJson) {
@@ -34,7 +34,7 @@
                 }
 
                 // @todo: Save currentTab in localStorage
-                this.currentTab = LokiCheckoutStorage.load('debugger.tab');
+                this.currentTab = LokiComponentsStorage.load('debugger.tab');
                 if (!this.currentTab) {
                     this.currentTab = this.$root.querySelectorAll('[data-tab-name]')[0].getAttribute('data-tab-name');
                 }
@@ -61,7 +61,7 @@
             },
             switchTab(event) {
                 this.currentTab = event.target.getAttribute('data-tab-name');
-                LokiCheckoutStorage.save('debugger.tab', this.currentTab);
+                LokiComponentsStorage.save('debugger.tab', this.currentTab);
             }
         }));
     });

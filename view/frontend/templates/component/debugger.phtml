@@ -17,7 +17,7 @@ $htmlId = $componentUtil->getElementIdByBlockName($block->getNameInLayout());
 ?>
 <div class="w-full border-t border-gray-400">
     <ul class="flex items-stretch overflow-x-auto" role="tablist">
-        <li class="p-4 border-b border-gray-300">
+        <li class="p-4 border-b border-gray-300 p-2">
             Loki Components Debugger
         </li>
         <li>
@@ -47,32 +47,32 @@ $htmlId = $componentUtil->getElementIdByBlockName($block->getNameInLayout());
         </div>
 
         <div role="tab" :class="tabCssClass" class="p-4"  data-tab-name="components">
-            <table class="text-xs">
+            <table class="table-auto w-full text-xs">
                 <thead>
                 <tr>
-                    <th>Component ID</th>
-                    <th>Component name</th>
-                    <th>Element ID</th>
-                    <th>Block name</th>
-                    <th>Step</th>
+                    <th class="border-b border-gray-300 p-2">Component ID</th>
+                    <th class="border-b border-gray-300 p-2">Component name</th>
+                    <th class="border-b border-gray-300 p-2">Element ID</th>
+                    <th class="border-b border-gray-300 p-2">Block name</th>
+                    <th class="border-b border-gray-300 p-2">Step</th>
                 </tr>
                 </thead>
                 <tbody>
                 <template x-for="component in components">
                     <tr>
-                        <td>
+                        <td class="border-b border-gray-300 p-2">
                             <code x-text="component.id"></code>
                         </td>
-                        <td>
+                        <td class="border-b border-gray-300 p-2">
                             <code x-text="component.name"></code>
                         </td>
-                        <td>
+                        <td class="border-b border-gray-300 p-2">
                             <code x-text="component.elementId"></code>
                         </td>
-                        <td>
+                        <td class="border-b border-gray-300 p-2">
                             <code x-text="component.blockId"></code>
                         </td>
-                        <td>
+                        <td class="border-b border-gray-300 p-2">
                             <code x-text="component.step"></code>
                         </td>
                     </tr>

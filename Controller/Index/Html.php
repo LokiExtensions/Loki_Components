@@ -46,7 +46,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
         $block = $this->getBlock($data['block']);
         $this->saveDataToComponent($block, $data['componentData']);
-        
+
         $this->renderBlocks($this->getTargetBlockNames($block->getNameInLayout(), $data['targets']));
 
         return $this->getHtmlResult();

@@ -14,6 +14,11 @@ class XmlConfig extends DataConfig
      */
     public function getComponentDefinitions(): array
     {
+        static $componentDefinitions = null;
+        if (!empty($componentDefinitions)) {
+            return $componentDefinitions;
+        }
+
         $componentDefinitions = [];
         $componentsData = $this->get('components');
         foreach ($componentsData as $componentData) {

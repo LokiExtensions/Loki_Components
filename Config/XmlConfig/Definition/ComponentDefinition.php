@@ -15,6 +15,7 @@ class ComponentDefinition
         private array $filters = [],
     ) {
         $this->targets[] = $this->getName();
+        $this->targets = array_unique($this->targets);
     }
 
     public function getName(): string
@@ -54,7 +55,7 @@ class ComponentDefinition
     }
     public function getTargets(): array
     {
-        return array_unique($this->targets);
+        return $this->targets;
     }
 
     public function getValidators(): array

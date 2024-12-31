@@ -93,11 +93,7 @@ class JsDataProvider implements ArgumentInterface
     private function getTargets(ComponentInterface $component): array
     {
         $block = $component->getBlock();
-
-        $targetNames = [
-            ...(array)$block->getTargets(),
-            $block->getNameInLayout(),
-        ];
+        $targetNames = (array)$block->getTargets();
 
         $viewModel = $component->getViewModel();
         if ($viewModel instanceof ComponentViewModelInterface) {
@@ -105,9 +101,8 @@ class JsDataProvider implements ArgumentInterface
         }
 
         $targetNames = $this->convertDomIds($targetNames);
-        $targetNames = array_unique($targetNames);
-
-        return array_values($targetNames);
+        $targetNames = array_values($targetNames);
+        return array_unique($targetNames);
     }
 
     private function convertDomIds(array $domIds): array

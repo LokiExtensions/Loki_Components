@@ -47,7 +47,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $block = $this->getBlock($data['block']);
         $this->saveDataToComponent($block, $data['componentData']);
 
-        $this->renderBlocks($this->getTargetBlockNames($block->getNameInLayout(), $data['targets']));
+        $this->renderBlocks($this->getTargetBlockNames($data['targets']));
 
         return $this->getHtmlResult();
     }
@@ -148,16 +148,10 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         }
     }
 
-    private function getTargetBlockNames(string $blockName, array $targets): array
+    private function getTargetBlockNames(array $targets): array
     {
-        $blockNames = [$blockName];
-
-        if (!empty($targets)) {
-            $blockNames = array_merge($blockNames, $this->convertTargetsToBlockNames($targets));
-        }
-
+        $blockNames = $this->convertTargetsToBlockNames($targets);
         $blockNames = array_unique($blockNames);
-
         $this->debug('targetBlocks', $blockNames);
 
         return $blockNames;
@@ -190,7 +184,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         $html = '';
         foreach ($this->htmlParts as $htmlPart) {
-            $html .= $htmlPart."\n\n";
+            $htmlPart = str_replace("\n\n", "\n", $htmlPart);
+            $html .= $htmlPart."\n\n\n";
         }
 
         /** @var HtmlResult $htmlResult */

@@ -14,8 +14,6 @@ class ComponentDefinition
         private array $validators = [],
         private array $filters = [],
     ) {
-        $this->targets[] = $this->getName();
-        $this->targets = array_unique($this->targets);
     }
 
     public function getName(): string

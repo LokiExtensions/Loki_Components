@@ -6,7 +6,6 @@ namespace Yireo\LokiComponents\Component;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
-use Yireo\LokiComponents\Exception\NoComponentFoundException;
 use Yireo\LokiComponents\Util\DefaultTargets;
 
 class Component implements ComponentInterface
@@ -36,11 +35,15 @@ class Component implements ComponentInterface
 
     public function getTargets(): array
     {
-        return array_unique(array_merge(
-            $this->defaultTargets->getTargets(),
-            [$this->getName()],
-            $this->targets
-        ));
+        $targets = [];
+        if (false === $this->skipSelf()) {
+            $targets[] = $this->getName();
+        }
+
+        $targets = array_merge($targets, $this->defaultTargets->getTargets());
+        $targets = array_merge($targets, $this->targets);
+
+        return array_unique(array_merge($targets));
     }
 
     public function getTargetString(): string
@@ -141,5 +144,18 @@ class Component implements ComponentInterface
         $this->block = $block;
 
         return $this->block;
+    }
+
+    private function skipSelf(): bool
+    {
+        if (false === $this->getViewModel() instanceof ComponentViewModelInterface) {
+            return false;
+        }
+
+        if (false === method_exists($this->getViewModel(), 'skipSelf')) {
+            return false;
+        }
+
+        return call_user_func([$this->getViewModel(), 'skipSelf']);
     }
 }

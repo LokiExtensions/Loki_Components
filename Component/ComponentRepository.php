@@ -33,6 +33,11 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
         }
     }
 
+    public function getComponentName(): string
+    {
+        return $this->component->getName();
+    }
+
     abstract protected function getData(): mixed;
 
     abstract protected function saveData(mixed $data): void;

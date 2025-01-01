@@ -18,6 +18,11 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
     ) {
     }
 
+    public function getComponentName(): string
+    {
+        return $this->component->getName();
+    }
+
     public function getElementId(): string
     {
         return preg_replace('/([^a-zA-Z0-9\-]+)/', '-', $this->block->getNameInLayout());

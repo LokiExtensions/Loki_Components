@@ -72,6 +72,7 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
         return $this->messageManager;
     }
 
+    // @todo: Should this be protected instead?
     public function getContext(): ComponentContextInterface
     {
         return $this->component->getContext();

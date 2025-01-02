@@ -5,22 +5,22 @@
     <xs:element name="components">
         <xs:complexType>
             <xs:sequence minOccurs="0" maxOccurs="unbounded">
-                <xs:element name="componentGroup" type="lokiComponentGroupType" minOccurs="0"/>
+                <xs:element name="group" type="lokiComponentGroupType" minOccurs="0"/>
+                <xs:element name="component" type="lokiComponentType" minOccurs="0"/>
             </xs:sequence>
         </xs:complexType>
     </xs:element>
 
     <xs:complexType name="lokiComponentGroupType">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
-            <xs:element name="component" type="lokiComponentType"/>
-            <xs:element name="defaultTarget" type="lokiTargetType"/>
+            <xs:element name="target" type="lokiTargetType"/>
         </xs:choice>
 
-        <xs:attribute name="name" type="xs:string" use="optional"/>
-        <xs:attribute name="defaultClass" type="phpClassName" use="optional"/>
-        <xs:attribute name="defaultContext" type="phpClassName" use="optional"/>
-        <xs:attribute name="defaultViewModel" type="phpClassName" use="optional"/>
-        <xs:attribute name="defaultRepository" type="phpClassName" use="optional"/>
+        <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="class" type="phpClassName" use="optional"/>
+        <xs:attribute name="context" type="phpClassName" use="optional"/>
+        <xs:attribute name="viewModel" type="phpClassName" use="optional"/>
+        <xs:attribute name="repository" type="phpClassName" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="lokiComponentType">
@@ -30,7 +30,8 @@
             <xs:element name="filter" type="lokiFilterType"/>
         </xs:choice>
 
-        <xs:attribute name="name" type="elementNameType" use="optional"/>
+        <xs:attribute name="name" type="elementNameType" use="required"/>
+        <xs:attribute name="group" type="xs:string" use="optional"/>
         <xs:attribute name="class" type="phpClassName" use="optional"/>
         <xs:attribute name="context" type="phpClassName" use="optional"/>
         <xs:attribute name="viewModel" type="phpClassName" use="optional"/>

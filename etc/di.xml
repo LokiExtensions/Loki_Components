@@ -6,22 +6,22 @@
             <argument name="schemaLocator" xsi:type="object">Yireo\LokiComponents\Config\XmlConfig\SchemaLocator</argument>
             <argument name="fileName" xsi:type="string">loki_components.xml</argument>
             <argument name="idAttributes" xsi:type="array">
-                <item name="/components/componentGroup" xsi:type="array">
+                <item name="/components/group" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
-                <item name="/components/componentGroup/defaultTarget" xsi:type="array">
+                <item name="/components/group/target" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
-                <item name="/components/componentGroup/component" xsi:type="array">
+                <item name="/components/component" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
-                <item name="/components/componentGroup/component/target" xsi:type="array">
+                <item name="/components/component/target" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
-                <item name="/components/componentGroup/component/validator" xsi:type="array">
+                <item name="/components/component/validator" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
-                <item name="/components/componentGroup/component/filter" xsi:type="array">
+                <item name="/components/component/filter" xsi:type="array">
                     <item name="name" xsi:type="string">name</item>
                 </item>
             </argument>

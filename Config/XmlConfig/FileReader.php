@@ -17,12 +17,12 @@ class FileReader extends Filesystem
         ValidationStateInterface $validationState,
         $fileName = 'loki_components.xml',
         $idAttributes = [
-            '/components/componentGroup/name' => 'id',
-            '/components/componentGroup/component/name' => 'id',
-            '/components/componentGroup/defaultTarget/name' => 'id',
-            '/components/componentGroup/component/target/name' => 'id',
-            '/components/componentGroup/component/validator/name' => 'id',
-            '/components/componentGroup/component/filter/name' => 'id',
+            '/components/group/name' => 'id',
+            '/components/group/component/name' => 'id',
+            '/components/group/target/name' => 'id',
+            '/components/component/target/name' => 'id',
+            '/components/component/validator/name' => 'id',
+            '/components/component/filter/name' => 'id',
         ],
         $domDocumentClass = Dom::class,
         $defaultScope = 'global'

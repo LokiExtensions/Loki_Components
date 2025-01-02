@@ -5,6 +5,7 @@ namespace Yireo\LokiComponents\Config\XmlConfig;
 use DOMDocument;
 use DOMNode;
 use Magento\Framework\Config\ConverterInterface;
+use RuntimeException;
 use Yireo\LokiComponents\Component\Component;
 use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
 
@@ -27,54 +28,63 @@ class Converter implements ConverterInterface
      */
     private function getComponentDefinitions(DOMDocument $source): array
     {
+        $groupDefinitions = $this->getGroupDefinitions($source);
         $componentDefinitions = [];
-        $componentGroupElements = $source->getElementsByTagName('componentGroup');
+        $componentElements = $source->getElementsByTagName('component');
 
-        foreach ($componentGroupElements as $componentGroupElement) {
-            $defaultComponentClass = (string)$componentGroupElement->getAttribute('defaultClass');
-            $defaultContext = (string)$componentGroupElement->getAttribute('defaultContext');
-            $defaultViewModel = (string)$componentGroupElement->getAttribute('defaultViewModel');
-            $defaultRepository = (string)$componentGroupElement->getAttribute('defaultRepository');
-            $defaultTargets = $this->getDefaultTargets($componentGroupElement);
-
-            if (empty($defaultComponentClass)) {
-                $defaultComponentClass = Component::class;
+        foreach ($componentElements as $componentElement) {
+            $name = (string)$componentElement->getAttribute('name');
+            $groupName = (string)$componentElement->getAttribute('group');
+            if (empty($groupName)) {
+                $groupName = 'default';
             }
 
-            $componentElements = $componentGroupElement->getElementsByTagName('component');
-
-            foreach ($componentElements as $componentElement) {
-                $name = (string)$componentElement->getAttribute('name');
-                $componentClass = (string)$componentElement->getAttribute('class');
-                $context = (string)$componentElement->getAttribute('context');
-                $viewModel = (string)$componentElement->getAttribute('viewModel');
-                $repository = (string)$componentElement->getAttribute('repository');
-
-                $componentDefinitions[$name] = [
-                    'name' => $name,
-                    'class' => !empty($componentClass) ? $componentClass : $defaultComponentClass,
-                    'context' => !empty($context) ? $context : $defaultContext,
-                    'viewModel' => !empty($viewModel) ? $viewModel : $defaultViewModel,
-                    'repository' => !empty($repository) ? $repository : $defaultRepository,
-                    'targets' => array_merge($defaultTargets, $this->getTargets($componentElement)),
-                    'validators' => $this->getValidators($componentElement),
-                    'filters' => $this->getFilters($componentElement),
-                ];
+            if (false === array_key_exists($groupName, $groupDefinitions)) {
+                throw new RuntimeException('Component "'.$name.'" refers to unknown group "'.$groupName.'"');
             }
+
+            $group = $groupDefinitions[$groupName];
+            $componentClass = (string)$componentElement->getAttribute('class');
+            $context = (string)$componentElement->getAttribute('context');
+            $viewModel = (string)$componentElement->getAttribute('viewModel');
+            $repository = (string)$componentElement->getAttribute('repository');
+
+            $componentDefinitions[$name] = [
+                'name' => $name,
+                'class' => !empty($componentClass) ? $componentClass : $group['class'],
+                'context' => !empty($context) ? $context : $group['context'],
+                'viewModel' => !empty($viewModel) ? $viewModel : $group['viewModel'],
+                'repository' => !empty($repository) ? $repository : $group['repository'],
+                'targets' => array_merge($group['targets'], $this->getTargets($componentElement)),
+                'validators' => $this->getValidators($componentElement),
+                'filters' => $this->getFilters($componentElement),
+            ];
         }
 
         return $componentDefinitions;
     }
 
-    private function getDefaultTargets(DOMNode $element): array
+    private function getGroupDefinitions(DOMNode $element): array
     {
-        $targets = [];
-        $targetElements = $element->getElementsByTagName('defaultTarget');
-        foreach ($targetElements as $targetElement) {
-            $targets[] = (string)$targetElement->getAttribute('name');
+        $groupDefinitions = [];
+        $groupElements = $element->getElementsByTagName('group');
+        foreach ($groupElements as $groupElement) {
+            $groupName = (string)$groupElement->getAttribute('name');
+            $groupClass = (string)$groupElement->getAttribute('class');
+            if (empty($groupClass)) {
+                $groupClass = Component::class;
+            }
+
+            $groupDefinitions[$groupName] = [
+                'class' => $groupClass,
+                'context' => (string)$groupElement->getAttribute('context'),
+                'viewModel' => (string)$groupElement->getAttribute('viewModel'),
+                'repository' => (string)$groupElement->getAttribute('repository'),
+                'targets' => $this->getTargets($groupElement),
+            ];
         }
 
-        return $targets;
+        return $groupDefinitions;
     }
 
     private function getTargets(DOMNode $element): array

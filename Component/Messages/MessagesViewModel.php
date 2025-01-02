@@ -4,6 +4,9 @@ namespace Yireo\LokiComponents\Component\Messages;
 
 use Yireo\LokiComponents\Component\ComponentViewModel;
 
+/**
+ * @method MessagesContext getContext()
+ */
 class MessagesViewModel extends ComponentViewModel
 {
     public function getJsComponentName(): ?string
@@ -11,10 +14,13 @@ class MessagesViewModel extends ComponentViewModel
         return 'LokiComponentMessages';
     }
 
+    /**
+     * @return array|null
+     */
     public function getJsData(): ?array
     {
         return [
-            'reload' => $this->getMessageManager()->hasGlobalMessages() // @todo: This is always true?
+            'messages' => $this->getContext()->getGlobalMessageManager()->toArray(),
         ];
     }
 }

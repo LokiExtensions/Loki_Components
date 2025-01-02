@@ -5,7 +5,7 @@ namespace Yireo\LokiComponents\Component;
 
 use Yireo\LokiComponents\Filter\Filter;
 use Yireo\LokiComponents\Validator\Validator;
-use Yireo\LokiComponents\Messages\MessageManager;
+use Yireo\LokiComponents\Messages\LocalMessageManager;
 
 abstract class ComponentRepository implements ComponentRepositoryInterface
 {
@@ -13,7 +13,7 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
         protected ComponentInterface $component,
         protected Validator $validator,
         protected Filter $filter,
-        protected MessageManager $messageManager,
+        protected LocalMessageManager $messageManager,
     ) {
     }
 
@@ -36,6 +36,11 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
     public function getComponentName(): string
     {
         return $this->component->getName();
+    }
+
+    public function getMessageManager(): LocalMessageManager
+    {
+        return $this->messageManager;
     }
 
     abstract protected function getData(): mixed;

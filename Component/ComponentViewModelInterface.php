@@ -15,7 +15,6 @@ interface ComponentViewModelInterface extends ArgumentInterface
 
     public function getValue(): mixed;
 
-
     public function getTargets(): array;
 
     public function getTargetString(): string;
@@ -24,7 +23,7 @@ interface ComponentViewModelInterface extends ArgumentInterface
 
     public function getFilters(): array;
 
-    public function getMessageManager(): MessageManager;
+    public function getMessages(): array;
 
     public function getContext(): ComponentContextInterface;
 

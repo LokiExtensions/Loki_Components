@@ -4,19 +4,25 @@ declare(strict_types=1);
 namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
+use Yireo\LokiComponents\Messages\GlobalMessageManager;
+use Yireo\LokiComponents\Messages\LocalMessageManager;
 
 interface ComponentInterface
 {
     public function getName(): string;
+
     public function getContext(): ComponentContextInterface;
 
     public function getViewModel(): ?ComponentViewModelInterface;
+
     public function hasViewModel(): bool;
 
     public function getRepository(): ?ComponentRepositoryInterface;
+
     public function hasRepository(): bool;
 
     public function getBlock(): ?AbstractBlock;
+
     public function getTargets(): array;
 
     public function getTargetString(): string;
@@ -24,4 +30,8 @@ interface ComponentInterface
     public function getValidators(array $validators = []): array;
 
     public function getFilters(array $filters = []): array;
+
+    public function getGlobalMessageManager(): GlobalMessageManager;
+
+    public function getLocalMessageManager(): LocalMessageManager;
 }

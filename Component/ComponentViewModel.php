@@ -4,16 +4,14 @@ declare(strict_types=1);
 namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
-use Yireo\LokiComponents\Messages\MessageManager;
-use Yireo\LokiComponents\Messages\MessageManagerFactory;
+use Yireo\LokiComponents\Messages\LocalMessageManager;
 
 abstract class ComponentViewModel implements ComponentViewModelInterface
 {
-    protected ?MessageManager $messageManager = null;
+    protected ?LocalMessageManager $messageManager = null;
 
     public function __construct(
         protected ComponentInterface $component,
-        protected MessageManagerFactory $messageManagerFactory,
         protected ?AbstractBlock $block = null,
     ) {
     }
@@ -62,14 +60,9 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
         return $this->getComponent()->getFilters();
     }
 
-    public function getMessageManager(): MessageManager
+    public function getMessages(): array
     {
-        if (false === $this->messageManager instanceof MessageManager) {
-            //echo "Create message manager for ".$this->component->getName();
-            $this->messageManager = $this->messageManagerFactory->create();
-        }
-
-        return $this->messageManager;
+        return $this->component->getLocalMessageManager()->getMessages();
     }
 
     // @todo: Should this be protected instead?

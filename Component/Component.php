@@ -6,18 +6,25 @@ namespace Yireo\LokiComponents\Component;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
+use Yireo\LokiComponents\Messages\GlobalMessageManager;
+use Yireo\LokiComponents\Messages\LocalMessageManager;
+use Yireo\LokiComponents\Messages\LocalMessageManagerFactory;
+use Yireo\LokiComponents\Messages\MessageManager;
 use Yireo\LokiComponents\Util\DefaultTargets;
 
 class Component implements ComponentInterface
 {
     protected ?ComponentViewModelInterface $viewModel = null;
     protected ?ComponentRepositoryInterface $repository = null;
+    protected ?LocalMessageManager $localMessageManager = null;
     protected ?AbstractBlock $block = null;
 
     public function __construct(
         protected ObjectManagerInterface $objectManager,
         protected LayoutInterface $layout,
         protected ComponentContextInterface $context,
+        protected LocalMessageManagerFactory $localMessageManagerFactory,
+        protected GlobalMessageManager $globalMessageManager,
         protected DefaultTargets $defaultTargets,
         protected string $name,
         protected array $targets = [],
@@ -146,6 +153,21 @@ class Component implements ComponentInterface
         return $this->block;
     }
 
+    public function getGlobalMessageManager(): GlobalMessageManager
+    {
+        return $this->globalMessageManager;
+    }
+
+    public function getLocalMessageManager(): LocalMessageManager
+    {
+        if (false === $this->localMessageManager instanceof MessageManager) {
+            $this->localMessageManager = $this->localMessageManagerFactory->create();
+        }
+
+        return $this->localMessageManager;
+    }
+
+    // @todo: Rewrite with XML variation
     private function skipSelf(): bool
     {
         if (false === $this->getViewModel() instanceof ComponentViewModelInterface) {

@@ -8,9 +8,8 @@ class NumberValidator implements ValidatorInterface
 {
     public function validate(ComponentInterface $component, mixed $value): bool
     {
-        $value = $component->getValue();
         if (false === is_numeric($value)) {
-            $component->getMessages()->addError((string)__('Value must contain numbers only'));
+            $component->getLocalMessageManager()->addError((string)__('Value must contain numbers only'));
 
             return false;
         }

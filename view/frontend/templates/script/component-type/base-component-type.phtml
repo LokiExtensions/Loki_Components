@@ -7,6 +7,7 @@ use Yireo\LokiComponents\Util\ComponentUtil;
 
 /** @var Template $block */
 /** @var ViewModelFactory $viewModelFactory */
+
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
@@ -61,6 +62,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 mode: 'same-origin',
                 headers: {
                     'X-Alpine-Request': true,
+                    'X-Requested-With': 'XMLHttpRequest',
                     'Content-Type': 'application/json'
                 },
                 body: JSON.stringify({

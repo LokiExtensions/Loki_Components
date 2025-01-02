@@ -21,7 +21,7 @@ class MessagesViewModel extends ComponentViewModel
     {
         $timeout = $this->getBlock()->getTimeout(); // @doc
         if (false === is_numeric($timeout)) {
-            $timeout = 10000;
+            $timeout = 5000;
         }
 
         return [

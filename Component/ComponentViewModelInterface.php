@@ -29,6 +29,8 @@ interface ComponentViewModelInterface extends ArgumentInterface
 
     public function getTemplate(): ?string;
 
+    public function getComponentName(): string;
+
     public function getJsComponentName(): ?string;
 
     public function getJsData(): ?array;

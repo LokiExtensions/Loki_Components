@@ -3,12 +3,9 @@ declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
 use Yireo\LokiCheckout\Util\Block\CssClass;
-use Yireo\LokiComponents\Messages\Message;
 
 /** @var Template $block */
 /** @var CssClass $css */
-/** @var Message[] $messages */
-$messages = $block->getMessages();
 ?>
 <ul class="loki-components-messages <?= $css('') ?>">
     <template x-for="message in messages">

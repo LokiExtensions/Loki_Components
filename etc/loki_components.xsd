@@ -40,19 +40,21 @@
 
     <xs:complexType name="lokiTargetType">
         <xs:attribute name="name" type="elementNameType" use="required"/>
+        <xs:attribute name="disabled" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="lokiValidatorType">
         <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="sortOrder" type="xs:integer" use="optional"/>
         <xs:attribute name="disabled" type="xs:string" use="optional"/>
     </xs:complexType>
 
     <xs:complexType name="lokiFilterType">
         <xs:attribute name="name" type="xs:string" use="required"/>
+        <xs:attribute name="sortOrder" type="xs:integer" use="optional"/>
         <xs:attribute name="disabled" type="xs:string" use="optional"/>
     </xs:complexType>
 
-    <!-- @todo Why can't we just re-use this from config.xsd? -->
     <xs:simpleType name="phpClassName">
         <xs:annotation>
             <xs:documentation>

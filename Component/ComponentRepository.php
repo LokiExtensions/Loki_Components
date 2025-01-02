@@ -13,7 +13,6 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
         protected ComponentInterface $component,
         protected Validator $validator,
         protected Filter $filter,
-        protected LocalMessageManager $messageManager,
     ) {
     }
 
@@ -38,9 +37,9 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
         return $this->component->getName();
     }
 
-    public function getMessageManager(): LocalMessageManager
+    public function getLocalMessageManager(): LocalMessageManager
     {
-        return $this->messageManager;
+        return $this->component->getLocalMessageManager();
     }
 
     abstract protected function getData(): mixed;

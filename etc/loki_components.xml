@@ -3,7 +3,7 @@
     <group name="default"/>
 
     <component
-        name="loki-components.messages"
+        name="loki-components.global-messages"
         context="Yireo\LokiComponents\Component\Messages\MessagesContext"
         viewModel="Yireo\LokiComponents\Component\Messages\MessagesViewModel"/>
 

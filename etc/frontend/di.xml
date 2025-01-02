@@ -5,7 +5,7 @@
     <type name="Yireo\LokiComponents\Util\DefaultTargets">
         <arguments>
             <argument name="targets" xsi:type="array">
-                <item name="messages" xsi:type="string">loki-components.messages</item>
+                <item name="messages" xsi:type="string">loki-components.global-messages</item>
             </argument>
         </arguments>
     </type>

@@ -37,6 +37,7 @@ class JsDataProvider implements ArgumentInterface
 
         $data['validators'] = $component->getValidators();
         $data['filters'] = $component->getFilters();
+        $data['messages'] = $component->getLocalMessageManager()->toArray();
 
         $viewModel = $component->getViewModel();
         if ($viewModel instanceof ComponentViewModelInterface) {

@@ -8,14 +8,14 @@ use Yireo\LokiComponents\Component\Messages\MessagesViewModel;
 /** @var MessagesViewModel $viewModel */
 
 ?>
-<div>
+<div class="m-4">
     <template x-for="message in messages">
-        <div class="message" :class="message.type" x-transition>
+        <div class="message" :class="message.type">
             <span x-html="message.text"></span>
             <button
                 type="button"
                 class="text-gray-600 hover:text-black"
-                aria-label="<?= __('Close message') ?>" @click.prevent="removeMessage(message.text)">
+                aria-label="<?= __('Close message') ?>" @click.prevent="remove(message.text)">
                 x
             </button>
         </div>

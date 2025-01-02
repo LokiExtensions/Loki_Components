@@ -18,6 +18,11 @@ class ComponentRegistry
     ) {
     }
 
+    /**
+     * @param string $componentName
+     * @return Component
+     * @throws NoComponentFoundException
+     */
     public function getComponentByName(string $componentName): Component
     {
         if (false === isset($this->components[$componentName])) {
@@ -31,17 +36,11 @@ class ComponentRegistry
      * @param string $blockName
      *
      * @return Component
+     * @deprecated Use getComponentByName instead
      */
     public function getComponentFromBlockName(string $blockName): Component
     {
-        // @todo: Rewrite this to array_filter function
-        foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
-            if ($componentDefinition->getName() === $blockName) {
-                return $this->getComponentByName($componentDefinition->getName());
-            }
-        }
-
-        throw new NoComponentFoundException((string)__('Unknown component "%1"', $blockName));
+        return $this->getComponentByName($blockName);
     }
 
     /**
@@ -57,7 +56,7 @@ class ComponentRegistry
             throw new NoComponentFoundException((string)__('Block has no name', $block->getJsId()));
         }
 
-        return $this->getComponentFromBlockName($blockName);
+        return $this->getComponentByName($blockName);
     }
 
 
@@ -88,7 +87,6 @@ class ComponentRegistry
         throw new NoComponentFoundException((string)__('Unknown element ID "%1"', $elementId));
     }
 
-
     /**
      * @param string $componentName
      *
@@ -96,10 +94,6 @@ class ComponentRegistry
      */
     private function createComponentByName(string $componentName): Component
     {
-        if (array_key_exists($componentName, $this->components)) {
-            return $this->components[$componentName];
-        }
-
         // @todo: Rewrite this to array_filter function
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
             if ($componentDefinition->getName() === $componentName) {
@@ -107,6 +101,6 @@ class ComponentRegistry
             }
         }
 
-        throw new \RuntimeException('Could not create component "'.$componentName.'"');
+        throw new NoComponentFoundException('Could not create component "'.$componentName.'"');
     }
 }

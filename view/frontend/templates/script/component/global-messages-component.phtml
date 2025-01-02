@@ -2,18 +2,18 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('LokiComponentMessages', () => ({
             ...LokiComponentType,
-            reload: false,
             initActions: {
                 ...LokiComponentType.initActions,
-                reload() {
-                    if (this.reload) {
-                        this.reloadMessages();
+                clearAfterTimeout() {
+                    if (this.timeout > 0) {
+                        setTimeout(() => {
+                            this.messages = [];
+                        }, this.timeout);
                     }
                 }
             },
-            reloadMessages() {
-                window.dispatchEvent(new CustomEvent("reload-customer-section-data"));
-                hyva.initMessages();
+            remove() {
+                this.messages = [];
             }
         }));
     });

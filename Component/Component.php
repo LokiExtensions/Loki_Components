@@ -9,7 +9,6 @@ use Magento\Framework\View\LayoutInterface;
 use Yireo\LokiComponents\Messages\GlobalMessageManager;
 use Yireo\LokiComponents\Messages\LocalMessageManager;
 use Yireo\LokiComponents\Messages\LocalMessageManagerFactory;
-use Yireo\LokiComponents\Messages\MessageManager;
 use Yireo\LokiComponents\Util\DefaultTargets;
 
 class Component implements ComponentInterface
@@ -23,9 +22,9 @@ class Component implements ComponentInterface
         protected ObjectManagerInterface $objectManager,
         protected LayoutInterface $layout,
         protected ComponentContextInterface $context,
-        protected LocalMessageManagerFactory $localMessageManagerFactory,
         protected GlobalMessageManager $globalMessageManager,
         protected DefaultTargets $defaultTargets,
+        private LocalMessageManagerFactory $localMessageManagerFactory,
         protected string $name,
         protected array $targets = [],
         protected array $validators = [],
@@ -160,7 +159,7 @@ class Component implements ComponentInterface
 
     public function getLocalMessageManager(): LocalMessageManager
     {
-        if (false === $this->localMessageManager instanceof MessageManager) {
+        if (false === $this->localMessageManager instanceof LocalMessageManager) {
             $this->localMessageManager = $this->localMessageManagerFactory->create();
         }
 

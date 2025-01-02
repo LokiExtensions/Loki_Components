@@ -19,7 +19,13 @@ class MessagesViewModel extends ComponentViewModel
      */
     public function getJsData(): ?array
     {
+        $timeout = $this->getBlock()->getTimeout(); // @doc
+        if (false === is_numeric($timeout)) {
+            $timeout = 10000;
+        }
+
         return [
+            'timeout' => $timeout,
             'messages' => $this->getContext()->getGlobalMessageManager()->toArray(),
         ];
     }

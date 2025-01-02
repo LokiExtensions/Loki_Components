@@ -11,5 +11,5 @@ interface ComponentRepositoryInterface
 
     public function get(): mixed;
 
-    public function getMessageManager(): MessageManager;
+    public function getLocalMessageManager(): MessageManager;
 }

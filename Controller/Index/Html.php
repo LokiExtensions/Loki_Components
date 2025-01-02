@@ -38,7 +38,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     public function execute(): ResultInterface|ResponseInterface
     {
-
         $data = json_decode($this->request->getContent(), true);
 
         $this->sanityCheck($data);

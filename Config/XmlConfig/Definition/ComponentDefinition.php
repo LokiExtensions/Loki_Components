@@ -34,7 +34,7 @@ class ComponentDefinition
 
         return null;
     }
-    public function getViewModel(): ?string
+    public function getViewModelClass(): ?string
     {
         if (!empty($this->viewModel)) {
             return $this->viewModel;
@@ -43,7 +43,7 @@ class ComponentDefinition
         return null;
     }
 
-    public function getRepository(): ?string
+    public function getRepositoryClass(): ?string
     {
         if (!empty($this->repository)) {
             return $this->repository;

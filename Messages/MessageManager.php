@@ -8,6 +8,11 @@ abstract class MessageManager
     /** @var Message[] */
     protected array $messages = [];
 
+    public function addSuccess(string $message): void
+    {
+        $this->messages[] = new Message($message, 'success');
+    }
+
     public function addNotice(string $message): void
     {
         $this->messages[] = new Message($message, Message::TYPE_NOTICE);

@@ -20,18 +20,20 @@ class ComponentFactory
         if (empty($contextClass)) {
             $contextClass = ComponentContext::class;
         }
+        $context = $this->objectManager->get($contextClass);
 
         $arguments = [
             'name' => $componentDefinition->getName(),
-            'context' => $this->objectManager->get($contextClass),
+            'context' => $context,
             'targets' => $componentDefinition->getTargets(),
-            'viewModelClass' => $componentDefinition->getViewModel(),
-            'repositoryClass' => $componentDefinition->getRepository(),
+            'viewModelClass' => $componentDefinition->getViewModelClass(),
+            'repositoryClass' => $componentDefinition->getRepositoryClass(),
             'validators' => $componentDefinition->getValidators(),
             'filters' => $componentDefinition->getFilters(),
         ];
 
         $componentClass = $componentDefinition->getClassName();
+
         try {
             return $this->objectManager->create($componentClass, $arguments);
         } catch(UnexpectedValueException $exception) {

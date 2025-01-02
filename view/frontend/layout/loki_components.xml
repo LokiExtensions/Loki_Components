@@ -2,7 +2,7 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="page.messages">
-            <block name="loki-components.messages" template="Yireo_LokiComponents::component/messages.phtml" before="-"/>
+            <block name="loki-components.global-messages" template="Yireo_LokiComponents::component/global-messages.phtml" before="-"/>
         </referenceContainer>
 
         <referenceBlock name="script-alpine-js" template="Yireo_LokiComponents::script/alpine.phtml"/>
@@ -14,12 +14,15 @@
 
             <container name="loki-components">
                 <block name="loki-components.script.component.base" template="Yireo_LokiComponents::script/component/base-component.phtml"/>
-                <block name="loki-components.script.component.messages" template="Yireo_LokiComponents::script/component/messages-component.phtml"/>
+                <block name="loki-components.script.component.global-messages" template="Yireo_LokiComponents::script/component/global-messages-component.phtml"/>
                 <block name="loki-components.script.component.toggle" template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
                 <block name="loki-components.script.component.debugger" template="Yireo_LokiComponents::script/component/debugger-component.phtml"/>
             </container>
 
             <block name="loki-components.debugger" template="Yireo_LokiComponents::component/debugger.phtml" before="-"/>
         </referenceContainer>
+
+        <block name="loki-components.utils.local-messages" template="Yireo_LokiComponents::utils/local-messages.phtml"/>
+
     </body>
 </page>

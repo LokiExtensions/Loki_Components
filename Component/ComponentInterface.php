@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
-use Yireo\LokiComponents\Messages\GlobalMessageManager;
-use Yireo\LokiComponents\Messages\LocalMessageManager;
+use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
+use Yireo\LokiComponents\Messages\LocalMessageRegistry;
 
 interface ComponentInterface
 {
@@ -31,7 +31,7 @@ interface ComponentInterface
 
     public function getFilters(array $filters = []): array;
 
-    public function getGlobalMessageManager(): GlobalMessageManager;
+    public function getGlobalMessageRegistry(): GlobalMessageRegistry;
 
-    public function getLocalMessageManager(): LocalMessageManager;
+    public function getLocalMessageRegistry(): LocalMessageRegistry;
 }

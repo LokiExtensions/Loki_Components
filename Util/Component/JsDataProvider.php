@@ -33,11 +33,11 @@ class JsDataProvider implements ArgumentInterface
 
         $block = $component->getBlock();
         $data['blockId'] = $block->getNameInLayout();
-        $data['elementId'] = $this->componentUtil->getElementIdByBlockName($block->getNameInLayout());
+        $data['elementId'] = $this->componentUtil->convertToElementId($block->getNameInLayout());
 
         $data['validators'] = $component->getValidators();
         $data['filters'] = $component->getFilters();
-        $data['messages'] = $component->getLocalMessageManager()->toArray();
+        $data['messages'] = $component->getLocalMessageRegistry()->getMessagesByComponent($component);
 
         $viewModel = $component->getViewModel();
         if ($viewModel instanceof ComponentViewModelInterface) {

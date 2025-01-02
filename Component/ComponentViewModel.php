@@ -4,12 +4,10 @@ declare(strict_types=1);
 namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
-use Yireo\LokiComponents\Messages\LocalMessageManager;
+use Yireo\LokiComponents\Messages\LocalMessageRegistry;
 
 abstract class ComponentViewModel implements ComponentViewModelInterface
 {
-    protected ?LocalMessageManager $messageManager = null;
-
     public function __construct(
         protected ComponentInterface $component,
         protected ?AbstractBlock $block = null,
@@ -62,7 +60,7 @@ abstract class ComponentViewModel implements ComponentViewModelInterface
 
     public function getMessages(): array
     {
-        return $this->component->getLocalMessageManager()->getMessages();
+        return $this->component->getLocalMessageRegistry()->getMessagesByComponent($this->component);
     }
 
     // @todo: Should this be protected instead?

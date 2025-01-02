@@ -6,25 +6,23 @@ namespace Yireo\LokiComponents\Component;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
-use Yireo\LokiComponents\Messages\GlobalMessageManager;
-use Yireo\LokiComponents\Messages\LocalMessageManager;
-use Yireo\LokiComponents\Messages\LocalMessageManagerFactory;
+use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
+use Yireo\LokiComponents\Messages\LocalMessageRegistry;
 use Yireo\LokiComponents\Util\DefaultTargets;
 
 class Component implements ComponentInterface
 {
     protected ?ComponentViewModelInterface $viewModel = null;
     protected ?ComponentRepositoryInterface $repository = null;
-    protected ?LocalMessageManager $localMessageManager = null;
     protected ?AbstractBlock $block = null;
 
     public function __construct(
         protected ObjectManagerInterface $objectManager,
         protected LayoutInterface $layout,
         protected ComponentContextInterface $context,
-        protected GlobalMessageManager $globalMessageManager,
+        protected GlobalMessageRegistry $globalMessageRegistry,
         protected DefaultTargets $defaultTargets,
-        private LocalMessageManagerFactory $localMessageManagerFactory,
+        protected LocalMessageRegistry $localMessageRegistry,
         protected string $name,
         protected array $targets = [],
         protected array $validators = [],
@@ -152,18 +150,14 @@ class Component implements ComponentInterface
         return $this->block;
     }
 
-    public function getGlobalMessageManager(): GlobalMessageManager
+    public function getGlobalMessageRegistry(): GlobalMessageRegistry
     {
-        return $this->globalMessageManager;
+        return $this->globalMessageRegistry;
     }
 
-    public function getLocalMessageManager(): LocalMessageManager
+    public function getLocalMessageRegistry(): LocalMessageRegistry
     {
-        if (false === $this->localMessageManager instanceof LocalMessageManager) {
-            $this->localMessageManager = $this->localMessageManagerFactory->create();
-        }
-
-        return $this->localMessageManager;
+        return $this->localMessageRegistry;
     }
 
     // @todo: Rewrite with XML variation

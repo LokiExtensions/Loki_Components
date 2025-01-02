@@ -26,7 +26,7 @@ class MessagesViewModel extends ComponentViewModel
 
         return [
             'timeout' => $timeout,
-            'messages' => $this->getContext()->getGlobalMessageManager()->toArray(),
+            'messages' => $this->getContext()->getGlobalMessageRegistry()->toArray(),
         ];
     }
 }

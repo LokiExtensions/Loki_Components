@@ -5,12 +5,12 @@ namespace Yireo\LokiComponents\Component\Messages;
 
 use Magento\Framework\App\ObjectManager;
 use Yireo\LokiComponents\Component\ComponentContext;
-use Yireo\LokiComponents\Messages\GlobalMessageManager;
+use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
 
 class MessagesContext extends ComponentContext
 {
-    public function getGlobalMessageManager(): GlobalMessageManager
+    public function getGlobalMessageRegistry(): GlobalMessageRegistry
     {
-        return ObjectManager::getInstance()->get(GlobalMessageManager::class);
+        return ObjectManager::getInstance()->get(GlobalMessageRegistry::class);
     }
 }

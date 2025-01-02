@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Messages;
 
-class Message
+class GlobalMessage
 {
     const TYPE_NOTICE = 'notice';
+    const TYPE_SUCCESS = 'success';
     const TYPE_WARNING = 'warning';
     const TYPE_ERROR = 'error';
 

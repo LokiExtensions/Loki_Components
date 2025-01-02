@@ -3,31 +3,39 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Messages;
 
-abstract class MessageManager
+class GlobalMessageRegistry
 {
-    /** @var Message[] */
+    /** @var GlobalMessage[] */
     protected array $messages = [];
+
+    public function add(GlobalMessage $message): void
+    {
+        $this->messages[] = $message;
+    }
 
     public function addSuccess(string $message): void
     {
-        $this->messages[] = new Message($message, 'success');
+        $this->add(new GlobalMessage($message, GlobalMessage::TYPE_SUCCESS));
     }
 
     public function addNotice(string $message): void
     {
-        $this->messages[] = new Message($message, Message::TYPE_NOTICE);
+        $this->add(new GlobalMessage($message, GlobalMessage::TYPE_NOTICE));
     }
 
     public function addWarning(string $message): void
     {
-        $this->messages[] = new Message($message, Message::TYPE_WARNING);
+        $this->add(new GlobalMessage($message, GlobalMessage::TYPE_WARNING));
     }
 
     public function addError(string $message): void
     {
-        $this->messages[] = new Message($message, Message::TYPE_ERROR);
+        $this->add(new GlobalMessage($message, GlobalMessage::TYPE_ERROR));
     }
 
+    /**
+     * @return GlobalMessage[]
+     */
     public function getMessages(): array
     {
         return array_unique($this->messages, SORT_REGULAR);

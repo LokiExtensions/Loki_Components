@@ -9,7 +9,7 @@ class RequiredValidator implements ValidatorInterface
     public function validate(ComponentInterface $component, mixed $value): bool
     {
         if (empty($value)) {
-            $component->getLocalMessageManager()->addError((string)__('Value is required'));
+            $component->getLocalMessageRegistry()->addError($component, (string)__('Value is required'));
 
             return false;
         }

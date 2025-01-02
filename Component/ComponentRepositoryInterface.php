@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Component;
 
-use Yireo\LokiComponents\Messages\MessageManager;
+use Yireo\LokiComponents\Messages\LocalMessageRegistry;
 
 interface ComponentRepositoryInterface
 {
@@ -11,5 +11,5 @@ interface ComponentRepositoryInterface
 
     public function get(): mixed;
 
-    public function getLocalMessageManager(): MessageManager;
+    public function getLocalMessageRegistry(): LocalMessageRegistry;
 }

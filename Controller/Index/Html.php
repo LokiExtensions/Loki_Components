@@ -102,7 +102,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             $this->debug('data', $componentData);
             $repository->save($componentData);
         } catch (RuntimeException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage()); // @todo: Or use GlobalMessageRegistry?
         }
     }
 

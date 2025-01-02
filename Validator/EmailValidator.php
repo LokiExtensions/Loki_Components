@@ -17,13 +17,13 @@ class EmailValidator implements ValidatorInterface
         $email = trim((string)$value);
 
         if (empty($email)) {
-            $component->getMessages()->addError('This value is required');
+            $component->getLocalMessageRegistry()->addError($component,'This value is required');
 
             return false;
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $component->getMessages()->addError( 'Invalid email');
+            $component->getLocalMessageRegistry()->addError( $component,'Invalid email');
 
             return false;
         }
@@ -32,13 +32,13 @@ class EmailValidator implements ValidatorInterface
         $domain = $parts[1];
         if (false === checkdnsrr($domain)) {
             $message = (string)__('Domain "%s" does not seem to be valid');
-            $component->getMessages()->addError( sprintf($message, $domain));
+            $component->getLocalMessageRegistry()->addError( $component, sprintf($message, $domain));
             return false;
         }
 
         // Mental note, this only triggers if `checkout/options/enable_guest_checkout_login` is enabled
         if (false === $this->accountManagement->isEmailAvailable($email)) {
-            $component->getMessages()->addError( 'This email address is not available');
+            $component->getLocalMessageRegistry()->addError( $component, 'This email address is not available');
 
             return false;
         }

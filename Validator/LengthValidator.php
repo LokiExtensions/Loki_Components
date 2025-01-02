@@ -26,14 +26,14 @@ class LengthValidator implements ValidatorInterface
 
         if ($viewModel->hasMinLength() && strlen($value) < $viewModel->getMinLength()) {
             $msg = __('This value should be %1 characters or more in length', $viewModel->getMinLength());
-            $repository->getMessageManager()->addError((string) $msg);
+            $repository->getLocalMessageRegistry()->addError($component, (string) $msg);
 
             return false;
         }
 
         if ($viewModel->hasMaxLength() && strlen($value) > $viewModel->getMaxLength()) {
             $msg = __('This value should be %1 characters or less in length: '.$value, $viewModel->getMaxLength());
-            $repository->getMessageManager()->addError((string) $msg);
+            $repository->getLocalMessageRegistry()->addError($component, (string) $msg);
 
             return false;
         }

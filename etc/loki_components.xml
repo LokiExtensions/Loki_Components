@@ -6,9 +6,4 @@
         name="loki-components.global-messages"
         context="Yireo\LokiComponents\Component\Messages\MessagesContext"
         viewModel="Yireo\LokiComponents\Component\Messages\MessagesViewModel"/>
-
-    <component
-        name="loki-components.debugger"
-        context="Yireo\LokiComponents\Component\Debugger\DebuggerContext"
-        viewModel="Yireo\LokiComponents\Component\Debugger\DebuggerViewModel"/>
 </components>

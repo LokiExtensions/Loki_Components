@@ -4,23 +4,25 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Controller\Index;
 
+use Exception;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use RuntimeException;
-use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Component\ComponentRegistry;
 use Yireo\LokiComponents\Component\ComponentRepositoryInterface;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
-use Yireo\LokiComponents\Util\Debugger;
+use Yireo\LokiComponents\Exception\NoComponentFoundException;
+use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
 
 class Html implements HttpPostActionInterface, HttpGetActionInterface
 {
@@ -31,8 +33,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly HtmlResultFactory $htmlResultFactory,
         private readonly RequestInterface $request,
         private readonly ComponentRegistry $componentRegistry,
-        private readonly MessageManager $messageManager,
-        private readonly Debugger $debugger
+        private readonly GlobalMessageRegistry $globalMessageRegistry,
+        private readonly EventManager $eventManager,
     ) {
     }
 
@@ -43,8 +45,13 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $this->sanityCheck($data);
         $this->initializeLayout($data['handles']);
 
-        $block = $this->getBlock($data['block']);
-        $this->saveDataToComponent($block, $data['componentData']);
+        try {
+            $block = $this->getBlock($data['block']);
+            $this->saveDataToComponent($block, $data['componentData']);
+        } catch(Exception $exception) {
+            $this->globalMessageRegistry->addError($exception->getMessage());
+            return $this->getHtmlResult();
+        }
 
         $this->renderBlocks($this->getTargetBlockNames($data['targets']));
 
@@ -54,15 +61,13 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     private function getBlock(string $blockName): AbstractBlock
     {
         if (empty($blockName)) {
-            throw new RuntimeException('Block name not specified');
+            throw new NoComponentFoundException('Block name not specified');
         }
 
         $block = $this->layout->getBlock($blockName);
         if (false === $block instanceof AbstractBlock) {
-            throw new RuntimeException('Block with name "'.$blockName.'" is not found');
+            throw new NoComponentFoundException('Block with name "'.$blockName.'" is not found');
         }
-
-        $this->debug('block', $blockName);
 
         return $block;
     }
@@ -85,54 +90,15 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     private function saveDataToComponent(AbstractBlock $block, mixed $componentData): void
     {
-        try {
-            $component = $this->componentRegistry->getComponentFromBlock($block);
-        } catch (RuntimeException $e) {
-            die($e->getMessage());
-        }
-
-        $this->debugComponent($component);
+        $component = $this->componentRegistry->getComponentFromBlock($block);
+        $this->eventManager->dispatch('loki_components_repository', ['component' => $component]);
 
         $repository = $component->getRepository();
         if (false === $repository instanceof ComponentRepositoryInterface) {
             return;
         }
 
-        try {
-            $this->debug('data', $componentData);
-            $repository->save($componentData);
-        } catch (RuntimeException $e) {
-            $this->messageManager->addErrorMessage($e->getMessage()); // @todo: Or use GlobalMessageRegistry?
-        }
-    }
-
-    private function debugComponent(ComponentInterface $component): void
-    {
-        $this->debug('component', $component->getName());
-
-        $viewModel = $component->getViewModel();
-        if (is_object($viewModel)) {
-            $this->debug('viewModel', get_class($viewModel));
-        }
-
-        $repository = $component->getRepository();
-        if (is_object($repository)) {
-            $this->debug('repository', get_class($repository));
-        }
-
-        $this->debug('validators', $component->getValidators());
-        $this->debug('filters', $component->getFilters());
-
-    }
-
-    private function getRequestData(): mixed
-    {
-        $json = $this->request->getParam('json');
-        if ($json) {
-            return json_decode($json, true);
-        }
-
-        return $this->request->getParam('data');
+        $repository->save($componentData);
     }
 
     private function renderBlocks(array $blockNames): void
@@ -142,7 +108,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             if ($block instanceof BlockInterface) {
                 $this->htmlParts[] = $block->toHtml();
             } else {
-                $this->messageManager->addErrorMessage('Block with name "'.$blockName.'" not found');
+                $this->globalMessageRegistry->addError('Block with name "'.$blockName.'" not found');
             }
         }
     }
@@ -151,7 +117,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         $blockNames = $this->convertTargetsToBlockNames($targets);
         $blockNames = array_unique($blockNames);
-        $this->debug('targetBlocks', $blockNames);
+        $this->eventManager->dispatch('loki_components_blocks', ['blocks' => $blockNames]);
 
         return $blockNames;
     }
@@ -192,10 +158,5 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $htmlResult->setContents($html);
 
         return $htmlResult;
-    }
-
-    private function debug(string $name, $value): void
-    {
-        $this->debugger->add($name, $value);
     }
 }

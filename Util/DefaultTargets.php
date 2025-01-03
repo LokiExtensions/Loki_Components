@@ -11,11 +11,6 @@ class DefaultTargets
 
     public function getTargets(): array
     {
-        $debugging = true; // @todo: Make this configurable
-        if ($debugging) {
-            $this->targets[] = 'loki-components.debugger';
-        }
-
         return $this->targets;
     }
 }

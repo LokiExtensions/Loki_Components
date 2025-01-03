@@ -63,7 +63,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
         $block = $component->getBlock();
 
         $attributes = (array)$block->getData('html_attributes');
-        $attributes['id'] = $this->getElementId($block); // @todo: Double-check that ID has not been added yet
+        $attributes['id'] = $this->getElementId($block);
         $attributes['x-data'] = $this->jsDataProvider->getComponentName($component);
         $attributes['x-title'] = $this->jsDataProvider->getComponentId($component);
 

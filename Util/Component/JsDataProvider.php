@@ -13,8 +13,6 @@ use Yireo\LokiComponents\Util\IdConvertor;
 use Yireo\LokiComponents\Component\ComponentViewModelInterface;
 use Yireo\LokiComponents\Util\ComponentUtil;
 
-// @todo: Retrieve targets from Component-class instead of ViewModel-class
-// @todo: Remove this and replace with JsDataProvider
 class JsDataProvider implements ArgumentInterface
 {
     public function __construct(

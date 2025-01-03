@@ -99,11 +99,13 @@ class JsDataProvider implements ArgumentInterface
         $viewModel = $component->getViewModel();
         if ($viewModel instanceof ComponentViewModelInterface) {
             $targetNames = array_merge($targetNames, (array)$viewModel->getTargets());
+        } else {
+            $targetNames = array_merge($targetNames, (array)$component->getTargets());
         }
 
         $targetNames = $this->convertDomIds($targetNames);
-        $targetNames = array_values($targetNames);
-        return array_unique($targetNames);
+        $targetNames = array_unique($targetNames);
+        return array_values($targetNames);
     }
 
     private function convertDomIds(array $domIds): array

@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Messages;
 
-class LocalMessage
+use JsonSerializable;
+
+class LocalMessage implements JsonSerializable
 {
     const TYPE_NOTICE = 'notice';
     const TYPE_SUCCESS = 'success';
@@ -38,5 +40,10 @@ class LocalMessage
             'text' => $this->getText(),
             'type' => $this->getType(),
         ];
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return $this->toArray();
     }
 }

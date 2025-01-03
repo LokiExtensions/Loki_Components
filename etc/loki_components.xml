@@ -4,6 +4,6 @@
 
     <component
         name="loki-components.global-messages"
-        context="Yireo\LokiComponents\Component\Messages\MessagesContext"
-        viewModel="Yireo\LokiComponents\Component\Messages\MessagesViewModel"/>
+        context="Yireo\LokiComponents\Component\GlobalMessages\GlobalMessagesContext"
+        viewModel="Yireo\LokiComponents\Component\GlobalMessages\GlobalMessagesViewModel"/>
 </components>

@@ -1,17 +1,17 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component\Messages;
+namespace Yireo\LokiComponents\Component\GlobalMessages;
 
 use Yireo\LokiComponents\Component\ComponentViewModel;
 
 /**
- * @method MessagesContext getContext()
+ * @method GlobalMessagesContext getContext()
  */
-class MessagesViewModel extends ComponentViewModel
+class GlobalMessagesViewModel extends ComponentViewModel
 {
     public function getJsComponentName(): ?string
     {
-        return 'LokiComponentMessages';
+        return 'LokiComponentGlobalMessages';
     }
 
     /**

@@ -1,14 +1,13 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component\Messages;
+namespace Yireo\LokiComponents\Component\GlobalMessages;
 
 use Magento\Framework\App\ObjectManager;
 use Yireo\LokiComponents\Component\ComponentContext;
 use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
 
-// @todo: Rename to GlobalMessagesContext
-class MessagesContext extends ComponentContext
+class GlobalMessagesContext extends ComponentContext
 {
     public function getGlobalMessageRegistry(): GlobalMessageRegistry
     {

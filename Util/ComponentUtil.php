@@ -39,6 +39,7 @@ class ComponentUtil implements ArgumentInterface
         return $block->getLayout()->getUpdate()->getHandles();
     }
 
+    // @todo: Deprecate this in favor of ComponentContext::isAjax()
     public function isAjax(): bool
     {
         /** @var Http $request */

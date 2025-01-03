@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Messages;
 
-class GlobalMessageRegistry
+use Magento\Framework\View\Element\Block\ArgumentInterface;
+
+class GlobalMessageRegistry implements ArgumentInterface
 {
     /** @var GlobalMessage[] */
     protected array $messages = [];

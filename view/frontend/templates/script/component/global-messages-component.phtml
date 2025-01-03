@@ -2,8 +2,14 @@
     document.addEventListener('alpine:init', () => {
         Alpine.data('LokiComponentGlobalMessages', () => ({
             ...LokiComponentType,
+            messages: [],
             initActions: {
                 ...LokiComponentType.initActions,
+                initializeMessages() {
+                    const messageContainer = document.getElementById('loki-components-utils-global-message-container');
+                    const messages = JSON.parse(messageContainer.getAttribute('data-messages'));
+                    this.messages = [...this.messages, ...messages];
+                },
                 clearAfterTimeout() {
                     if (this.timeout > 0) {
                         setTimeout(() => {

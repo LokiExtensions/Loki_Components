@@ -20,6 +20,7 @@
                 <block name="loki-components.script.component.toggle" template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
             </container>
 
+            <block name="loki-components.utils.global-message-container" template="Yireo_LokiComponents::script/global-messages-container.phtml"/>
         </referenceContainer>
 
         <block name="loki-components.utils.local-messages" template="Yireo_LokiComponents::utils/local-messages.phtml"/>

@@ -11,6 +11,6 @@ class GlobalMessagesContext extends ComponentContext
 {
     public function getGlobalMessageRegistry(): GlobalMessageRegistry
     {
-        return ObjectManager::getInstance()->get(GlobalMessageRegistry::class);
+        //return ObjectManager::getInstance()->get(GlobalMessageRegistry::class);
     }
 }

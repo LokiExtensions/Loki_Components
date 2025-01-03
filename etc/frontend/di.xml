@@ -4,6 +4,7 @@
         <arguments>
             <argument name="targets" xsi:type="array">
                 <item name="messages" xsi:type="string">loki-components.global-messages</item>
+                <item name="messages-container" xsi:type="string">loki-components.utils.global-message-container</item>
             </argument>
         </arguments>
     </type>

@@ -41,18 +41,17 @@ class JsDataProvider implements ArgumentInterface
 
         // @doc
         $viewModelData = $viewModel->getJsData();
-        if (is_array($viewModelData)) {
+        if (!empty($viewModelData)) {
             $data = array_merge($data, $viewModelData);
         }
-
-        $data['messages'] = $component->getLocalMessageRegistry()->getMessagesByComponent($component);
-
 
         // @doc
         $blockData = $block->getJsData();
         if (is_array($blockData)) {
             $data = array_merge($data, $blockData);
         }
+
+        $data['messages'] = $component->getLocalMessageRegistry()->getMessagesByComponent($component);
 
         return $data;
     }

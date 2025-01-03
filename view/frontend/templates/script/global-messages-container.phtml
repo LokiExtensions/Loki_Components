@@ -1,0 +1,14 @@
+<?php
+declare(strict_types=1);
+
+use Yireo\LokiComponents\Factory\ViewModelFactory;
+use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
+
+/**
+ * @var GlobalMessageRegistry $globalMessageRegistry
+ * @var ViewModelFactory $viewModelFactory
+ */
+$globalMessageRegistry = $viewModelFactory->create(GlobalMessageRegistry::class);
+?>
+
+<div id="loki-components-utils-global-message-container" data-messages='<?= json_encode($globalMessageRegistry->toArray()) ?>'></div>

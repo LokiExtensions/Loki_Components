@@ -1,0 +1,22 @@
+<script>
+    const LokiComponentsStorage = {
+        get() {
+            const lokiCheckoutJson = localStorage.getItem('loki-checkout');
+            if (!lokiCheckoutJson) {
+                return {};
+            }
+
+            return JSON.parse(lokiCheckoutJson);
+        },
+        load(key) {
+            const data = this.get();
+            return data[key];
+        },
+        save(key, value) {
+            const data = this.get();
+            data[key] = value;
+            const lokiCheckoutJson = JSON.stringify(data);
+            localStorage.setItem('loki-checkout', lokiCheckoutJson);
+        }
+    }
+</script>

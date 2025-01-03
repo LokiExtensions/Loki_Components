@@ -83,12 +83,6 @@ class JsDataProvider implements ArgumentInterface
         return $this->camelCaseConvertor->toCamelCase($block->getNameInLayout());
     }
 
-    // @todo: Where is this being used?
-    public function getJsValue(mixed $value): mixed
-    {
-        return str_replace("\n", '\n', (string)$value);
-    }
-
     private function getTargets(ComponentInterface $component): array
     {
         $block = $component->getBlock();

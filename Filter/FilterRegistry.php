@@ -17,19 +17,18 @@ class FilterRegistry
     }
 
     /**
-     * @param array $selectedFilters
+     * @param array $filters
      * @return FilterInterface[]
-     * @todo Rename to getApplicableFilters()
      */
-    public function getSelectedFilters(array $selectedFilters = []): array
+    public function getApplicableFilters(array $filters = []): array
     {
-        $filters = [];
-        foreach ($selectedFilters as $filter) {
+        $applicableFilters = [];
+        foreach ($filters as $filter) {
             if (array_key_exists($filter, $this->filters)) {
-                $filters[$filter] = $this->filters[$filter];
+                $applicableFilters[$filter] = $this->filters[$filter];
             }
         }
 
-        return $filters;
+        return $applicableFilters;
     }
 }

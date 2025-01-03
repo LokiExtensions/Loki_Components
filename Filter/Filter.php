@@ -23,7 +23,7 @@ class Filter
             return $data;
         }
 
-        $filters = $this->filterRegistry->getSelectedFilters($requestedFilters);
+        $filters = $this->filterRegistry->getApplicableFilters($requestedFilters);
         foreach ($filters as $filter) {
             $data = $filter->filter($data);
         }

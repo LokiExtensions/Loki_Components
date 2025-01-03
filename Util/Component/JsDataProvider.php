@@ -38,6 +38,7 @@ class JsDataProvider implements ArgumentInterface
 
         $viewModel = $component->getViewModel();
         $data['value'] = $viewModel->getValue();
+        $data['messages'] = $viewModel->getMessages();
 
         // @doc
         $viewModelData = $viewModel->getJsData();
@@ -51,7 +52,6 @@ class JsDataProvider implements ArgumentInterface
             $data = array_merge($data, $blockData);
         }
 
-        $data['messages'] = $component->getLocalMessageRegistry()->getMessagesByComponent($component);
 
         return $data;
     }

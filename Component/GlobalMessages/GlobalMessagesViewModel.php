@@ -14,7 +14,7 @@ class GlobalMessagesViewModel extends ComponentViewModel
     /**
      * @return array|null
      */
-    public function getJsData(): ?array
+    public function getJsData(): array
     {
         $timeout = $this->getBlock()->getTimeout(); // @doc
         if (false === is_numeric($timeout)) {

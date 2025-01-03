@@ -88,8 +88,8 @@ class ComponentViewModel implements ComponentViewModelInterface
         return null;
     }
 
-    public function getJsData(): ?array
+    public function getJsData(): array
     {
-        return null;
+        return [];
     }
 }

@@ -137,7 +137,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         if (!empty($handles)) {
             foreach ($handles as $handle) {
                 $handle = preg_replace('/([^a-z0-9\-\_]+)/', '', $handle);
-                // @todo: Filter handle value
                 $this->layout->getUpdate()->addHandle($handle);
             }
         }

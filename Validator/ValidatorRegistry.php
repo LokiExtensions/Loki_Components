@@ -17,20 +17,19 @@ class ValidatorRegistry
     }
 
     /**
-     * @param array $selectedValidators
+     * @param array $validators
      *
      * @return ValidatorInterface[]
-     * @todo: Rename to getRequestedValidators()
      */
-    public function getSelectedValidators(array $selectedValidators = []): array
+    public function getApplicableValidators(array $validators = []): array
     {
-        $validators = [];
-        foreach ($selectedValidators as $validatorName) {
+        $applicableValidators = [];
+        foreach ($validators as $validatorName) {
             if (array_key_exists($validatorName, $this->validators)) {
-                $validators[$validatorName] = $this->validators[$validatorName];
+                $applicableValidators[$validatorName] = $this->validators[$validatorName];
             }
         }
 
-        return $validators;
+        return $applicableValidators;
     }
 }

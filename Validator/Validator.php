@@ -29,7 +29,7 @@ class Validator
             return true;
         }
 
-        $validators = $this->validatorRegistry->getSelectedValidators($component->getValidators());
+        $validators = $this->validatorRegistry->getApplicableValidators($component->getValidators());
         foreach ($validators as $validator) {
             if (false === $validator->validate($component, $data)) {
                 return false;

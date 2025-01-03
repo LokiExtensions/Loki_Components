@@ -33,10 +33,6 @@ class AddComponentToBlock implements ObserverInterface
         }
 
         $viewModel = $component->getViewModel();
-        if (false === $viewModel instanceof ComponentViewModelInterface) {
-            return;
-        }
-
         if (!empty($viewModel->getTemplate())) {
             $block->setTemplate($viewModel->getTemplate());
         }

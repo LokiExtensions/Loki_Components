@@ -15,10 +15,6 @@ class LengthValidator implements ValidatorInterface
         }
 
         $viewModel = $component->getViewModel();
-        if (false === $viewModel instanceof ComponentViewModelInterface) {
-            return true;
-        }
-
         $repository = $component->getRepository();
         if (false === $repository instanceof ComponentRepositoryInterface) {
             return true;

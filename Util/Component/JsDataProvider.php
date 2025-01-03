@@ -66,11 +66,9 @@ class JsDataProvider implements ArgumentInterface
         }
 
         $viewModel = $component->getViewModel();
-        if ($viewModel instanceof ComponentViewModelInterface) {
-            $componentName = $viewModel->getJsComponentName();
-            if (!empty($componentName)) {
-                return $componentName;
-            }
+        $componentName = $viewModel->getJsComponentName();
+        if (!empty($componentName)) {
+            return $componentName;
         }
 
         return 'LokiComponent';
@@ -89,11 +87,7 @@ class JsDataProvider implements ArgumentInterface
         $targetNames = (array)$block->getTargets();
 
         $viewModel = $component->getViewModel();
-        if ($viewModel instanceof ComponentViewModelInterface) {
-            $targetNames = array_merge($targetNames, (array)$viewModel->getTargets());
-        } else {
-            $targetNames = array_merge($targetNames, (array)$component->getTargets());
-        }
+        $targetNames = array_merge($targetNames, (array)$viewModel->getTargets());
 
         $targetNames = $this->convertDomIds($targetNames);
         $targetNames = array_unique($targetNames);

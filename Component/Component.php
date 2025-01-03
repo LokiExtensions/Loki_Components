@@ -50,16 +50,11 @@ class Component implements ComponentInterface
         return $this->getViewModel() instanceof ComponentViewModelInterface;
     }
 
-    public function getViewModel(): ?ComponentViewModelInterface
+    public function getViewModel(): ComponentViewModelInterface
     {
         if ($this->viewModel instanceof ComponentViewModelInterface) {
             return $this->viewModel;
         }
-
-        if (empty($this->viewModelClass)) {
-            return null;
-        }
-
 
         $this->viewModel = $this->objectManager->create($this->viewModelClass, [
             'component' => $this,

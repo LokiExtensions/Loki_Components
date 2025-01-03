@@ -8,9 +8,15 @@ use Magento\Framework\Config\ConverterInterface;
 use RuntimeException;
 use Yireo\LokiComponents\Component\Component;
 use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
+use Yireo\LokiComponents\Util\DefaultTargets;
 
 class Converter implements ConverterInterface
 {
+    public function __construct(
+        private readonly DefaultTargets $defaultTargets,
+    ) {
+    }
+
     /**
      * @param DOMDocument $source
      * @return array
@@ -55,7 +61,7 @@ class Converter implements ConverterInterface
                 'context' => !empty($context) ? $context : $group['context'],
                 'viewModel' => !empty($viewModel) ? $viewModel : $group['viewModel'],
                 'repository' => !empty($repository) ? $repository : $group['repository'],
-                'targets' => array_merge($group['targets'], $this->getTargets($componentElement)),
+                'targets' => $this->getTargets($componentElement, $name, $group['targets']),
                 'validators' => $this->getValidators($componentElement),
                 'filters' => $this->getFilters($componentElement),
             ];
@@ -87,15 +93,30 @@ class Converter implements ConverterInterface
         return $groupDefinitions;
     }
 
-    private function getTargets(DOMNode $element): array
+    private function getTargets(DOMNode $element, string $blockName = '', array $targets = []): array
     {
-        $targets = [];
-        $targetElements = $element->getElementsByTagName('target');
-        foreach ($targetElements as $targetElement) {
-            $targets[] = (string)$targetElement->getAttribute('name');
+        $disabledTargets = [];
+        if (!empty($blockName)) {
+            $targets[] = $blockName;
         }
 
-        return $targets;
+        $targetElements = $element->getElementsByTagName('target');
+        foreach ($targetElements as $targetElement) {
+            $targetName = (string)$targetElement->getAttribute('name');
+            if ($targetName === 'self') {
+                $targetName = $blockName;
+            }
+
+            if (true === (bool)$targetElement->getAttribute('disabled')) {
+                $disabledTargets[] = $targetName;
+            } else {
+                $targets[] = $targetName;
+            }
+        }
+
+        $targets = array_merge($targets, $this->defaultTargets->getTargets());
+        $targets = array_diff($targets, $disabledTargets);
+        return array_values(array_unique($targets));
     }
 
     private function getValidators(DOMNode $element): array

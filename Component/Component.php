@@ -18,7 +18,7 @@ class Component implements ComponentInterface
     public function __construct(
         protected ObjectManagerInterface $objectManager,
         protected LayoutInterface $layout,
-        protected ComponentContextInterface $context,
+        protected ComponentContext $context,
         protected GlobalMessageRegistry $globalMessageRegistry,
         protected LocalMessageRegistry $localMessageRegistry,
         protected string $name,
@@ -114,7 +114,7 @@ class Component implements ComponentInterface
         );
     }
 
-    public function getContext(): ComponentContextInterface
+    public function getContext(): ComponentContext
     {
         return $this->context;
     }

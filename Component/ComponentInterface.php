@@ -11,7 +11,7 @@ interface ComponentInterface
 {
     public function getName(): string;
 
-    public function getContext(): ComponentContextInterface;
+    public function getContext(): ComponentContext;
 
     public function getViewModel(): ?ComponentViewModelInterface;
 

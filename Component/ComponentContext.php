@@ -7,7 +7,7 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\ObjectManagerInterface;
 
-class ComponentContext implements ComponentContextInterface
+class ComponentContext
 {
     public function __construct(
         public readonly ObjectManagerInterface $objectManager,

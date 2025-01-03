@@ -24,7 +24,7 @@ interface ComponentViewModelInterface extends ArgumentInterface
 
     public function getMessages(): array;
 
-    public function getContext(): ComponentContextInterface;
+    public function getContext(): ComponentContext;
 
     public function getTemplate(): ?string;
 

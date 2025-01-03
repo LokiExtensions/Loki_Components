@@ -90,6 +90,9 @@ class ComponentViewModel implements ComponentViewModelInterface
 
     public function getJsData(): array
     {
-        return [];
+        return [
+            'value' => $this->getValue(),
+            'messages' => $this->getMessages(),
+        ];
     }
 }

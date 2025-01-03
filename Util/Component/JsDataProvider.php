@@ -32,15 +32,10 @@ class JsDataProvider implements ArgumentInterface
         $block = $component->getBlock();
         $data['blockId'] = $block->getNameInLayout();
         $data['elementId'] = $this->componentUtil->convertToElementId($block->getNameInLayout());
-
         $data['validators'] = $component->getValidators();
         $data['filters'] = $component->getFilters();
 
         $viewModel = $component->getViewModel();
-        $data['value'] = $viewModel->getValue();
-        $data['messages'] = $viewModel->getMessages();
-
-        // @doc
         $viewModelData = $viewModel->getJsData();
         if (!empty($viewModelData)) {
             $data = array_merge($data, $viewModelData);

@@ -84,8 +84,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         const newTargetElement = ajaxDocument.getElementById(target);
                         if (targetElement && newTargetElement) {
                             targetElement.outerHTML = newTargetElement.outerHTML;
-                        } else {
-                            console.log('Target element "' + target + '" does not exist');
                         }
                     });
                 })
@@ -100,11 +98,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         }
                     });
                 })
-        },
-        afterAjax(event) {
-            // @todo: This requires @ajax:success or something to be added to the element
-            this.$root.removeAttribute('aria-busy');
-            console.log('ajax:after', event);
         }
     }
 </script>

@@ -33,17 +33,6 @@ class ComponentRegistry
     }
 
     /**
-     * @param string $blockName
-     *
-     * @return Component
-     * @deprecated Use getComponentByName instead
-     */
-    public function getComponentFromBlockName(string $blockName): Component
-    {
-        return $this->getComponentByName($blockName);
-    }
-
-    /**
      * @param AbstractBlock $block
      *
      * @return Component

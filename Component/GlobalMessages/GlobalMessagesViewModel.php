@@ -4,9 +4,6 @@ namespace Yireo\LokiComponents\Component\GlobalMessages;
 
 use Yireo\LokiComponents\Component\ComponentViewModel;
 
-/**
- * @method GlobalMessagesContext getContext()
- */
 class GlobalMessagesViewModel extends ComponentViewModel
 {
     public function getJsComponentName(): ?string

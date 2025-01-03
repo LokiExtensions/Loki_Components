@@ -7,6 +7,7 @@ use DOMNode;
 use Magento\Framework\Config\ConverterInterface;
 use RuntimeException;
 use Yireo\LokiComponents\Component\Component;
+use Yireo\LokiComponents\Component\ComponentViewModel;
 use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
 use Yireo\LokiComponents\Util\DefaultTargets;
 
@@ -81,10 +82,15 @@ class Converter implements ConverterInterface
                 $groupClass = Component::class;
             }
 
+            $viewModelClass = (string)$groupElement->getAttribute('viewModel');
+            if (empty($viewModelClass)) {
+                $viewModelClass = ComponentViewModel::class;
+            }
+
             $groupDefinitions[$groupName] = [
                 'class' => $groupClass,
                 'context' => (string)$groupElement->getAttribute('context'),
-                'viewModel' => (string)$groupElement->getAttribute('viewModel'),
+                'viewModel' => $viewModelClass,
                 'repository' => (string)$groupElement->getAttribute('repository'),
                 'targets' => $this->getTargets($groupElement),
             ];

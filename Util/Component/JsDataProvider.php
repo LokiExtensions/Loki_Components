@@ -35,18 +35,18 @@ class JsDataProvider implements ArgumentInterface
 
         $data['validators'] = $component->getValidators();
         $data['filters'] = $component->getFilters();
-        $data['messages'] = $component->getLocalMessageRegistry()->getMessagesByComponent($component);
 
         $viewModel = $component->getViewModel();
-        if ($viewModel instanceof ComponentViewModelInterface) {
-            $data['value'] = $viewModel->getValue();
+        $data['value'] = $viewModel->getValue();
 
-            // @doc
-            $viewModelData = $viewModel->getJsData();
-            if (is_array($viewModelData)) {
-                $data = array_merge($data, $viewModelData);
-            }
+        // @doc
+        $viewModelData = $viewModel->getJsData();
+        if (is_array($viewModelData)) {
+            $data = array_merge($data, $viewModelData);
         }
+
+        $data['messages'] = $component->getLocalMessageRegistry()->getMessagesByComponent($component);
+
 
         // @doc
         $blockData = $block->getJsData();
@@ -97,6 +97,7 @@ class JsDataProvider implements ArgumentInterface
 
         $targetNames = $this->convertDomIds($targetNames);
         $targetNames = array_unique($targetNames);
+
         return array_values($targetNames);
     }
 

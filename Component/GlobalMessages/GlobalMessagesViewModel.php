@@ -23,6 +23,7 @@ class GlobalMessagesViewModel extends ComponentViewModel
         if (false === is_numeric($timeout)) {
             $timeout = 5000;
         }
+        echo 'JISSE2';
 
         return [
             'timeout' => $timeout,

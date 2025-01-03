@@ -6,7 +6,7 @@ namespace Yireo\LokiComponents\Component;
 use Magento\Framework\View\Element\AbstractBlock;
 use Yireo\LokiComponents\Messages\LocalMessageRegistry;
 
-abstract class ComponentViewModel implements ComponentViewModelInterface
+class ComponentViewModel implements ComponentViewModelInterface
 {
     public function __construct(
         protected ComponentInterface $component,

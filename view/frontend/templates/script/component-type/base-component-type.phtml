@@ -60,6 +60,10 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 }
             });
 
+            document.addEventListener("focus", (event) => {
+                window.lastFocusElement = event.target;
+            });
+
             await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
@@ -87,6 +91,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         if (targetElement && newTargetElement) {
                             targetElement.outerHTML = newTargetElement.outerHTML;
                         }
+
+                        window.lastFocusElement.focus();
                     });
                 })
                 .catch(error => {

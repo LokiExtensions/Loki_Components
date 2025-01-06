@@ -11,6 +11,8 @@ use Yireo\LokiComponents\Util\ComponentUtil;
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
+    const LokiComponentFormKey = '<?= $componentUtil->getFormKey() ?>';
+
     const LokiComponentType = {
         id: '',
         name: '',
@@ -58,7 +60,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 }
             });
 
-            await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + hyva.getFormKey() + '&isAjax=true', {
+            await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
                 headers: {

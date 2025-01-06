@@ -4,6 +4,7 @@ namespace Yireo\LokiComponents\Util;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Data\Form\FormKey as FormKeyModel;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -13,6 +14,7 @@ class ComponentUtil implements ArgumentInterface
     public function __construct(
         private UrlFactory $urlFactory,
         private RequestInterface $request,
+        private FormKeyModel $formKey
     ) {
     }
 
@@ -58,5 +60,10 @@ class ComponentUtil implements ArgumentInterface
         return (string)$block->getLayout()->getBlock('loki-components.form_html')
             ->setData('source_block', $block)
             ->toHtml();
+    }
+
+    public function getFormKey(): string
+    {
+        return $this->formKey->getFormKey();
     }
 }

@@ -19,17 +19,17 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
 
     public function get(): mixed
     {
-        $data = $this->filter($this->getData());
-        $this->validate($data);
+        $data = $this->filter($this->getValue()); // @todo: Move filtering outside of repository
+        $this->validate($data); // @todo: Move validation outside of repository
         return $data;
     }
 
     public function save(mixed $data): void
     {
-        $data = $this->filter($data);
+        $data = $this->filter($data); // @todo: Move filtering outside of repository
 
         if ($this->validate($data)) {
-            $this->saveData($data);
+            $this->saveValue($data);
         }
     }
 
@@ -48,9 +48,9 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
         return $this->component->getLocalMessageRegistry();
     }
 
-    abstract protected function getData(): mixed;
+    abstract protected function getValue(): mixed;
 
-    abstract protected function saveData(mixed $data): void;
+    abstract protected function saveValue(mixed $data): void;
 
     protected function getContext(): ComponentContext
     {

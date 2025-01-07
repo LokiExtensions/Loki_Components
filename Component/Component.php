@@ -20,7 +20,7 @@ class Component implements ComponentInterface
     public function __construct(
         protected ObjectManagerInterface $objectManager,
         protected LayoutInterface $layout,
-        protected ComponentContext $context,
+        protected ComponentContextInterface $context,
         protected GlobalMessageRegistry $globalMessageRegistry,
         protected LocalMessageRegistry $localMessageRegistry,
         protected Validator $validator,

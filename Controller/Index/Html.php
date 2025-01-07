@@ -103,7 +103,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
         $componentData = $this->filter->filter($component->getFilters(), $componentData);
         if (true === $this->validator->validate($component, $componentData)) {
-            $repository->save($componentData);
+            $repository->saveValue($componentData);
         }
     }
 

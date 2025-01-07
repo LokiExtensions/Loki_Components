@@ -118,7 +118,7 @@ class Component implements ComponentInterface
         );
     }
 
-    public function getContext(): ComponentContext
+    public function getContext(): ComponentContextInterface
     {
         return $this->context;
     }

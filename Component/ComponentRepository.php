@@ -41,7 +41,7 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
 
     abstract public function saveValue(mixed $data): void;
 
-    protected function getContext(): ComponentContext
+    protected function getContext(): ComponentContextInterface
     {
         return $this->component->getContext();
     }

@@ -87,7 +87,7 @@ class ComponentViewModel implements ComponentViewModelInterface
         return $this->component->getLocalMessageRegistry()->getMessagesByComponent($this->component);
     }
 
-    public function getContext(): ComponentContext
+    public function getContext(): ComponentContextInterface
     {
         return $this->component->getContext();
     }

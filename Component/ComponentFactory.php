@@ -20,6 +20,7 @@ class ComponentFactory
         if (empty($contextClass)) {
             $contextClass = ComponentContext::class;
         }
+
         $context = $this->objectManager->get($contextClass);
 
         $arguments = [

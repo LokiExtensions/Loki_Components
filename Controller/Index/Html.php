@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yireo\LokiComponents\Controller\Index;
 
 use Exception;
+use RuntimeException;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\Request\Http;
@@ -12,17 +13,17 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Event\Manager as EventManager;
-use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
-use RuntimeException;
 use Yireo\LokiComponents\Component\ComponentRegistry;
 use Yireo\LokiComponents\Component\ComponentRepositoryInterface;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
+use Yireo\LokiComponents\Filter\Filter;
 use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
+use Yireo\LokiComponents\Validator\Validator;
 
 class Html implements HttpPostActionInterface, HttpGetActionInterface
 {
@@ -35,6 +36,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly ComponentRegistry $componentRegistry,
         private readonly GlobalMessageRegistry $globalMessageRegistry,
         private readonly EventManager $eventManager,
+        private Validator $validator,
+        private Filter $filter,
     ) {
     }
 
@@ -98,7 +101,10 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             return;
         }
 
-        $repository->save($componentData);
+        $componentData = $this->filter->filter($component->getFilters(), $componentData);
+        if (true === $this->validator->validate($component, $componentData)) {
+            $repository->save($componentData);
+        }
     }
 
     private function renderBlocks(array $blockNames): void

@@ -6,8 +6,10 @@ namespace Yireo\LokiComponents\Component;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
+use Yireo\LokiComponents\Filter\Filter;
 use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
 use Yireo\LokiComponents\Messages\LocalMessageRegistry;
+use Yireo\LokiComponents\Validator\Validator;
 
 class Component implements ComponentInterface
 {
@@ -21,6 +23,8 @@ class Component implements ComponentInterface
         protected ComponentContext $context,
         protected GlobalMessageRegistry $globalMessageRegistry,
         protected LocalMessageRegistry $localMessageRegistry,
+        protected Validator $validator,
+        protected Filter $filter,
         protected string $name,
         protected array $targets = [],
         protected array $validators = [],
@@ -56,10 +60,11 @@ class Component implements ComponentInterface
             return $this->viewModel;
         }
 
-        $this->viewModel = $this->objectManager->create($this->viewModelClass, [
-            'component' => $this,
-            'block' => $this->getBlock(),
-        ]);
+        $this->viewModel = $this->objectManager->create($this->viewModelClass);
+        $this->viewModel->setComponent($this);
+        $this->viewModel->setBlock($this->getBlock());
+        $this->viewModel->setValidator($this->validator);
+        $this->viewModel->setFilter($this->filter);
 
         return $this->viewModel;
     }
@@ -79,9 +84,8 @@ class Component implements ComponentInterface
             return null;
         }
 
-        $this->repository = $this->objectManager->create($this->repositoryClass, [
-            'component' => $this,
-        ]);
+        $this->repository = $this->objectManager->create($this->repositoryClass);
+        $this->repository->setComponent($this);
 
         return $this->repository;
     }

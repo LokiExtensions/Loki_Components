@@ -10,27 +10,16 @@ use Yireo\LokiComponents\Messages\LocalMessageRegistry;
 
 abstract class ComponentRepository implements ComponentRepositoryInterface
 {
-    public function __construct(
-        protected ComponentInterface $component,
-        protected Validator $validator,
-        protected Filter $filter,
-    ) {
+    protected ?ComponentInterface $component = null;
+
+    public function setComponent(ComponentInterface $component): void
+    {
+        $this->component = $component;
     }
 
-    public function get(): mixed
+    public function getComponent(): ComponentInterface
     {
-        $data = $this->filter($this->getValue()); // @todo: Move filtering outside of repository
-        $this->validate($data); // @todo: Move validation outside of repository
-        return $data;
-    }
-
-    public function save(mixed $data): void
-    {
-        $data = $this->filter($data); // @todo: Move filtering outside of repository
-
-        if ($this->validate($data)) {
-            $this->saveValue($data);
-        }
+        return $this->component;
     }
 
     public function getComponentName(): string
@@ -48,22 +37,12 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
         return $this->component->getLocalMessageRegistry();
     }
 
-    abstract protected function getValue(): mixed;
+    abstract public function getValue(): mixed;
 
-    abstract protected function saveValue(mixed $data): void;
+    abstract public function saveValue(mixed $data): void;
 
     protected function getContext(): ComponentContext
     {
         return $this->component->getContext();
-    }
-
-    protected function filter(mixed $data): mixed
-    {
-        return $this->filter->filter($this->component->getFilters(), $data);
-    }
-
-    protected function validate(mixed $data): bool
-    {
-        return $this->validator->validate($this->component, $data);
     }
 }

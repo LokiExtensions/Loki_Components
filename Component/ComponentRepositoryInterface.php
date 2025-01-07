@@ -3,13 +3,12 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Component;
 
-use Yireo\LokiComponents\Messages\LocalMessageRegistry;
-
 interface ComponentRepositoryInterface
 {
-    public function save(mixed $data): void;
+    public function setComponent(ComponentInterface $component): void;
 
-    public function get(): mixed;
+    public function saveValue(mixed $data): void;
 
-    public function getLocalMessageRegistry(): LocalMessageRegistry;
+    public function getValue(): mixed;
+
 }

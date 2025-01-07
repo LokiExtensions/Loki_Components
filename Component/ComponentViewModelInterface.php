@@ -5,9 +5,19 @@ namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Yireo\LokiComponents\Filter\Filter;
+use Yireo\LokiComponents\Validator\Validator;
 
 interface ComponentViewModelInterface extends ArgumentInterface
 {
+    public function setComponent(ComponentInterface $component): void;
+
+    public function setValidator(Validator $validator): void;
+
+    public function setFilter(Filter $filter): void;
+
+    public function setBlock(AbstractBlock $block): void;
+
     public function getElementId(): string;
 
     public function getBlock(): AbstractBlock;

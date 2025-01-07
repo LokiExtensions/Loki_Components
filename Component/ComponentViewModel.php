@@ -4,14 +4,34 @@ declare(strict_types=1);
 namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
-use Yireo\LokiComponents\Messages\LocalMessageRegistry;
+use Yireo\LokiComponents\Filter\Filter;
+use Yireo\LokiComponents\Validator\Validator;
 
 class ComponentViewModel implements ComponentViewModelInterface
 {
-    public function __construct(
-        protected ComponentInterface $component,
-        protected ?AbstractBlock $block = null,
-    ) {
+    protected ?ComponentInterface $component = null;
+    protected ?Validator $validator = null;
+    protected ?Filter $filter = null;
+    protected ?AbstractBlock $block = null;
+
+    public function setComponent(ComponentInterface $component): void
+    {
+        $this->component = $component;
+    }
+
+    public function setValidator(Validator $validator): void
+    {
+        $this->validator = $validator;
+    }
+
+    public function setFilter(Filter $filter): void
+    {
+        $this->filter = $filter;
+    }
+
+    public function setBlock(AbstractBlock $block): void
+    {
+        $this->block = $block;
     }
 
     public function getComponentName(): string
@@ -30,7 +50,11 @@ class ComponentViewModel implements ComponentViewModelInterface
             return null;
         }
 
-        return $this->getComponent()->getRepository()->get();
+        $value = $this->getComponent()->getRepository()->getValue();
+        $value = $this->filter->filter($value);
+        $this->validator->validate($value);
+
+        return $value;
     }
 
     public function getBlock(): AbstractBlock

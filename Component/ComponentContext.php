@@ -11,7 +11,7 @@ class ComponentContext
 {
     public function __construct(
         public readonly ObjectManagerInterface $objectManager,
-    ){
+    ) {
     }
 
     public function getCustomerSession(): CustomerSession
@@ -22,12 +22,5 @@ class ComponentContext
     public function getRequest(): HttpRequest
     {
         return $this->objectManager->get(HttpRequest::class);
-    }
-
-    public function isAjax(): bool
-    {
-        $request = $this->getRequest();
-
-        return $request->getHeader('X-Alpine-Request') === 'true';
     }
 }

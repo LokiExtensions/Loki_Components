@@ -9,23 +9,27 @@ use Magento\Framework\UrlFactory;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
+/**
+ * @deprecated
+ */
 class ComponentUtil implements ArgumentInterface
 {
     public function __construct(
         private UrlFactory $urlFactory,
         private RequestInterface $request,
-        private FormKeyModel $formKey
+        private FormKeyModel $formKey,
+        private IdConvertor $idConvertor
     ) {
     }
 
-    public function getElementIdByBlock(AbstractBlock $block): string
-    {
-        return $this->getElementIdByBlockName($block->getNameInLayout());
-    }
-
+    /**
+     * @param string $blockName
+     * @return string
+     * @deprecated Use IdConvertor instead
+     */
     public function convertToElementId(string $blockName): string
     {
-        return preg_replace('/([^a-z0-9\-]+)/', '-', $blockName);
+        return $this->idConvertor->toElementId($blockName);
     }
 
     /**
@@ -33,21 +37,12 @@ class ComponentUtil implements ArgumentInterface
      */
     public function getElementIdByBlockName(string $blockName): string
     {
-        return $this->convertToElementId($blockName);
+        return $this->idConvertor->toElementId($blockName);
     }
 
     public function getHandles(AbstractBlock $block): array
     {
         return $block->getLayout()->getUpdate()->getHandles();
-    }
-
-    // @todo: Deprecate this in favor of ComponentContext::isAjax()
-    public function isAjax(): bool
-    {
-        /** @var Http $request */
-        $request = $this->request;
-
-        return $request->getHeader('X-Alpine-Request') === 'true';
     }
 
     public function getPostUrl(): string

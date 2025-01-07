@@ -92,7 +92,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                             targetElement.outerHTML = newTargetElement.outerHTML;
                         }
 
-                        window.lastFocusElement.focus();
+                        if (window.lastFocusElement) {
+                            window.lastFocusElement.focus();
+                        }
                     });
                 })
                 .catch(error => {

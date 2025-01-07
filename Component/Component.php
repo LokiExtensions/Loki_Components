@@ -62,7 +62,12 @@ class Component implements ComponentInterface
 
         $this->viewModel = $this->objectManager->create($this->viewModelClass);
         $this->viewModel->setComponent($this);
-        $this->viewModel->setBlock($this->getBlock());
+
+        $block = $this->getBlock();
+        if ($block instanceof AbstractBlock) {
+            $this->viewModel->setBlock($block);
+        }
+
         $this->viewModel->setValidator($this->validator);
         $this->viewModel->setFilter($this->filter);
 

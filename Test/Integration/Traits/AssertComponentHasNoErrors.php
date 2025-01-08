@@ -4,9 +4,9 @@ namespace Yireo\LokiComponents\Test\Integration\Traits;
 
 use Yireo\LokiComponents\Component\ComponentInterface;
 
-trait AssertComponentHasError
+trait AssertComponentHasNoErrors
 {
-    protected function assertComponentHasError(ComponentInterface $component, $error)
+    protected function assertComponentHasNoErrors(ComponentInterface $component)
     {
         $messages = $component->getLocalMessageRegistry()->getMessages();
         $found = false;
@@ -15,11 +15,9 @@ trait AssertComponentHasError
                 continue;
             }
 
-            if ($message === $error) {
-                $found = true;
-            }
+            $found = true;
         }
 
-        $this->assertTrue($found);
+        $this->assertFalse($found);
     }
 }

@@ -5,7 +5,6 @@ namespace Yireo\LokiComponents\Config;
 
 use Magento\Framework\Config\Data as DataConfig;
 use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
-use Yireo\LokiComponents\Exception\XmlConfigException;
 
 class XmlConfig extends DataConfig
 {

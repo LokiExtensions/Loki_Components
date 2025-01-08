@@ -5,7 +5,7 @@ namespace Yireo\LokiComponents\Component;
 use Magento\Framework\View\Element\AbstractBlock;
 use Yireo\LokiComponents\Config\XmlConfig;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
-use Yireo\LokiComponents\Util\ComponentUtil;
+use Yireo\LokiComponents\Util\IdConvertor;
 
 class ComponentRegistry
 {
@@ -14,7 +14,7 @@ class ComponentRegistry
     public function __construct(
         private XmlConfig $xmlConfig,
         private ComponentFactory $componentFactory,
-        private ComponentUtil $componentUtil
+        private IdConvertor $idConvertor
     ) {
     }
 
@@ -57,7 +57,7 @@ class ComponentRegistry
     public function getBlockNameFromElementId(string $elementId): string
     {
         foreach ($this->xmlConfig->getComponentDefinitions() as $componentDefinition) {
-            if ($this->componentUtil->convertToElementId($componentDefinition->getName()) === $elementId) {
+            if ($this->idConvertor->toElementId($componentDefinition->getName()) === $elementId) {
                 return $componentDefinition->getName();
             }
 
@@ -66,7 +66,7 @@ class ComponentRegistry
                     return $target;
                 }
 
-                if ($this->componentUtil->convertToElementId($target) === $elementId) {
+                if ($this->idConvertor->toElementId($target) === $elementId) {
                     return $target;
                 }
             }

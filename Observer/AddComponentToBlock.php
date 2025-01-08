@@ -7,7 +7,6 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Component\ComponentViewModelInterface;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
 use Yireo\LokiComponents\Util\ComponentUtil;
 

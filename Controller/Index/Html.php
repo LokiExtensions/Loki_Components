@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Yireo\LokiComponents\Controller\Index;
 
 use Exception;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
 use RuntimeException;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
@@ -15,7 +17,6 @@ use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\BlockInterface;
-use Magento\Framework\View\LayoutInterface;
 use Yireo\LokiComponents\Component\ComponentRegistry;
 use Yireo\LokiComponents\Component\ComponentRepositoryInterface;
 use Yireo\LokiComponents\Controller\HtmlResult;
@@ -28,16 +29,17 @@ use Yireo\LokiComponents\Validator\Validator;
 class Html implements HttpPostActionInterface, HttpGetActionInterface
 {
     private array $htmlParts = [];
+    private ?LayoutInterface $layout = null;
 
     public function __construct(
-        private readonly LayoutInterface $layout,
+        private readonly ResultPageFactory $resultPageFactory,
         private readonly HtmlResultFactory $htmlResultFactory,
         private readonly RequestInterface $request,
         private readonly ComponentRegistry $componentRegistry,
         private readonly GlobalMessageRegistry $globalMessageRegistry,
         private readonly EventManager $eventManager,
-        private Validator $validator,
-        private Filter $filter,
+        private readonly Validator $validator,
+        private readonly Filter $filter,
     ) {
     }
 
@@ -140,13 +142,19 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     private function initializeLayout(array $handles): void
     {
+        $resultPage = $this->resultPageFactory->create();
+
         if (!empty($handles)) {
             foreach ($handles as $handle) {
                 $handle = preg_replace('/([^a-z0-9\-\_]+)/', '', $handle);
-                $this->layout->getUpdate()->addHandle($handle);
+                $resultPage->addHandle($handle);
             }
         }
 
+        //$this->eventManager->dispatch('layout_render_before');
+        //$this->eventManager->dispatch('layout_render_before_' . $this->request->getFullActionName());
+
+        $this->layout = $resultPage->getLayout();
         $this->layout->generateElements();
     }
 

@@ -4,6 +4,7 @@ namespace Yireo\LokiComponents\Test\Integration\Traits;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
 use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Component\ComponentRegistry;
 use Yireo\LokiComponents\Util\Controller\LayoutLoader;
@@ -21,6 +22,25 @@ trait GetComponent
             return $component;
         }
 
+        $layout = $this->getLayout();
+        $block = $layout->getBlock($blockId);
+        $this->assertInstanceOf(AbstractBlock::class, $block, 'No block "'.$blockId.'" in layout');
+
+        $objectManager = ObjectManager::getInstance();
+        $componentRegistry = $objectManager->get(ComponentRegistry::class);
+        $component = $componentRegistry->getComponentByName($blockId);
+        $components[$blockId] = $component;
+
+        return $component;
+    }
+
+    private function getLayout(): LayoutInterface
+    {
+        static $layout;
+        if ($layout instanceof LayoutInterface) {
+            return $layout;
+        }
+
         $objectManager = ObjectManager::getInstance();
         $layoutLoader = $objectManager->get(LayoutLoader::class);
         $layout = $layoutLoader->load([
@@ -30,13 +50,6 @@ trait GetComponent
             'loki_checkout_theme_onestep',
         ]);
 
-        $block = $layout->getBlock($blockId);
-        $this->assertInstanceOf(AbstractBlock::class, $block, 'No block "'.$blockId.'" in layout');
-
-        $componentRegistry = $objectManager->get(ComponentRegistry::class);
-        $component = $componentRegistry->getComponentByName($blockId);
-        $components[$blockId] = $component;
-
-        return $component;
+        return $layout;
     }
 }

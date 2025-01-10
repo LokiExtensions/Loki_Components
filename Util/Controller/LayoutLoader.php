@@ -27,7 +27,7 @@ class LayoutLoader
         //$this->eventManager->dispatch('layout_render_before_' . $this->request->getFullActionName());
 
         $layout = $resultPage->getLayout();
-        $layout->generateElements();
+        //$layout->generateElements();
 
         return $layout;
     }

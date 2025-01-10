@@ -15,7 +15,7 @@ class Validator
         ComponentInterface $component,
         mixed $data = null
     ): bool {
-        if (empty($data)) {
+        if (empty($data) && false === in_array('required', $component->getValidators())) {
             return true;
         }
 

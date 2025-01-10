@@ -26,6 +26,7 @@ trait GetComponent
 
         $componentRegistry = $objectManager->get(ComponentRegistry::class);
         $component = $componentRegistry->getComponentByName($blockId);
+        $component->getLocalMessageRegistry()->clearMessages();
 
         $this->assertInstanceOf(AbstractBlock::class, $component->getBlock());
         return $component;

@@ -18,6 +18,6 @@ trait AssertComponentHasErrors
             $found = true;
         }
 
-        $this->assertTrue($found);
+        $this->assertTrue($found, 'Component "'.$component->getName().'" has no errors');
     }
 }

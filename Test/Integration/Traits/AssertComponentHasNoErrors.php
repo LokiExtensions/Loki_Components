@@ -18,6 +18,6 @@ trait AssertComponentHasNoErrors
             $found = true;
         }
 
-        $this->assertFalse($found);
+        $this->assertFalse($found, 'Component "'.$component->getName().'" has errors: '.var_export($messages, true));
     }
 }

@@ -22,7 +22,7 @@ trait GetComponent
         ]);
 
         $block = $layout->getBlock($blockId);
-        $this->assertInstanceOf(AbstractBlock::class, $block, 'No block "'.$blockId.'" in layout: '.$debug);
+        $this->assertInstanceOf(AbstractBlock::class, $block, 'No block "'.$blockId.'" in layout');
 
         $componentRegistry = $objectManager->get(ComponentRegistry::class);
         $component = $componentRegistry->getComponentByName($blockId);

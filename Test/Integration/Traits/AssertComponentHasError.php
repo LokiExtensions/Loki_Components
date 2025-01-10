@@ -6,7 +6,7 @@ use Yireo\LokiComponents\Component\ComponentInterface;
 
 trait AssertComponentHasError
 {
-    protected function assertComponentHasError(ComponentInterface $component, $error)
+    protected function assertComponentHasError(ComponentInterface $component, $expectedError)
     {
         $messages = $component->getLocalMessageRegistry()->getMessages();
         $found = false;
@@ -15,11 +15,11 @@ trait AssertComponentHasError
                 continue;
             }
 
-            if ($message === $error) {
+            if ($message === $expectedError) {
                 $found = true;
             }
         }
 
-        $this->assertTrue($found);
+        $this->assertTrue($found, 'Component "'.$component->getName().'" does not have error "'.$expectedError.'": '.var_export($messages, true));
     }
 }

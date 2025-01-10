@@ -7,7 +7,7 @@ interface ComponentRepositoryInterface
 {
     public function setComponent(ComponentInterface $component): void;
 
-    public function saveValue(mixed $data): void;
+    public function saveValue(mixed $value): void;
 
     public function getValue(): mixed;
 

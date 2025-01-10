@@ -17,9 +17,7 @@ class EmailValidator implements ValidatorInterface
         $email = trim((string)$value);
 
         if (empty($email)) {
-            $component->getLocalMessageRegistry()->addError($component,'This value is required');
-
-            return false;
+            return true;
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {

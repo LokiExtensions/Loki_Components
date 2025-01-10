@@ -12,6 +12,15 @@ trait GetComponent
 {
     protected function getComponent(string $blockId): ComponentInterface
     {
+        static $components = [];
+        if (isset($components[$blockId])) {
+            $component = $components[$blockId];
+            $this->assertInstanceOf(AbstractBlock::class, $component->getBlock());
+            $component->getLocalMessageRegistry()->clearMessages();
+
+            return $component;
+        }
+
         $objectManager = ObjectManager::getInstance();
         $layoutLoader = $objectManager->get(LayoutLoader::class);
         $layout = $layoutLoader->load([
@@ -26,9 +35,8 @@ trait GetComponent
 
         $componentRegistry = $objectManager->get(ComponentRegistry::class);
         $component = $componentRegistry->getComponentByName($blockId);
-        $component->getLocalMessageRegistry()->clearMessages();
+        $components[$blockId] = $component;
 
-        $this->assertInstanceOf(AbstractBlock::class, $component->getBlock());
         return $component;
     }
 }

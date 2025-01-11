@@ -27,6 +27,16 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 for ([key, value] of Object.entries(jsonData)) {
                     this[key] = value;
                 }
+            },
+            setValidation: function() {
+                const field = this.$refs.field;
+                if (field) {
+                    if (true === this.valid) {
+                        field.removeAttribute('aria-invalid');
+                    } else {
+                        field.setAttribute('aria-invalid', true);
+                    }
+                }
             }
         },
         beforeInit() {

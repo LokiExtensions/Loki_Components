@@ -5,6 +5,7 @@ namespace Yireo\LokiComponents\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
 use Yireo\LokiComponents\Filter\Filter;
+use Yireo\LokiComponents\Messages\LocalMessage;
 use Yireo\LokiComponents\Validator\Validator;
 
 class ComponentViewModel implements ComponentViewModelInterface
@@ -112,11 +113,23 @@ class ComponentViewModel implements ComponentViewModelInterface
         return null;
     }
 
+    public function isValid(): bool
+    {
+        foreach ($this->getMessages() as $message) {
+            if ($message->getType() === LocalMessage::TYPE_ERROR) {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
     public function getJsData(): array
     {
         return [
             'value' => $this->getValue(),
             'messages' => $this->getMessages(),
+            'valid' => $this->isValid(),
         ];
     }
 }

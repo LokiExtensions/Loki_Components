@@ -93,6 +93,15 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     return response.text()
                 })
                 .then(html => {
+                    try {
+                        const data = JSON.parse(html);
+                        if (data) {
+                            this.handleJson(data);
+                            return;
+                        }
+                    } catch(e) {
+                    }
+
                     const parser = new DOMParser();
                     const ajaxDocument = parser.parseFromString(html, "text/html");
                     this.targets.forEach(target => {
@@ -118,6 +127,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         }
                     });
                 })
+        },
+        handleJson(data) {
+            if (data.redirect) {
+                window.location = data.redirect;
+            }
         }
     }
 </script>

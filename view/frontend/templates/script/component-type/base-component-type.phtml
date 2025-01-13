@@ -52,13 +52,13 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         },
         afterInit() {
         },
-        async post(data) {
-            if (data instanceof Event) {
-                data = null;
+        async post(value) {
+            if (value instanceof Event) {
+                value = null;
             }
 
-            if (!data) {
-                data = this.value;
+            if (!value) {
+                value = this.value;
             }
 
             this.targets.forEach(target => {
@@ -84,7 +84,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 },
                 body: JSON.stringify({
                     targets: this.targets,
-                    componentData: data,
+                    componentData: value,
                     block: this.blockId,
                     handles: <?= json_encode($componentUtil->getHandles($block)) ?>,
                 })

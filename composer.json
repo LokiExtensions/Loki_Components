@@ -11,9 +11,7 @@
         "ext-pcre": "*",
         "ext-dom": "*"
     },
-    "license": [
-        "Open Software License (OSL)"
-    ],
+    "license": "OSL-3.0",
     "autoload": {
         "files": [
             "registration.php"

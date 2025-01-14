@@ -22,7 +22,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         messages: [],
         value: null,
         initActions: {
-            loadInitialData: function () {
+            loadInitialData: function () { // @todo: Should this not be loadInitialData(){}
                 const jsonData = JSON.parse(this.$el.getAttribute('x-init-data'));
                 for ([key, value] of Object.entries(jsonData)) {
                     this[key] = value;
@@ -31,7 +31,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             register() {
                 Alpine.store('components').add(this);
             },
-            setValidation: function() {
+            setValidation: function() { // @todo: Should this not be setValidation(){}
                 const field = this.$refs.field;
                 if (field) {
                     if (true === this.valid) {
@@ -40,7 +40,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         field.setAttribute('aria-invalid', true);
                     }
                 }
-            }
+            },
         },
         beforeInit() {
         },
@@ -142,7 +142,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         getDetails() {
             return {
                 value: this.value,
-            }
+            };
         }
     }
 </script>

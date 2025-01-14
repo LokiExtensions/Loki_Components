@@ -7,6 +7,12 @@
 
         <referenceBlock name="script-alpine-js" template="Yireo_LokiComponents::script/alpine.phtml"/>
 
+        <referenceContainer name="after.body.start">
+            <block
+                name="loki-components.script.components-store"
+                template="Yireo_LokiComponents::script/components-store.phtml"/>
+        </referenceContainer>
+
         <referenceContainer name="before.body.end">
             <block name="loki-components.script.local-storage" template="Yireo_LokiComponents::script/local-storage.phtml"/>
 

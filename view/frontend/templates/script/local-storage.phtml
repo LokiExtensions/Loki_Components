@@ -1,12 +1,12 @@
 <script>
     const LokiComponentsStorage = {
         get() {
-            const lokiCheckoutJson = localStorage.getItem('loki-checkout');
-            if (!lokiCheckoutJson) {
+            const lokiComponentsJson = localStorage.getItem('loki-components');
+            if (!lokiComponentsJson) {
                 return {};
             }
 
-            return JSON.parse(lokiCheckoutJson);
+            return JSON.parse(lokiComponentsJson);
         },
         load(key) {
             const data = this.get();
@@ -15,8 +15,8 @@
         save(key, value) {
             const data = this.get();
             data[key] = value;
-            const lokiCheckoutJson = JSON.stringify(data);
-            localStorage.setItem('loki-checkout', lokiCheckoutJson);
+            const lokiComponentsJson = JSON.stringify(data);
+            localStorage.setItem('loki-components', lokiComponentsJson);
         }
     }
 </script>

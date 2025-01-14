@@ -1,0 +1,31 @@
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.store('components', {
+            components: [],
+            getComponentIds() {
+                return Object.keys(this.components);
+            },
+            getComponents() {
+                return Object.values(this.components);
+            },
+            add(component) {
+                if (!component.id) {
+                    component.id = 'unknown';
+                }
+
+                this.components[component.id] = component;
+                document.dispatchEvent(new CustomEvent(
+                    'yireo-loki-components.component-register',
+                    {detail: {component}}
+                ));
+            },
+            get(componentId) {
+                if (this.components[componentId]) {
+                    return this.components[componentId];
+                }
+
+                throw new Error('No such a component: ' + componentId);
+            }
+        })
+    });
+</script>

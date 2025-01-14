@@ -28,6 +28,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     this[key] = value;
                 }
             },
+            register() {
+                Alpine.store('components').add(this);
+            },
             setValidation: function() {
                 const field = this.$refs.field;
                 if (field) {
@@ -131,6 +134,14 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         handleJson(data) {
             if (data.redirect) {
                 window.location = data.redirect;
+            }
+        },
+        getDetailsString() {
+            return JSON.stringify(this.getDetails());
+        },
+        getDetails() {
+            return {
+                value: this.value,
             }
         }
     }

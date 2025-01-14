@@ -43,6 +43,8 @@ trait GetComponent
 
         $objectManager = ObjectManager::getInstance();
         $layoutLoader = $objectManager->get(LayoutLoader::class);
+
+        // @todo: Make this configurable
         $layout = $layoutLoader->load([
             'default',
             'checkout_index_index',

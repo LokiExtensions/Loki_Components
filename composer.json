@@ -7,6 +7,7 @@
         "magento/framework": "^103.0",
         "magento/module-customer": "^103.0",
         "yireo/magento2-csp-utilities": "^1.0",
+        "php": "^8.3",
         "ext-json": "*",
         "ext-pcre": "*",
         "ext-dom": "*"

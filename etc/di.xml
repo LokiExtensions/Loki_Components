@@ -58,8 +58,8 @@
                 <item name="trim" xsi:type="object">Yireo\LokiComponents\Filter\Trim</item>
                 <item name="capitalize" xsi:type="object">Yireo\LokiComponents\Filter\Capitalize</item>
                 <item name="lowercase" xsi:type="object">Yireo\LokiComponents\Filter\Lowercase</item>
-                <item name="numeric" xsi:type="object">Yireo\LokiComponents\Filter\Numeric</item>
-                <item name="positive_numeric" xsi:type="object">Yireo\LokiComponents\Filter\PositiveNumeric</item>
+                <item name="number" xsi:type="object">Yireo\LokiComponents\Filter\Number</item>
+                <item name="positive_number" xsi:type="object">Yireo\LokiComponents\Filter\PositiveNumber</item>
                 <item name="uppercase" xsi:type="object">Yireo\LokiComponents\Filter\Uppercase</item>
             </argument>
         </arguments>

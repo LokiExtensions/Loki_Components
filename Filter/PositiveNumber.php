@@ -2,7 +2,7 @@
 
 namespace Yireo\LokiComponents\Filter;
 
-class PositiveNumeric implements FilterInterface
+class PositiveNumber implements FilterInterface
 {
     public function filter(mixed $value): mixed
     {

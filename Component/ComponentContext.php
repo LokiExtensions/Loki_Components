@@ -9,7 +9,7 @@ use Magento\Framework\UrlFactory;
 class ComponentContext implements ComponentContextInterface
 {
     public function __construct(
-        private CustomerSession $customerSession,
+        private readonly CustomerSession $customerSession,
         private readonly UrlFactory $urlFactory,
     ) {
     }

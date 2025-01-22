@@ -3,6 +3,7 @@
 namespace Yireo\LokiComponents\Validator;
 
 use Yireo\LokiComponents\Component\ComponentInterface;
+use Yireo\LokiComponents\Messages\LocalMessage;
 use Yireo\LokiComponents\Util\Ajax;
 
 class Validator
@@ -37,8 +38,19 @@ class Validator
 
         $validators = $this->validatorRegistry->getApplicableValidators($component->getValidators());
         foreach ($validators as $validator) {
-            if (false === $validator->validate($component, $data)) {
-                return false;
+            $result = $validator->validate($data, $component);
+            if (true === $result) {
+                continue;
+            }
+
+            foreach ($result as $message) {
+                if ($message instanceof LocalMessage) {
+                    $component->getLocalMessageRegistry()->add($message);
+                    continue;
+                }
+
+                // @todo: Allow for global message to be added too
+                $component->getLocalMessageRegistry()->addError($component, $message);
             }
         }
 

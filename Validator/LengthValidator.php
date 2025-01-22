@@ -8,30 +8,19 @@ use Yireo\LokiComponents\Component\ComponentViewModelInterface;
 
 class LengthValidator implements ValidatorInterface
 {
-    public function validate(ComponentInterface $component, mixed $value): bool
+    public function validate(mixed $value, ?ComponentInterface $component = null): true|array
     {
         if (false === is_string($value)) {
             return true;
         }
 
         $viewModel = $component->getViewModel();
-        $repository = $component->getRepository();
-        if (false === $repository instanceof ComponentRepositoryInterface) {
-            return true;
-        }
-
         if ($viewModel->hasMinLength() && strlen($value) < $viewModel->getMinLength()) {
-            $msg = __('This value should be %1 characters or more in length', $viewModel->getMinLength());
-            $repository->getLocalMessageRegistry()->addError($component, (string) $msg);
-
-            return false;
+            return [__('This value should be %1 characters or more in length', $viewModel->getMinLength())];
         }
 
         if ($viewModel->hasMaxLength() && strlen($value) > $viewModel->getMaxLength()) {
-            $msg = __('This value should be %1 characters or less in length: '.$value, $viewModel->getMaxLength());
-            $repository->getLocalMessageRegistry()->addError($component, (string) $msg);
-
-            return false;
+            return [__('This value should be %1 characters or less in length: '.$value, $viewModel->getMaxLength())];
         }
 
         return true;

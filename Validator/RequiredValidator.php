@@ -6,12 +6,10 @@ use Yireo\LokiComponents\Component\ComponentInterface;
 
 class RequiredValidator implements ValidatorInterface
 {
-    public function validate(ComponentInterface $component, mixed $value): bool
+    public function validate(mixed $value, ?ComponentInterface $component = null): true|array
     {
         if (empty($value)) {
-            $component->getLocalMessageRegistry()->addError($component, (string)__('Value is required'));
-
-            return false;
+            return [(string)__('Value is required')];
         }
 
         return true;

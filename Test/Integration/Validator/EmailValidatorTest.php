@@ -3,7 +3,6 @@
 namespace Yireo\LokiComponents\Test\Integration\Validator;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
-use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 use Magento\Customer\Model\AccountManagement;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
@@ -11,45 +10,44 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\Config;
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Component\Component;
-use Yireo\LokiComponents\Test\Integration\Traits\AssertComponentHasError;
 use Yireo\LokiComponents\Validator\EmailValidator;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
 
 #[AppArea('frontend')]
 class EmailValidatorTest extends TestCase
 {
-    use AssertComponentHasError;
-
     public function testWithNoValue(): void
     {
         $validator = ObjectManager::getInstance()->get(EmailValidator::class);
-        $component = ObjectManager::getInstance()->get(Component::class);
-
-        $this->assertFalse($validator->validate($component->getViewModel(), null));
+        $this->assertTrue($validator->validate(null));
     }
 
     /**
-     * @param string $postcode
-     * @param string $countryId
-     * @param bool $return
+     * @param string $email
+     * @param bool $expectedResult
      * @return void
      * @dataProvider getValues
      */
-    public function testWithVariousValues(string $email, bool $return): void
+    public function testWithVariousValues(string $email, true|string $expectedResult): void
     {
         $validator = ObjectManager::getInstance()->get(EmailValidator::class);
-        $component = ObjectManager::getInstance()->get(Component::class);
+        $actualResult = $validator->validate($email);
+        if (true === $actualResult) {
+            $this->assertTrue($actualResult);
+            return;
+        }
 
-        $this->assertSame($return, $validator->validate($component->getViewModel(), $email));
+        $error = array_pop($actualResult);
+        $this->assertStringContainsString($expectedResult, $error, var_export($actualResult, true));
     }
 
     public function getValues(): array
     {
         return [
             ['jane@example.com', true],
-            ['jane@example', false],
-            ['jane', false],
-            ['jane@example.comcomcomcomcom', false],
+            ['jane@example', 'Invalid email'],
+            ['jane', 'Invalid email'],
+            ['jane@example.comcomcomcomcom', 'does not seem to be valid'],
         ];
     }
 
@@ -59,11 +57,11 @@ class EmailValidatorTest extends TestCase
         $this->createCustomer('john@example.com');
 
         $validator = ObjectManager::getInstance()->get(EmailValidator::class);
-        $component = ObjectManager::getInstance()->get(Component::class);
         $email = 'john@example.com';
+        $result = $validator->validate($email);
 
-        $this->assertFalse($validator->validate($component->getViewModel(), $email));
-        $this->assertComponentHasError($component, 'This email address is not available');
+        $this->assertNotTrue($result);
+        $this->assertContains('This email address is not available', $result);
     }
 
     private function createCustomer(string $email)

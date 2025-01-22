@@ -12,7 +12,7 @@ class EmailValidator implements ValidatorInterface
     ) {
     }
 
-    public function validate(ComponentInterface $component, mixed $value): bool
+    public function validate(mixed $value, ?ComponentInterface $component = null): true|array
     {
         $email = trim((string)$value);
 
@@ -21,24 +21,19 @@ class EmailValidator implements ValidatorInterface
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $component->getLocalMessageRegistry()->addError( $component,'Invalid email');
-
-            return false;
+            return ['Invalid email'];
         }
 
         $parts = explode('@', $email);
         $domain = $parts[1];
         if (false === checkdnsrr($domain)) {
             $message = (string)__('Domain "%s" does not seem to be valid');
-            $component->getLocalMessageRegistry()->addError( $component, sprintf($message, $domain));
-            return false;
+            return [sprintf($message, $domain)];
         }
 
         // Mental note, this only triggers if `checkout/options/enable_guest_checkout_login` is enabled
         if (false === $this->accountManagement->isEmailAvailable($email)) {
-            $component->getLocalMessageRegistry()->addError( $component, 'This email address is not available');
-
-            return false;
+            return ['This email address is not available'];
         }
 
         return true;

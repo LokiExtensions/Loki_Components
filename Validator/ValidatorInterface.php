@@ -6,5 +6,5 @@ use Yireo\LokiComponents\Component\ComponentInterface;
 
 interface ValidatorInterface
 {
-    public function validate(ComponentInterface $component, mixed $value): bool;
+    public function validate(mixed $value, ?ComponentInterface $component = null): true|array;
 }

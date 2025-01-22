@@ -6,12 +6,10 @@ use Yireo\LokiComponents\Component\ComponentInterface;
 
 class NumberValidator implements ValidatorInterface
 {
-    public function validate(ComponentInterface $component, mixed $value): bool
+    public function validate(mixed $value, ?ComponentInterface $component = null): true|array
     {
         if (false === is_numeric($value)) {
-            $component->getLocalMessageRegistry()->addError($component->getName(), (string)__('Value must contain numbers only'));
-
-            return false;
+            return [(string)__('Value must contain numbers only')];
         }
 
         return true;

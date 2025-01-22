@@ -15,11 +15,6 @@ class LengthValidator implements ValidatorInterface
         }
 
         $viewModel = $component->getViewModel();
-        $repository = $component->getRepository();
-        if (false === $repository instanceof ComponentRepositoryInterface) {
-            return true;
-        }
-
         if ($viewModel->hasMinLength() && strlen($value) < $viewModel->getMinLength()) {
             return [__('This value should be %1 characters or more in length', $viewModel->getMinLength())];
         }

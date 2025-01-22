@@ -12,13 +12,13 @@ use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\Config;
 use PHPUnit\Framework\TestCase;
 use Yireo\LokiComponents\Component\Component;
-use Yireo\LokiComponents\Test\Integration\Traits\AssertComponentHasError;
+use Yireo\LokiComponents\Test\Integration\Traits\AssertComponentErrors;
 use Yireo\LokiComponents\Validator\EmailValidator;
 
 #[AppArea('frontend')]
 class EmailValidatorTest extends TestCase
 {
-    use AssertComponentHasError;
+    use AssertComponentErrors;
 
     public function testWithNoValue(): void
     {
@@ -38,9 +38,7 @@ class EmailValidatorTest extends TestCase
     public function testWithVariousValues(string $email, bool $return): void
     {
         $validator = ObjectManager::getInstance()->get(EmailValidator::class);
-        $component = ObjectManager::getInstance()->get(Component::class);
-
-        $this->assertSame($return, $validator->validate($component->getViewModel(), $email));
+        $this->assertSame($return, $validator->validate($email));
     }
 
     public function getValues(): array
@@ -59,10 +57,9 @@ class EmailValidatorTest extends TestCase
         $this->createCustomer('john@example.com');
 
         $validator = ObjectManager::getInstance()->get(EmailValidator::class);
-        $component = ObjectManager::getInstance()->get(Component::class);
         $email = 'john@example.com';
 
-        $this->assertFalse($validator->validate($component->getViewModel(), $email));
+        $this->assertFalse($validator->validate($email));
         $this->assertComponentHasError($component, 'This email address is not available');
     }
 

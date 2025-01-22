@@ -38,7 +38,7 @@ class Validator
 
         $validators = $this->validatorRegistry->getApplicableValidators($component->getValidators());
         foreach ($validators as $validator) {
-            $result = $validator->validate($component, $data);
+            $result = $validator->validate($data, $component);
             if (true === $result) {
                 continue;
             }

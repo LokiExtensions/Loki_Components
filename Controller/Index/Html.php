@@ -51,6 +51,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         } catch (RedirectException $redirectException) {
             return $this->getJsonRedirect($redirectException->getMessage());
         } catch (Exception $exception) {
+            echo $exception->getMessage();
             $this->globalMessageRegistry->addError($exception->getMessage());
 
             return $this->getHtmlResult();

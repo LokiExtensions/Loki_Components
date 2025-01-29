@@ -90,6 +90,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     componentData: value,
                     block: this.blockId,
                     handles: <?= json_encode($componentUtil->getHandles($block)) ?>,
+                    request: <?= json_encode($componentUtil->getRequestParams()) ?>,
                 })
             })
                 .then(response => {

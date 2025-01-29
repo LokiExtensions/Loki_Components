@@ -45,6 +45,10 @@ class ComponentUtil implements ArgumentInterface
         return $block->getLayout()->getUpdate()->getHandles();
     }
 
+    public function getRequestParams(): array
+    {
+        return $this->request->getParams();
+    }
     public function getPostUrl(): string
     {
         return $this->urlFactory->create()->getUrl('loki_components/index/html');

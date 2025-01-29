@@ -21,6 +21,13 @@ class RequestDataLoader
         return $data;
     }
 
+    public function mergeRequestParams()
+    {
+        $data = $this->load();
+        $params = array_merge($this->request->getParams(), $data['request']);
+        $this->request->setParams($params);
+    }
+
     private function sanityCheck(array $requestData): void
     {
         /** @var Http $request */

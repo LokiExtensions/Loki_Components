@@ -54,6 +54,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             return $this->getHtmlResult();
         }
 
+        $this->requestDataLoader->mergeRequestParams();
         $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
 
         return $this->getHtmlResult($htmlParts);

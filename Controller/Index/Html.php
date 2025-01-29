@@ -39,6 +39,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     public function execute(): ResultInterface|ResponseInterface
     {
         $data = $this->requestDataLoader->load();
+        $this->requestDataLoader->mergeRequestParams();
+
         $layout = $this->layoutLoader->load($data['handles']);
 
         try {
@@ -54,7 +56,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             return $this->getHtmlResult();
         }
 
-        $this->requestDataLoader->mergeRequestParams();
         $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
 
         return $this->getHtmlResult($htmlParts);

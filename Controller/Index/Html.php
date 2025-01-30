@@ -40,7 +40,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();
-
         $layout = $this->layoutLoader->load($data['handles']);
 
         try {
@@ -51,9 +50,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         } catch (RedirectException $redirectException) {
             return $this->getJsonRedirect($redirectException->getMessage());
         } catch (Exception $exception) {
-            echo $exception->getMessage();
-            $this->globalMessageRegistry->addError($exception->getMessage());
-
+            echo get_class($exception).': '.$exception->getMessage();
             return $this->getHtmlResult();
         }
 

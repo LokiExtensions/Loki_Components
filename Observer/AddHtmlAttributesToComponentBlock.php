@@ -10,7 +10,6 @@ use Magento\Framework\View\Element\Template;
 use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Util\Component\JsDataProvider;
 use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Component\ComponentViewModelInterface;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
 
 class AddHtmlAttributesToComponentBlock implements ObserverInterface

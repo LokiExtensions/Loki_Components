@@ -38,7 +38,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
             return;
         }
 
-        if (false === preg_match('/^<([a-z]{2,})/', $html, $match)) {
+        if (!preg_match('/^<([a-z]{2,})/', $html, $match)) {
             return;
         }
 

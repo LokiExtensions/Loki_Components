@@ -15,6 +15,7 @@ class Ajax implements ArgumentInterface
 
     public function isAjax(): bool
     {
-        return in_array($this->httpRequest->getHeader('X-Alpine-Request'), [1, 'true', true]);
+        $value = $this->httpRequest->getHeader('X-Alpine-Request');
+        return in_array($value, [1, 'true', true]);
     }
 }

@@ -5,11 +5,13 @@ namespace Yireo\LokiComponents\Util\Controller;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use RuntimeException;
+use Yireo\LokiComponents\Util\Ajax;
 
 class RequestDataLoader
 {
     public function __construct(
         private readonly RequestInterface $request,
+        private readonly Ajax $ajax
     ) {
     }
 
@@ -24,15 +26,13 @@ class RequestDataLoader
     public function mergeRequestParams()
     {
         $data = $this->load();
-        $params = array_merge($this->request->getParams(), $data['request']);
+        $params = array_merge($data['request'], $this->request->getParams());
         $this->request->setParams($params);
     }
 
     private function sanityCheck(array $requestData): void
     {
-        /** @var Http $request */
-        $request = $this->request;
-        if ($request->getHeader('X-Alpine-Request') !== 'true') {
+        if (false === $this->ajax->isAjax()) {
             throw new RuntimeException('Not an Alpine request');
         }
 

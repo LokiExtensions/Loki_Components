@@ -1,11 +1,9 @@
 <?xml version="1.0"?>
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
-        <referenceContainer name="page.messages">
+        <referenceContainer name="main.content">
             <block name="loki-components.global-messages" template="Yireo_LokiComponents::component/global-messages.phtml" before="-"/>
         </referenceContainer>
-
-        <referenceBlock name="script-alpine-js" template="Yireo_LokiComponents::script/alpine.phtml"/>
 
         <referenceContainer name="after.body.start">
             <block
@@ -14,6 +12,8 @@
         </referenceContainer>
 
         <referenceContainer name="before.body.end">
+            <block name="loki-components.alpinejs" template="Yireo_LokiComponents::script/alpine.phtml" after="-"/>
+
             <block name="loki-components.script.local-storage" template="Yireo_LokiComponents::script/local-storage.phtml"/>
 
             <container name="loki-component-types">

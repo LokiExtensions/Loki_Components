@@ -3,12 +3,20 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Messages;
 
+use Magento\Framework\Message\ManagerInterface as MessageManager;
+use Magento\Framework\Message\Session as MessageSession;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
 class GlobalMessageRegistry implements ArgumentInterface
 {
     /** @var GlobalMessage[] */
     protected array $messages = [];
+
+    public function __construct(
+        private readonly MessageManager $messageManager,
+        private readonly MessageSession $messageSession
+    ) {
+    }
 
     public function add(GlobalMessage $message): void
     {
@@ -40,6 +48,11 @@ class GlobalMessageRegistry implements ArgumentInterface
      */
     public function getMessages(): array
     {
+        $messageCollection = $this->messageManager->getMessages(true, 'default');
+        foreach ($messageCollection->getItems() as $message) {
+            $this->add(GlobalMessage::fromMessage($message));
+        }
+
         return array_unique($this->messages, SORT_REGULAR);
     }
 

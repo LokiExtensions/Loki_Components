@@ -25,7 +25,6 @@ class AssignAdditionalBlockVariables implements ObserverInterface
         }
 
         $block->assign('css', $this->cssClassFactory->create()->setBlock($block));
-
         $block->assign('viewModelFactory', $this->viewModelFactory);
     }
 }

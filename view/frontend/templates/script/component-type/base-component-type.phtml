@@ -110,6 +110,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     const ajaxDocument = parser.parseFromString(html, "text/html");
                     this.targets.forEach(target => {
                         const targetElement = document.getElementById(target);
+                        console.log(window.lastFocusElement, targetElement);
+                        if (document.activeElement === targetElement) {
+                            console.log('targetElement focus', targetElement);
+                        }
+
                         const newTargetElement = ajaxDocument.getElementById(target);
                         if (targetElement && newTargetElement) {
                             targetElement.outerHTML = newTargetElement.outerHTML;

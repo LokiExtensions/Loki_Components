@@ -13,6 +13,13 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 <script>
     const LokiComponentFormKey = '<?= $componentUtil->getFormKey() ?>';
 
+    [...document.getElementsByTagName('input')].forEach(function (element) {
+        element.addEventListener("focus", (event) => {
+            console.log('On focus', event.target);
+            document.lastFocusElementId = event.target.id;
+        });
+    });
+
     const LokiComponentType = {
         id: '',
         name: '',
@@ -21,17 +28,20 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         targets: [],
         messages: [],
         value: null,
+        originalValue: null,
         initActions: {
             loadInitialData: function () { // @todo: Should this not be loadInitialData(){}
                 const jsonData = JSON.parse(this.$el.getAttribute('x-init-data'));
                 for ([key, value] of Object.entries(jsonData)) {
                     this[key] = value;
                 }
+
+                this.originalValue = this.value;
             },
             register() {
                 Alpine.store('components').add(this);
             },
-            setValidation: function() { // @todo: Should this not be setValidation(){}
+            setValidation: function () { // @todo: Should this not be setValidation(){}
                 const field = this.$refs.field;
                 if (field) {
                     if (true === this.valid) {
@@ -55,6 +65,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         },
         afterInit() {
         },
+        hasChanges() {
+            return this.value !== this.originalValue;
+        },
         async post(value) {
             if (value instanceof Event) {
                 value = null;
@@ -71,10 +84,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 } else {
                     console.log('Target element "' + target + '" does not exist');
                 }
-            });
-
-            document.addEventListener("focus", (event) => {
-                window.lastFocusElement = event.target;
             });
 
             await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
@@ -103,27 +112,28 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                             this.handleJson(data);
                             return;
                         }
-                    } catch(e) {
+                    } catch (e) {
                     }
 
                     const parser = new DOMParser();
                     const ajaxDocument = parser.parseFromString(html, "text/html");
                     this.targets.forEach(target => {
                         const targetElement = document.getElementById(target);
-                        console.log(window.lastFocusElement, targetElement);
-                        if (document.activeElement === targetElement) {
-                            console.log('targetElement focus', targetElement);
+                        const component = Alpine.store('components').getComponentByElementId(target);
+
+                        if (component && targetElement.value !== component.value && component.elementId !== this.elementId) {
+                            return;
                         }
 
                         const newTargetElement = ajaxDocument.getElementById(target);
                         if (targetElement && newTargetElement) {
                             targetElement.outerHTML = newTargetElement.outerHTML;
                         }
-
-                        if (window.lastFocusElement) {
-                            window.lastFocusElement.focus();
-                        }
                     });
+
+                    if (document.lastFocusElementId) {
+                        document.getElementById(document.lastFocusElementId).focus();
+                    }
                 })
                 .catch(error => {
                     console.log(error)

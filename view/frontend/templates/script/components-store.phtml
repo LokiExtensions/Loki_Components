@@ -25,6 +25,11 @@
                 }
 
                 throw new Error('No such a component: ' + componentId);
+            },
+            getComponentByElementId(elementId) {
+                return this.getComponents().find((component) => {
+                    return component.elementId === elementId;
+                });
             }
         })
     });

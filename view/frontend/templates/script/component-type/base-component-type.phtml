@@ -15,7 +15,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 
     [...document.getElementsByTagName('input')].forEach(function (element) {
         element.addEventListener("focus", (event) => {
-            console.log('On focus', event.target);
             document.lastFocusElementId = event.target.id;
         });
     });

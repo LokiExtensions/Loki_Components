@@ -118,16 +118,16 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     const ajaxDocument = parser.parseFromString(html, "text/html");
                     this.targets.forEach(target => {
                         const targetElement = document.getElementById(target);
-                        const component = Alpine.store('components').getComponentByElementId(target);
-
-                        if (component && targetElement.value !== component.value && component.elementId !== this.elementId) {
+                        if (!targetElement) {
                             return;
                         }
 
                         const newTargetElement = ajaxDocument.getElementById(target);
-                        if (targetElement && newTargetElement) {
-                            targetElement.outerHTML = newTargetElement.outerHTML;
+                        if (!newTargetElement) {
+                            return;
                         }
+
+                        targetElement.outerHTML = newTargetElement.outerHTML;
                     });
 
                     if (document.lastFocusElementId) {

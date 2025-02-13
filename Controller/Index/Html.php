@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace Yireo\LokiComponents\Controller\Index;
 
 use Exception;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
 use Magento\Framework\View\LayoutInterface;
@@ -33,6 +34,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly HtmlResultFactory $htmlResultFactory,
         private readonly JsonResultFactory $jsonResultFactory,
         private readonly GlobalMessageRegistry $globalMessageRegistry,
+        private readonly AppState $appState
     ) {
     }
 
@@ -51,7 +53,14 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         } catch (RedirectException $redirectException) {
             return $this->getJsonRedirect($redirectException->getMessage());
         } catch (Exception $exception) {
-            $this->globalMessageRegistry->addError($exception->getMessage());
+            $error = $exception->getMessage();
+
+            if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
+                $error .= '<br/> ['.$exception->getFile().' line '.$exception->getLine().'] <br/>';
+                $error .= $exception->getTraceAsString();
+            }
+
+            $this->globalMessageRegistry->addError($error);
         }
 
         $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
@@ -90,7 +99,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     private function getJsonRedirect(string $redirectUrl): JsonResult
     {
-        $json =$this->jsonResultFactory->create()->setData([
+        $json = $this->jsonResultFactory->create()->setData([
             'redirect' => $redirectUrl,
         ]);
 

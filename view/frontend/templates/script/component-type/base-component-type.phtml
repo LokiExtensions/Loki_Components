@@ -76,6 +76,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 value = this.value;
             }
 
+            document.getElementById(this.elementId).setAttribute('aria-busy', true);
+            if (this.$refs.field) {
+                this.$refs.field.setAttribute('aria-busy', true);
+            }
+
             this.targets.forEach(target => {
                 const targetElement = document.getElementById(target);
                 if (targetElement) {

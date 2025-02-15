@@ -29,7 +29,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         value: null,
         originalValue: null,
         initActions: {
-            loadInitialData: function () { // @todo: Should this not be loadInitialData(){}
+            loadInitialData() {
                 const jsonData = JSON.parse(this.$el.getAttribute('x-init-data'));
                 for ([key, value] of Object.entries(jsonData)) {
                     this[key] = value;
@@ -40,7 +40,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             register() {
                 Alpine.store('components').add(this);
             },
-            setValidation: function () { // @todo: Should this not be setValidation(){}
+            setValidation() {
                 const field = this.$refs.field;
                 if (field) {
                     if (true === this.valid) {

@@ -7,6 +7,10 @@
                 ...LokiComponentType.initActions,
                 initializeMessages() {
                     const messageContainer = document.getElementById('loki-components-utils-global-message-container');
+                    if (!messageContainer) {
+                        return;
+                    }
+                    
                     const messages = JSON.parse(messageContainer.getAttribute('data-messages'));
                     this.messages = [...this.messages, ...messages];
                 },

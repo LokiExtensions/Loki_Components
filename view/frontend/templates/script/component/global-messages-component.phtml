@@ -10,7 +10,7 @@
                     if (!messageContainer) {
                         return;
                     }
-                    
+
                     const messages = JSON.parse(messageContainer.getAttribute('data-messages'));
                     this.messages = [...this.messages, ...messages];
                 },

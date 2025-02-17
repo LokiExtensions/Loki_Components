@@ -26,8 +26,7 @@ trait GetComponent
         $block = $layout->getBlock($blockId);
         $this->assertInstanceOf(AbstractBlock::class, $block, 'No block "'.$blockId.'" in layout');
 
-        $objectManager = ObjectManager::getInstance();
-        $componentRegistry = $objectManager->get(ComponentRegistry::class);
+        $componentRegistry = ObjectManager::getInstance()->get(ComponentRegistry::class);
         $component = $componentRegistry->getComponentByName($blockId);
         $components[$blockId] = $component;
 

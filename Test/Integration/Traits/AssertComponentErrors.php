@@ -12,10 +12,6 @@ trait AssertComponentErrors
         $found = false;
         $foundMessages = [];
         foreach ($messages as $message) {
-            if ($message->getComponentName() !== $component->getName()) {
-                continue;
-            }
-
             $foundMessages[] = $message->getText();
             if ($message->getText() === $expectedError) {
                 $found = true;
@@ -31,31 +27,11 @@ trait AssertComponentErrors
 
     protected function assertComponentHasErrors(ComponentInterface $component)
     {
-        $messages = $component->getLocalMessageRegistry()->getMessages();
-        $found = false;
-        foreach ($messages as $message) {
-            if ($message->getComponentName() !== $component->getName()) {
-                continue;
-            }
-
-            $found = true;
-        }
-
-        $this->assertTrue($found, 'Component "'.$component->getName().'" has no errors');
+        return $this->assertNotEmpty($component->getLocalMessageRegistry()->getMessages());
     }
 
     protected function assertComponentHasNoErrors(ComponentInterface $component)
     {
-        $messages = $component->getLocalMessageRegistry()->getMessages();
-        $found = false;
-        foreach ($messages as $message) {
-            if ($message->getComponentName() !== $component->getName()) {
-                continue;
-            }
-
-            $found = true;
-        }
-
-        $this->assertFalse($found, 'Component "'.$component->getName().'" has errors: '.var_export($messages, true));
+        return $this->assertEmpty($component->getLocalMessageRegistry()->getMessages());
     }
 }

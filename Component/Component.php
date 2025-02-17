@@ -9,6 +9,7 @@ use Magento\Framework\View\LayoutInterface;
 use Yireo\LokiComponents\Filter\Filter;
 use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
 use Yireo\LokiComponents\Messages\LocalMessageRegistry;
+use Yireo\LokiComponents\Messages\LocalMessageRegistryFactory;
 use Yireo\LokiComponents\Validator\Validator;
 
 class Component implements ComponentInterface
@@ -16,13 +17,14 @@ class Component implements ComponentInterface
     protected ?ComponentViewModelInterface $viewModel = null;
     protected ?ComponentRepositoryInterface $repository = null;
     protected ?AbstractBlock $block = null;
+    protected ?LocalMessageRegistry $localMessageRegistry = null;
 
     public function __construct(
         protected ObjectManagerInterface $objectManager,
         protected LayoutInterface $layout,
         protected ComponentContextInterface $context,
         protected GlobalMessageRegistry $globalMessageRegistry,
-        protected LocalMessageRegistry $localMessageRegistry,
+        LocalMessageRegistryFactory $localMessageRegistryFactory,
         protected Validator $validator,
         protected Filter $filter,
         protected string $name,
@@ -32,6 +34,7 @@ class Component implements ComponentInterface
         protected ?string $repositoryClass = null,
         protected ?string $viewModelClass = null,
     ) {
+        $this->localMessageRegistry = $localMessageRegistryFactory->create();
     }
 
     public function getName(): string

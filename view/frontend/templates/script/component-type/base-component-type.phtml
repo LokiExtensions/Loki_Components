@@ -79,7 +79,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             document.getElementById(this.elementId).setAttribute('aria-busy', true);
             if (this.$refs.field) {
                 this.$refs.field.setAttribute('aria-busy', true);
-                this.$refs.field.setAttribute('aria-readonly', true);
+                this.$refs.field.setAttribute('disabled', true);
             }
 
             this.targets.forEach(target => {
@@ -153,7 +153,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 
                     if (this.$refs.field) {
                         this.$refs.field.removeAttribute('aria-busy');
-                        this.$refs.field.removeAttribute('aria-readonly');
+                        this.$refs.field.removeAttribute('disabled');
                     }
                 })
         },

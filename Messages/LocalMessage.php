@@ -13,15 +13,9 @@ class LocalMessage implements JsonSerializable
     const TYPE_ERROR = 'error';
 
     public function __construct(
-        private string $componentName, // @todo: Remove this from here
         private string $text,
         private string $type = self::TYPE_NOTICE
     ) {
-    }
-
-    public function getComponentName(): string
-    {
-        return $this->componentName;
     }
 
     public function getText(): string

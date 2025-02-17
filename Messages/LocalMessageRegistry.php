@@ -8,44 +8,31 @@ use Yireo\LokiComponents\Component\ComponentInterface;
 class LocalMessageRegistry
 {
     /** @var LocalMessage[] */
-    protected array $messages = [];
+    private array $messages = [];
 
     public function add(LocalMessage $message): void
     {
         $this->messages[] = $message;
     }
 
-    public function addSuccess(ComponentInterface|string $component, string $message): void
+    public function addSuccess(string $message): void
     {
-        if ($component instanceof ComponentInterface) {
-            $component = $component->getName();
-        }
-
-        $this->messages[] = new LocalMessage($component, $message, LocalMessage::TYPE_SUCCESS);
+        $this->messages[] = new LocalMessage($message, LocalMessage::TYPE_SUCCESS);
     }
 
-    public function addNotice(ComponentInterface|string $component, string $message): void
+    public function addNotice(string $message): void
     {
-        if ($component instanceof ComponentInterface) {
-            $component = $component->getName();
-        }
-        $this->messages[] = new LocalMessage($component, $message, LocalMessage::TYPE_NOTICE);
+        $this->messages[] = new LocalMessage($message, LocalMessage::TYPE_NOTICE);
     }
 
-    public function addWarning(ComponentInterface|string $component, string $message): void
+    public function addWarning(string $message): void
     {
-        if ($component instanceof ComponentInterface) {
-            $component = $component->getName();
-        }
-        $this->messages[] = new LocalMessage($component, $message, LocalMessage::TYPE_WARNING);
+        $this->messages[] = new LocalMessage($message, LocalMessage::TYPE_WARNING);
     }
 
-    public function addError(ComponentInterface|string $component, string $message): void
+    public function addError(string $message): void
     {
-        if ($component instanceof ComponentInterface) {
-            $component = $component->getName();
-        }
-        $this->messages[] = new LocalMessage($component, $message, LocalMessage::TYPE_ERROR);
+        $this->messages[] = new LocalMessage($message, LocalMessage::TYPE_ERROR);
     }
 
     /**
@@ -56,11 +43,14 @@ class LocalMessageRegistry
         return array_unique($this->messages, SORT_REGULAR);
     }
 
+    /**
+     * @param ComponentInterface $component
+     * @return array
+     * @deprecated Use getMessages() instead
+     */
     public function getMessagesByComponent(ComponentInterface $component): array
     {
-        return array_filter($this->getMessages(), function (LocalMessage $message) use ($component) {
-            return $message->getComponentName() === $component->getName();
-        });
+        return $component->getLocalMessageRegistry()->getMessages();
     }
 
     public function hasMessages(): bool

@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.3] - 18 February 2025
+### Fixed
+- Friendlier message for unknown email domain in validator
+
+### Refactor
+- Refactor LocalMessageRegistry methods
+- Remove obsolete ViewModel methods getFilters and getValidators
+
 ## [0.0.2] - 13 February 2025
 ### Fixed
 - Fix rendering of global messages

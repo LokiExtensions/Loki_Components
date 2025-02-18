@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ### Fixed
 - Re-add getFilters and getValidators differently
+- Only validate AJAX calls setting
 
 ## [0.0.3] - 18 February 2025
 ### Fixed

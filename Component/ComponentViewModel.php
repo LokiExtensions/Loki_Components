@@ -52,7 +52,7 @@ class ComponentViewModel implements ComponentViewModelInterface
         }
 
         $value = $this->getComponent()->getRepository()->getValue();
-        $value = $this->filter->filter($this->getFilters(), $value);
+        $value = $this->filter->filter($this->getComponent()->getFilters(), $value);
         $this->validator->validate($this->component, $value);
 
         return $value;
@@ -71,16 +71,6 @@ class ComponentViewModel implements ComponentViewModelInterface
     public function getTargetString(): string
     {
         return $this->getComponent()->getTargetString();
-    }
-
-    public function getValidators(): array
-    {
-        return $this->getComponent()->getValidators();
-    }
-
-    public function getFilters(): array
-    {
-        return $this->getComponent()->getFilters();
     }
 
     public function getMessages(): array

@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+### Fixed
+- Re-add getFilters and getValidators differently
+
 ## [0.0.3] - 18 February 2025
 ### Fixed
 - Friendlier message for unknown email domain in validator

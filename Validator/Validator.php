@@ -3,6 +3,7 @@
 namespace Yireo\LokiComponents\Validator;
 
 use Yireo\LokiComponents\Component\ComponentInterface;
+use Yireo\LokiComponents\Config\Config;
 use Yireo\LokiComponents\Messages\LocalMessage;
 use Yireo\LokiComponents\Util\Ajax;
 
@@ -11,6 +12,7 @@ class Validator
     public function __construct(
         private ValidatorRegistry $validatorRegistry,
         private Ajax $ajax,
+        private Config $config
     ) {
     }
 
@@ -18,7 +20,7 @@ class Validator
         ComponentInterface $component,
         mixed $data = null
     ): bool {
-        if (false === $this->ajax->isAjax()) {
+        if ($this->config->onlyValidateAjax() && false === $this->ajax->isAjax()) {
             return true;
         }
 

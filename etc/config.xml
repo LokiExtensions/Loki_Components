@@ -1,0 +1,10 @@
+<?xml version="1.0" ?>
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <yireo_loki_components>
+            <general>
+                <only_validate_ajax>0</only_validate_ajax>
+            </general>
+        </yireo_loki_components>
+    </default>
+</config>

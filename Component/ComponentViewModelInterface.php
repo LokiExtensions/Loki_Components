@@ -24,6 +24,8 @@ interface ComponentViewModelInterface extends ArgumentInterface
 
     public function getValue(): mixed;
 
+    public function getValidators(): array;
+    public function getFilters(): array;
     public function getTargets(): array;
 
     public function getTargetString(): string;

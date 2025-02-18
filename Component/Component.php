@@ -105,7 +105,8 @@ class Component implements ComponentInterface
                 array_merge(
                     $this->validators,
                     $validators,
-                    (array)$this->block?->getValidators()
+                    $this->getViewModel()->getValidators(),
+                    (array)$this->block?->getValidators(),
                 )
             )
         );

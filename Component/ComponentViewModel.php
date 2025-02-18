@@ -63,6 +63,16 @@ class ComponentViewModel implements ComponentViewModelInterface
         return $this->block;
     }
 
+    public function getValidators(): array
+    {
+        return [];
+    }
+
+    public function getFilters(): array
+    {
+        return [];
+    }
+
     public function getTargets(): array
     {
         return $this->getComponent()->getTargets();

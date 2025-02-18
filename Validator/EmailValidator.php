@@ -27,7 +27,7 @@ class EmailValidator implements ValidatorInterface
         $parts = explode('@', $email);
         $domain = $parts[1];
         if (false === checkdnsrr($domain)) {
-            $message = (string)__('Domain "%s" does not seem to be valid');
+            $message = (string)__('Domain "%s" is not reachable for mail');
             return [sprintf($message, $domain)];
         }
 

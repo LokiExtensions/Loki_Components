@@ -16,7 +16,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
 {
     public function __construct(
         private readonly ComponentRegistry $componentRegistry,
-        private readonly JsDataProvider    $jsDataProvider
+        private readonly JsDataProvider $jsDataProvider
     ) {
     }
 
@@ -51,17 +51,17 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
             return;
         }
 
-        $htmlAttributes = $this->getHtmlAttributes($component);
+        $htmlAttributes = $this->getHtmlAttributes($component, $html);
         if (empty($htmlAttributes)) {
             return;
         }
 
-        $html = preg_replace('/^<([a-z]{2,})/', '<\1 ' . $htmlAttributes, $html);
+        $html = preg_replace('/^<([a-z]{2,})/', '<\1 '.$htmlAttributes, $html);
 
         $transport->setHtml($html);
     }
 
-    private function getHtmlAttributes(ComponentInterface $component): string
+    private function getHtmlAttributes(ComponentInterface $component, string $currentHtml): string
     {
         $block = $component->getBlock();
 
@@ -72,10 +72,14 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
 
         $htmlAttribute = '';
         foreach ($attributes as $attributeName => $attributeValue) {
-            $htmlAttribute .= ' ' . $attributeName . '="' . $attributeValue . '"';
+            if (str_contains($currentHtml, ' '.$attributeName.'="')) {
+                continue;
+            }
+
+            $htmlAttribute .= ' '.$attributeName.'="'.$attributeValue.'"';
         }
 
-        $htmlAttribute .= " x-init-data='" . $this->getJsData($component) . "'";
+        $htmlAttribute .= " x-init-data='".$this->getJsData($component)."'";
 
         return trim($htmlAttribute);
     }
@@ -83,12 +87,14 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
     private function getJsData(ComponentInterface $component): string
     {
         $componentData = $this->jsDataProvider->getComponentData($component);
+
         return json_encode($componentData);
     }
 
     private function getElementId(AbstractBlock $block): string
     {
         $nameInLayout = strtolower((string)$block->getNameInLayout());
+
         // @todo: Find all instances of this kind of thing and DRY
         return preg_replace('#([^a-zA-Z0-9]{1})#', '-', $nameInLayout);
     }

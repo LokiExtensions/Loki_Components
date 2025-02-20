@@ -2,12 +2,16 @@
 declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
+use Yireo\LokiComponents\Config\Config;
 use Yireo\LokiComponents\Factory\ViewModelFactory;
 use Yireo\LokiComponents\Util\ComponentUtil;
 
 /** @var Template $block */
 /** @var ViewModelFactory $viewModelFactory */
+/** @var Config $config */
+/** @var ComponentUtil $componentUtil */
 
+$config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
@@ -87,7 +91,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 if (targetElement) {
                     targetElement.setAttribute('aria-busy', true);
                 } else {
+                    <?php if ($config->isDebug()): ?>
                     console.log('Target element "' + target + '" does not exist');
+                    <?php endif; ?>
                 }
             });
 

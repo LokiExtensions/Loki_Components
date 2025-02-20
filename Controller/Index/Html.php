@@ -86,8 +86,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         $html = '';
         foreach ($htmlParts as $htmlPart) {
-            $htmlPart = str_replace("\n\n", "\n", $htmlPart);
-            $html .= $htmlPart."\n\n\n";
+            $htmlPart = preg_replace("/([\r\n]+)/", "\n", $htmlPart);
+            $html .= $htmlPart."\n\n";
         }
 
         /** @var HtmlResult $htmlResult */

@@ -18,6 +18,10 @@ class RequestDataLoader
     public function load(): array
     {
         $data = json_decode($this->request->getContent(), true);
+        if (empty($data)) {
+            throw new RuntimeException('Not a valid request');
+        }
+
         $this->sanityCheck($data);
 
         return $data;
@@ -30,7 +34,7 @@ class RequestDataLoader
         $this->request->setParams($params);
     }
 
-    private function sanityCheck(array $requestData): void
+    private function sanityCheck(array $requestData = []): void
     {
         if (false === $this->ajax->isAjax()) {
             throw new RuntimeException('Not an Alpine request');

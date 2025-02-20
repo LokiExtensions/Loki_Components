@@ -37,7 +37,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             loadInitialData() {
                 const jsonData = JSON.parse(this.$root.getAttribute('x-init-data'));
                 for ([key, value] of Object.entries(jsonData)) {
-                    this.$data[key] = value;
+                    this[key] = value;
                 }
 
                 this.originalValue = this.value;
@@ -142,18 +142,37 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     const parser = new DOMParser();
                     const ajaxDocument = parser.parseFromString(html, "text/html");
                     this.targets.forEach(target => {
-                        const targetElement = document.getElementById(target);
-                        if (!targetElement) {
+                        if (target === this.elementId) {
                             return;
                         }
 
+                        const targetElement = document.getElementById(target);
                         const newTargetElement = ajaxDocument.getElementById(target);
-                        if (!newTargetElement) {
+
+                        if (!targetElement || !newTargetElement) {
                             return;
                         }
 
                         targetElement.outerHTML = newTargetElement.outerHTML;
                     });
+
+
+                    const newTargetElement = ajaxDocument.getElementById(this.elementId);
+                    if (!newTargetElement) {
+                        return;
+                    }
+
+                    const targetElement = document.getElementById(this.elementId);
+                    targetElement.innerHTML = newTargetElement.innerHTML;
+                    targetElement.removeAttribute('aria-busy');
+                    targetElement.setAttribute('x-init-data', newTargetElement.getAttribute('x-init-data'));
+
+                    const jsonData = JSON.parse(targetElement.getAttribute('x-init-data'));
+                    for ([key, value] of Object.entries(jsonData)) {
+                        this[key] = value;
+                    }
+
+                    this.value = this.originalValue;
 
                     if (document.lastFocusElementId) {
                         document.getElementById(document.lastFocusElementId).focus();

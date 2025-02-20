@@ -6,9 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.4] - 20 February 2025
 ### Fixed
 - Re-add getFilters and getValidators differently
 - Only validate AJAX calls setting
+- Rewrite updating of HTML and component props
+- Remove duplicate newlines for easier debugging
+- Add failsafe checks
+
+### Added
+- Add debug config option
 
 ## [0.0.3] - 18 February 2025
 ### Fixed

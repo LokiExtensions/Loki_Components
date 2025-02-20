@@ -28,31 +28,43 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         name: '',
         elementId: '',
         blockId: '',
+        field: null,
         targets: [],
         messages: [],
         value: null,
         originalValue: null,
         initActions: {
             loadInitialData() {
-                const jsonData = JSON.parse(this.$el.getAttribute('x-init-data'));
+                const jsonData = JSON.parse(this.$root.getAttribute('x-init-data'));
                 for ([key, value] of Object.entries(jsonData)) {
-                    this[key] = value;
+                    this.$data[key] = value;
                 }
 
                 this.originalValue = this.value;
+
+                this.field = this.$root.querySelectorAll('[data-type="field"]')[0];
             },
             register() {
                 Alpine.store('components').add(this);
             },
             setValidation() {
-                const field = this.$refs.field;
-                if (field) {
-                    if (true === this.valid) {
-                        field.removeAttribute('aria-invalid');
-                    } else {
-                        field.setAttribute('aria-invalid', true);
-                    }
+                if (!this.field) {
+                    return;
                 }
+
+                if (true === this.valid) {
+                    this.field.removeAttribute('aria-invalid');
+                } else {
+                    this.field.setAttribute('aria-invalid', true);
+                }
+
+                this.$watch('valid', () => {
+                    if (true === this.valid) {
+                        this.field.removeAttribute('aria-invalid');
+                    } else {
+                        this.field.setAttribute('aria-invalid', true);
+                    }
+                })
             },
         },
         beforeInit() {
@@ -80,10 +92,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 value = this.value;
             }
 
-            document.getElementById(this.elementId).setAttribute('aria-busy', true);
-            if (this.$refs.field) {
-                this.$refs.field.setAttribute('aria-busy', true);
-                this.$refs.field.setAttribute('disabled', true);
+            if (this.field) {
+                this.field.setAttribute('aria-busy', true);
+                this.field.setAttribute('disabled', true);
             }
 
             this.targets.forEach(target => {
@@ -96,6 +107,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     <?php endif; ?>
                 }
             });
+
+            this.originalValue = this.value;
 
             await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
@@ -150,18 +163,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     console.log(error)
                 })
                 .finally(() => {
-                    this.targets.forEach(target => {
-                        const targetElement = document.getElementById(target);
-                        if (targetElement) {
-                            targetElement.removeAttribute('aria-busy');
-                        }
-                    });
-
-                    if (this.$refs.field) {
-                        this.$refs.field.removeAttribute('aria-busy');
-                        this.$refs.field.removeAttribute('disabled');
+                    if (this.field) {
+                        this.field.removeAttribute('aria-busy');
+                        this.field.removeAttribute('disabled');
                     }
-                })
+                });
         },
         handleJson(data) {
             if (data.redirect) {

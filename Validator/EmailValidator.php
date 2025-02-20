@@ -23,11 +23,12 @@ class EmailValidator implements ValidatorInterface
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             return ['Invalid email'];
         }
-        
+
         $parts = explode('@', $email);
         $domain = $parts[1];
         if (false === checkdnsrr($domain)) {
             $message = (string)__('Domain "%s" is not reachable for mail');
+
             return [sprintf($message, $domain)];
         }
 

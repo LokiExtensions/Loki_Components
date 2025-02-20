@@ -10,6 +10,16 @@
             <resource>Yireo_LokiComponents::configuration</resource>
             <group id="general" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Generic settings</label>
+                <field id="debug"
+                       translate="label"
+                       type="select"
+                       sortOrder="1"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="0">
+                    <label>Debug</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
                 <field id="only_validate_ajax"
                        translate="label"
                        type="select"

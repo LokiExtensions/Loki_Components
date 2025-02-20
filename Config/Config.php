@@ -12,6 +12,11 @@ class Config implements ArgumentInterface
     ) {
     }
 
+    public function isDebug(): bool
+    {
+        return (bool)$this->scopeConfig->getValue('yireo_loki_components/general/debug');
+    }
+
     public function onlyValidateAjax(): bool
     {
         return (bool)$this->scopeConfig->getValue('yireo_loki_components/general/only_validate_ajax');

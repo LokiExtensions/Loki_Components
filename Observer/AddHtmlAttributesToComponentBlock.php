@@ -65,6 +65,12 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
     {
         $block = $component->getBlock();
 
+        if (!preg_match('/^<([^>]+)>/', $currentHtml, $match)) {
+            return $currentHtml;
+        }
+
+        $firstTagHtml = $currentHtml[0];
+
         $attributes = (array)$block->getData('html_attributes');
         $attributes['id'] = $this->getElementId($block);
         $attributes['x-data'] = $this->jsDataProvider->getComponentName($component);
@@ -72,7 +78,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
 
         $htmlAttribute = '';
         foreach ($attributes as $attributeName => $attributeValue) {
-            if (str_contains($currentHtml, ' '.$attributeName.'="')) {
+            if (str_contains($firstTagHtml, ' '.$attributeName.'="')) {
                 continue;
             }
 

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.5] - 22 February 2025
+### Fixed
+-  Fix issue with HTML attributes for nested components
+-  Prevent duplicate HTML attributes
+
 ## [0.0.4] - 20 February 2025
 ### Fixed
 - Re-add getFilters and getValidators differently

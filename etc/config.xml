@@ -4,7 +4,7 @@
         <yireo_loki_components>
             <general>
                 <debug>0</debug>
-                <only_validate_ajax>0</only_validate_ajax>
+                <only_validate_ajax>1</only_validate_ajax>
             </general>
         </yireo_loki_components>
     </default>

@@ -3,12 +3,13 @@ declare(strict_types=1);
 
 use Magento\Framework\View\Element\Template;
 use Yireo\LokiComponents\Component\GlobalMessages\GlobalMessagesViewModel;
+use Yireo\LokiComponents\Util\Block\CssClass;
 
 /** @var Template $block */
 /** @var GlobalMessagesViewModel $viewModel */
-
+/** @var CssClass $css */
 ?>
-<div class="m-4">
+<div class="<?= $css('fixed z-40 w-full p-4') ?>">
     <template x-for="message in messages">
         <div class="message" :class="message.type">
             <span x-html="message.text"></span>

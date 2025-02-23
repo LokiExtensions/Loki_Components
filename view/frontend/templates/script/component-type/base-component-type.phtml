@@ -17,8 +17,15 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 <script>
     const LokiComponentFormKey = '<?= $componentUtil->getFormKey() ?>';
 
-    [...document.getElementsByTagName('input')].forEach(function (element) {
-        element.addEventListener("focus", (event) => {
+    const focusElements = [
+        ...document.getElementsByTagName('input'),
+        ...document.getElementsByTagName('select'),
+        ...document.getElementsByTagName('textarea'),
+    ];
+
+    focusElements.forEach(function (element) {
+        element.addEventListener('focus', (event) => {
+            console.log('Focus', event.target.id);
             document.lastFocusElementId = event.target.id;
         });
     });

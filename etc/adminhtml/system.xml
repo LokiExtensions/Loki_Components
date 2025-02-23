@@ -31,6 +31,18 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
+            <group id="global_messages" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
+                <label>Global Messages</label>
+                <field id="timeout"
+                       translate="label"
+                       type="text"
+                       sortOrder="1"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="0">
+                    <label>Timeout</label>
+                </field>
+            </group>
         </section>
     </system>
 </config>

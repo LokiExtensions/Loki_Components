@@ -4,6 +4,9 @@ namespace Yireo\LokiComponents\Component\GlobalMessages;
 
 use Yireo\LokiComponents\Component\ComponentViewModel;
 
+/**
+ * @method GlobalMessagesContext getContext()
+ */
 class GlobalMessagesViewModel extends ComponentViewModel
 {
     public function getJsComponentName(): ?string
@@ -16,13 +19,8 @@ class GlobalMessagesViewModel extends ComponentViewModel
      */
     public function getJsData(): array
     {
-        $timeout = $this->getBlock()->getTimeout(); // @doc
-        if (false === is_numeric($timeout)) {
-            $timeout = 5000;
-        }
-
         return [
-            'timeout' => $timeout,
+            'timeout' => $this->getContext()->getConfig()->getGlobalMessagesTimeout(),
         ];
     }
 }

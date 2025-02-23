@@ -6,6 +6,9 @@
                 <debug>0</debug>
                 <only_validate_ajax>1</only_validate_ajax>
             </general>
+            <global_messages>
+                <timeout>5000</timeout>
+            </global_messages>
         </yireo_loki_components>
     </default>
 </config>

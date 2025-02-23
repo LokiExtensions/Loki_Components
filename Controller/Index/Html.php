@@ -40,6 +40,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     public function execute(): ResultInterface|ResponseInterface
     {
+        $debug = false; // @todo: Enable debugging here
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();
         $layout = $this->layoutLoader->load($data['handles']);
@@ -55,7 +56,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         } catch (Exception $exception) {
             $error = $exception->getMessage();
 
-            if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
+            if ($debug && $this->appState->getMode() === AppState::MODE_DEVELOPER) {
                 $error .= '<br/> ['.$exception->getFile().' line '.$exception->getLine().'] <br/>';
                 $error .= $exception->getTraceAsString();
             }

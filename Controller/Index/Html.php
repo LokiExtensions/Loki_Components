@@ -14,6 +14,7 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Element\AbstractBlock;
+use Yireo\LokiComponents\Config\Config;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
@@ -34,13 +35,14 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly HtmlResultFactory $htmlResultFactory,
         private readonly JsonResultFactory $jsonResultFactory,
         private readonly GlobalMessageRegistry $globalMessageRegistry,
+        private readonly Config $config,
         private readonly AppState $appState
     ) {
     }
 
     public function execute(): ResultInterface|ResponseInterface
     {
-        $debug = false; // @todo: Enable debugging here
+        $debug = $this->config->isDebug();
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();
         $layout = $this->layoutLoader->load($data['handles']);

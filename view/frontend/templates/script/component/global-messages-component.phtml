@@ -12,7 +12,10 @@
                     }
 
                     const messages = JSON.parse(messageContainer.getAttribute('data-messages'));
-                    this.messages = [...this.messages, ...messages];
+                    messages.forEach(message => {
+                        message.text = decodeURIComponent(message.text.replace(/\+/g, ' '));
+                        this.messages.push(message);
+                    });
                 },
                 clearAfterTimeout() {
                     if (this.timeout > 0) {

@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.6] - 23 February 2025
+### Fixed
+- Allow stack trace to be shown as global message while debugging
+- Position global messages fixed in top
+- Add new setting for timeout of global messages
+- Only add trace to exceptions if debugging is enabled
+- Do not switch back to originalValue, preventing AJAX loop
+- Only validate AJAX calls by default
+
 ## [0.0.5] - 22 February 2025
 ### Fixed
 -  Fix issue with HTML attributes for nested components

@@ -61,7 +61,7 @@ class GlobalMessageRegistry implements ArgumentInterface
         $messages = [];
         foreach ($this->getMessages() as $message) {
             $messages[] = [
-                'text' => $message->getText(),
+                'text' => urlencode($message->getText()),
                 'type' => $message->getType(),
             ];
         }

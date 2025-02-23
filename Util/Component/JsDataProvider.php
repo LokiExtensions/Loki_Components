@@ -47,7 +47,6 @@ class JsDataProvider implements ArgumentInterface
             $data = array_merge($data, $blockData);
         }
 
-
         return $data;
     }
 

@@ -41,6 +41,7 @@
                        showInWebsite="1"
                        showInStore="0">
                     <label>Timeout</label>
+                    <comment>Set to 0 to never remove global messages automatically</comment>
                 </field>
             </group>
         </section>

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.7] - 24 February 2025
+### Fixed
+- Implement focus listener in a better way
+
 ## [0.0.6] - 23 February 2025
 ### Fixed
 - Allow stack trace to be shown as global message while debugging

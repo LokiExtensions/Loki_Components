@@ -27,7 +27,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         targets: [],
         messages: [],
         value: null,
-        originalValue: null,
         autofillListenerTimer: null,
         initActions: {
             loadInitialData() {
@@ -36,7 +35,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     this[key] = value;
                 }
 
-                this.originalValue = this.value;
                 this.field = this.$root.querySelectorAll('[data-type="field"]')[0];
             },
             register() {
@@ -72,10 +70,14 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         return;
                     }
 
+                    if (document.activeElement && document.activeElement.id === this.field.id) {
+                        return;
+                    }
+
                     this.fieldValue = this.field.value;
                     this.value = this.field.value;
                     this.field.dispatchEvent(new Event('change'));
-                }).bind(this), 1000);
+                }).bind(this), 2000);
             }
         },
         beforeInit() {
@@ -115,8 +117,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     <?php endif; ?>
                 }
             });
-
-            this.originalValue = this.value;
 
             await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
@@ -180,7 +180,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         this[key] = value;
                     }
 
-                    this.value = this.originalValue;
+                    //this.value = this.fieldValue;
 
                     if (document.lastFocusElementId) {
                         document.getElementById(document.lastFocusElementId).focus();

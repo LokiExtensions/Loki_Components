@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.12] - 24 February 2025
+### Fixed
+- Remove obsolete NoBlockFoundException
+
 ## [0.0.11] - 24 February 2025
 ### Fixed
 - Setting for disabling MX lookup for email validator

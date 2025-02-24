@@ -91,9 +91,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         },
         afterInit() {
         },
-        hasChanges() {
-            return this.value !== this.originalValue;
-        },
         async post(value) {
             if (value instanceof Event) {
                 value = null;
@@ -182,6 +179,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     for ([key, value] of Object.entries(jsonData)) {
                         this[key] = value;
                     }
+
+                    this.value = this.originalValue;
 
                     if (document.lastFocusElementId) {
                         document.getElementById(document.lastFocusElementId).focus();

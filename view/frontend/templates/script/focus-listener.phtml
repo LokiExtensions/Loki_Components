@@ -1,0 +1,17 @@
+<script>
+    const LokiComponentsFocusListener = () => {
+        [
+            ...document.getElementsByTagName('input'),
+            ...document.getElementsByTagName('select'),
+            ...document.getElementsByTagName('textarea'),
+        ].forEach(function (element) {
+            element.addEventListener('focus', (event) => {
+                if (event.target.id) {
+                    document.lastFocusElementId = event.target.id;
+                }
+            });
+        });
+    }
+
+    LokiComponentsFocusListener();
+</script>

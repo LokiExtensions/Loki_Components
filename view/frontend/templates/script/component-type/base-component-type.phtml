@@ -17,18 +17,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 <script>
     const LokiComponentFormKey = '<?= $componentUtil->getFormKey() ?>';
 
-    const focusElements = [
-        ...document.getElementsByTagName('input'),
-        ...document.getElementsByTagName('select'),
-        ...document.getElementsByTagName('textarea'),
-    ];
-
-    focusElements.forEach(function (element) {
-        element.addEventListener('focus', (event) => {
-            document.lastFocusElementId = event.target.id;
-        });
-    });
-
     const LokiComponentType = {
         id: '',
         name: '',
@@ -178,8 +166,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         this[key] = value;
                     }
 
-                    //this.value = this.originalValue;
-
                     if (document.lastFocusElementId) {
                         document.getElementById(document.lastFocusElementId).focus();
                     }
@@ -192,6 +178,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         this.field.removeAttribute('aria-busy');
                         this.field.removeAttribute('disabled');
                     }
+
+                    LokiComponentsFocusListener();
                 });
         },
         handleJson(data) {

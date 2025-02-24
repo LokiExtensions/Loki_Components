@@ -3,6 +3,7 @@
     <body>
         <referenceContainer name="after.body.start">
             <block name="loki-components.global-messages" template="Yireo_LokiComponents::component/global-messages.phtml" before="-"/>
+            <block name="loki-components.focus-listener" template="Yireo_LokiComponents::script/focus-listener.phtml" before="-"/>
 
             <block
                 name="loki-components.script.components-store"

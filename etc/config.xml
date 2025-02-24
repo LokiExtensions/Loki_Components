@@ -9,6 +9,9 @@
             <global_messages>
                 <timeout>5000</timeout>
             </global_messages>
+            <validators>
+                <enable_mx_validation_for_email>1</enable_mx_validation_for_email>
+            </validators>
         </yireo_loki_components>
     </default>
 </config>

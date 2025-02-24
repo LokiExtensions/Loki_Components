@@ -161,9 +161,13 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                             return;
                         }
 
+                        const targetComponent = Alpine.store('components').getComponentByElementId(target);
+                        if (targetComponent) {
+                            targetComponent.destroy();
+                        }
+
                         targetElement.outerHTML = newTargetElement.outerHTML;
                     });
-
 
                     const newTargetElement = ajaxDocument.getElementById(this.elementId);
                     if (!newTargetElement) {
@@ -171,6 +175,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     }
 
                     const targetElement = document.getElementById(this.elementId);
+                    this.destroy();
+
                     targetElement.innerHTML = newTargetElement.innerHTML;
                     targetElement.removeAttribute('aria-busy');
                     targetElement.setAttribute('x-init-data', newTargetElement.getAttribute('x-init-data'));
@@ -179,8 +185,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     for ([key, value] of Object.entries(jsonData)) {
                         this[key] = value;
                     }
-
-                    //this.value = this.fieldValue;
 
                     if (document.lastFocusElementId) {
                         document.getElementById(document.lastFocusElementId).focus();

@@ -10,5 +10,6 @@ interface ComponentRepositoryInterface
     public function saveValue(mixed $value): void;
 
     public function getValue(): mixed;
+    public function getDefaultValue(): mixed;
 
 }

@@ -3,9 +3,7 @@ declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Component;
 
-use Yireo\LokiComponents\Filter\Filter;
 use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
-use Yireo\LokiComponents\Validator\Validator;
 use Yireo\LokiComponents\Messages\LocalMessageRegistry;
 
 abstract class ComponentRepository implements ComponentRepositoryInterface
@@ -38,6 +36,11 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
     }
 
     abstract public function getValue(): mixed;
+
+    public function getDefaultValue(): mixed
+    {
+        return null;
+    }
 
     abstract public function saveValue(mixed $value): void;
 

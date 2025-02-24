@@ -64,4 +64,13 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Yireo\LokiComponents\Util\DefaultTargets">
+        <arguments>
+            <argument name="targets" xsi:type="array">
+                <item name="messages-container" xsi:type="string">loki-components.utils.global-message-container</item>
+                <item name="messages" xsi:type="string">loki-components.global-messages</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

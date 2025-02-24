@@ -23,10 +23,12 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         elementId: '',
         blockId: '',
         field: null,
+        fieldValue: null,
         targets: [],
         messages: [],
         value: null,
         originalValue: null,
+        autofillListenerTimer: null,
         initActions: {
             loadInitialData() {
                 const jsonData = JSON.parse(this.$root.getAttribute('x-init-data'));
@@ -35,7 +37,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 }
 
                 this.originalValue = this.value;
-
                 this.field = this.$root.querySelectorAll('[data-type="field"]')[0];
             },
             register() {
@@ -60,6 +61,22 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     }
                 })
             },
+            listenToAutofillChanges() {
+                if (!this.field || this.field.disabled) {
+                    return;
+                }
+
+                this.fieldValue = this.field.value;
+                this.autofillListenerTimer = setInterval((function() {
+                    if (!this.field.value || this.field.value === this.fieldValue || this.field.value === this.value) {
+                        return;
+                    }
+
+                    this.fieldValue = this.field.value;
+                    this.value = this.field.value;
+                    this.field.dispatchEvent(new Event('change'));
+                }).bind(this), 1000);
+            }
         },
         beforeInit() {
         },
@@ -194,6 +211,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             return {
                 value: this.value,
             };
+        },
+        destroy() {
+            clearInterval(this.autofillListenerTimer);
         }
     }
 </script>

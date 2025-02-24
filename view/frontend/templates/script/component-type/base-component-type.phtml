@@ -211,8 +211,15 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 value: this.value,
             };
         },
-        destroy() {
-            clearInterval(this.autofillListenerTimer);
+        destroyActions: {
+            clearAutofillListenerTimer() {
+                clearInterval(this.autofillListenerTimer);
+            }
+        },
+        async destroy() {
+            for ([key, callback] of Object.entries(this.destroyActions)) {
+                await callback.apply(this);
+            }
         }
     }
 </script>

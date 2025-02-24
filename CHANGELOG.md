@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.9] - 24 February 2025
+### Fixed
+- Remove old hasChanges method
+- Do not display NoComponentFoundException on frontend
+- Improve autofill mechanism
+
 ## [0.0.8] - 24 February 2025
 ### Fixed
 - Default target definitions were dropped when cache was refreshed from non-frontend
@@ -70,3 +76,4 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.1] - 18 January 2025
 - Initial release
+

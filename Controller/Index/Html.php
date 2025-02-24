@@ -53,6 +53,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
                 $data['componentData']
             );
 
+        } catch (NoComponentFoundException $noComponentFoundException) {
+            // @todo: Write this to a dedicated log
         } catch (RedirectException $redirectException) {
             return $this->getJsonRedirect($redirectException->getMessage());
         } catch (Exception $exception) {

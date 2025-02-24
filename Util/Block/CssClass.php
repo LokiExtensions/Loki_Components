@@ -3,7 +3,6 @@
 namespace Yireo\LokiComponents\Util\Block;
 
 use Magento\Framework\View\Element\Template;
-use Yireo\LokiComponents\Exception\NoBlockFoundException;
 use Yireo\LokiComponents\Util\Block\CssClassParser\CssClassParserInterface;
 
 class CssClass

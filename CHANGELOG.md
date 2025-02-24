@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.8] - 24 February 2025
+### Fixed
+- Default target definitions were dropped when cache was refreshed from non-frontend
+- Add little hint about microseconds
+- Listen to autofill changes
+- Add support default value
+
 ## [0.0.7] - 24 February 2025
 ### Fixed
 - Implement focus listener in a better way

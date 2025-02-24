@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.10] - 24 February 2025
+### Fixed
+- Allow multiple destroy actions
+
 ## [0.0.9] - 24 February 2025
 ### Fixed
 - Remove old hasChanges method

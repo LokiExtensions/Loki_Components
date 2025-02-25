@@ -41,7 +41,7 @@ class CssClass
 
         // @todo: Beautify this
         $nameInLayout = $this->block->getNameInLayout();
-        $defaultsBlock = $this->block->getLayout()->getBlock('loki-checkout.css_classes');
+        $defaultsBlock = $this->block->getLayout()->getBlock('loki-components.css_classes');
         if ($defaultsBlock) {
             $blockData = $defaultsBlock->getData($nameInLayout);
             if (!empty($blockData)) {

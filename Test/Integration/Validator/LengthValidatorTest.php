@@ -5,7 +5,7 @@ namespace Yireo\LokiComponents\Test\Integration\Validator;
 use Magento\Framework\App\ObjectManager;
 use Magento\TestFramework\Fixture\AppArea;
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiCheckout\Component\Base\Field\FieldViewModel;
+use Yireo\LokiComponents\Component\Behaviour\LengthBehaviourInterface;
 use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Validator\LengthValidator;
 
@@ -22,7 +22,7 @@ class LengthValidatorTest extends TestCase
     {
         $validator = ObjectManager::getInstance()->get(LengthValidator::class);
 
-        $componentViewModel = $this->createMock(FieldViewModel::class);
+        $componentViewModel = $this->createMock(LengthBehaviourInterface::class);
         $componentViewModel->method('hasMinLength')->willReturn(true);
         $componentViewModel->method('getMinLength')->willReturn(2);
 

@@ -12,7 +12,7 @@ $config = $viewModelFactory->create(Config::class);
 <script>
     const LokiComponentsLogger = {
         allowDebugging: <?= $config->isDebug() ? 'true' : 'false' ?>,
-        prefix: 'Yireo_LokiCheckout',
+        prefix: 'Yireo_LokiComponents',
         getColor(logType) {
             if (logType === 'notice') {
                 return '#6495ED';

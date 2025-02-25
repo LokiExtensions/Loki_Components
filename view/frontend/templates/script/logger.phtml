@@ -1,0 +1,61 @@
+<?php declare(strict_types=1);
+
+use Yireo\LokiComponents\Config\Config;
+use Yireo\LokiComponents\Factory\ViewModelFactory;
+
+/**
+ * @var ViewModelFactory $viewModelFactory
+ * @var Config $config
+ */
+$config = $viewModelFactory->create(Config::class);
+?>
+<script>
+    const LokiComponentsLogger = {
+        allowDebugging: <?= $config->isDebug() ? 'true' : 'false' ?>,
+        prefix: 'Yireo_LokiCheckout',
+        getColor(logType) {
+            if (logType === 'notice') {
+                return '#6495ED';
+            }
+
+            if (logType === 'success') {
+                return 'green';
+            }
+
+            if (logType === 'warning') {
+                return 'orange';
+            }
+
+            if (logType === 'error') {
+                return 'red';
+            }
+
+            return 'gray';
+        },
+        notice(...args) {
+            return this.message('notice', ...args);
+        },
+        success(...args) {
+            return this.message('success', ...args);
+        },
+        warning(...args) {
+            return this.message('warning', ...args);
+        },
+        error(...args) {
+            return this.message('error', ...args);
+        },
+        debug(...args) {
+            if (!this.allowDebugging) {
+                return;
+            }
+
+            return this.message('debug', ...args);
+        },
+        message(messageType, ...args) {
+            const color = this.getColor(messageType);
+            const prefix = this.prefix + ' [' + messageType.toUpperCase() + ']';
+            const css = 'color:white; background-color:' + color + '; padding:1px;'
+            console.log('%c' + prefix, css, ...args);
+        }
+    };
+</script>

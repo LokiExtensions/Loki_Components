@@ -2,8 +2,17 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" layout="1column" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="after.body.start">
-            <block name="loki-components.global-messages" template="Yireo_LokiComponents::component/global-messages.phtml" before="-"/>
-            <block name="loki-components.focus-listener" template="Yireo_LokiComponents::script/focus-listener.phtml" before="-"/>
+            <block
+                name="loki-components.script.logger"
+                template="Yireo_LokiComponents::script/logger.phtml"/>
+            <block
+                name="loki-components.global-messages"
+                template="Yireo_LokiComponents::component/global-messages.phtml"
+                before="-"/>
+            <block
+                name="loki-components.focus-listener"
+                template="Yireo_LokiComponents::script/focus-listener.phtml"
+                before="-"/>
 
             <block
                 name="loki-components.script.components-store"
@@ -11,23 +20,40 @@
         </referenceContainer>
 
         <referenceContainer name="before.body.end">
-            <block name="loki-components.alpinejs" template="Yireo_LokiComponents::script/alpine.phtml" after="-"/>
+            <block
+                name="loki-components.alpinejs"
+                template="Yireo_LokiComponents::script/alpine.phtml"
+                after="-"/>
 
-            <block name="loki-components.script.local-storage" template="Yireo_LokiComponents::script/local-storage.phtml"/>
+            <block
+                name="loki-components.script.local-storage"
+                template="Yireo_LokiComponents::script/local-storage.phtml"/>
 
             <container name="loki-component-types">
-                <block name="loki-components.script.component-type.base" template="Yireo_LokiComponents::script/component-type/base-component-type.phtml"/>
+                <block
+                    name="loki-components.script.component-type.base"
+                    template="Yireo_LokiComponents::script/component-type/base-component-type.phtml"/>
             </container>
 
             <container name="loki-components">
-                <block name="loki-components.script.component.base" template="Yireo_LokiComponents::script/component/base-component.phtml"/>
-                <block name="loki-components.script.component.global-messages" template="Yireo_LokiComponents::script/component/global-messages-component.phtml"/>
-                <block name="loki-components.script.component.toggle" template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
+                <block
+                    name="loki-components.script.component.base"
+                    template="Yireo_LokiComponents::script/component/base-component.phtml"/>
+                <block
+                    name="loki-components.script.component.global-messages"
+                    template="Yireo_LokiComponents::script/component/global-messages-component.phtml"/>
+                <block
+                    name="loki-components.script.component.toggle"
+                    template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
             </container>
 
-            <block name="loki-components.utils.global-message-container" template="Yireo_LokiComponents::script/global-messages-container.phtml"/>
+            <block
+                name="loki-components.utils.global-message-container"
+                template="Yireo_LokiComponents::script/global-messages-container.phtml"/>
         </referenceContainer>
 
-        <block name="loki-components.utils.local-messages" template="Yireo_LokiComponents::utils/local-messages.phtml"/>
+        <block
+            name="loki-components.utils.local-messages"
+            template="Yireo_LokiComponents::utils/local-messages.phtml"/>
     </body>
 </page>

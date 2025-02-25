@@ -200,11 +200,13 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         this.value = this.beforePostValue;
                     }
 
-                    document.dispatchEvent(new CustomEvent('yireo-loki-checkout.component-change',  {detail: {component: this}}));
+                    this.$nextTick(() => {
+                        document.dispatchEvent(new CustomEvent('yireo-loki-checkout.component-change',  {detail: {component: this}}));
 
-                    if (document.lastFocusElementId) {
-                        document.getElementById(document.lastFocusElementId).focus();
-                    }
+                        if (document.lastFocusElementId) {
+                            document.getElementById(document.lastFocusElementId).focus();
+                        }
+                    });
                 })
                 .catch(error => {
                     console.log(error)

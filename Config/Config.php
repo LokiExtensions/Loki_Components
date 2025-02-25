@@ -29,6 +29,6 @@ class Config implements ArgumentInterface
 
     public function enableMxValidationForEmail(): bool
     {
-        return (bool)$this->scopeConfig->getValue('yireo_loki_checkout/validators/enable_mx_validation_for_email');
+        return (bool)$this->scopeConfig->getValue('yireo_loki_components/validators/enable_mx_validation_for_email');
     }
 }

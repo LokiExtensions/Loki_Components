@@ -2,14 +2,12 @@
 
 namespace Yireo\LokiComponents\Validator;
 
-use Magento\Customer\Api\AccountManagementInterface;
 use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Config\Config;
 
 class EmailValidator implements ValidatorInterface
 {
     public function __construct(
-        private AccountManagementInterface $accountManagement,
         private Config $config
     ) {
     }
@@ -31,11 +29,6 @@ class EmailValidator implements ValidatorInterface
             if (is_array($result)) {
                 return $result;
             }
-        }
-
-        // Mental note, this only triggers if `checkout/options/enable_guest_checkout_login` is enabled
-        if (false === $this->accountManagement->isEmailAvailable($email)) {
-            return ['This email address is not available'];
         }
 
         return true;

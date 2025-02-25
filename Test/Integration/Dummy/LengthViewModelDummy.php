@@ -3,7 +3,6 @@
 namespace Yireo\LokiComponents\Test\Integration\Dummy;
 
 use Magento\Framework\View\Element\AbstractBlock;
-use Yireo\LokiComponents\Component\ComponentContext;
 use Yireo\LokiComponents\Component\ComponentContextInterface;
 use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Component\ComponentViewModelInterface;
@@ -36,7 +35,9 @@ class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehavio
 
     public function getBlock(): AbstractBlock
     {
-        return null;
+        /** @var AbstractBlock $object */
+        $object = null;
+        return $object;
     }
 
     public function getValue(): mixed
@@ -71,7 +72,9 @@ class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehavio
 
     public function getContext(): ComponentContextInterface
     {
-        return new ComponentContext();
+        /** @var ComponentContextInterface $object */
+        $object = null;
+        return $object;
     }
 
     public function getTemplate(): ?string
@@ -96,7 +99,7 @@ class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehavio
 
     public function getMinLength(): int
     {
-        return false;
+        return 0;
     }
 
     public function hasMinLength(): bool
@@ -111,6 +114,6 @@ class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehavio
 
     public function hasMaxLength(): bool
     {
-        return 0;
+        return false;
     }
 }

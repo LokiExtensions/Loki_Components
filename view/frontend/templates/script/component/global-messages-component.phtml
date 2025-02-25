@@ -3,6 +3,9 @@
         Alpine.data('LokiComponentGlobalMessages', () => ({
             ...LokiComponentType,
             messages: [],
+            hasMessages() {
+                return Object.values(this.messages).length > 0;
+            },
             initActions: {
                 ...LokiComponentType.initActions,
                 initializeMessages() {

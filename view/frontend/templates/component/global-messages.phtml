@@ -9,13 +9,13 @@ use Yireo\LokiComponents\Util\Block\CssClass;
 /** @var GlobalMessagesViewModel $viewModel */
 /** @var CssClass $css */
 ?>
-<div x-cloak x-if="messages" class="<?= $css('fixed z-40 w-full p-4') ?>">
+<div class="<?= $css('fixed z-40 w-full p-4', 'inner') ?>" x-cloak x-show="hasMessages">
     <template x-for="message in messages">
         <div class="message" :class="message.type">
             <span x-html="message.text"></span>
             <button
                 type="button"
-                class="text-gray-600 hover:text-black"
+                class="<?= $css('text-gray-600 hover:text-black', 'button') ?>"
                 aria-label="<?= __('Close message') ?>" @click.prevent="remove(message.text)">
                 x
             </button>

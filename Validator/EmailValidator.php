@@ -21,7 +21,7 @@ class EmailValidator implements ValidatorInterface
         }
 
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return ['Invalid email'];
+            return ['Invalid email address'];
         }
 
         if ($this->config->enableMxValidationForEmail()) {

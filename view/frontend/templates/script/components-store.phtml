@@ -1,11 +1,14 @@
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.store('components', {
-            components: [],
+            components: {},
             getComponentIds() {
                 return Object.keys(this.components);
             },
             getComponents() {
+                return this.components;
+            },
+            getComponentArray() {
                 return Object.values(this.components);
             },
             add(component) {
@@ -27,7 +30,7 @@
                 throw new Error('No such a component: ' + componentId);
             },
             getComponentByElementId(elementId) {
-                return this.getComponents().find((component) => {
+                return this.getComponentArray().find((component) => {
                     return component.elementId === elementId;
                 });
             }

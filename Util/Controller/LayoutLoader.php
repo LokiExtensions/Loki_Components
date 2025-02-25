@@ -23,12 +23,6 @@ class LayoutLoader
             }
         }
 
-        //$this->eventManager->dispatch('layout_render_before');
-        //$this->eventManager->dispatch('layout_render_before_' . $this->request->getFullActionName());
-
-        $layout = $resultPage->getLayout();
-        //$layout->generateElements();
-
-        return $layout;
+        return $resultPage->getLayout();
     }
 }

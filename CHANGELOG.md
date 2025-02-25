@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.12] - 25 February 2025
+### Fixed
+- Standardize JS event names
+- Rename yireo-loki-checkout.component-change to loki-components.component.update
+- Add generic LokiComponentsLogger
+- StepForwardButton not activated after component updates ($nextTick is now used)
+- Hide entire global messages div if empty
+- Remove obsolete NoBlockFoundException
+
 ## [0.0.11] - 24 February 2025
 ### Fixed
 - Setting for disabling MX lookup for email validator

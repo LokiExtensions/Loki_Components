@@ -169,10 +169,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         }
 
                         targetElement.outerHTML = newTargetElement.outerHTML;
-
-                        if (targetComponent) {
-                            LokiCheckoutValidator.validate(targetComponent);
-                        }
                     });
 
                     const newTargetElement = ajaxDocument.getElementById(this.elementId);

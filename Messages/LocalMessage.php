@@ -20,7 +20,7 @@ class LocalMessage implements JsonSerializable
 
     public function getText(): string
     {
-        return $this->text;
+        return (string)__($this->text);
     }
 
     public function getType(): string

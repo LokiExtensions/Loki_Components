@@ -15,7 +15,7 @@
 
                 this.components[component.id] = component;
                 document.dispatchEvent(new CustomEvent(
-                    'yireo-loki-components.component-register',
+                    'loki-components.component-register',
                     {detail: {component}}
                 ));
             },

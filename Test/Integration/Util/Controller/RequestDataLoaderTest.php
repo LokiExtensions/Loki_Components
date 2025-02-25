@@ -15,7 +15,7 @@ class RequestDataLoaderTest extends TestCase
     {
         $requestDataLoader = $this->getRequestDataLoader();
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Not an Alpine request');
+        $this->expectExceptionMessage('Not a valid request');
         $requestDataLoader->load();
     }
 
@@ -24,7 +24,7 @@ class RequestDataLoaderTest extends TestCase
         $requestData = [];
         $requestDataLoader = $this->getRequestDataLoader($requestData, $this->getValidHeaders());
         $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('No targets in request');
+        $this->expectExceptionMessage('Not a valid request');
         $requestDataLoader->load();
     }
 

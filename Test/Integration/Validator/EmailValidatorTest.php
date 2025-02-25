@@ -4,6 +4,7 @@ namespace Yireo\LokiComponents\Test\Integration\Validator;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\TestFramework\Fixture\AppArea;
+use Magento\TestFramework\Fixture\Config;
 use PHPUnit\Framework\TestCase;
 use Yireo\LokiComponents\Validator\EmailValidator;
 
@@ -22,6 +23,7 @@ class EmailValidatorTest extends TestCase
      * @return void
      * @dataProvider getValues
      */
+    #[Config('yireo_loki_components/validators/enable_mx_validation_for_email', 1)]
     public function testWithVariousValues(string $email, true|string $expectedResult): void
     {
         $validator = ObjectManager::getInstance()->get(EmailValidator::class);
@@ -41,7 +43,7 @@ class EmailValidatorTest extends TestCase
             ['jane@example.com', true],
             ['jane@example', 'Invalid email'],
             ['jane', 'Invalid email'],
-            ['jane@example.comcomcomcomcom', 'does not seem to be valid'],
+            ['jane@example.comcom', 'is not reachable for mail'],
         ];
     }
 }

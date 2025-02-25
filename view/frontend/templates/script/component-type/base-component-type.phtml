@@ -27,6 +27,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         targets: [],
         messages: [],
         value: null,
+        beforePostValue: null,
         autofillListenerTimer: null,
         initActions: {
             loadInitialData() {
@@ -65,7 +66,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 }
 
                 this.fieldValue = this.field.value;
-                this.autofillListenerTimer = setInterval((function() {
+                this.autofillListenerTimer = setInterval((function () {
                     if (!this.field.value || this.field.value === this.fieldValue || this.field.value === this.value) {
                         return;
                     }
@@ -76,7 +77,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 
                     this.fieldValue = this.field.value;
                     this.value = this.field.value;
-                    this.field.dispatchEvent(new Event('change'));
+                    this.field.dispatchEvent(new Event('change')); // @todo: What should this do?
                 }).bind(this), 2000);
             }
         },
@@ -94,6 +95,10 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         afterInit() {
         },
         async post(value) {
+            if (this.disabled) {
+                return;
+            }
+
             if (value instanceof Event) {
                 value = null;
             }
@@ -118,6 +123,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 }
             });
 
+            this.beforePostValue = this.value;
             await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
@@ -167,6 +173,10 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         }
 
                         targetElement.outerHTML = newTargetElement.outerHTML;
+
+                        if (targetComponent) {
+                            LokiCheckoutValidator.validate(targetComponent);
+                        }
                     });
 
                     const newTargetElement = ajaxDocument.getElementById(this.elementId);
@@ -185,6 +195,12 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     for ([key, value] of Object.entries(jsonData)) {
                         this[key] = value;
                     }
+
+                    if (!this.valid) {
+                        this.value = this.beforePostValue;
+                    }
+
+                    document.dispatchEvent(new CustomEvent('yireo-loki-checkout.component-change',  {detail: {component: this}}));
 
                     if (document.lastFocusElementId) {
                         document.getElementById(document.lastFocusElementId).focus();

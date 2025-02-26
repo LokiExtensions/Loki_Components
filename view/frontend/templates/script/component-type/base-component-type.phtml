@@ -180,7 +180,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     this.destroy();
 
                     targetElement.innerHTML = newTargetElement.innerHTML;
-                    targetElement.removeAttribute('aria-busy');
                     targetElement.setAttribute('x-init-data', newTargetElement.getAttribute('x-init-data'));
 
                     const jsonData = JSON.parse(targetElement.getAttribute('x-init-data'));
@@ -193,7 +192,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     }
 
                     this.$nextTick(() => {
-                        document.dispatchEvent(new CustomEvent('loki-components.component.update',  {detail: {component: this}}));
+                        document.dispatchEvent(new CustomEvent('loki-components.component.update', {detail: {component: this}}));
 
                         if (document.lastFocusElementId) {
                             document.getElementById(document.lastFocusElementId).focus();
@@ -204,6 +203,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     console.log(error)
                 })
                 .finally(() => {
+                    this.targets.forEach(target => {
+                        const targetElement = document.getElementById(target);
+                        targetElement.removeAttribute('aria-busy');
+                    });
+
                     if (this.field) {
                         this.field.removeAttribute('aria-busy');
                         this.field.removeAttribute('disabled');
@@ -224,6 +228,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             return {
                 value: this.value,
             };
+        },
+        onFail() {
         },
         destroyActions: {
             clearAutofillListenerTimer() {

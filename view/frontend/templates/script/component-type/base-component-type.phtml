@@ -211,7 +211,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     this.$nextTick(() => {
                         this.targets.forEach(target => {
                             const targetElement = document.getElementById(target);
-                            targetElement.removeAttribute('aria-busy');
+                            if (targetElement) {
+                                targetElement.removeAttribute('aria-busy');
+                            } else {
+                                LokiComponentsLogger.error('Target not found', target);
+                            }
                         });
                     });
 

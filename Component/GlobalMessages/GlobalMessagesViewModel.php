@@ -11,7 +11,7 @@ class GlobalMessagesViewModel extends ComponentViewModel
 {
     public function getJsComponentName(): ?string
     {
-        return 'LokiComponentGlobalMessages';
+        return 'LokiComponentsGlobalMessages';
     }
 
     /**

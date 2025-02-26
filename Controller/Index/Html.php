@@ -55,8 +55,10 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
         } catch (NoComponentFoundException $noComponentFoundException) {
             // @todo: Write this to a dedicated log
+
         } catch (RedirectException $redirectException) {
             return $this->getJsonRedirect($redirectException->getMessage());
+
         } catch (Exception $exception) {
             $error = $exception->getMessage();
 
@@ -65,6 +67,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
                 $error .= $exception->getTraceAsString();
             }
 
+            echo 'jisse';
             $this->globalMessageRegistry->addError($error);
         }
 
@@ -95,7 +98,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             $html .= $htmlPart."\n\n";
         }
 
-        /** @var HtmlResult $htmlResult */
         $htmlResult = $this->htmlResultFactory->create();
         $htmlResult->setContents($html);
 

@@ -137,7 +137,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 })
             })
                 .then(response => {
-                    if(response.ok) {
+                    if (response.ok) {
                         return response.text()
                     }
 
@@ -208,9 +208,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     this.addGlobalMessage('error', error);
                 })
                 .finally(() => {
-                    this.targets.forEach(target => {
-                        const targetElement = document.getElementById(target);
-                        targetElement.removeAttribute('aria-busy');
+                    this.$nextTick(() => {
+                        this.targets.forEach(target => {
+                            const targetElement = document.getElementById(target);
+                            targetElement.removeAttribute('aria-busy');
+                        });
                     });
 
                     if (this.field) {

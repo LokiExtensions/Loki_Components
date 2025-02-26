@@ -9,7 +9,7 @@ use Yireo\LokiComponents\Util\Block\CssClass;
 /** @var GlobalMessagesViewModel $viewModel */
 /** @var CssClass $css */
 ?>
-<div class="<?= $css('fixed z-40 w-full p-4', 'inner') ?>" x-cloak x-show="hasMessages">
+<div class="<?= $css('fixed z-40 w-full p-4') ?>" x-cloak x-show="hasMessages">
     <template x-for="message in messages">
         <div class="message" :class="message.type">
             <span x-html="message.text"></span>

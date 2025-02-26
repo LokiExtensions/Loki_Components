@@ -24,7 +24,12 @@ class Config implements ArgumentInterface
 
     public function getGlobalMessagesTimeout(): int
     {
-        return (int)$this->scopeConfig->getValue('yireo_loki_components/global_messages/timeout');
+        $timeout = (int)$this->scopeConfig->getValue('yireo_loki_components/global_messages/timeout');
+        if ($timeout < 0) {
+            return 0;
+        }
+
+        return $timeout;
     }
 
     public function enableMxValidationForEmail(): bool

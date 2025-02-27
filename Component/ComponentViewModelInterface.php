@@ -25,7 +25,9 @@ interface ComponentViewModelInterface extends ArgumentInterface
     public function getValue(): mixed;
 
     public function getValidators(): array;
+
     public function getFilters(): array;
+
     public function getTargets(): array;
 
     public function getTargetString(): string;
@@ -37,6 +39,10 @@ interface ComponentViewModelInterface extends ArgumentInterface
     public function getTemplate(): ?string;
 
     public function getComponentName(): string;
+
+    public function isLazyLoad(): bool;
+
+    public function isAllowRendering(): bool;
 
     public function getJsComponentName(): ?string;
 

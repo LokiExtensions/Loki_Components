@@ -11,7 +11,7 @@ use Yireo\LokiComponents\Util\Controller\LayoutLoader;
 
 trait GetComponent
 {
-    protected function getComponent(string $blockId): ComponentInterface
+    protected function getComponent(string $blockId, array $handles = []): ComponentInterface
     {
         static $components = [];
         if (isset($components[$blockId])) {
@@ -22,7 +22,7 @@ trait GetComponent
             return $component;
         }
 
-        $layout = $this->getLayout();
+        $layout = $this->getLayout($handles);
         $block = $layout->getBlock($blockId);
         $this->assertInstanceOf(AbstractBlock::class, $block, 'No block "'.$blockId.'" in layout');
 
@@ -33,7 +33,7 @@ trait GetComponent
         return $component;
     }
 
-    private function getLayout(): LayoutInterface
+    private function getLayout(array $handles): LayoutInterface
     {
         static $layout;
         if ($layout instanceof LayoutInterface) {
@@ -42,15 +42,6 @@ trait GetComponent
 
         $objectManager = ObjectManager::getInstance();
         $layoutLoader = $objectManager->get(LayoutLoader::class);
-
-        // @todo: Make this configurable
-        $layout = $layoutLoader->load([
-            'default',
-            'checkout_index_index',
-            'loki_checkout',
-            'loki_checkout_theme_onestep',
-        ]);
-
-        return $layout;
+        return $layoutLoader->load($handles);
     }
 }

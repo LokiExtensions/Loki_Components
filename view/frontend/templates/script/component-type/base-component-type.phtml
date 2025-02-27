@@ -22,11 +22,13 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         name: '',
         elementId: '',
         blockId: '',
-        field: null,
-        fieldValue: null,
+        field: null, // @todo: Move to LokiFieldComponentType
+        fieldValue: null, // @todo: Move to LokiFieldComponentType
         targets: [],
         messages: [],
-        value: null,
+        value: null, // @todo: Move to LokiFieldComponentType
+        visible: false,
+        lazyLoad: false,
         beforePostValue: null,
         autofillListenerTimer: null,
         initActions: {
@@ -79,6 +81,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     this.value = this.field.value;
                     this.field.dispatchEvent(new Event('change')); // @todo: What should this do?
                 }).bind(this), 2000);
+            },
+            lazyLoad() {
+                if (this.lazyLoad) {
+                    this.post({});
+                }
             }
         },
         beforeInit() {
@@ -243,6 +250,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         getDetails() {
             return {
                 value: this.value,
+                visible: this.visible,
+                valid: this.valid,
             };
         },
         addGlobalMessage(messageType, messageText) {

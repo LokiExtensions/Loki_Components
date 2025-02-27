@@ -14,6 +14,8 @@ class ComponentViewModel implements ComponentViewModelInterface
     protected ?Validator $validator = null;
     protected ?Filter $filter = null;
     protected ?AbstractBlock $block = null;
+    protected bool $lazyLoad = true;
+    protected bool $allowRendering = true;
 
     public function setComponent(ComponentInterface $component): void
     {
@@ -121,6 +123,19 @@ class ComponentViewModel implements ComponentViewModelInterface
         }
 
         return true;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isLazyLoad(): bool
+    {
+        return $this->lazyLoad;
+    }
+
+    public function isAllowRendering(): bool
+    {
+        return $this->allowRendering;
     }
 
     public function getJsData(): array

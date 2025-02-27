@@ -1,0 +1,14 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+use Yireo\LokiComponents\Component\ComponentViewModelInterface;
+
+/** @var Template $block */
+/** @var ComponentViewModelInterface $viewModel */
+?>
+<div
+     aria-hidden="true"
+     style="display:none; visibility: hidden;">
+    <!-- Not rendered: <?= $block->getNameInLayout() ?> -->
+</div>

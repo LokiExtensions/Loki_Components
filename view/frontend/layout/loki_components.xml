@@ -55,5 +55,7 @@
         <block
             name="loki-components.utils.local-messages"
             template="Yireo_LokiComponents::utils/local-messages.phtml"/>
+
+        <block name="loki-components.css_classes"/>
     </body>
 </page>

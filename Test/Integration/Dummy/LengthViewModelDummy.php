@@ -116,4 +116,14 @@ class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehavio
     {
         return false;
     }
+
+    public function isLazyLoad(): bool
+    {
+        return false;
+    }
+
+    public function isAllowRendering(): bool
+    {
+        return false;
+    }
 }

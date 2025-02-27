@@ -44,7 +44,7 @@ class LokiComponentsTestCase extends AbstractController
         $this->assertModuleIsEnabled('Yireo_LokiComponents');
     }
 
-    public function getComponentByBlockName(string $blockName): ComponentInterface
+    protected function getComponentByBlockName(string $blockName): ComponentInterface
     {
         $layout = $this->getObjectManager()->get(LayoutInterface::class);
         $block = $layout->getBlock($blockName);
@@ -56,31 +56,49 @@ class LokiComponentsTestCase extends AbstractController
         return $component;
     }
 
-    public function assertComponentExistsOnPage(ComponentInterface $component)
+    protected function assertComponentExistsOnPage(string|ComponentInterface $component)
     {
-        $blockName = $component->getName();
-        $elementId = $this->getObjectManager()->get(IdConvertor::class)->toElementId($blockName);
+        if ($component instanceof ComponentInterface) {
+            $component = $component->getName();
+        }
+
+        $elementId = $this->getObjectManager()->get(IdConvertor::class)->toElementId($component);
         $this->assertElementIdExistsOnPage($elementId);
     }
 
-    public function assertElementIdExistsOnPage(string $elementId)
+    protected function assertElementIdExistsOnPage(string $elementId)
     {
-        $body = $this->getResponse()->getBody();
-        preg_match_all('/ id="([^\"]+)"/', $body, $matches);
-        $found = str_contains($body, '"'.$elementId.'"');
-        $this->assertTrue($found, 'Element ID "'.$elementId.'" not found: '.implode("\n", $matches[1]));
+        $found = $this->existsElementIdOnPage($elementId);
+        $this->assertTrue($found, 'Element ID "'.$elementId.'" not found');
     }
 
-    public function assertComponentNotExistsOnPage(string $blockName)
+    protected function assertElementIdNotExistsOnPage(string $elementId)
     {
-        $body = $this->getResponse()->getBody();
-        $this->assertStringNotContainsString('x-title="'.$blockName.'"', $body);
+        $found = $this->existsElementIdOnPage($elementId);
+        $this->assertFalse($found, 'Element ID "'.$elementId.'" found anyway');
+    }
+
+    protected function assertComponentNotExistsOnPage(string|ComponentInterface $component)
+    {
+        if ($component instanceof ComponentInterface) {
+            $component = $component->getName();
+        }
+
+        $elementId = $this->getObjectManager()->get(IdConvertor::class)->toElementId($component);
+        $this->assertElementIdNotExistsOnPage($elementId);
     }
 
     protected function assertComponentValidators(array $expectedValidators, ComponentInterface $component)
     {
         foreach ($expectedValidators as $expectedValidator) {
             $this->assertContains($expectedValidator, $component->getValidators());
+        }
+    }
+
+    protected function assertComponentNoValidators(array $expectedValidators, ComponentInterface $component)
+    {
+        foreach ($expectedValidators as $expectedValidator) {
+            $this->assertNotContains($expectedValidator, $component->getValidators());
         }
     }
 
@@ -108,6 +126,14 @@ class LokiComponentsTestCase extends AbstractController
         }
     }
 
+    protected function existsElementIdOnPage(string $elementId): bool
+    {
+        $body = $this->getResponse()->getBody();
+        preg_match_all('/ id="([^\"]+)"/', $body);
+        return str_contains($body, '"'.$elementId.'"');
+    }
+
+
     protected function setAsAjaxRequest(): void
     {
         $headers = new Headers();
@@ -116,12 +142,12 @@ class LokiComponentsTestCase extends AbstractController
 
     }
 
-    public function getValidator(): Validator
+    protected function getValidator(): Validator
     {
         return $this->getObjectManager()->get(Validator::class);
     }
 
-    public function getFilter(): Filter
+    protected function getFilter(): Filter
     {
         return $this->getObjectManager()->get(Filter::class);
     }

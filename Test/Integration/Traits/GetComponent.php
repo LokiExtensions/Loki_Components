@@ -13,18 +13,10 @@ trait GetComponent
 {
     protected function getComponent(string $blockId): ComponentInterface
     {
-        static $components = [];
-        if (isset($components[$blockId])) {
-            $component = $components[$blockId];
-            $this->assertInstanceOf(AbstractBlock::class, $component->getBlock());
-            $component->getLocalMessageRegistry()->clearMessages();
-
-            return $component;
-        }
-
         $componentRegistry = ObjectManager::getInstance()->get(ComponentRegistry::class);
         $component = $componentRegistry->getComponentByName($blockId);
-        $components[$blockId] = $component;
+        $component->getLocalMessageRegistry()->clearMessages();
+
         return $component;
     }
 

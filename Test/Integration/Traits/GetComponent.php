@@ -11,7 +11,7 @@ use Yireo\LokiComponents\Util\Controller\LayoutLoader;
 
 trait GetComponent
 {
-    protected function getComponent(string $blockId, array $handles = []): ComponentInterface
+    protected function getComponent(string $blockId): ComponentInterface
     {
         static $components = [];
         if (isset($components[$blockId])) {
@@ -22,15 +22,19 @@ trait GetComponent
             return $component;
         }
 
+        $componentRegistry = ObjectManager::getInstance()->get(ComponentRegistry::class);
+        $component = $componentRegistry->getComponentByName($blockId);
+        $components[$blockId] = $component;
+        return $component;
+    }
+
+    protected function getComponentWithBlock(string $blockId, array $handles = []): ComponentInterface
+    {
         $layout = $this->getLayout($handles);
         $block = $layout->getBlock($blockId);
         $this->assertInstanceOf(AbstractBlock::class, $block, 'No block "'.$blockId.'" in layout');
 
-        $componentRegistry = ObjectManager::getInstance()->get(ComponentRegistry::class);
-        $component = $componentRegistry->getComponentByName($blockId);
-        $components[$blockId] = $component;
-
-        return $component;
+        return $this->getComponent($blockId);
     }
 
     private function getLayout(array $handles): LayoutInterface

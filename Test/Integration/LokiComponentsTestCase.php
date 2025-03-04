@@ -129,8 +129,7 @@ class LokiComponentsTestCase extends AbstractController
     protected function existsElementIdOnPage(string $elementId): bool
     {
         $body = $this->getResponse()->getBody();
-        preg_match_all('/ id="([^\"]+)"/', $body);
-        return str_contains($body, '"'.$elementId.'"');
+        return str_contains($body, ' id="'.$elementId.'"');
     }
 
 

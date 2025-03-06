@@ -2,6 +2,7 @@
 
 namespace Yireo\LokiComponents\Validator;
 
+use Magento\Framework\Phrase;
 use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Config\Config;
 use Yireo\LokiComponents\Messages\LocalMessage;
@@ -49,6 +50,10 @@ class Validator
                 if ($message instanceof LocalMessage) {
                     $component->getLocalMessageRegistry()->add($message);
                     continue;
+                }
+
+                if ($message instanceof Phrase) {
+                    $message = (string)$message;
                 }
 
                 // @todo: Allow for global message to be added too

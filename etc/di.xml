@@ -47,6 +47,8 @@
                 <item name="positive_number" xsi:type="object">Yireo\LokiComponents\Validator\PositiveNumberValidator</item>
                 <item name="length" xsi:type="object">Yireo\LokiComponents\Validator\LengthValidator</item>
                 <item name="email" xsi:type="object">Yireo\LokiComponents\Validator\EmailValidator</item>
+                <item name="date" xsi:type="object">Yireo\LokiComponents\Validator\DateValidator</item>
+                <item name="past_date" xsi:type="object">Yireo\LokiComponents\Validator\PastDateValidator</item>
             </argument>
         </arguments>
     </type>

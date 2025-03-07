@@ -55,10 +55,6 @@ class ComponentViewModel implements ComponentViewModelInterface
 
         $value = $this->getComponent()->getRepository()->getValue();
 
-        if ($this->getComponentName() === 'example-loki-field-components.multiselect') {
-            var_dump($value);
-        }
-
         $value = $this->filter->filter($this->getComponent()->getFilters(), $value);
         $this->validator->validate($this->component, $value);
 

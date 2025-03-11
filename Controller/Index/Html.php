@@ -67,7 +67,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
                 $error .= $exception->getTraceAsString();
             }
 
-            echo 'jisse';
             $this->globalMessageRegistry->addError($error);
         }
 

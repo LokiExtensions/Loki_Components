@@ -1,6 +1,6 @@
 {
     "name": "yireo/magento2-loki-components",
-    "version": "0.0.13",
+    "version": "0.0.14",
     "description": "N/A",
     "type": "magento2-module",
     "require": {

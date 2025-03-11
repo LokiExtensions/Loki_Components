@@ -6,6 +6,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.14] - 11 March 2025
+### Fixed
+- Turn Phrases into strings automatically
+- Add validators `date` and `past_date`
+- Reorganize tests
+- Add module dependencies
+- Huge refactoring to move logic into new LokiFieldComponents module
+- Intercept non-existing target error
+- Apply `document.getElementById` after nextTick
+- Improve handling of AJAX errors
+- Make sure to remove loader when fatal errors occurs on server
+- Remove wrong scope in CSS
+- Add various integration tests 
+- Add TargetRenderer test
+- Cleanup layout loader and add test
+- Fix integration test of translation strings
+- Abstract ViewModel methods for length behaviour
+- Move EmailValidatorTest
+- Add missing Dutch translations
+- Properly translate validation messages
+- Move email availability in separate validator `email_available`
+- Rename `block loki-checkout.defaults.x` to `loki-components.defaults.x`
+- Rename `loki-checkout.css_classes` to `loki-components.css_classes`
+- Config option for MX lookup was using wrong path
+- Rewrite `Alpine.store()` APIs
+
 ## [0.0.13] - 25 February 2025
 ### Fixed
 - Standardize JS event names

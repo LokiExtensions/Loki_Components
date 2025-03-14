@@ -1,4 +1,4 @@
-name: ExtDN Integration Tests
+name: Yireo Tests
 on: [push]
 
 jobs:

@@ -22,7 +22,7 @@ jobs:
         env:
           'discovery.type': single-node
           'xpack.security.enabled': false
-          ES_JAVA_OPTS: "-Xms64m -Xmx512m"
+          ES_JAVA_OPTS: "-Xms128m -Xmx128m"
         options: --health-cmd="curl localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s" --health-interval=10s --health-timeout=5s --health-retries=3
       redis:
         image: redis
@@ -38,10 +38,7 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
       - run: |
-          pwd
-          echo $GITHUB_WORKSPACE
-          ls -al
-          . .module.ini
+          . ${GITHUB_WORKSPACE}/.module.ini
           cd /tmp/magento
           composer config gitlab-token.gitlab.yireo.com gitlab-ci-token $CI_JOB_TOKEN
           composer config repositories.local-source path $CI_PROJECT_DIR

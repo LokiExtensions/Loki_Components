@@ -4,7 +4,8 @@ on: [push]
 jobs:
   integration-tests:
     name: Magento 2 Integration Tests
-    runs-on: yireo/magento2installed:2.4.7-p4
+    container:
+        image: yireo/magento2installed:2.4.7-p4
     services:
       mysql:
         image: mysql:8.0

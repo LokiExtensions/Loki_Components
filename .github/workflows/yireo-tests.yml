@@ -38,12 +38,18 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
       - run: |
-          source .module.ini
+          pwd
+          echo $GITHUB_WORKSPACE
+          ls -al
+          . .module.ini
           cd /tmp/magento
           composer config gitlab-token.gitlab.yireo.com gitlab-ci-token $CI_JOB_TOKEN
           composer config repositories.local-source path $CI_PROJECT_DIR
           composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
           composer require --prefer-source -- $COMPOSER_NAME:@dev
           export MAGENTO_MODULE=${EXTENSION_VENDOR}_${EXTENSION_NAME}
-          cd /tmp/magento/dev/tests/integration/ && cp $CI_PROJECT_DIR/.gitlab-ci/install-config-mysql.php etc/install-config-mysql.php && cp $CI_PROJECT_DIR/.gitlab-ci/phpunit.xml phpunit.xml && php -d memory_limit=4G ../../../vendor/bin/phpunit -c phpunit.xml ../../../vendor/$COMPOSER_NAME/Test/Integration
+          cd /tmp/magento/dev/tests/integration/
+          cp $GITHUB_WORKSPACE/.gitlab-ci/install-config-mysql.php etc/install-config-mysql.php
+          cp $GITHUB_WORKSPACE/.gitlab-ci/phpunit.xml phpunit.xml
+          php -d memory_limit=4G ../../../vendor/bin/phpunit -c phpunit.xml ../../../vendor/$COMPOSER_NAME/Test/Integration
 

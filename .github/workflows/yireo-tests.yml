@@ -37,8 +37,9 @@ jobs:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
-      - run: |
-          . ${GITHUB_WORKSPACE}/.module.ini
+      - shell: bash
+        run: |
+          source ${GITHUB_WORKSPACE}/.module.ini
           cd /tmp/magento
           composer config gitlab-token.gitlab.yireo.com gitlab-ci-token $CI_JOB_TOKEN
           composer config repositories.local-source path $CI_PROJECT_DIR

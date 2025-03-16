@@ -12,6 +12,8 @@ jobs:
         run: |
           cd $GITHUB_WORKSPACE
           ls -al
+          cd ${{ github.workspace }}
+          ls -al
           export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
           test -z "$COMPOSER_NAME}" && (echo "No composer name found" && exit 1)
           mkdir /tmp/magento/package-source

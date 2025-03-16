@@ -1,5 +1,5 @@
 name: Yireo Tests
-on: [push]
+on: [push, pull_request, release]
 
 jobs:
   integration-tests:
@@ -36,16 +36,19 @@ jobs:
         with:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+        
+      - run: |
+          export EXTENSION_VENDOR=`cat .module.ini | grep EXTENSION_VENDOR | cut -f2 -d= | tr -d '"'`
+          export EXTENSION_NAME=`cat .module.ini | grep EXTENSION_NAME | cut -f2 -d= | tr -d '"'`
+          export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
+          export MAGENTO_MODULE=${EXTENSION_VENDOR}_${EXTENSION_NAME}
 
-      - shell: bash
-        run: |
-          source ${GITHUB_WORKSPACE}/.module.ini
+      - run: |
           cd /tmp/magento
           composer config gitlab-token.gitlab.yireo.com gitlab-ci-token $CI_JOB_TOKEN
           composer config repositories.local-source path $CI_PROJECT_DIR
           composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
           composer require --prefer-source -- $COMPOSER_NAME:@dev
-          export MAGENTO_MODULE=${EXTENSION_VENDOR}_${EXTENSION_NAME}
           cd /tmp/magento/dev/tests/integration/
           cp $GITHUB_WORKSPACE/.gitlab-ci/install-config-mysql.php etc/install-config-mysql.php
           cp $GITHUB_WORKSPACE/.gitlab-ci/phpunit.xml phpunit.xml

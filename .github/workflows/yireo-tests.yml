@@ -42,8 +42,6 @@ jobs:
           export EXTENSION_NAME=`cat .module.ini | grep EXTENSION_NAME | cut -f2 -d= | tr -d '"'`
           export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
           export MAGENTO_MODULE=${EXTENSION_VENDOR}_${EXTENSION_NAME}
-
-      - run: |
           cd /tmp/magento
           composer config repositories.local-source path $GITHUB_WORKSPACE
           composer require --prefer-source -- $COMPOSER_NAME:@dev

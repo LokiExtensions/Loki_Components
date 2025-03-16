@@ -13,13 +13,13 @@ jobs:
         image: mysql:8.0
         env:
           MYSQL_ROOT_PASSWORD: root
-        ports:
-          - 3306:3306
+        #ports:
+        #  - 3306:3306
         options: --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw --health-cmd="mysqladmin ping"
       opensearch:
         image: yireo/opensearch-dummy
-        ports:
-          - 9200:9200
+        #ports:
+        #  - 9200:9200
         env:
           'discovery.type': single-node
           'xpack.security.enabled': false
@@ -27,8 +27,8 @@ jobs:
         options: --health-cmd="curl localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s" --health-interval=10s --health-timeout=5s --health-retries=3
       redis:
         image: redis
-        ports:
-          - 6379:6379
+        #ports:
+        #  - 6379:6379
         options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v4

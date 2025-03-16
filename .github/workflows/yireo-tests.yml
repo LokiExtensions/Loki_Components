@@ -1,5 +1,9 @@
 name: Yireo Tests
-on: [push, pull_request, release]
+on:
+  release:
+  push:
+    branches:
+      - 'main'
 
 jobs:
   integration-tests:
@@ -36,7 +40,8 @@ jobs:
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
 
       - name: Add module source
-        run: echo "GitHub actor: " ${{ github.actor }}
+        run: |
+          echo "GitHub actor: " ${{ github.actor }}
 
       - name: Add module source
         run: |

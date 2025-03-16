@@ -36,7 +36,7 @@ jobs:
       - name: Add module source
         run: |
           export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
-          cp -R ${GITHUB_WORKSPACE}/ /tmp/magento/package-source
+          cp -R ${GITHUB_WORKSPACE}/* /tmp/magento/package-source
           cd /tmp/magento
           composer config repositories.local-source path package-source/
           composer require --prefer-source -- ${COMPOSER_NAME}:@dev

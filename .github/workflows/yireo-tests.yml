@@ -4,7 +4,8 @@ on: [push, pull_request, release]
 jobs:
   integration-tests:
     name: Magento 2 Integration Tests
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    #runs-on: ubuntu-latest
     container:
         image: yireo/magento2installed:2.4.7-p4
     services:

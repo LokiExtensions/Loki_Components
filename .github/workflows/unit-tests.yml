@@ -8,16 +8,14 @@ jobs:
     container:
         image: yireo/magento2installed:2.4.7-p4
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
       - name: Add module source
         run: |
-          cd $GITHUB_WORKSPACE
-          ls -al
-          cd ${{ github.workspace }}
-          ls -al
           export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
           test -z "$COMPOSER_NAME}" && (echo "No composer name found" && exit 1)
-          mkdir /tmp/magento/package-source
-          cp -R $GITHUB_WORKSPACE/* /tmp/magento/package-source/
+          cp -R $GITHUB_WORKSPACE /tmp/magento/package-source
           cd /tmp/magento
           composer config repositories.local-source path package-source/
           composer require --prefer-source -- $COMPOSER_NAME:@dev

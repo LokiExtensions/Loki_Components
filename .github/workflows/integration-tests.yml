@@ -33,6 +33,9 @@ jobs:
         image: redis
         options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
       - name: Add module source
         run: |
           export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`

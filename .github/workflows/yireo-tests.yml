@@ -47,7 +47,7 @@ jobs:
           composer config repositories.local-source path $GITHUB_WORKSPACE
           composer require --prefer-source -- $COMPOSER_NAME:@dev
           cd /tmp/magento/dev/tests/integration/
-          cp $GITHUB_WORKSPACE/.gitlab-ci/install-config-mysql.php etc/install-config-mysql.php
-          cp $GITHUB_WORKSPACE/.gitlab-ci/phpunit.xml phpunit.xml
+          cp $GITHUB_WORKSPACE/.github/workflows/yireo-tests/install-config-mysql.php etc/install-config-mysql.php
+          cp $GITHUB_WORKSPACE/.github/workflows/yireo-tests/phpunit.xml phpunit.xml
           php -d memory_limit=4G ../../../vendor/bin/phpunit -c phpunit.xml ../../../vendor/$COMPOSER_NAME/Test/Integration
 

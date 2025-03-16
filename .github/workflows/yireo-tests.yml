@@ -16,13 +16,9 @@ jobs:
           MYSQL_USER: magento2
           MYSQL_PASSWORD: magento2
           MYSQL_DATABASE: magento2
-        #ports:
-        #  - 3306:3306
         options: --tmpfs /tmp:rw --tmpfs /var/lib/mysql:rw --health-cmd="mysqladmin ping"
       opensearch:
         image: yireo/opensearch-dummy
-        #ports:
-        #  - 9200:9200
         env:
           'discovery.type': single-node
           'xpack.security.enabled': false
@@ -30,8 +26,6 @@ jobs:
         options: --health-cmd="curl localhost:9200/_cluster/health?wait_for_status=yellow&timeout=60s" --health-interval=10s --health-timeout=5s --health-retries=3
       redis:
         image: redis
-        #ports:
-        #  - 6379:6379
         options: --health-cmd "redis-cli ping" --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
       - uses: actions/checkout@v4
@@ -40,16 +34,36 @@ jobs:
         with:
           path: /tmp/composer-cache
           key: ${{ runner.os }}-${{ hashFiles('**/composer.lock') }}
+
+      - name: Add module source
+        run: echo "GitHub actor: " ${{ github.actor }}
+
+      - name: Add module source
+        run: |
+          export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
+          cp -R $GITHUB_WORKSPACE/ /tmp/magento/package-source
+          cd /tmp/magento
+          composer config repositories.local-source path package-source/
+          composer require --prefer-source -- $COMPOSER_NAME:@dev
+
+      - name: Run Magento 2 Functional Tests
+        run: |
+          test -d $GITHUB_WORKSPACE/Test/Functional || exit 0
+
+      - name: Run Magento 2 Unit Tests
+        run: |
+          test -d $GITHUB_WORKSPACE/Test/Unit || exit 0
+          export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
+          cd /tmp/magento/dev/tests/unit/
+          php -d memory_limit=4G ../../../vendor/bin/phpunit -c phpunit.xml ../../../vendor/$COMPOSER_NAME/Test/Unit
         
-      - run: |
+      - name: Run Magento 2 Integration Tests
+        run: |
+          test -d $GITHUB_WORKSPACE/Test/Integration || exit 0
           export EXTENSION_VENDOR=`cat .module.ini | grep EXTENSION_VENDOR | cut -f2 -d= | tr -d '"'`
           export EXTENSION_NAME=`cat .module.ini | grep EXTENSION_NAME | cut -f2 -d= | tr -d '"'`
           export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
           export MAGENTO_MODULE=${EXTENSION_VENDOR}_${EXTENSION_NAME}
-          cd /tmp/magento
-          cp -R $GITHUB_WORKSPACE/ /tmp/magento/package-source
-          composer config repositories.local-source path package-source/
-          composer require --prefer-source -- $COMPOSER_NAME:@dev
           cd /tmp/magento/dev/tests/integration/
           cp $GITHUB_WORKSPACE/.github/workflows/yireo-tests/install-config-mysql.php etc/install-config-mysql.php
           cp $GITHUB_WORKSPACE/.github/workflows/yireo-tests/phpunit.xml phpunit.xml

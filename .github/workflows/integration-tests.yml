@@ -36,10 +36,10 @@ jobs:
       - name: Add module source
         run: |
           export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
-          cp -R $GITHUB_WORKSPACE/ /tmp/magento/package-source
+          cp -R ${GITHUB_WORKSPACE}/ /tmp/magento/package-source
           cd /tmp/magento
           composer config repositories.local-source path package-source/
-          composer require --prefer-source -- $COMPOSER_NAME:@dev
+          composer require --prefer-source -- ${COMPOSER_NAME}:@dev
 
       - name: Run Magento 2 Integration Tests
         run: |
@@ -49,6 +49,6 @@ jobs:
           export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
           export MAGENTO_MODULE=${EXTENSION_VENDOR}_${EXTENSION_NAME}
           cd /tmp/magento/dev/tests/integration/
-          cp -R $GITHUB_WORKSPACE/.github/workflows/integration-tests/* .
+          cp -R ${GITHUB_WORKSPACE}/.github/workflows/integration-tests/* .
           php -d memory_limit=4G ../../../vendor/bin/phpunit -c phpunit.xml ../../../vendor/$COMPOSER_NAME/Test/Integration
 

@@ -45,9 +45,7 @@ jobs:
 
       - run: |
           cd /tmp/magento
-          composer config gitlab-token.gitlab.yireo.com gitlab-ci-token $CI_JOB_TOKEN
-          composer config repositories.local-source path $CI_PROJECT_DIR
-          composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
+          composer config repositories.local-source path $GITHUB_WORKSPACE
           composer require --prefer-source -- $COMPOSER_NAME:@dev
           cd /tmp/magento/dev/tests/integration/
           cp $GITHUB_WORKSPACE/.gitlab-ci/install-config-mysql.php etc/install-config-mysql.php

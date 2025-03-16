@@ -17,6 +17,7 @@ jobs:
       mysql:
         image: mysql:8.0
         env:
+          MYSQL_ROOT_PASSWORD: root
           MYSQL_USER: magento2
           MYSQL_PASSWORD: magento2
           MYSQL_DATABASE: magento2

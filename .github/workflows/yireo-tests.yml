@@ -47,7 +47,8 @@ jobs:
           export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
           export MAGENTO_MODULE=${EXTENSION_VENDOR}_${EXTENSION_NAME}
           cd /tmp/magento
-          composer config repositories.local-source path $GITHUB_WORKSPACE
+          cp -R $GITHUB_WORKSPACE/ /tmp/magento/package-source
+          composer config repositories.local-source path package-source/
           composer require --prefer-source -- $COMPOSER_NAME:@dev
           cd /tmp/magento/dev/tests/integration/
           cp $GITHUB_WORKSPACE/.github/workflows/yireo-tests/install-config-mysql.php etc/install-config-mysql.php

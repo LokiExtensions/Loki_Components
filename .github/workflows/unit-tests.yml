@@ -10,6 +10,8 @@ jobs:
     steps:
       - name: Add module source
         run: |
+          ls -al $GITHUB_WORKSPACE
+          cat $GITHUB_WORKSPACE/.module.ini
           export COMPOSER_NAME=`cat ${GITHUB_WORKSPACE}/.module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
           test -z "$COMPOSER_NAME}" && (echo "No composer name found" && exit 1)
           cp -R $GITHUB_WORKSPACE/ /tmp/magento/package-source

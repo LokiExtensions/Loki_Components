@@ -1,4 +1,5 @@
 name: Yireo Tests
+#on: ['push', 'pull_request']
 on:
   release:
   push:
@@ -60,7 +61,7 @@ jobs:
           test -d $GITHUB_WORKSPACE/Test/Unit || exit 0
           export COMPOSER_NAME=`cat .module.ini | grep COMPOSER_NAME | cut -f2 -d= | tr -d '"'`
           cd /tmp/magento/dev/tests/unit/
-          php -d memory_limit=4G ../../../vendor/bin/phpunit -c phpunit.xml ../../../vendor/$COMPOSER_NAME/Test/Unit
+          php -d memory_limit=4G ../../../vendor/bin/phpunit -c phpunit.xml.dist ../../../vendor/$COMPOSER_NAME/Test/Unit
         
       - name: Run Magento 2 Integration Tests
         run: |

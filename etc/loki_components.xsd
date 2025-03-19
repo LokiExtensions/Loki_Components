@@ -23,6 +23,11 @@
         <xs:attribute name="repository" type="phpClassName" use="optional"/>
     </xs:complexType>
 
+    <!--
+    <xs:complexType name="lokiComponentGroupName">
+    </xs:complexType>
+    -->
+
     <xs:complexType name="lokiComponentType">
         <xs:choice minOccurs="0" maxOccurs="unbounded">
             <xs:element name="target" type="lokiTargetType"/>

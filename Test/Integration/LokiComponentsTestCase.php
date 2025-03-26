@@ -56,36 +56,51 @@ class LokiComponentsTestCase extends AbstractController
         return $component;
     }
 
-    protected function assertComponentExistsOnPage(string|ComponentInterface $component)
+    protected function assertComponentExistsOnPage(string $componentName, bool $debug = false)
     {
-        if ($component instanceof ComponentInterface) {
-            $component = $component->getName();
+        $component = $this->getComponent($componentName);
+        $found = $this->existsComponentOnPage($component);
+        $msg = 'Component "'.$component->getName().'" not found';
+
+        if ($debug) {
+            $msg .= "\n".$this->getResponse()->getBody();
         }
 
-        $elementId = $this->getObjectManager()->get(IdConvertor::class)->toElementId($component);
-        $this->assertElementIdExistsOnPage($elementId);
+        $this->assertTrue($found, $msg);
     }
 
-    protected function assertElementIdExistsOnPage(string $elementId)
+    protected function assertComponentNotExistsOnPage(string $componentName, bool $debug = false)
     {
-        $found = $this->existsElementIdOnPage($elementId);
-        $this->assertTrue($found, 'Element ID "'.$elementId.'" not found');
-    }
-
-    protected function assertElementIdNotExistsOnPage(string $elementId)
-    {
-        $found = $this->existsElementIdOnPage($elementId);
-        $this->assertFalse($found, 'Element ID "'.$elementId.'" found anyway');
-    }
-
-    protected function assertComponentNotExistsOnPage(string|ComponentInterface $component)
-    {
-        if ($component instanceof ComponentInterface) {
-            $component = $component->getName();
+        $component = $this->getComponent($componentName);
+        $found = $this->existsComponentOnPage($component);
+        $msg = 'Component "'.$component->getName().'" found anyway';
+        if ($debug) {
+            $msg .= "\n".$this->getResponse()->getBody();
         }
 
-        $elementId = $this->getObjectManager()->get(IdConvertor::class)->toElementId($component);
-        $this->assertElementIdNotExistsOnPage($elementId);
+        $this->assertFalse($found, $msg);
+    }
+
+    protected function assertElementIdExistsOnPage(string $elementId, bool $debug = false)
+    {
+        $found = $this->existsElementIdOnPage($elementId);
+        $msg = 'Element ID "'.$elementId.'" not found';
+        if ($debug) {
+            $msg .= "\n".$this->getResponse()->getBody();
+        }
+
+        $this->assertTrue($found, $msg);
+    }
+
+    protected function assertElementIdNotExistsOnPage(string $elementId, bool $debug = false)
+    {
+        $found = $this->existsElementIdOnPage($elementId);
+        $msg = 'Element ID "'.$elementId.'" found anyway';
+        if ($debug) {
+            $msg .= "\n".$this->getResponse()->getBody();
+        }
+
+        $this->assertFalse($found, $msg);
     }
 
     protected function assertComponentValidators(array $expectedValidators, ComponentInterface $component)
@@ -129,9 +144,32 @@ class LokiComponentsTestCase extends AbstractController
     protected function existsElementIdOnPage(string $elementId): bool
     {
         $body = $this->getResponse()->getBody();
-        return str_contains($body, ' id="'.$elementId.'"');
+        if (false === str_contains($body, ' id="'.$elementId.'"')) {
+            return false;
+        }
+
+        echo 'Not rendered: '.$elementId;
+        if (str_contains($body, 'Not rendered: '.$elementId)) {
+            return false;
+        }
+
+        return true;
     }
 
+    protected function existsComponentOnPage(ComponentInterface $component): bool
+    {
+        $elementId = $this->getObjectManager()->get(IdConvertor::class)->toElementId($component->getName());
+        $body = $this->getResponse()->getBody();
+        if (false === str_contains($body, ' id="'.$elementId.'"')) {
+            return false;
+        }
+
+        if (str_contains($body, 'Not rendered: '.$component->getName())) {
+            return false;
+        }
+
+        return true;
+    }
 
     protected function setAsAjaxRequest(): void
     {

@@ -1,4 +1,4 @@
-<?php
+<?php // phpcs:ignoreFile
 
 use Yireo\IntegrationTestHelper\Utilities\DisableModules;
 use Yireo\IntegrationTestHelper\Utilities\InstallConfig;

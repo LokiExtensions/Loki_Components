@@ -1,0 +1,18 @@
+{
+    "modules": [
+        "Magento_Customer",
+        "Magento_Backend",
+        "Magento_Store",
+        "Yireo_CspUtilities"
+    ],
+    "components": [
+        "default",
+        "loki-components.global-messages"
+    ],
+    "config": {
+        "yireo_loki_components\/general\/debug": "Debug",
+        "yireo_loki_components\/general\/only_validate_ajax": "Only validate AJAX calls",
+        "yireo_loki_components\/validators\/enable_mx_validation_for_email": "Enable MX Validation for Email Values",
+        "yireo_loki_components\/global_messages\/timeout": "Timeout"
+    }
+}

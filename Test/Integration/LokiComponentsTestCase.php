@@ -164,7 +164,7 @@ class LokiComponentsTestCase extends AbstractController
             return false;
         }
 
-        if (str_contains($body, 'Not rendered: '.$component->getName())) {
+        if (str_contains($body, 'Not rendered: '.$component->getName().' ')) {
             return false;
         }
 

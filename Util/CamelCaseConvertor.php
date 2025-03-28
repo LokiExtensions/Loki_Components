@@ -13,4 +13,10 @@ class CamelCaseConvertor implements ArgumentInterface
 
         return preg_replace('#[_.-]+#', '', $text);
     }
+
+    public function toKebabCase(string $text): string
+    {
+        $pattern = '/(?<=\\w)(?=[A-Z])|(?<=[a-z])(?=[0-9])/';
+        return strtolower(preg_replace($pattern, '-', $text));
+    }
 }

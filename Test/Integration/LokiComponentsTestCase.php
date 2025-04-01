@@ -156,6 +156,16 @@ class LokiComponentsTestCase extends AbstractController
         return true;
     }
 
+    protected function assertStringNotOccursOnPage(string $string): void
+    {
+        $this->assertStringNotContainsString($string, $this->getResponse()->getBody());
+    }
+
+    protected function assertStringOccursOnPage(string $string): void
+    {
+        $this->assertStringContainsString($string, $this->getResponse()->getBody());
+    }
+
     protected function existsComponentOnPage(ComponentInterface $component): bool
     {
         $elementId = $this->getObjectManager()->get(IdConvertor::class)->toElementId($component->getName());

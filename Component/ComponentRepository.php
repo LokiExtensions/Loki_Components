@@ -6,6 +6,7 @@ namespace Yireo\LokiComponents\Component;
 use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
 use Yireo\LokiComponents\Messages\LocalMessageRegistry;
 
+// @todo: Move this into a trait, so that repository don't extend anymore?
 abstract class ComponentRepository implements ComponentRepositoryInterface
 {
     protected ?ComponentInterface $component = null;

@@ -70,7 +70,11 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             $this->globalMessageRegistry->addError($error);
         }
 
-        $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
+        if (!isset($data['componentData']['render']) || $data['componentData']['render'] === 1) {
+            $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
+        } else {
+            $htmlParts = [];
+        }
 
         return $this->getHtmlResult($htmlParts);
     }

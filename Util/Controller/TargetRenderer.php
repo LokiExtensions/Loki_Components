@@ -6,12 +6,10 @@ use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
 use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
 
 class TargetRenderer
 {
     public function __construct(
-        private GlobalMessageRegistry $globalMessageRegistry,
         private readonly EventManager $eventManager,
         private readonly ComponentRegistry $componentRegistry,
     ) {
@@ -29,8 +27,6 @@ class TargetRenderer
             $block = $layout->getBlock($blockName);
             if ($block instanceof BlockInterface) {
                 $htmlParts[] = $block->toHtml();
-            } else {
-                $this->globalMessageRegistry->addError('Block with name "'.$blockName.'" not found');
             }
         }
 

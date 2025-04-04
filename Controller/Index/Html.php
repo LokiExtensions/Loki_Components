@@ -17,6 +17,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Yireo\LokiComponents\Config\Config;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
+use Yireo\LokiComponents\Exception\NoBlockFoundException;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
 use Yireo\LokiComponents\Exception\RedirectException;
 use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
@@ -52,8 +53,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
                 $this->getBlock($layout, $data['block']),
                 $data['componentData']
             );
-
-        } catch (NoComponentFoundException $noComponentFoundException) {
+        } catch (NoBlockFoundException $exception) {
             // @todo: Write this to a dedicated log for debugging purpose
 
         } catch (RedirectException $redirectException) {
@@ -70,7 +70,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             $this->globalMessageRegistry->addError($error);
         }
 
-        if (!isset($data['componentData']['render']) || $data['componentData']['render'] === 1) {
+        if ($this->allowRendering($data)) {
             $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
         } else {
             $htmlParts = [];
@@ -82,12 +82,12 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     private function getBlock(LayoutInterface $layout, string $blockName): AbstractBlock
     {
         if (empty($blockName)) {
-            throw new NoComponentFoundException('Block name not specified');
+            throw new NoBlockFoundException('Block name not specified');
         }
 
         $block = $layout->getBlock($blockName);
         if (false === $block instanceof AbstractBlock) {
-            throw new NoComponentFoundException('Block with name "'.$blockName.'" is not found');
+            throw new NoBlockFoundException('Block with name "'.$blockName.'" is not found');
         }
 
         return $block;
@@ -116,5 +116,10 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $json->setHeader('X-Loki-Redirect', $redirectUrl);
 
         return $json;
+    }
+
+    private function allowRendering(array $data): bool
+    {
+        return !isset($data['componentData']['render']) || $data['componentData']['render'] === 1;
     }
 }

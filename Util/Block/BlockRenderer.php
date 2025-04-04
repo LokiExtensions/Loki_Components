@@ -5,16 +5,10 @@ namespace Yireo\LokiComponents\Util\Block;
 use InvalidArgumentException;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\LayoutInterface;
 use RuntimeException;
 
 class BlockRenderer extends AbstractRenderer
 {
-    public function __construct(
-        private LayoutInterface $layout,
-    ) {
-    }
-
     /**
      * @param string $blockName
      * @param AbstractBlock $ancestorBlock
@@ -51,12 +45,15 @@ class BlockRenderer extends AbstractRenderer
         AbstractBlock $ancestorBlock,
         string $blockName,
         array $data = []
-    ) {
+    ): string {
         try {
             return $this->get($ancestorBlock, $blockName, $data)->toHtml();
         } catch (InvalidArgumentException|RuntimeException $e) {
-            return '<!-- Block with name "'.$blockName.'": '.$e->getMessage(
-                ).' -->'; // @todo: Only report this in debug mode
+            if ($this->isDeveloperMode()) {
+                return '<!-- Block with name "'.$blockName.'": '.$e->getMessage().' -->';
+            }
+
+            return '';
         }
     }
 }

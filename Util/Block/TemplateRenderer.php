@@ -4,16 +4,10 @@ namespace Yireo\LokiComponents\Util\Block;
 
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
-use Magento\Framework\View\LayoutInterface;
 use RuntimeException;
 
 class TemplateRenderer extends AbstractRenderer
 {
-    public function __construct(
-        private LayoutInterface $layout,
-    ) {
-    }
-
     public function get(
         AbstractBlock $ancestorBlock,
         string $templateName,

@@ -5,6 +5,7 @@ namespace Yireo\LokiComponents\Util\Block;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Framework\View\LayoutInterface;
 use Yireo\LokiComponents\Component\ComponentViewModelInterface;
 
 abstract class AbstractRenderer implements ArgumentInterface
@@ -12,7 +13,8 @@ abstract class AbstractRenderer implements ArgumentInterface
     private array $counters = [];
 
     public function __construct(
-        private AppState $appState,
+        protected LayoutInterface $layout,
+        protected AppState $appState,
     ) {
     }
 

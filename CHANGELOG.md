@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.15] - 04 April 2025
+### Fixed
+- Allow for specific exceptions to redirect back to checkout/cart
+- Refactor to ignore non-existing target rendering
+- Rename default CSS class from "inline" to "default"
+- Only show HTML hints for failing blocks in Developer Mode
+- Refactor way that loading is handled a bit
+- First batch of Playwright functional tests
+- Add new MODULE.json with meta-information
+- Fix test for components that are disallowed rendering
+- Add proper styling of messages under Luma
+
 ## [0.0.14] - 11 March 2025
 ### Fixed
 - Turn Phrases into strings automatically

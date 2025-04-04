@@ -66,11 +66,13 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             watchLoading() {
                 this.$watch('loading', () => {
                     if (true === this.loading) {
+                        this.$root.setAttribute('aria-busy', true);
                         if (this.field) {
                             this.field.setAttribute('aria-busy', true);
                             this.field.setAttribute('disabled', true);
                         }
                     } else {
+                        this.$root.removeAttribute('aria-busy');
                         if (this.field) {
                             this.field.removeAttribute('aria-busy');
                             this.field.removeAttribute('disabled');

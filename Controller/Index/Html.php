@@ -18,7 +18,6 @@ use Yireo\LokiComponents\Config\Config;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
 use Yireo\LokiComponents\Exception\NoBlockFoundException;
-use Yireo\LokiComponents\Exception\NoComponentFoundException;
 use Yireo\LokiComponents\Exception\RedirectException;
 use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
 use Yireo\LokiComponents\Util\Controller\LayoutLoader;
@@ -37,7 +36,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly JsonResultFactory $jsonResultFactory,
         private readonly GlobalMessageRegistry $globalMessageRegistry,
         private readonly Config $config,
-        private readonly AppState $appState
+        private readonly AppState $appState,
     ) {
     }
 
@@ -60,14 +59,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             return $this->getJsonRedirect($redirectException->getMessage());
 
         } catch (Exception $exception) {
-            $error = $exception->getMessage();
-
-            if ($debug && $this->appState->getMode() === AppState::MODE_DEVELOPER) {
-                $error .= '<br/> ['.$exception->getFile().' line '.$exception->getLine().'] <br/>';
-                $error .= $exception->getTraceAsString();
-            }
-
-            $this->globalMessageRegistry->addError($error);
+            $this->addGlobalException($exception);
         }
 
         if ($this->allowRendering($data)) {
@@ -121,5 +113,17 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     private function allowRendering(array $data): bool
     {
         return !isset($data['componentData']['render']) || $data['componentData']['render'] === 1;
+    }
+
+    private function addGlobalException(Exception $exception): void
+    {
+        $error = $exception->getMessage();
+
+        if ($this->config->isDebug() && $this->appState->getMode() === AppState::MODE_DEVELOPER) {
+            $error .= '<br/> ['.$exception->getFile().' line '.$exception->getLine().'] <br/>';
+            $error .= $exception->getTraceAsString();
+        }
+
+        $this->globalMessageRegistry->addError($error);
     }
 }

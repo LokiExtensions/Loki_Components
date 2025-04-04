@@ -28,6 +28,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         messages: [],
         value: null, // @todo: Move to LokiFieldComponentType
         visible: false,
+        loading: false,
         lazyLoad: false,
         beforePostValue: null,
         autofillListenerTimer: null,
@@ -59,6 +60,21 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         this.field.removeAttribute('aria-invalid');
                     } else {
                         this.field.setAttribute('aria-invalid', true);
+                    }
+                })
+            },
+            watchLoading() {
+                this.$watch('loading', () => {
+                    if (true === this.loading) {
+                        if (this.field) {
+                            this.field.setAttribute('aria-busy', true);
+                            this.field.setAttribute('disabled', true);
+                        }
+                    } else {
+                        if (this.field) {
+                            this.field.removeAttribute('aria-busy');
+                            this.field.removeAttribute('disabled');
+                        }
                     }
                 })
             },
@@ -110,10 +126,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 value = this.value;
             }
 
-            if (this.field) {
-                this.field.setAttribute('aria-busy', true);
-                this.field.setAttribute('disabled', true);
-            }
+            this.loading = true;
 
             this.targets.forEach(target => {
                 const targetElement = document.getElementById(target);
@@ -226,10 +239,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         });
                     });
 
-                    if (this.field) {
-                        this.field.removeAttribute('aria-busy');
-                        this.field.removeAttribute('disabled');
-                    }
+                    this.loading = false;
 
                     LokiComponentsFocusListener();
                 });

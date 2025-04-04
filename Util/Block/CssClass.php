@@ -33,7 +33,7 @@ class CssClass
 
         $defaultCss = trim($defaultCss);
         if (!empty($defaultCss)) {
-            $cssClasses[$scope]['inline'] = $defaultCss;
+            $cssClasses[$scope]['default'] = $defaultCss;
         }
 
         $blockCssClasses = (array)$this->block->getData('css_classes');

@@ -11,7 +11,7 @@ class ChildRenderer extends AbstractRenderer
     public function get(
         AbstractBlock $ancestorBlock,
         string $blockAlias,
-        array $data = []
+        array $data = [],
     ): AbstractBlock {
         $block = $ancestorBlock->getChildBlock($blockAlias);
         if (false === $block instanceof AbstractBlock) {
@@ -32,7 +32,11 @@ class ChildRenderer extends AbstractRenderer
         try {
             return (string)$this->get($ancestorBlock, $blockAlias, $data)?->toHtml();
         } catch (RuntimeException|InvalidArgumentException $e) {
-            return '<!-- '.$e->getMessage().' -->'; // @todo: Only report this in debug mode
+            if ($this->isDeveloperMode()) {
+                return '<!-- '.$e->getMessage().' -->';
+            }
+
+            return '';
         }
     }
 }

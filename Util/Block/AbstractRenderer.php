@@ -2,6 +2,7 @@
 
 namespace Yireo\LokiComponents\Util\Block;
 
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Yireo\LokiComponents\Component\ComponentViewModelInterface;
@@ -9,6 +10,11 @@ use Yireo\LokiComponents\Component\ComponentViewModelInterface;
 abstract class AbstractRenderer implements ArgumentInterface
 {
     private array $counters = [];
+
+    public function __construct(
+        private AppState $appState,
+    ) {
+    }
 
     protected function populateBlock(
         AbstractBlock $block,
@@ -71,5 +77,10 @@ abstract class AbstractRenderer implements ArgumentInterface
         $ancestorId = $ancestorBlock->getNameInLayout();
         $blockParts = explode('.', $block->getNameInLayout());
         return $ancestorId.'-'.array_pop($blockParts);
+    }
+
+    protected function isDeveloperMode(): bool
+    {
+        return $this->appState->getMode() === AppState::MODE_DEVELOPER;
     }
 }

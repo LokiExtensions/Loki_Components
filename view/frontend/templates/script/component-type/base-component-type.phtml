@@ -40,6 +40,12 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 }
 
                 this.field = this.$root.querySelectorAll('[data-type="field"]')[0];
+
+                this.$root.removeAttribute('aria-busy');
+                if (this.field) {
+                    this.field.removeAttribute('aria-busy');
+                    this.field.removeAttribute('disabled');
+                }
             },
             register() {
                 Alpine.store('components').add(this);

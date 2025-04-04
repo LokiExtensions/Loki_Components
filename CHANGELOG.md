@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.16] - 04 April 2025
+### Fixed
+- Reset HTML attributes when reloading component
+
 ## [0.0.15] - 04 April 2025
 ### Fixed
 - Allow for specific exceptions to redirect back to checkout/cart

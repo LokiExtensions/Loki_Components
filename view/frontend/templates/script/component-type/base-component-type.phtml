@@ -43,30 +43,30 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 this.field = this.$refs.field;
 
                 this.$root.removeAttribute('aria-busy');
-                if (this.field) {
-                    this.field.removeAttribute('aria-busy');
-                    this.field.removeAttribute('disabled');
+                if (this.$refs.field) {
+                    this.$refs.field.removeAttribute('aria-busy');
+                    this.$refs.field.removeAttribute('disabled');
                 }
             },
             register() {
                 Alpine.store('components').add(this);
             },
             setValidation() {
-                if (!this.field) {
+                if (!this.$refs.field) {
                     return;
                 }
 
                 if (true === this.valid) {
-                    this.field.removeAttribute('aria-invalid');
+                    this.$refs.field.removeAttribute('aria-invalid');
                 } else {
-                    this.field.setAttribute('aria-invalid', true);
+                    this.$refs.field.setAttribute('aria-invalid', true);
                 }
 
                 this.$watch('valid', () => {
                     if (true === this.valid) {
-                        this.field.removeAttribute('aria-invalid');
+                        this.$refs.field.removeAttribute('aria-invalid');
                     } else {
-                        this.field.setAttribute('aria-invalid', true);
+                        this.$refs.field.setAttribute('aria-invalid', true);
                     }
                 })
             },
@@ -74,21 +74,21 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 this.$watch('loading', () => {
                     if (true === this.loading) {
                         this.$root.setAttribute('aria-busy', true);
-                        if (this.field) {
+                        if (this.$refs.field) {
                             this.field.setAttribute('aria-busy', true);
                             this.field.setAttribute('disabled', true);
                         }
                     } else {
                         this.$root.removeAttribute('aria-busy');
-                        if (this.field) {
-                            this.field.removeAttribute('aria-busy');
-                            this.field.removeAttribute('disabled');
+                        if (this.$refs.field) {
+                            this.$refs.field.removeAttribute('aria-busy');
+                            this.$refs.field.removeAttribute('disabled');
                         }
                     }
                 })
             },
             listenToAutofillChanges() {
-                if (!this.field || this.field.disabled) {
+                if (!this.$refs.field || this.$refs.field.disabled) {
                     return;
                 }
 
@@ -138,13 +138,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             this.loading = true;
 
             this.targets.forEach(target => {
-                const targetElement = document.getElementById(target);
-                if (targetElement) {
-                    targetElement.setAttribute('aria-busy', true);
-                } else {
-                    <?php if ($config->isDebug()): ?>
-                    LokiComponentsLogger.warning('Target element "' + target + '" does not exist');
-                    <?php endif; ?>
+                const targetComponent = Alpine.store('components').getComponentByElementId(target);
+                if (targetComponent) {
+                    targetComponent.loading = true;
                 }
             });
 

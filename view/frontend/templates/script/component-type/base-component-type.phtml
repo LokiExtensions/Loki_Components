@@ -22,7 +22,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         name: '',
         elementId: '',
         blockId: '',
-        field: null, // @todo: Move to LokiFieldComponentType
+        field: null, // @todo: Move to LokiFieldComponentType // @todo: Use this.$refs.field instead
         fieldValue: null, // @todo: Move to LokiFieldComponentType
         targets: [],
         messages: [],
@@ -39,7 +39,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     this[key] = value;
                 }
 
-                this.field = this.$root.querySelectorAll('[data-type="field"]')[0];
+                //this.field = this.$root.querySelectorAll('[data-type="field"]')[0]; // @todo: Remove when ready
+                this.field = this.$refs.field;
 
                 this.$root.removeAttribute('aria-busy');
                 if (this.field) {

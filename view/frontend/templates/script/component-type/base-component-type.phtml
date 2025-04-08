@@ -118,7 +118,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         async init() {
             this.beforeInit();
 
-            for ([key, callback] of Object.entries(this.initActions)) {
+            for (callback of Object.values(this.initActions)) {
                 await callback.apply(this);
             }
 
@@ -183,7 +183,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     const ajaxDocument = parser.parseFromString(html, "text/html");
                     this.targets.forEach(target => {
                         if (target === this.elementId) {
-                            return;
+                            //return;
                         }
 
                         const targetElement = document.getElementById(target);
@@ -201,21 +201,24 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                         targetElement.outerHTML = newTargetElement.outerHTML;
                     });
 
+                    /*
                     const newTargetElement = ajaxDocument.getElementById(this.elementId);
                     if (!newTargetElement) {
                         return;
                     }
 
                     const targetElement = document.getElementById(this.elementId);
+
+
                     this.destroy();
 
-                    targetElement.innerHTML = newTargetElement.innerHTML;
+                    targetElement.outerHTML = newTargetElement.outerHTML; // @todo: Why would this need to be innerHTML?
                     targetElement.setAttribute('x-init-data', newTargetElement.getAttribute('x-init-data'));
 
                     const jsonData = JSON.parse(targetElement.getAttribute('x-init-data'));
                     for ([key, value] of Object.entries(jsonData)) {
                         this[key] = value;
-                    }
+                    }*/
 
                     if (!this.valid) {
                         this.value = this.beforePostValue;

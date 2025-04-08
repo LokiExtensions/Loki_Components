@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.17] - 08 April 2025
+### Fixed
+- Simplify reloading of this component
+- Simplify loading state of target components
+- Remove select-icon when loading select-field
+
 ## [0.0.16] - 04 April 2025
 ### Fixed
 - Reset HTML attributes when reloading component

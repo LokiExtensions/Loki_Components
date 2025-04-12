@@ -2,6 +2,8 @@
 <components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Yireo_LokiComponents:etc/loki_components.xsd">
     <group name="default"/>
 
+    <component name="loki-components.modal" />
+
     <component
         name="loki-components.global-messages"
         context="Yireo\LokiComponents\Component\GlobalMessages\GlobalMessagesContext"

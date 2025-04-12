@@ -1,0 +1,17 @@
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('LokiComponentModal', () => ({
+            ...LokiComponentType,
+            shown: true,
+            show() {
+                this.shown = true;
+            },
+            hide() {
+                this.shown = false;
+            }
+            toggle() {
+                this.shown = !this.shown;
+            }
+        }));
+    });
+</script>

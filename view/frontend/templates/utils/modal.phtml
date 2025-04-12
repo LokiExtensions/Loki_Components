@@ -1,0 +1,15 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+use Yireo\LokiComponents\Util\Block\CssClass;
+
+/** @var Template $block */
+/** @var CssClass $css */
+?>
+<div class="<?= $css('fixed top-0 left-0 right-0 bottom-0 z-50 ') ?>" x-cloak x-show="shown">
+    <div class="fixed inset-0 bg-gray-500/75 transition-opacity" aria-hidden="true"></div>
+    <div class="bg-white w-64 h-64 mx-auto">
+        MODAL CONTAINER
+    </div>
+</div>

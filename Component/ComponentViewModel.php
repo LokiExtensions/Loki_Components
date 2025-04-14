@@ -112,7 +112,7 @@ class ComponentViewModel implements ComponentViewModelInterface
 
     public function getJsComponentName(): ?string
     {
-        return null;
+        return $this->getBlock()->getJsComponentName();
     }
 
     public function isValid(): bool

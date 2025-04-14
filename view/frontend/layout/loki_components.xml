@@ -29,10 +29,6 @@
                 name="loki-components.script.local-storage"
                 template="Yireo_LokiComponents::script/local-storage.phtml"/>
 
-            <block
-                name="loki-components.modal"
-                template="Yireo_LokiComponents::utils/modal.phtml"/>
-
             <container name="loki-component-types">
                 <block
                     name="loki-components.script.component-type.base"
@@ -49,10 +45,6 @@
                 <block
                     name="loki-components.script.component.toggle"
                     template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
-                <!-- @todo Add this conditionally -->
-                <block
-                    name="loki-components.script.component.modal"
-                    template="Yireo_LokiComponents::script/component/modal-component.phtml"/>
             </container>
 
             <block

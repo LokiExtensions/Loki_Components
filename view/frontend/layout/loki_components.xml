@@ -36,18 +36,27 @@
                         template="Yireo_LokiComponents::script/component-type/base-component-type.phtml"/>
                 </container>
 
+                <container name="loki-component-partials">
+                    <block
+                        name="loki-components.script.component-partial.modal"
+                        template="Yireo_LokiComponents::script/component-partial/modal-component-partial.phtml"/>
+                </container>
+
                 <container name="loki-components">
                     <block
-                        name="loki-components.script.component.base"
+                        name="loki-components.script.component.base-component"
                         template="Yireo_LokiComponents::script/component/base-component.phtml"/>
                     <block
-                        name="loki-components.script.component.global-messages"
+                        name="loki-components.script.component.global-messages-component"
                         template="Yireo_LokiComponents::script/component/global-messages-component.phtml"/>
                     <block
                         name="loki-components.script.component.modal"
+                        template="Yireo_LokiComponents::script/component/modal.phtml"/>
+                    <block
+                        name="loki-components.script.component.modal-component"
                         template="Yireo_LokiComponents::script/component/modal-component.phtml"/>
                     <block
-                        name="loki-components.script.component.toggle"
+                        name="loki-components.script.component.toggle-component"
                         template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
                 </container>
 

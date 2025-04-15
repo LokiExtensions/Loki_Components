@@ -35,6 +35,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         initActions: {
             loadInitialData() {
                 const jsonData = JSON.parse(this.$root.getAttribute('x-init-data'));
+                if (!jsonData) {
+                    console.log('Failed to read initial data for Loki Component', this.$root);
+                    return;
+                }
+
                 for ([key, value] of Object.entries(jsonData)) {
                     this[key] = value;
                 }

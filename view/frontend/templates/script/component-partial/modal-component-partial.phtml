@@ -1,0 +1,18 @@
+<script>
+    const LokiModalComponentPartial = {
+        toggleModal() {
+            if (this.isModalOpen()) {
+                this.$refs.modal.close();
+                return;
+            }
+
+            this.$refs.modal.showModal();
+        },
+        isModalOpen() {
+            return this.$refs.modal.open;
+        },
+        isModalClosed() {
+            return !this.isModalOpen();
+        }
+    };
+</script>

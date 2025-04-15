@@ -2,7 +2,6 @@
 
 namespace Yireo\LokiComponents\Location;
 
-use Yireo\LokiComponents\Location\Address;
 use Yireo\LokiComponents\Location\Address\BusinessHours;
 
 class Location

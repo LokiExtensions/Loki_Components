@@ -3,7 +3,6 @@
 namespace Yireo\LokiComponents\Location;
 
 use Magento\Framework\ObjectManagerInterface;
-use Yireo\LokiComponents\Location\Address;
 use Yireo\LokiComponents\Location\Address\BusinessHours;
 
 class LocationFactory

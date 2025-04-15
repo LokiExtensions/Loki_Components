@@ -5,6 +5,7 @@ namespace Yireo\LokiComponents\Location;
 class Address
 {
     public function __construct(
+        private AddressRenderer $addressRenderer,
         private string $street,
         private string $houseNumber,
         private string $postcode,
@@ -54,5 +55,10 @@ class Address
     public function getLongitude(): ?float
     {
         return $this->longitude;
+    }
+
+    public function render(): string
+    {
+        return $this->addressRenderer->getHtml($this);
     }
 }

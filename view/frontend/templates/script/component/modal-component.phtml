@@ -1,0 +1,20 @@
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('LokiModal', () => ({
+            ...LokiComponentType,
+            toggleModal() {
+                if (this.isModalOpen()) {
+                    this.$refs.modal.close();
+                    return;
+                }
+                this.$refs.modal.showModal();
+            },
+            isModalOpen() {
+                return this.$refs.modal.open;
+            },
+            isModalClosed() {
+                return !this.isModalOpen();
+            }
+        }));
+    });
+</script>

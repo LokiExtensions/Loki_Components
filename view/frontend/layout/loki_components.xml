@@ -44,6 +44,9 @@
                         name="loki-components.script.component.global-messages"
                         template="Yireo_LokiComponents::script/component/global-messages-component.phtml"/>
                     <block
+                        name="loki-components.script.component.modal"
+                        template="Yireo_LokiComponents::script/component/modal-component.phtml"/>
+                    <block
                         name="loki-components.script.component.toggle"
                         template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
                 </container>

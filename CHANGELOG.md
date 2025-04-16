@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.0.18] - 16 April 2025
+### Fixed
+- Chop up modal into regular component, Loki Component and component partial
+- Move scripts from "before.body.end" to new "loki-scripts" container
+- Complete modal functionality
+- Use `js_component_name` from block by default
+
 ## [0.0.17] - 08 April 2025
 ### Fixed
 - Simplify reloading of this component

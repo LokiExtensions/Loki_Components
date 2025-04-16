@@ -7,6 +7,7 @@ class BusinessHourSegment
         private string $day,
         private string $openingHour,
         private string $closingHour,
+        private string $comment = '',
     ) {
     }
 
@@ -23,5 +24,10 @@ class BusinessHourSegment
     public function getClosingHour(): string
     {
         return $this->closingHour;
+    }
+
+    public function getComment(): string
+    {
+        return $this->comment;
     }
 }

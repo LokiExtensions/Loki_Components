@@ -16,12 +16,13 @@ class BusinessHours
         $this->businessHourSegments[] = $businessHourSegment;
     }
 
-    public function add(string $day, string $openingHour, string $closingHour): void
+    public function add(string $day, string $openingHour = '', string $closingHour = '', string $comment = ''): void
     {
         $this->businessHourSegments[] = $this->businessHourSegmentFactory->create([
             'day' => $day,
             'openingHour' => $openingHour,
             'closingHour' => $closingHour,
+            'comment' => $comment,
         ]);
     }
 

@@ -29,6 +29,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         value: null, // @todo: Move to LokiFieldComponentType
         visible: false,
         loading: false,
+        showLoader: false,
+        showLoaderTimeout: 500,
         lazyLoad: false,
         beforePostValue: null,
         autofillListenerTimer: null,
@@ -150,6 +152,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             });
 
             this.beforePostValue = this.value;
+
+            const showLoaderTimerId = setTimeout(() => {
+                this.showLoader = true;
+            }, this.showLoaderTimeout);
+
             await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
@@ -234,6 +241,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     });
 
                     this.loading = false;
+                    this.showLoader = false;
+                    clearTimeout(showLoaderTimerId);
 
                     LokiComponentsFocusListener();
                 });

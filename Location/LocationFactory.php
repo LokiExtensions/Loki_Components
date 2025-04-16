@@ -19,6 +19,8 @@ class LocationFactory
         int $distance,
         Address $address,
         ?BusinessHours $businessHours = null,
+        ?string $pickupFrom = null,
+        ?int $price = null,
     ): Location
     {
         return $this->objectManager->create(Location::class, [
@@ -28,6 +30,8 @@ class LocationFactory
             'distance' => $distance,
             'address' => $address,
             'businessHours' => $businessHours,
+            'pickupFrom' => $pickupFrom,
+            'price' => $price,
         ]);
     }
 }

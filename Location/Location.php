@@ -13,6 +13,8 @@ class Location
         private int $distance,
         private Address $address,
         private ?BusinessHours $businessHours = null,
+        private ?string $pickupFrom = null,
+        private ?int $price = null,
     ) {
     }
 
@@ -44,5 +46,15 @@ class Location
     public function getBusinessHours(): ?BusinessHours
     {
         return $this->businessHours;
+    }
+
+    public function getPickupFrom(): ?string
+    {
+        return $this->pickupFrom;
+    }
+
+    public function getPrice(): ?int
+    {
+        return $this->price;
     }
 }

@@ -40,6 +40,9 @@
                     <block
                         name="loki-components.script.component-partial.modal"
                         template="Yireo_LokiComponents::script/component-partial/modal-component-partial.phtml"/>
+                    <block
+                        name="loki-components.script.component-partial.tab"
+                        template="Yireo_LokiComponents::script/component-partial/tab-component-partial.phtml"/>
                 </container>
 
                 <container name="loki-components">

@@ -1,0 +1,37 @@
+<script>
+    const LokiTabComponentPartial = {
+        activeTabId: '',
+        activeTabClass: 'tab-active',
+        inactiveTabClass: 'tab-inactive',
+        showActiveTab() {
+            // @todo: Use ref instead?
+            const activeTab = this.$root.querySelector('[data-tab-id="' + this.activeTabId + '"]');
+            this.toggleTabs({target: activeTab});
+        },
+        toggleTabs(event) {
+            const currentTabId = event.target.getAttribute('data-tab-id');
+
+            this.$root.querySelectorAll('[data-tab-id]').forEach(tab => {
+                tab.classList.remove('tab-active');
+                tab.classList.add('tab-inactive');
+            });
+
+            this.$root.querySelectorAll('[data-tab-content]').forEach(tabContent => {
+                tabContent.classList.remove('block');
+                tabContent.classList.add('hidden');
+            });
+
+            const activeTab = this.$root.querySelector('[data-tab-id="' + currentTabId + '"]');
+            if (activeTab) {
+                activeTab.classList.remove('tab-inactive');
+                activeTab.classList.add('tab-active');
+            }
+
+            const activeContent = this.$root.querySelector('[data-tab-content="' + currentTabId + '"]');
+            if (activeContent) {
+                activeContent.classList.remove('hidden');
+                activeContent.classList.add('block');
+            }
+        }
+    };
+</script>

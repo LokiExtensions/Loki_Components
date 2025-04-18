@@ -30,7 +30,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         visible: false,
         loading: false,
         showLoader: false,
-        showLoaderTimeout: 500,
+        showLoaderTimeout: 700,
         lazyLoad: false,
         beforePostValue: null,
         autofillListenerTimer: null,
@@ -81,6 +81,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 this.$watch('loading', () => {
                     if (true === this.loading) {
                         this.$root.setAttribute('aria-busy', true);
+                        // @todo: Move this to Field Components
                         if (this.$refs.field) {
                             this.field.setAttribute('aria-busy', true);
                             this.field.setAttribute('disabled', true);
@@ -145,6 +146,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             this.loading = true;
 
             this.targets.forEach(target => {
+                const targetElement = document.getElementById(target);
+                if (targetElement) {
+                    targetElement.setAttribute('aria-busy', true);
+                }
+
                 const targetComponent = Alpine.store('components').getComponentByElementId(target);
                 if (targetComponent) {
                     targetComponent.loading = true;
@@ -194,10 +200,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     const parser = new DOMParser();
                     const ajaxDocument = parser.parseFromString(html, "text/html");
                     this.targets.forEach(target => {
-                        if (target === this.elementId) {
-                            //return;
-                        }
-
                         const targetElement = document.getElementById(target);
                         const newTargetElement = ajaxDocument.getElementById(target);
 

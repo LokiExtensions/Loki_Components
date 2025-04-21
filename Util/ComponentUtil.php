@@ -9,9 +9,6 @@ use Magento\Framework\UrlFactory;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
-/**
- * @deprecated
- */
 class ComponentUtil implements ArgumentInterface
 {
     public function __construct(

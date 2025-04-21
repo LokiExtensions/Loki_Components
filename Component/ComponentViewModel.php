@@ -142,6 +142,7 @@ class ComponentViewModel implements ComponentViewModelInterface
     public function getJsData(): array
     {
         return [
+            ...(array)$this->getBlock()->getJsData(),
             'value' => $this->getValue(),
             'messages' => $this->getMessages(),
             'valid' => $this->isValid(),

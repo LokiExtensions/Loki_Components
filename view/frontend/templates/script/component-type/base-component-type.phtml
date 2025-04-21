@@ -196,6 +196,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             }
         },
         getDetailsString() {
+            console.log(this.elementId, this.getDetails());
             return JSON.stringify(this.getDetails());
         },
         getDetails() {

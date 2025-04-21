@@ -22,11 +22,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         name: '',
         elementId: '',
         blockId: '',
-        field: null, // @todo: Move to LokiFieldComponentType // @todo: Use this.$refs.field instead
-        fieldValue: null, // @todo: Move to LokiFieldComponentType
         targets: [],
         messages: [],
-        value: null, // @todo: Move to LokiFieldComponentType
+        value: null,
         visible: false,
         loading: false,
         showLoader: false,
@@ -46,74 +44,10 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     this[key] = value;
                 }
 
-                //this.field = this.$root.querySelectorAll('[data-type="field"]')[0]; // @todo: Remove when ready
-                this.field = this.$refs.field;
-
-                this.$root.removeAttribute('aria-busy');
-                if (this.$refs.field) {
-                    this.$refs.field.removeAttribute('aria-busy');
-                    this.$refs.field.removeAttribute('disabled');
-                }
+                this.$root.removeAttribute('aria-busy'); // @todo: Is this still needed?
             },
             register() {
                 Alpine.store('components').add(this);
-            },
-            setValidation() {
-                if (!this.$refs.field) {
-                    return;
-                }
-
-                if (true === this.valid) {
-                    this.$refs.field.removeAttribute('aria-invalid');
-                } else {
-                    this.$refs.field.setAttribute('aria-invalid', true);
-                }
-
-                this.$watch('valid', () => {
-                    if (true === this.valid) {
-                        this.$refs.field.removeAttribute('aria-invalid');
-                    } else {
-                        this.$refs.field.setAttribute('aria-invalid', true);
-                    }
-                })
-            },
-            watchLoading() {
-                this.$watch('loading', () => {
-                    if (true === this.loading) {
-                        this.$root.setAttribute('aria-busy', true);
-                        // @todo: Move this to Field Components
-                        if (this.$refs.field) {
-                            this.field.setAttribute('aria-busy', true);
-                            this.field.setAttribute('disabled', true);
-                        }
-                    } else {
-                        this.$root.removeAttribute('aria-busy');
-                        if (this.$refs.field) {
-                            this.$refs.field.removeAttribute('aria-busy');
-                            this.$refs.field.removeAttribute('disabled');
-                        }
-                    }
-                })
-            },
-            listenToAutofillChanges() {
-                if (!this.$refs.field || this.$refs.field.disabled) {
-                    return;
-                }
-
-                this.fieldValue = this.field.value;
-                this.autofillListenerTimer = setInterval((function () {
-                    if (!this.field.value || this.field.value === this.fieldValue || this.field.value === this.value) {
-                        return;
-                    }
-
-                    if (document.activeElement && document.activeElement.id === this.field.id) {
-                        return;
-                    }
-
-                    this.fieldValue = this.field.value;
-                    this.value = this.field.value;
-                    this.field.dispatchEvent(new Event('change')); // @todo: What should this do?
-                }).bind(this), 2000);
             },
             lazyLoad() {
                 if (this.lazyLoad) {

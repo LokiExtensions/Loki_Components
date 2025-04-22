@@ -65,11 +65,11 @@ class CssClass
             $cssName = preg_replace('/([^0-9a-zA-Z]+)/', '-', (string)$nameInLayout);
         }
 
-        $css = 'scope-'.$scope. ' ' .trim($css);
+        $css = 'scope-'.$scope.' '.trim($css);
         if ($scope === 'block') {
             $scopeClass = $cssName;
         } else {
-            $scopeClass = $cssName .'__'.$scope;
+            $scopeClass = $cssName.'__'.$scope;
         }
 
         $css = $scopeClass.' '.trim($css);
@@ -95,6 +95,10 @@ class CssClass
     private function parse(array $cssClasses, string $scope): array
     {
         foreach ($this->cssClassParsers as $cssClassParser) {
+            if (false === $cssClassParser instanceof CssClassParserInterface) {
+                continue;
+            }
+
             $cssClasses = $cssClassParser->parse($cssClasses, $scope, $this->block);
         }
 

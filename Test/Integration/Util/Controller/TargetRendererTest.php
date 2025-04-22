@@ -25,6 +25,7 @@ class TargetRendererTest extends TestCase
 
         $targetRenderer = ObjectManager::getInstance()->get(TargetRenderer::class);
         $htmlParts = $targetRenderer->render($layout, ['loki-components.global-messages']);
+
         $this->assertNotEmpty($htmlParts);
     }
 }

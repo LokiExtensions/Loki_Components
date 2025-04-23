@@ -59,11 +59,17 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             return $this->getJsonRedirect($redirectException->getMessage());
 
         } catch (Exception $exception) {
+            echo get_class($exception) . ': '.$exception->getMessage()."\n\n";
             $this->addGlobalException($exception);
         }
 
         if ($this->allowRendering($data)) {
-            $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
+            try {
+                $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
+            } catch(RedirectException $redirectException) {
+                return $this->getJsonRedirect($redirectException->getMessage());
+            }
+
         } else {
             $htmlParts = [];
         }

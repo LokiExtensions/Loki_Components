@@ -34,7 +34,12 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         autofillListenerTimer: null,
         initActions: {
             loadInitialData() {
-                const jsonData = JSON.parse(this.$root.getAttribute('x-init-data'));
+                const initialData = this.$refs.initialData;
+                if (!initialData) {
+                    return;
+                }
+
+                const jsonData = JSON.parse(initialData.innerText);
                 if (!jsonData) {
                     console.log('Failed to read initial data for Loki Component', this.$root);
                     return;

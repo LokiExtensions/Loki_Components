@@ -58,7 +58,18 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
 
         $html = preg_replace('/^<([a-z]{2,})/', '<\1 '.$htmlAttributes, $html);
 
+        $initialDataElement = $this->getInitialDataElement($component);
+        $html = preg_replace('/^<([^>]+)>/', '<\1>'.$initialDataElement, $html);
+
         $transport->setHtml($html);
+    }
+
+    private function getInitialDataElement(ComponentInterface $component): string
+    {
+        $json = $this->getJsData($component);
+        return <<<EOF
+<script x-ref="initialData" type="text/x-loki-init">$json</script>
+EOF;
     }
 
     private function getHtmlAttributes(ComponentInterface $component, string $currentHtml): string
@@ -84,8 +95,6 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
 
             $htmlAttribute .= ' '.$attributeName.'="'.$attributeValue.'"';
         }
-
-        $htmlAttribute .= " x-init-data='".$this->getJsData($component)."'";
 
         return trim($htmlAttribute);
     }

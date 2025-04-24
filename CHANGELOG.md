@@ -6,6 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.0] - 24 April 2025
+- Major version to promote stability, because it works!
+
+### Fixed
+- Intercept unwanted exceptions while rendering
+- Move from `x-init-data` to separate `text/x-loki-init` script to prevent possible escaping issues
+- Fix possible issue when LokiCheckout config is used outside of checkout
+- Allow for `jsData` to be set from block as well
+- Fix CSP issue with new `x-json` directive
+- Do not mark `ComponentUtil` as a whole as deprecated
+- Move all field behaviour to FieldComponentType
+- Move tabs into new component partial
+- Make loader icon in fields depend on Alpine and activate only after configurable timeout
+
 ## [0.0.18] - 16 April 2025
 ### Fixed
 - Chop up modal into regular component, Loki Component and component partial

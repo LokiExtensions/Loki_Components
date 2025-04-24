@@ -42,7 +42,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     public function execute(): ResultInterface|ResponseInterface
     {
-        $debug = $this->config->isDebug();
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();
         $layout = $this->layoutLoader->load($data['handles']);
@@ -59,6 +58,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             return $this->getJsonRedirect($redirectException->getMessage());
 
         } catch (Exception $exception) {
+            // @phpcs:ignore
             echo get_class($exception).': '.$exception->getMessage()."\n\n";
             $this->addGlobalException($exception);
         }

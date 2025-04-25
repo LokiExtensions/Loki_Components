@@ -188,6 +188,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     LokiComponentsFocusListener();
                 });
         },
+        notLoading() {
+            return !this.loading;
+        },
         handleJson(data) {
             if (data.error) {
                 LokiComponentsLogger.error(data.error);

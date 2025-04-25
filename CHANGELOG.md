@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.1] - 25 April 2025
+### Fixed
+- Add `setValue()` method
+- CSP fixes
+
 ## [1.0.0] - 24 April 2025
 - Major version to promote stability, because it works!
 

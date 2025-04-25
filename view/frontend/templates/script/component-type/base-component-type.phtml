@@ -188,6 +188,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     LokiComponentsFocusListener();
                 });
         },
+        setValue(event) {
+            this.value = event.target.value;
+        },
         notLoading() {
             return !this.loading;
         },

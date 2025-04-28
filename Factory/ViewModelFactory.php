@@ -9,7 +9,7 @@ use RuntimeException;
 class ViewModelFactory
 {
     public function __construct(
-        private ObjectManagerInterface $objectManager
+        private readonly ObjectManagerInterface $objectManager
     ) {
     }
 

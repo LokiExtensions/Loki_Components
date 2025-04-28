@@ -5,15 +5,15 @@ namespace Yireo\LokiComponents\Location;
 class Address
 {
     public function __construct(
-        private AddressRenderer $addressRenderer,
-        private string $street,
-        private string $houseNumber,
-        private string $postcode,
-        private string $city,
-        private string $countryId,
-        private ?float $latitude = null,
-        private ?float $longitude = null,
-        private string $comment = '',
+        private readonly AddressRenderer $addressRenderer,
+        private readonly string $street,
+        private readonly string $houseNumber,
+        private readonly string $postcode,
+        private readonly string $city,
+        private readonly string $countryId,
+        private readonly ?float $latitude = null,
+        private readonly ?float $longitude = null,
+        private readonly string $comment = '',
     ) {
     }
 

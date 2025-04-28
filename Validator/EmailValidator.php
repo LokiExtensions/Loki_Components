@@ -8,7 +8,7 @@ use Yireo\LokiComponents\Config\Config;
 class EmailValidator implements ValidatorInterface
 {
     public function __construct(
-        private Config $config
+        private readonly Config $config
     ) {
     }
 
@@ -16,7 +16,7 @@ class EmailValidator implements ValidatorInterface
     {
         $email = trim((string)$value);
 
-        if (empty($email)) {
+        if ($email === '' || $email === '0') {
             return true;
         }
 

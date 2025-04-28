@@ -13,7 +13,7 @@ class CssClass
      * @param CssClassParserInterface[] $cssClassParsers
      */
     public function __construct(
-        private array $cssClassParsers = [],
+        private readonly array $cssClassParsers = [],
     ) {
     }
 
@@ -32,7 +32,7 @@ class CssClass
         }
 
         $defaultCss = trim($defaultCss);
-        if (!empty($defaultCss)) {
+        if ($defaultCss !== '' && $defaultCss !== '0') {
             $cssClasses[$scope]['default'] = $defaultCss;
         }
 
@@ -66,11 +66,7 @@ class CssClass
         }
 
         $css = 'scope-'.$scope.' '.trim($css);
-        if ($scope === 'block') {
-            $scopeClass = $cssName;
-        } else {
-            $scopeClass = $cssName.'__'.$scope;
-        }
+        $scopeClass = $scope === 'block' ? $cssName : $cssName.'__'.$scope;
 
         $css = $scopeClass.' '.trim($css);
 

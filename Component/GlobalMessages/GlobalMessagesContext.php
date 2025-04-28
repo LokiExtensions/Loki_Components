@@ -9,7 +9,7 @@ use Yireo\LokiComponents\Config\Config;
 class GlobalMessagesContext implements ComponentContextInterface
 {
     public function __construct(
-        private Config $config
+        private readonly Config $config
     ) {
     }
 

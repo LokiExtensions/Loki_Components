@@ -52,7 +52,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
         }
 
         $htmlAttributes = $this->getHtmlAttributes($component, $html);
-        if (empty($htmlAttributes)) {
+        if ($htmlAttributes === '' || $htmlAttributes === '0') {
             return;
         }
 

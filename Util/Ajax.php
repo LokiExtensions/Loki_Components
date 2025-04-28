@@ -9,7 +9,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class Ajax implements ArgumentInterface
 {
     public function __construct(
-        private HttpRequest $httpRequest
+        private readonly HttpRequest $httpRequest
     ) {
     }
 

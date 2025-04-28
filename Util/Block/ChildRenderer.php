@@ -30,7 +30,7 @@ class ChildRenderer extends AbstractRenderer
         array $data = []
     ) {
         try {
-            return (string)$this->get($ancestorBlock, $blockAlias, $data)?->toHtml();
+            return (string)$this->get($ancestorBlock, $blockAlias, $data)->toHtml();
         } catch (RuntimeException|InvalidArgumentException $e) {
             if ($this->isDeveloperMode()) {
                 return '<!-- '.$e->getMessage().' -->';

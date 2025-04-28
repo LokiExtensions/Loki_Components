@@ -13,8 +13,8 @@ class LocalMessage implements JsonSerializable
     const TYPE_ERROR = 'error';
 
     public function __construct(
-        private string $text,
-        private string $type = self::TYPE_NOTICE
+        private readonly string $text,
+        private readonly string $type = self::TYPE_NOTICE
     ) {
     }
 

@@ -5,7 +5,7 @@ namespace Yireo\LokiComponents\Filter;
 class Filter
 {
     public function __construct(
-        private FilterRegistry $filterRegistry
+        private readonly FilterRegistry $filterRegistry
     ) {
     }
 

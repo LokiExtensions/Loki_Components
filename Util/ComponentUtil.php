@@ -12,10 +12,10 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class ComponentUtil implements ArgumentInterface
 {
     public function __construct(
-        private UrlFactory $urlFactory,
-        private RequestInterface $request,
-        private FormKeyModel $formKey,
-        private IdConvertor $idConvertor
+        private readonly UrlFactory $urlFactory,
+        private readonly RequestInterface $request,
+        private readonly FormKeyModel $formKey,
+        private readonly IdConvertor $idConvertor
     ) {
     }
 

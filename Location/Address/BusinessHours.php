@@ -7,7 +7,7 @@ class BusinessHours
     private array $businessHourSegments = [];
 
     public function __construct(
-        private BusinessHourSegmentFactory $businessHourSegmentFactory
+        private readonly BusinessHourSegmentFactory $businessHourSegmentFactory
     ) {
     }
 

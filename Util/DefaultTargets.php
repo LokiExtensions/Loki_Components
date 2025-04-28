@@ -5,7 +5,7 @@ namespace Yireo\LokiComponents\Util;
 class DefaultTargets
 {
     public function __construct(
-        private array $targets = []
+        private readonly array $targets = []
     ) {
     }
 

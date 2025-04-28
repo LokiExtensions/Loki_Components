@@ -10,14 +10,14 @@ use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
 class ComponentFactory
 {
     public function __construct(
-        private ObjectManagerInterface $objectManager
+        private readonly ObjectManagerInterface $objectManager
     ) {
     }
 
     public function createFromDefinition(ComponentDefinition $componentDefinition): Component
     {
         $contextClass = $componentDefinition->getContext();
-        if (empty($contextClass)) {
+        if ($contextClass === null || $contextClass === '' || $contextClass === '0') {
             $contextClass = ComponentContext::class;
         }
 
@@ -38,10 +38,9 @@ class ComponentFactory
         try {
             return $this->objectManager->create($componentClass, $arguments);
         } catch(UnexpectedValueException $exception) {
-            throw new UnexpectedValueException(
-                "Failed to create component: \n"
-                .json_encode($arguments)."\n"
-                .$exception->getMessage());
+            throw new UnexpectedValueException("Failed to create component: \n"
+            .json_encode($arguments)."\n"
+            .$exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 }

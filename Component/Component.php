@@ -88,7 +88,7 @@ class Component implements ComponentInterface
             return $this->repository;
         }
 
-        if (empty($this->repositoryClass)) {
+        if ($this->repositoryClass === null || $this->repositoryClass === '' || $this->repositoryClass === '0') {
             return null;
         }
 

@@ -8,7 +8,7 @@ use Yireo\LokiComponents\Location\Address\BusinessHours;
 class LocationFactory
 {
     public function __construct(
-        private ObjectManagerInterface $objectManager
+        private readonly ObjectManagerInterface $objectManager
     ) {
     }
 

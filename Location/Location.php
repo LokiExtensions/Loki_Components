@@ -7,14 +7,14 @@ use Yireo\LokiComponents\Location\Address\BusinessHours;
 class Location
 {
     public function __construct(
-        private string $id,
-        private string $code,
-        private string $label,
-        private int $distance,
-        private Address $address,
-        private ?BusinessHours $businessHours = null,
-        private ?string $pickupFrom = null,
-        private ?int $price = null,
+        private readonly string $id,
+        private readonly string $code,
+        private readonly string $label,
+        private readonly int $distance,
+        private readonly Address $address,
+        private readonly ?BusinessHours $businessHours = null,
+        private readonly ?string $pickupFrom = null,
+        private readonly ?int $price = null,
     ) {
     }
 

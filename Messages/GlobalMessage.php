@@ -17,8 +17,8 @@ class GlobalMessage
         return new GlobalMessage($message->getText(), $message->getType());
     }
     public function __construct(
-        private string $text,
-        private string $type = self::TYPE_NOTICE
+        private readonly string $text,
+        private readonly string $type = self::TYPE_NOTICE
     ) {
     }
 

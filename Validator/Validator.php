@@ -11,9 +11,9 @@ use Yireo\LokiComponents\Util\Ajax;
 class Validator
 {
     public function __construct(
-        private ValidatorRegistry $validatorRegistry,
-        private Ajax $ajax,
-        private Config $config
+        private readonly ValidatorRegistry $validatorRegistry,
+        private readonly Ajax $ajax,
+        private readonly Config $config
     ) {
     }
 

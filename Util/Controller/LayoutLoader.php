@@ -16,7 +16,7 @@ class LayoutLoader
     {
         $resultPage = $this->resultPageFactory->create();
 
-        if (!empty($handles)) {
+        if ($handles !== []) {
             foreach ($handles as $handle) {
                 $handle = preg_replace('/([^a-z0-9\-\_]+)/', '', $handle);
                 $resultPage->addHandle($handle);

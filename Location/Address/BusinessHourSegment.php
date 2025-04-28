@@ -4,10 +4,10 @@ namespace Yireo\LokiComponents\Location\Address;
 class BusinessHourSegment
 {
     public function __construct(
-        private string $day,
-        private string $openingHour,
-        private string $closingHour,
-        private string $comment = '',
+        private readonly string $day,
+        private readonly string $openingHour,
+        private readonly string $closingHour,
+        private readonly string $comment = '',
     ) {
     }
 

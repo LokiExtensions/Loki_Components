@@ -71,7 +71,7 @@ class GlobalMessageRegistry implements ArgumentInterface
 
     public function hasMessages(): bool
     {
-        return count($this->messages) > 0;
+        return $this->messages !== [];
     }
 
     public function clearMessages(): void

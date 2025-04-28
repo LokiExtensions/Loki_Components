@@ -79,7 +79,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     private function getBlock(LayoutInterface $layout, string $blockName): AbstractBlock
     {
-        if (empty($blockName)) {
+        if ($blockName === '' || $blockName === '0') {
             throw new NoBlockFoundException('Block name not specified');
         }
 

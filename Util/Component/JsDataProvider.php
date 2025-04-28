@@ -16,9 +16,9 @@ use Yireo\LokiComponents\Util\ComponentUtil;
 class JsDataProvider implements ArgumentInterface
 {
     public function __construct(
-        private ComponentUtil $componentUtil,
-        private IdConvertor $idConvertor,
-        private CamelCaseConvertor $camelCaseConvertor,
+        private readonly ComponentUtil $componentUtil,
+        private readonly IdConvertor $idConvertor,
+        private readonly CamelCaseConvertor $camelCaseConvertor,
     ) {
     }
 
@@ -37,7 +37,7 @@ class JsDataProvider implements ArgumentInterface
 
         $viewModel = $component->getViewModel();
         $viewModelData = $viewModel->getJsData();
-        if (!empty($viewModelData)) {
+        if ($viewModelData !== []) {
             $data = array_merge($data, $viewModelData);
         }
 
@@ -60,7 +60,7 @@ class JsDataProvider implements ArgumentInterface
 
         $viewModel = $component->getViewModel();
         $componentName = $viewModel->getJsComponentName();
-        if (!empty($componentName)) {
+        if ($componentName !== null && $componentName !== '' && $componentName !== '0') {
             return $componentName;
         }
 

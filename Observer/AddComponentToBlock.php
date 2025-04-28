@@ -13,8 +13,8 @@ use Yireo\LokiComponents\Util\ComponentUtil;
 class AddComponentToBlock implements ObserverInterface
 {
     public function __construct(
-        private ComponentRegistry $componentRegistry,
-        private ComponentUtil $componentUtil,
+        private readonly ComponentRegistry $componentRegistry,
+        private readonly ComponentUtil $componentUtil,
     ) {
     }
 
@@ -32,7 +32,7 @@ class AddComponentToBlock implements ObserverInterface
         }
 
         $viewModel = $component->getViewModel();
-        if (!empty($viewModel->getTemplate())) {
+        if ($viewModel->getTemplate() !== null && $viewModel->getTemplate() !== '' && $viewModel->getTemplate() !== '0') {
             $block->setTemplate($viewModel->getTemplate());
         }
 

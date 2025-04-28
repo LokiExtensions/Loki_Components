@@ -8,7 +8,7 @@ use Magento\Framework\View\Element\Block\ArgumentInterface;
 class Config implements ArgumentInterface
 {
     public function __construct(
-        private ScopeConfigInterface $scopeConfig,
+        private readonly ScopeConfigInterface $scopeConfig,
     ) {
     }
 

@@ -41,7 +41,7 @@ class TemplateRenderer extends AbstractRenderer
         }
 
         if (false === str_contains($templateName, '.phtml')) {
-            $templateName = $templateName.'.phtml';
+            $templateName .= '.phtml';
         }
 
         $block = $this->layout->getBlock($blockName);

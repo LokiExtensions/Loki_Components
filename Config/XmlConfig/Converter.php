@@ -42,7 +42,7 @@ class Converter implements ConverterInterface
         foreach ($componentElements as $componentElement) {
             $name = (string)$componentElement->getAttribute('name');
             $groupName = (string)$componentElement->getAttribute('group');
-            if (empty($groupName)) {
+            if ($groupName === '' || $groupName === '0') {
                 $groupName = 'default';
             }
 
@@ -58,10 +58,10 @@ class Converter implements ConverterInterface
 
             $componentDefinitions[$name] = [
                 'name' => $name,
-                'class' => !empty($componentClass) ? $componentClass : $group['class'],
-                'context' => !empty($context) ? $context : $group['context'],
-                'viewModel' => !empty($viewModel) ? $viewModel : $group['viewModel'],
-                'repository' => !empty($repository) ? $repository : $group['repository'],
+                'class' => $componentClass === '' || $componentClass === '0' ? $group['class'] : $componentClass,
+                'context' => $context === '' || $context === '0' ? $group['context'] : $context,
+                'viewModel' => $viewModel === '' || $viewModel === '0' ? $group['viewModel'] : $viewModel,
+                'repository' => $repository === '' || $repository === '0' ? $group['repository'] : $repository,
                 'targets' => $this->getTargets($componentElement, $name, $group['targets']),
                 'validators' => $this->getValidators($componentElement),
                 'filters' => $this->getFilters($componentElement),
@@ -78,12 +78,12 @@ class Converter implements ConverterInterface
         foreach ($groupElements as $groupElement) {
             $groupName = (string)$groupElement->getAttribute('name');
             $groupClass = (string)$groupElement->getAttribute('class');
-            if (empty($groupClass)) {
+            if ($groupClass === '' || $groupClass === '0') {
                 $groupClass = Component::class;
             }
 
             $viewModelClass = (string)$groupElement->getAttribute('viewModel');
-            if (empty($viewModelClass)) {
+            if ($viewModelClass === '' || $viewModelClass === '0') {
                 $viewModelClass = ComponentViewModel::class;
             }
 
@@ -102,7 +102,7 @@ class Converter implements ConverterInterface
     private function getTargets(DOMNode $element, string $blockName = '', array $targets = []): array
     {
         $disabledTargets = [];
-        if (!empty($blockName)) {
+        if ($blockName !== '' && $blockName !== '0') {
             $targets[] = $blockName;
         }
 
@@ -113,7 +113,7 @@ class Converter implements ConverterInterface
                 $targetName = $blockName;
             }
 
-            if (true === (bool)$targetElement->getAttribute('disabled')) {
+            if ((bool)$targetElement->getAttribute('disabled')) {
                 $disabledTargets[] = $targetName;
             } else {
                 $targets[] = $targetName;

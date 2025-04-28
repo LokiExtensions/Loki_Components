@@ -12,9 +12,9 @@ class ComponentRegistry
     private array $components = [];
 
     public function __construct(
-        private XmlConfig $xmlConfig,
-        private ComponentFactory $componentFactory,
-        private IdConvertor $idConvertor
+        private readonly XmlConfig $xmlConfig,
+        private readonly ComponentFactory $componentFactory,
+        private readonly IdConvertor $idConvertor
     ) {
     }
 

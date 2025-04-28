@@ -8,9 +8,9 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
 use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Util\Component\JsDataProvider;
 use Yireo\LokiComponents\Component\ComponentRegistry;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
+use Yireo\LokiComponents\Util\Component\JsDataProvider;
 
 class AddHtmlAttributesToComponentBlock implements ObserverInterface
 {
@@ -56,10 +56,10 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
             return;
         }
 
-        $html = preg_replace('/^<([a-z]{2,})/', '<\1 '.$htmlAttributes, $html);
+        $html = preg_replace('/^<([a-z]{2,})/', '<\1 ' . $htmlAttributes, $html);
 
         $initialDataElement = $this->getInitialDataElement($component);
-        $html = preg_replace('/^<([^>]+)>/', '<\1>'.$initialDataElement, $html);
+        $html = preg_replace('/^<([^>]+)>/', '<\1>' . $initialDataElement, $html);
 
         $transport->setHtml($html);
     }
@@ -89,11 +89,11 @@ EOF;
 
         $htmlAttribute = '';
         foreach ($attributes as $attributeName => $attributeValue) {
-            if (str_contains($firstTagHtml, ' '.$attributeName.'="')) {
+            if (str_contains($firstTagHtml, ' ' . $attributeName . '="')) {
                 continue;
             }
 
-            $htmlAttribute .= ' '.$attributeName.'="'.$attributeValue.'"';
+            $htmlAttribute .= ' ' . $attributeName . '="' . $attributeValue . '"';
         }
 
         return trim($htmlAttribute);

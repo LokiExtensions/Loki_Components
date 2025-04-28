@@ -48,7 +48,6 @@ class ComponentRegistry
         return $this->getComponentByName($blockName);
     }
 
-
     /**
      * @param string $elementId
      *
@@ -88,6 +87,6 @@ class ComponentRegistry
             }
         }
 
-        throw new NoComponentFoundException('Could not create component "'.$componentName.'"');
+        throw new NoComponentFoundException('Could not create component "' . $componentName . '"');
     }
 }

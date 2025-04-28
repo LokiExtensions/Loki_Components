@@ -47,7 +47,7 @@ class Converter implements ConverterInterface
             }
 
             if (false === array_key_exists($groupName, $groupDefinitions)) {
-                throw new RuntimeException('Component "'.$name.'" refers to unknown group "'.$groupName.'"');
+                throw new RuntimeException('Component "' . $name . '" refers to unknown group "' . $groupName . '"');
             }
 
             $group = $groupDefinitions[$groupName];

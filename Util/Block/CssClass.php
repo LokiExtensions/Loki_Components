@@ -57,7 +57,7 @@ class CssClass
                 $cssClassValue = array_pop($cssClassValue);
             }
 
-            $css .= ' '.$cssClassValue;
+            $css .= ' ' . $cssClassValue;
         }
 
         $cssName = $this->block->getCssName();
@@ -65,10 +65,10 @@ class CssClass
             $cssName = preg_replace('/([^0-9a-zA-Z]+)/', '-', (string)$nameInLayout);
         }
 
-        $css = 'scope-'.$scope.' '.trim($css);
-        $scopeClass = $scope === 'block' ? $cssName : $cssName.'__'.$scope;
+        $css = 'scope-' . $scope . ' ' . trim($css);
+        $scopeClass = $scope === 'block' ? $cssName : $cssName . '__' . $scope;
 
-        $css = $scopeClass.' '.trim($css);
+        $css = $scopeClass . ' ' . trim($css);
 
         return trim($css);
     }
@@ -79,7 +79,7 @@ class CssClass
         $templateId = preg_replace('/\.phtml/', '', $templateId);
         $templateId = str_replace('/', '.', $templateId);
 
-        $defaultBlockName = 'loki-components.defaults.'.$templateId;
+        $defaultBlockName = 'loki-components.defaults.' . $templateId;
         $defaultBlock = $this->block->getLayout()->getBlock($defaultBlockName);
         if (empty($defaultBlock)) {
             return [];

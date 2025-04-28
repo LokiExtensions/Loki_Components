@@ -50,7 +50,7 @@ class BlockRenderer extends AbstractRenderer
             return $this->get($ancestorBlock, $blockName, $data)->toHtml();
         } catch (InvalidArgumentException|RuntimeException $e) {
             if ($this->isDeveloperMode()) {
-                return '<!-- Block with name "'.$blockName.'": '.$e->getMessage().' -->';
+                return '<!-- Block with name "' . $blockName . '": ' . $e->getMessage() . ' -->';
             }
 
             return '';

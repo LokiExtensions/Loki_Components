@@ -62,7 +62,7 @@ abstract class AbstractRenderer implements ArgumentInterface
         }
 
         if ($ancestorBlock instanceof AbstractBlock) {
-            return 'block'.$this->getCounter($ancestorBlock);
+            return 'block' . $this->getCounter($ancestorBlock);
         }
 
         return '';
@@ -71,14 +71,14 @@ abstract class AbstractRenderer implements ArgumentInterface
     protected function setNameInLayout(AbstractBlock $block, AbstractBlock $ancestorBlock): void
     {
         $alias = $this->getBlockAlias($block, $ancestorBlock);
-        $block->setNameInLayout($ancestorBlock->getNameInLayout().'.'.$alias);
+        $block->setNameInLayout($ancestorBlock->getNameInLayout() . '.' . $alias);
     }
 
     protected function getUniqId(AbstractBlock $block, AbstractBlock $ancestorBlock): string
     {
         $ancestorId = $ancestorBlock->getNameInLayout();
         $blockParts = explode('.', $block->getNameInLayout());
-        return $ancestorId.'-'.array_pop($blockParts);
+        return $ancestorId . '-' . array_pop($blockParts);
     }
 
     protected function isDeveloperMode(): bool

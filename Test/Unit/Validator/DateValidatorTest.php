@@ -4,7 +4,6 @@ namespace Yireo\LokiComponents\Test\Unit\Validator;
 
 use PHPUnit\Framework\TestCase;
 use Yireo\LokiComponents\Validator\DateValidator;
-use Yireo\LokiComponents\Validator\NumberValidator;
 
 class DateValidatorTest extends TestCase
 {

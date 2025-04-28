@@ -17,11 +17,11 @@ class ViewModelFactory
     {
         $viewModel = $this->objectManager->get($viewModelClass);
         if (empty($viewModel)) {
-            throw new RuntimeException('ViewModel "'.$viewModelClass.'" could not be instantiated');
+            throw new RuntimeException('ViewModel "' . $viewModelClass . '" could not be instantiated');
         }
 
         if (false === $viewModel instanceof ArgumentInterface) {
-            throw new RuntimeException('Class "'.$viewModelClass.'" is not a ViewModel');
+            throw new RuntimeException('Class "' . $viewModelClass . '" is not a ViewModel');
         }
 
         return $viewModel;

@@ -20,8 +20,7 @@ class AddressFactory
         ?float $latitude = null,
         ?float $longitude = null,
         string $comment = '',
-    ): Address
-    {
+    ): Address {
         return $this->objectManager->create(Address::class, [
             'street' => $street,
             'houseNumber' => $houseNumber,

@@ -2,7 +2,6 @@
 
 namespace Yireo\LokiComponents\Util\Controller;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use RuntimeException;
 use Yireo\LokiComponents\Util\Ajax;
@@ -43,7 +42,7 @@ class RequestDataLoader
         $requiredFields = ['targets', 'componentData', 'block', 'handles'];
         foreach ($requiredFields as $requiredField) {
             if (false === array_key_exists($requiredField, $requestData)) {
-                throw new RuntimeException('No '.$requiredField.' in request');
+                throw new RuntimeException('No ' . $requiredField . ' in request');
             }
         }
     }

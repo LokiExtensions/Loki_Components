@@ -7,14 +7,14 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
-use Yireo\LokiComponents\Util\Block\ChildRenderer;
-use Yireo\LokiComponents\Util\Block\TemplateRenderer;
 use Yireo\LokiComponents\Component\ComponentRegistry;
 use Yireo\LokiComponents\Component\ComponentViewModelInterface;
 use Yireo\LokiComponents\Exception\NoComponentFoundException;
 use Yireo\LokiComponents\Factory\ViewModelFactory;
 use Yireo\LokiComponents\Util\Block\BlockRenderer;
+use Yireo\LokiComponents\Util\Block\ChildRenderer;
 use Yireo\LokiComponents\Util\Block\CssClassFactory;
+use Yireo\LokiComponents\Util\Block\TemplateRenderer;
 
 class AssignAdditionalBlockVariables implements ObserverInterface
 {

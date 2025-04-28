@@ -14,7 +14,7 @@ class TemplateRenderer extends AbstractRenderer
         array $data = []
     ): Template {
         $blockAlias = $this->getBlockAlias(null, $ancestorBlock, $data);
-        $blockName = $ancestorBlock->getNameInLayout().'.'.$blockAlias;
+        $blockName = $ancestorBlock->getNameInLayout() . '.' . $blockAlias;
         $block = $this->createBlockFromTemplate($templateName, $blockName);
 
         if (false === $block instanceof AbstractBlock) {
@@ -37,7 +37,7 @@ class TemplateRenderer extends AbstractRenderer
     private function createBlockFromTemplate(string $templateName, string $blockName): Template
     {
         if (false === str_contains($templateName, '::')) {
-            $templateName = 'Yireo_LokiComponents::'.$templateName;
+            $templateName = 'Yireo_LokiComponents::' . $templateName;
         }
 
         if (false === str_contains($templateName, '.phtml')) {

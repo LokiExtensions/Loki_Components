@@ -120,7 +120,8 @@ class Component implements ComponentInterface
                     $this->filters,
                     $filters,
                     ['security'],
-                    ((array)$this->block?->getFilters()
+                    (
+                        (array)$this->block?->getFilters()
                     )
                 )
             )

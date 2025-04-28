@@ -2,16 +2,11 @@
 
 namespace Yireo\LokiComponents\Util\Component;
 
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use RuntimeException;
 use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Filter\FilterRegistry;
-use Yireo\LokiComponents\Filter\Security;
 use Yireo\LokiComponents\Util\CamelCaseConvertor;
-use Yireo\LokiComponents\Util\IdConvertor;
-use Yireo\LokiComponents\Component\ComponentViewModelInterface;
 use Yireo\LokiComponents\Util\ComponentUtil;
+use Yireo\LokiComponents\Util\IdConvertor;
 
 class JsDataProvider implements ArgumentInterface
 {

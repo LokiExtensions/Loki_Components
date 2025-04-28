@@ -3,12 +3,12 @@
 namespace Yireo\LokiComponents\Test\Integration\Dummy;
 
 use Magento\Framework\View\Element\AbstractBlock;
+use Yireo\LokiComponents\Component\Behaviour\LengthBehaviourInterface;
 use Yireo\LokiComponents\Component\ComponentContextInterface;
 use Yireo\LokiComponents\Component\ComponentInterface;
 use Yireo\LokiComponents\Component\ComponentViewModelInterface;
 use Yireo\LokiComponents\Filter\Filter;
 use Yireo\LokiComponents\Validator\Validator;
-use Yireo\LokiComponents\Component\Behaviour\LengthBehaviourInterface;
 
 class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehaviourInterface
 {

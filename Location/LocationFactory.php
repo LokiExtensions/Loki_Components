@@ -21,8 +21,7 @@ class LocationFactory
         ?BusinessHours $businessHours = null,
         ?string $pickupFrom = null,
         ?int $price = null,
-    ): Location
-    {
+    ): Location {
         return $this->objectManager->create(Location::class, [
             'id' => $id,
             'code' => $code,

@@ -42,7 +42,6 @@ class TargetRenderer
         return $blockNames;
     }
 
-
     private function convertTargetsToBlockNames(array $targets): array
     {
         $blockNames = [];

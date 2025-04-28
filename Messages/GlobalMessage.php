@@ -12,7 +12,7 @@ class GlobalMessage
     const TYPE_WARNING = 'warning';
     const TYPE_ERROR = 'error';
 
-    static public function fromMessage(MessageInterface $message): GlobalMessage
+    public static function fromMessage(MessageInterface $message): GlobalMessage
     {
         return new GlobalMessage($message->getText(), $message->getType());
     }

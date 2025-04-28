@@ -5,15 +5,15 @@ declare(strict_types=1);
 namespace Yireo\LokiComponents\Controller\Index;
 
 use Exception;
-use Magento\Framework\App\State as AppState;
-use Magento\Framework\Controller\Result\Json as JsonResult;
-use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
-use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Controller\Result\Json as JsonResult;
+use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
 use Yireo\LokiComponents\Config\Config;
 use Yireo\LokiComponents\Controller\HtmlResult;
 use Yireo\LokiComponents\Controller\HtmlResultFactory;
@@ -59,7 +59,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
         } catch (Exception $exception) {
             // @phpcs:ignore
-            echo get_class($exception).': '.$exception->getMessage()."\n\n";
+            echo get_class($exception) . ': ' . $exception->getMessage() . "\n\n";
             $this->addGlobalException($exception);
         }
 
@@ -85,7 +85,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
         $block = $layout->getBlock($blockName);
         if (false === $block instanceof AbstractBlock) {
-            throw new NoBlockFoundException('Block with name "'.$blockName.'" is not found');
+            throw new NoBlockFoundException('Block with name "' . $blockName . '" is not found');
         }
 
         return $block;
@@ -96,7 +96,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $html = '';
         foreach ($htmlParts as $htmlPart) {
             $htmlPart = preg_replace("/([\r\n]+)/", "\n", $htmlPart);
-            $html .= $htmlPart."\n\n";
+            $html .= $htmlPart . "\n\n";
         }
 
         $htmlResult = $this->htmlResultFactory->create();
@@ -126,7 +126,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $error = $exception->getMessage();
 
         if ($this->config->isDebug() && $this->appState->getMode() === AppState::MODE_DEVELOPER) {
-            $error .= '<br/> ['.$exception->getFile().' line '.$exception->getLine().'] <br/>';
+            $error .= '<br/> [' . $exception->getFile() . ' line ' . $exception->getLine() . '] <br/>';
             $error .= $exception->getTraceAsString();
         }
 

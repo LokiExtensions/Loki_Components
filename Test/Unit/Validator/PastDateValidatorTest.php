@@ -3,8 +3,6 @@
 namespace Yireo\LokiComponents\Test\Unit\Validator;
 
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Validator\DateValidator;
-use Yireo\LokiComponents\Validator\NumberValidator;
 use Yireo\LokiComponents\Validator\PastDateValidator;
 
 class PastDateValidatorTest extends TestCase
@@ -16,7 +14,7 @@ class PastDateValidatorTest extends TestCase
     {
         $validator = new PastDateValidator();
         $result = $validator->validate($value);
-        $this->assertSame($expectedResult, $result, 'Tested value: '.$value);
+        $this->assertSame($expectedResult, $result, 'Tested value: ' . $value);
     }
 
     public function getTestData(): array

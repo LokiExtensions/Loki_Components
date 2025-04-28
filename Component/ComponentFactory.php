@@ -37,10 +37,10 @@ class ComponentFactory
 
         try {
             return $this->objectManager->create($componentClass, $arguments);
-        } catch(UnexpectedValueException $exception) {
+        } catch (UnexpectedValueException $exception) {
             throw new UnexpectedValueException("Failed to create component: \n"
-            .json_encode($arguments)."\n"
-            .$exception->getMessage(), $exception->getCode(), $exception);
+            . json_encode($arguments) . "\n"
+            . $exception->getMessage(), $exception->getCode(), $exception);
         }
     }
 }

@@ -3,7 +3,6 @@
 namespace Yireo\LokiComponents\Test\Unit\Filter;
 
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Filter\Number;
 use Yireo\LokiComponents\Filter\PositiveNumber;
 
 class PositiveNumberTest extends TestCase

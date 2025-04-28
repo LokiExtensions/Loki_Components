@@ -15,14 +15,14 @@ class SchemaLocator implements SchemaLocatorInterface
     protected string $perFileSchema = '';
 
     public function __construct(
-       private readonly Reader $moduleReader
+        private readonly Reader $moduleReader
     ) {
     }
 
     public function getSchema()
     {
         if ($this->schema === '' || $this->schema === '0') {
-            $this->schema = $this->getModuleEtcFolder().'/'.self::CONFIG_FILE_SCHEMA;
+            $this->schema = $this->getModuleEtcFolder() . '/' . self::CONFIG_FILE_SCHEMA;
         }
 
         return $this->schema;
@@ -31,7 +31,7 @@ class SchemaLocator implements SchemaLocatorInterface
     public function getPerFileSchema()
     {
         if ($this->perFileSchema === '' || $this->perFileSchema === '0') {
-            $this->perFileSchema = $this->getModuleEtcFolder().'/'.self::CONFIG_FILE_SCHEMA;
+            $this->perFileSchema = $this->getModuleEtcFolder() . '/' . self::CONFIG_FILE_SCHEMA;
         }
 
         return $this->perFileSchema;

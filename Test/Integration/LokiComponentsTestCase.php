@@ -4,6 +4,7 @@ namespace Yireo\LokiComponents\Test\Integration;
 
 use Laminas\Http\Header\GenericHeader;
 use Laminas\Http\Headers;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\LayoutInterface;
@@ -20,7 +21,6 @@ use Yireo\LokiComponents\Test\Integration\Traits\CreateComponent;
 use Yireo\LokiComponents\Test\Integration\Traits\GetComponent;
 use Yireo\LokiComponents\Util\IdConvertor;
 use Yireo\LokiComponents\Validator\Validator;
-use Magento\Framework\App\Request\Http as HttpRequest;
 
 class LokiComponentsTestCase extends AbstractController
 {
@@ -60,10 +60,10 @@ class LokiComponentsTestCase extends AbstractController
     {
         $component = $this->getComponent($componentName);
         $found = $this->existsComponentOnPage($component);
-        $msg = 'Component "'.$component->getName().'" not found';
+        $msg = 'Component "' . $component->getName() . '" not found';
 
         if ($debug) {
-            $msg .= "\n".$this->getResponse()->getBody();
+            $msg .= "\n" . $this->getResponse()->getBody();
         }
 
         $this->assertTrue($found, $msg);
@@ -73,9 +73,9 @@ class LokiComponentsTestCase extends AbstractController
     {
         $component = $this->getComponent($componentName);
         $found = $this->existsComponentOnPage($component);
-        $msg = 'Component "'.$component->getName().'" found anyway';
+        $msg = 'Component "' . $component->getName() . '" found anyway';
         if ($debug) {
-            $msg .= "\n".$this->getResponse()->getBody();
+            $msg .= "\n" . $this->getResponse()->getBody();
         }
 
         $this->assertFalse($found, $msg);
@@ -84,9 +84,9 @@ class LokiComponentsTestCase extends AbstractController
     protected function assertElementIdExistsOnPage(string $elementId, bool $debug = false)
     {
         $found = $this->existsElementIdOnPage($elementId);
-        $msg = 'Element ID "'.$elementId.'" not found';
+        $msg = 'Element ID "' . $elementId . '" not found';
         if ($debug) {
-            $msg .= "\n".$this->getResponse()->getBody();
+            $msg .= "\n" . $this->getResponse()->getBody();
         }
 
         $this->assertTrue($found, $msg);
@@ -95,9 +95,9 @@ class LokiComponentsTestCase extends AbstractController
     protected function assertElementIdNotExistsOnPage(string $elementId, bool $debug = false)
     {
         $found = $this->existsElementIdOnPage($elementId);
-        $msg = 'Element ID "'.$elementId.'" found anyway';
+        $msg = 'Element ID "' . $elementId . '" found anyway';
         if ($debug) {
-            $msg .= "\n".$this->getResponse()->getBody();
+            $msg .= "\n" . $this->getResponse()->getBody();
         }
 
         $this->assertFalse($found, $msg);
@@ -127,12 +127,12 @@ class LokiComponentsTestCase extends AbstractController
         $result = $this->getValidator()->validate($component, $value);
 
         if (true === $expectedResult) {
-            $this->assertTrue($result, 'Validation did not succeed for value: '.$value);
+            $this->assertTrue($result, 'Validation did not succeed for value: ' . $value);
         } else {
-            $this->assertFalse($result, 'Validation did not fail for value: '.$value);
+            $this->assertFalse($result, 'Validation did not fail for value: ' . $value);
         }
 
-        if(empty($expectedErrors)) {
+        if (empty($expectedErrors)) {
             $this->assertComponentHasNoErrors($component);
         }
 
@@ -144,12 +144,12 @@ class LokiComponentsTestCase extends AbstractController
     protected function existsElementIdOnPage(string $elementId): bool
     {
         $body = $this->getResponse()->getBody();
-        if (false === str_contains($body, ' id="'.$elementId.'"')) {
+        if (false === str_contains($body, ' id="' . $elementId . '"')) {
             return false;
         }
 
-        echo 'Not rendered: '.$elementId;
-        if (str_contains($body, 'Not rendered: '.$elementId)) {
+        echo 'Not rendered: ' . $elementId;
+        if (str_contains($body, 'Not rendered: ' . $elementId)) {
             return false;
         }
 
@@ -170,11 +170,11 @@ class LokiComponentsTestCase extends AbstractController
     {
         $elementId = $this->getObjectManager()->get(IdConvertor::class)->toElementId($component->getName());
         $body = $this->getResponse()->getBody();
-        if (false === str_contains($body, ' id="'.$elementId.'"')) {
+        if (false === str_contains($body, ' id="' . $elementId . '"')) {
             return false;
         }
 
-        if (str_contains($body, 'Not rendered: '.$component->getName().' ')) {
+        if (str_contains($body, 'Not rendered: ' . $component->getName() . ' ')) {
             return false;
         }
 

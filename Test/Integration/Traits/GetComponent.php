@@ -24,7 +24,7 @@ trait GetComponent
     {
         $layout = $this->getLayout($handles);
         $block = $layout->getBlock($blockId);
-        $this->assertInstanceOf(AbstractBlock::class, $block, 'No block "'.$blockId.'" in layout');
+        $this->assertInstanceOf(AbstractBlock::class, $block, 'No block "' . $blockId . '" in layout');
 
         return $this->getComponent($blockId);
     }

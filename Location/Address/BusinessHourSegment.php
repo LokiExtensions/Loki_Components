@@ -1,6 +1,7 @@
 <?php declare(strict_types=1);
 
 namespace Yireo\LokiComponents\Location\Address;
+
 class BusinessHourSegment
 {
     public function __construct(

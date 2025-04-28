@@ -2,7 +2,6 @@
 
 namespace Yireo\LokiComponents\Util;
 
-use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\FormKey as FormKeyModel;
 use Magento\Framework\UrlFactory;

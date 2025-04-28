@@ -20,8 +20,8 @@ trait AssertComponentErrors
 
         $this->assertTrue(
             $found,
-            'Component "'.$component->getName().'" does not have error "'.$expectedError.'"'."\n"
-            .'Actual messages: '.implode("\n", $foundMessages)
+            'Component "' . $component->getName() . '" does not have error "' . $expectedError . '"' . "\n"
+            . 'Actual messages: ' . implode("\n", $foundMessages)
         );
     }
 

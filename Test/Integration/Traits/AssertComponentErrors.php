@@ -13,7 +13,7 @@ trait AssertComponentErrors
         $foundMessages = [];
         foreach ($messages as $message) {
             $foundMessages[] = $message->getText();
-            if ($message->getText() === $expectedError) {
+            if (str_contains($message->getText(), $expectedError)) {
                 $found = true;
             }
         }

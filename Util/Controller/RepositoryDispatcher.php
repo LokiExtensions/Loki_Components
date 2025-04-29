@@ -30,8 +30,10 @@ class RepositoryDispatcher
         }
 
         $componentData = $this->filter->filter($component->getFilters(), $componentData);
-        if ($this->validator->validate($component, $componentData)) {
-            $repository->saveValue($componentData);
+        if (false === $this->validator->validate($component, $componentData)) {
+            return;
         }
+
+        $repository->saveValue($componentData);
     }
 }

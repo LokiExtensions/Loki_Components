@@ -23,8 +23,6 @@ class ValidatorRegistry
      */
     public function getApplicableValidators(array $validators = []): array
     {
-        print_r(array_keys($this->validators));
-
         $applicableValidators = [];
         foreach ($validators as $validatorName) {
             if (array_key_exists($validatorName, $this->validators)) {

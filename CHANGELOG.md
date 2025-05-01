@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.3] - 01 May 2025
+### Fixed
+- Allow everything to happen in backend as well
+- Allow PHP 8.4 in CI
+- Fix issue with LokiCheckoutMollie DI type overriding core validators
+
 ## [1.0.2] - 28 April 2025
 ### Fixed
 - Check for integration test containing string, not full match

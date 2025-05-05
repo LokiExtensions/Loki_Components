@@ -59,6 +59,9 @@
                         name="loki-components.script.component.modal-component"
                         template="Yireo_LokiComponents::script/component/modal-component.phtml"/>
                     <block
+                        name="loki-components.script.component.toggle"
+                        template="Yireo_LokiComponents::script/component/toggle.phtml"/>
+                    <block
                         name="loki-components.script.component.toggle-component"
                         template="Yireo_LokiComponents::script/component/toggle-component.phtml"/>
                 </container>

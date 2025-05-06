@@ -16,7 +16,9 @@ use Yireo\LokiComponents\Util\Block\CssClass;
             <button
                 type="button"
                 class="<?= $css('text-gray-600 hover:text-black', 'button') ?>"
-                aria-label="<?= __('Close message') ?>" @click.prevent="remove(message.text)">
+                aria-label="<?= __('Close message') ?>"
+                :data-message="message.text"
+                @click.prevent="removeMessage">
                 x
             </button>
         </div>

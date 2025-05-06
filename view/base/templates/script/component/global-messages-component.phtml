@@ -25,7 +25,9 @@
                     }, this.timeout);
                 }
             },
-            remove() {
+            removeMessage(event) {
+                //console.log('remove message', event.target.getAttribute('data-message'));
+                //this.messages = this.messages.filter();
                 this.messages = [];
             }
         }));

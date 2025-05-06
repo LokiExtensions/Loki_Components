@@ -30,12 +30,6 @@
                     name="loki-components.script.local-storage"
                     template="Yireo_LokiComponents::script/local-storage.phtml"/>
 
-                <container name="loki-component-types">
-                    <block
-                        name="loki-components.script.component-type.base"
-                        template="Yireo_LokiComponents::script/component-type/base-component-type.phtml"/>
-                </container>
-
                 <container name="loki-component-partials">
                     <block
                         name="loki-components.script.component-partial.modal"
@@ -43,6 +37,12 @@
                     <block
                         name="loki-components.script.component-partial.tab"
                         template="Yireo_LokiComponents::script/component-partial/tab-component-partial.phtml"/>
+                </container>
+
+                <container name="loki-component-types">
+                    <block
+                        name="loki-components.script.component-type.base"
+                        template="Yireo_LokiComponents::script/component-type/base-component-type.phtml"/>
                 </container>
 
                 <container name="loki-components">

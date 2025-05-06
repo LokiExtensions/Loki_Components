@@ -6,26 +6,23 @@
             hasMessages() {
                 return Object.values(this.messages).length > 0;
             },
-            initActions: {
-                ...LokiComponentType.initActions,
-                initializeMessages() {
-                    const messageContainer = document.getElementById('loki-components-utils-global-message-container');
-                    if (!messageContainer) {
-                        return;
-                    }
+            initMessages() {
+                const messageContainer = document.getElementById('loki-components-utils-global-message-container');
+                if (!messageContainer) {
+                    return;
+                }
 
-                    const messages = JSON.parse(messageContainer.getAttribute('data-messages'));
-                    messages.forEach(message => {
-                        message.text = decodeURIComponent(message.text.replace(/\+/g, ' '));
-                        this.messages.push(message);
-                    });
-                },
-                clearAfterTimeout() {
-                    if (this.timeout > 0) {
-                        setTimeout(() => {
-                            this.messages = [];
-                        }, this.timeout);
-                    }
+                const messages = JSON.parse(messageContainer.getAttribute('data-messages'));
+                messages.forEach(message => {
+                    message.text = decodeURIComponent(message.text.replace(/\+/g, ' '));
+                    this.messages.push(message);
+                });
+            },
+            initClearAfterTimeout() {
+                if (this.timeout > 0) {
+                    setTimeout(() => {
+                        this.messages = [];
+                    }, this.timeout);
                 }
             },
             remove() {

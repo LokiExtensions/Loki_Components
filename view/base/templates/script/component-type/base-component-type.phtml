@@ -32,46 +32,42 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         lazyLoad: false,
         beforePostValue: null,
         autofillListenerTimer: null,
-        initActions: {
-            loadInitialData() {
-                const initialData = this.$refs.initialData;
-                if (!initialData) {
-                    return;
-                }
-
-                const jsonData = JSON.parse(initialData.innerText);
-                if (!jsonData) {
-                    console.log('Failed to read initial data for Loki Component', this.$root);
-                    return;
-                }
-
-                for ([key, value] of Object.entries(jsonData)) {
-                    this[key] = value;
-                }
-
-                this.$root.removeAttribute('aria-busy'); // @todo: Is this still needed?
-            },
-            register() {
-                Alpine.store('components').add(this);
-            },
-            lazyLoad() {
-                if (this.lazyLoad) {
-                    this.post({});
-                }
-            }
-        },
-        beforeInit() {
-        },
         async init() {
-            this.beforeInit();
+            this.loadData();
 
-            for (callback of Object.values(this.initActions)) {
-                await callback.apply(this);
+            const initMethods = Object.getOwnPropertyNames(this).filter((methodName) => {
+                return methodName.startsWith('init') && methodName !== 'init';
+            });
+
+            initMethods.forEach(methodName => {
+                this[methodName].apply(this);
+            })
+        },
+        loadData() {
+            const initialData = this.$refs.initialData;
+            if (!initialData) {
+                return;
             }
 
-            this.afterInit();
+            const jsonData = JSON.parse(initialData.innerText);
+            if (!jsonData) {
+                console.log('Failed to read initial data for Loki Component', this.$root);
+                return;
+            }
+
+            for ([key, value] of Object.entries(jsonData)) {
+                this[key] = value;
+            }
+
+            this.$root.removeAttribute('aria-busy'); // @todo: Is this still needed?
         },
-        afterInit() {
+        initComponentRegistration() {
+            Alpine.store('components').add(this);
+        },
+        initLazyLoading() {
+            if (this.lazyLoad) {
+                this.post({});
+            }
         },
         async post(value) {
             if (value instanceof Event) {

@@ -18,6 +18,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
     const LokiComponentFormKey = '<?= $componentUtil->getFormKey() ?>';
 
     const LokiComponentType = {
+        ...LokiDataLoaderComponentPartial,
         id: '',
         name: '',
         elementId: '',
@@ -42,24 +43,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             initMethods.forEach(methodName => {
                 this[methodName].apply(this);
             })
-        },
-        loadData() {
-            const initialData = this.$refs.initialData;
-            if (!initialData) {
-                return;
-            }
-
-            const jsonData = JSON.parse(initialData.innerText);
-            if (!jsonData) {
-                console.log('Failed to read initial data for Loki Component', this.$root);
-                return;
-            }
-
-            for ([key, value] of Object.entries(jsonData)) {
-                this[key] = value;
-            }
-
-            this.$root.removeAttribute('aria-busy'); // @todo: Is this still needed?
         },
         initComponentRegistration() {
             Alpine.store('components').add(this);

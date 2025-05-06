@@ -1,0 +1,20 @@
+<script>
+    const LokiDataLoaderComponentPartial = {
+        loadData() {
+            const initialData = this.$refs.initialData;
+            if (!initialData) {
+                return;
+            }
+
+            const jsonData = JSON.parse(initialData.innerText);
+            if (!jsonData) {
+                console.log('Failed to read initial data for Loki Component', this.$root);
+                return;
+            }
+
+            for ([key, value] of Object.entries(jsonData)) {
+                this[key] = value;
+            }
+        },
+    };
+</script>

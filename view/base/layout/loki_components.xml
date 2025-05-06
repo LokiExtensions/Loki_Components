@@ -32,6 +32,9 @@
 
                 <container name="loki-component-partials">
                     <block
+                        name="loki-components.script.component-data-loader.modal"
+                        template="Yireo_LokiComponents::script/component-partial/data-loader-component-partial.phtml"/>
+                    <block
                         name="loki-components.script.component-partial.modal"
                         template="Yireo_LokiComponents::script/component-partial/modal-component-partial.phtml"/>
                     <block

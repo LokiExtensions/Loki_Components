@@ -6,6 +6,18 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.4] - 07 May 2025
+### Fixed
+- CSP issue with closing messages
+- Move data loading into separate component partial
+- Rewrite Alpine from initActions object to methods starting with init
+- Allow for plugins to be loaded right before main Alpine
+- Improve styling of messages in admin
+- Move Loki messages in admin to page.messages container
+- Add admin controller
+- Support security for complex values
+- Modules should NOT determine the page layout for reusable handles
+
 ## [1.0.3] - 01 May 2025
 ### Fixed
 - Allow everything to happen in backend as well

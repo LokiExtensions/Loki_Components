@@ -115,6 +115,13 @@ class ComponentViewModel implements ComponentViewModelInterface
         return $this->getBlock()->getJsComponentName();
     }
 
+    public function getJsComponentId(): string
+    {
+        $componentId = ucwords($this->getBlock()->getNameInLayout(), '_.-');
+
+        return preg_replace('#[_.-]+#', '', $componentId);
+    }
+
     public function isValid(): bool
     {
         foreach ($this->getMessages() as $message) {

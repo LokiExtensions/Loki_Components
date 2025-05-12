@@ -6,7 +6,7 @@
         "Yireo_CspUtilities"
     ],
     "components": [
-        "default",
+        "loki-components.modal",
         "loki-components.global-messages"
     ],
     "config": {
@@ -14,5 +14,10 @@
         "yireo_loki_components\/general\/only_validate_ajax": "Only validate AJAX calls",
         "yireo_loki_components\/validators\/enable_mx_validation_for_email": "Enable MX Validation for Email Values",
         "yireo_loki_components\/global_messages\/timeout": "Timeout"
+    },
+    "tests": {
+        "unit": 16,
+        "integration": 8,
+        "functional": 0
     }
 }

@@ -21,6 +21,10 @@ class XmlConfig extends DataConfig
         $componentDefinitions = [];
         $componentsData = (array)$this->get('components');
         foreach ($componentsData as $componentData) {
+            if (empty($componentData)) {
+                continue;
+            }
+
             $name = $componentData['name'];
             $componentDefinitions[$name] = $this->createComponentDefinition($componentData);
         }

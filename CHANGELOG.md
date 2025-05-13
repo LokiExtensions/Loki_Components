@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.5] - 13 May 2025
+### Fixed
+- Fix possible warning
+- Fix possible warning
+- Add allFunctionsCalledOnLoad
+
 ## [1.0.4] - 07 May 2025
 ### Fixed
 - CSP issue with closing messages

@@ -1,0 +1,9 @@
+<script>
+    document.addEventListener('alpine:init', () => {
+        Alpine.data('LokiForm', () => ({
+            submit() {
+                return this.$root.submit();
+            }
+        }));
+    });
+</script>

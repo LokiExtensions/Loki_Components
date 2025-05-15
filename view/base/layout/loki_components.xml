@@ -56,6 +56,9 @@
                         name="loki-components.script.component.global-messages-component"
                         template="Yireo_LokiComponents::script/component/global-messages-component.phtml"/>
                     <block
+                        name="loki-components.script.component.form"
+                        template="Yireo_LokiComponents::script/component/form.phtml"/>
+                    <block
                         name="loki-components.script.component.modal"
                         template="Yireo_LokiComponents::script/component/modal.phtml"/>
                     <block

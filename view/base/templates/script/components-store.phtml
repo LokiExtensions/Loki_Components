@@ -33,6 +33,16 @@
                 return this.getComponentArray().find((component) => {
                     return component.elementId === elementId;
                 });
+            },
+            exists(component) {
+                return document.getElementById(component.elementId);
+            },
+            removeInvisibleComponents() {
+                this.getComponentArray().forEach((component) => {
+                    if(!this.exists(component)) {
+                        delete this.components[component.id];
+                    }
+                });
             }
         })
     });

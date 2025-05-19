@@ -25,10 +25,42 @@
                     }, this.timeout);
                 }
             },
-            removeMessage(event) {
-                //console.log('remove message', event.target.getAttribute('data-message'));
-                //this.messages = this.messages.filter();
+            addNotice(text) {
+                this.messages.push({
+                    text: text,
+                    type: 'notice'
+                });
+            },
+            addSuccess(text) {
+                this.messages.push({
+                    text: text,
+                    type: 'success'
+                });
+            },
+            addWarning(text) {
+                this.messages.push({
+                    text: text,
+                    type: 'warning'
+                });
+            },
+            addError(text) {
+                this.messages.push({
+                    text: text,
+                    type: 'error'
+                });
+            },
+            addMessage(text, type) {
+                this.messages.push({
+                    text: text,
+                    type: type
+                });
+            },
+            clearMessages() {
                 this.messages = [];
+            },
+            removeMessage() {
+                const text = this.$el.getAttribute('data-message');
+                this.messages = this.messages.filter(message => message.text !== text);
             }
         }));
     });

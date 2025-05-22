@@ -7,7 +7,10 @@
     "require": {
         "magento/framework": "^103.0",
         "magento/module-backend": "^102.0",
+        "magento/module-config": "^101.0",
         "magento/module-customer": "^103.0",
+        "laminas/laminas-http": "^2.0",
+        "yireo/magento2-integration-test-helper": "~0.0",
         "yireo/magento2-csp-utilities": "^1.0",
         "php": "^8.3",
         "ext-json": "*",

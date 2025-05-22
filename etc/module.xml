@@ -2,10 +2,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
     <module name="Yireo_LokiComponents">
         <sequence>
+            <module name="Magento_Config"/>
             <module name="Magento_Customer"/>
             <module name="Magento_Backend"/>
             <module name="Magento_Store"/>
             <module name="Yireo_CspUtilities"/>
+            <module name="Yireo_IntegrationTestHelper"/>
         </sequence>
     </module>
 </config>

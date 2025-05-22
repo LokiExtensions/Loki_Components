@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.6] - 22 May 2025
+### Fixed
+- Fix z-index of messages
+- Add simple LokiForm component
+- Update admin settings with tooltip and regenerate new MODULE.json
+
 ## [1.0.5] - 13 May 2025
 ### Fixed
 - Fix possible warning

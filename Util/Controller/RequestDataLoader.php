@@ -2,6 +2,7 @@
 
 namespace Yireo\LokiComponents\Util\Controller;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
 use RuntimeException;
 use Yireo\LokiComponents\Util\Ajax;
@@ -29,6 +30,17 @@ class RequestDataLoader
     public function mergeRequestParams()
     {
         $data = $this->load();
+
+        /** @var HttpRequest $request */
+        $currentUri = explode('_', $data['currentUri']);
+        $request = $this->request;
+        if (!empty($currentUri)) {
+            $request->setParam('currentUri', $data['currentUri']);
+            $request->setModuleName($currentUri[0]);
+            $request->setControllerName($currentUri[1]);
+            $request->setActionName($currentUri[2]);
+        }
+
         $params = array_merge($data['request'], $this->request->getParams());
         $this->request->setParams($params);
     }

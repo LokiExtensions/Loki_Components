@@ -2,6 +2,7 @@
 
 namespace Yireo\LokiComponents\Util;
 
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\FormKey as FormKeyModel;
 use Magento\Framework\UrlFactory;
@@ -45,6 +46,14 @@ class ComponentUtil implements ArgumentInterface
     {
         return $this->request->getParams();
     }
+
+    public function getCurrentUri(): string
+    {
+        /** @var Http $request */
+        $request = $this->request;
+        return $request->getFullActionName();
+    }
+
     public function getPostUrl(): string
     {
         return $this->urlFactory->create()->getUrl('loki_components/index/html');

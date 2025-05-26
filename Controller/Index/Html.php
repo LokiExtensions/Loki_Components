@@ -127,11 +127,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
         if ($this->config->isDebug() && $this->appState->getMode() === AppState::MODE_DEVELOPER) {
             $error .= '<br/> [' . $exception->getFile() . ' line ' . $exception->getLine() . '] <br/>';
-            $error .= $exception->getTraceAsString();
+            $error .= '<small>'.nl2br($exception->getTraceAsString()).'</small>';
         }
-
-        // @phpcs:ignore
-        echo get_class($exception) . ': ' . $error . "\n\n";
 
         $this->globalMessageRegistry->addError($error);
     }

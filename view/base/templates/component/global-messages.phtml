@@ -12,7 +12,7 @@ use Yireo\LokiComponents\Util\Block\CssClass;
 <div class="<?= $css('fixed z-[300] w-full p-4') ?>" x-cloak x-show="hasMessages">
     <template x-for="message in messages">
         <div class="message" :class="message.type">
-            <span x-html="message.text"></span>
+            <div class="inline-block" x-html="message.text"></div>
             <button
                 type="button"
                 class="<?= $css('text-gray-600 hover:text-black', 'button') ?>"

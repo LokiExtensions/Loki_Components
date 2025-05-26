@@ -58,14 +58,13 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             return $this->getJsonRedirect($redirectException->getMessage());
 
         } catch (Exception $exception) {
-            // @phpcs:ignore
-            echo get_class($exception) . ': ' . $exception->getMessage() . "\n\n";
             $this->addGlobalException($exception);
         }
 
         if ($this->allowRendering($data)) {
             try {
                 $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
+
             } catch (RedirectException $redirectException) {
                 return $this->getJsonRedirect($redirectException->getMessage());
             }
@@ -112,6 +111,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         ]);
 
         $json->setHeader('X-Loki-Redirect', $redirectUrl);
+        $this->globalMessageRegistry->toSession();
 
         return $json;
     }
@@ -129,6 +129,9 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             $error .= '<br/> [' . $exception->getFile() . ' line ' . $exception->getLine() . '] <br/>';
             $error .= $exception->getTraceAsString();
         }
+
+        // @phpcs:ignore
+        echo get_class($exception) . ': ' . $error . "\n\n";
 
         $this->globalMessageRegistry->addError($error);
     }

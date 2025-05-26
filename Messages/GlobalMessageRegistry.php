@@ -56,6 +56,27 @@ class GlobalMessageRegistry implements ArgumentInterface
         return array_unique($this->messages, SORT_REGULAR);
     }
 
+    public function toSession(): void
+    {
+        foreach ($this->messages as $message) {
+            if ($message->getType() === 'notice') {
+                $this->messageManager->addNoticeMessage($message->getText());
+            }
+
+            if ($message->getType() === 'success') {
+                $this->messageManager->addSuccessMessage($message->getText());
+            }
+
+            if ($message->getType() === 'warning') {
+                $this->messageManager->addWarningMessage($message->getText());
+            }
+
+            if ($message->getType() === 'error') {
+                $this->messageManager->addErrorMessage($message->getText());
+            }
+        }
+    }
+
     public function toArray(): array
     {
         $messages = [];

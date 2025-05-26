@@ -84,7 +84,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
         $block = $layout->getBlock($blockName);
         if (false === $block instanceof AbstractBlock) {
-            throw new NoBlockFoundException('Block with name "' . $blockName . '" is not found');
+            throw new NoBlockFoundException('Block with name "'.$blockName.'" is not found');
         }
 
         return $block;
@@ -95,7 +95,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $html = '';
         foreach ($htmlParts as $htmlPart) {
             $htmlPart = preg_replace("/([\r\n]+)/", "\n", $htmlPart);
-            $html .= $htmlPart . "\n\n";
+            $html .= $htmlPart."\n\n";
         }
 
         $htmlResult = $this->htmlResultFactory->create();
@@ -126,8 +126,12 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $error = $exception->getMessage();
 
         if ($this->config->isDebug() && $this->appState->getMode() === AppState::MODE_DEVELOPER) {
-            $error .= '<br/> [' . $exception->getFile() . ' line ' . $exception->getLine() . '] <br/>';
-            $error .= '<small>'.nl2br($exception->getTraceAsString()).'</small>';
+            $errorWrapper = '<details>';
+            $errorWrapper .= '<summary>'.$error.'</summary>';
+            $errorWrapper .= '<br/> ['.$exception->getFile().' line '.$exception->getLine().'] <br/>';
+            $errorWrapper .= '<small>'.nl2br($exception->getTraceAsString()).'</small>';
+            $errorWrapper .= '</details>';
+            $error = $errorWrapper;
         }
 
         $this->globalMessageRegistry->addError($error);

@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.7] - 18 June 2025
+### Fixed
+- Add details/summary to popup message
+- WIP on maps integration
+- Remove echo from controller output, just make debug message more readable
+- Enhance workflow of errors during final stage
+- Reuse currentUri in AJAX request
+
 ## [1.0.6] - 22 May 2025
 ### Fixed
 - Fix z-index of messages

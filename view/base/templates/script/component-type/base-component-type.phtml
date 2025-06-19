@@ -183,7 +183,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             if (data.redirect) {
                 console.log('Redirecting to ' + data.redirect);
                 document.location.assign(data.redirect);
-                //window.location.replace(data.redirect);
+                //window.location.replace(data.redirect); // @todo
             }
         },
         getDetailsString() {

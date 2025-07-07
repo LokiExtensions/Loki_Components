@@ -19,6 +19,7 @@ class Security implements FilterInterface
         $value = (string)$value;
         $value = strip_tags($value);
         $value = htmlentities($value);
+        $value = htmlspecialchars_decode($value);
         return $value;
     }
 }

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [1.0.8] - 08 July 2025
+### Fixed
+- Add addGlobalError helper method to base component
+
 ## [1.0.7] - 18 June 2025
 ### Fixed
 - Add details/summary to popup message

@@ -9,6 +9,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [1.0.8] - 08 July 2025
 ### Fixed
 - Add addGlobalError helper method to base component
+- Do not convert special chars in field values (example `'s Hertogenbosch`)
 
 ## [1.0.7] - 18 June 2025
 ### Fixed

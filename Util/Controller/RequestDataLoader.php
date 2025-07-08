@@ -32,9 +32,9 @@ class RequestDataLoader
         $data = $this->load();
 
         /** @var HttpRequest $request */
-        $currentUri = explode('_', $data['currentUri']);
         $request = $this->request;
-        if (!empty($currentUri)) {
+        if (!empty($data['currentUri'])) {
+            $currentUri = explode('_', $data['currentUri']);
             $request->setParam('currentUri', $data['currentUri']);
             $request->setModuleName($currentUri[0]);
             $request->setControllerName($currentUri[1]);

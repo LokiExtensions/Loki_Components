@@ -27,11 +27,11 @@ trait AssertComponentErrors
 
     protected function assertComponentHasErrors(ComponentInterface $component)
     {
-        return $this->assertNotEmpty($component->getLocalMessageRegistry()->getMessages());
+        $this->assertNotEmpty($component->getLocalMessageRegistry()->getMessages());
     }
 
     protected function assertComponentHasNoErrors(ComponentInterface $component)
     {
-        return $this->assertEmpty($component->getLocalMessageRegistry()->getMessages());
+        $this->assertEmpty($component->getLocalMessageRegistry()->getMessages());
     }
 }

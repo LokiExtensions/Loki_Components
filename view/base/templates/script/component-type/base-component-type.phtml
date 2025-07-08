@@ -197,6 +197,18 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 valid: this.valid,
             };
         },
+        addGlobalSuccess(messageText) {
+            this.addGlobalMessage('success',  messageText);
+        },
+        addGlobalNotice(messageText) {
+            this.addGlobalMessage('notice',  messageText);
+        },
+        addGlobalWarning(messageText) {
+            this.addGlobalMessage('warning',  messageText);
+        },
+        addGlobalError(messageText) {
+            this.addGlobalMessage('error',  messageText);
+        },
         addGlobalMessage(messageType, messageText) {
             const globalMessageComponent = Alpine.store('components').get('LokiComponentsGlobalMessages');
             globalMessageComponent.messages.push({

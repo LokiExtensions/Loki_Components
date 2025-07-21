@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util\Controller;
+namespace Loki\Components\Util\Controller;
 
 use Magento\Framework\App\ObjectManager;
 use PHPUnit\Framework\TestCase;

@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util\Controller;
+namespace Loki\Components\Util\Controller;
 
 use Laminas\Http\Headers;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
-use Yireo\LokiComponents\Util\Ajax;
+use Loki\Components\Util\Ajax;
 
 class RequestDataLoaderTest extends TestCase
 {

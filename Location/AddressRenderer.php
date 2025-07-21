@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Location;
+namespace Loki\Components\Location;
 
 use Magento\Customer\Block\Address\Renderer\RendererInterface;
 use Magento\Customer\Model\Address\Config as AddressConfig;

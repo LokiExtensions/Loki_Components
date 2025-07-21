@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Unit\Filter;
+namespace Loki\Components\Test\Unit\Filter;
 
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Filter\Uppercase;
+use Loki\Components\Filter\Uppercase;
 
 class UppercaseTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Filter;
+namespace Loki\Components\Filter;
 
 class Filter
 {

@@ -3,12 +3,12 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd"
 >
     <event name="view_block_abstract_to_html_before">
-        <observer name="Yireo_LokiComponents::assignAdditionalBlockVariables" instance="Yireo\LokiComponents\Observer\AssignAdditionalBlockVariables"/>
+        <observer name="Loki_Components::assignAdditionalBlockVariables" instance="Loki\Components\Observer\AssignAdditionalBlockVariables"/>
 
-        <observer name="Yireo_LokiComponents::addComponentToBlock" instance="Yireo\LokiComponents\Observer\AddComponentToBlock"/>
+        <observer name="Loki_Components::addComponentToBlock" instance="Loki\Components\Observer\AddComponentToBlock"/>
     </event>
 
     <event name="view_block_abstract_to_html_after">
-        <observer name="Yireo_LokiComponents::addHtmlAttributesToComponentBlock" instance="Yireo\LokiComponents\Observer\AddHtmlAttributesToComponentBlock"/>
+        <observer name="Loki_Components::addHtmlAttributesToComponentBlock" instance="Loki\Components\Observer\AddHtmlAttributesToComponentBlock"/>
     </event>
 </config>

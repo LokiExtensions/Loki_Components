@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util;
+namespace Loki\Components\Util;
 
 class DefaultTargets
 {

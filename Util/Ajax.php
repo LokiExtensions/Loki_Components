@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util;
+namespace Loki\Components\Util;
 
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\View\Element\Block\ArgumentInterface;

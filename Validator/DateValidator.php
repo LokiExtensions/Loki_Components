@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Validator;
+namespace Loki\Components\Validator;
 
-use Yireo\LokiComponents\Component\ComponentInterface;
+use Loki\Components\Component\ComponentInterface;
 
 class DateValidator implements ValidatorInterface
 {

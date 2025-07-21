@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util\Controller;
+namespace Loki\Components\Util\Controller;
 
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
-use Yireo\LokiComponents\Component\ComponentRegistry;
+use Loki\Components\Component\ComponentRegistry;
 
 class TargetRenderer
 {

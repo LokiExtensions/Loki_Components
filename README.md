@@ -1,14 +1,14 @@
-# Yireo_LokiComponents
+# Loki_Components
 
 **This is the main core package for Loki Components, as is being used by the Loki Checkout suite.**
 
 ## Installation
 Install this package via composer (assuming you have setup the `composer.yireo.com` repository correctly already):
 ```bash
-composer require yireo/magento2-loki-components
+composer require loki/magento2-components
 ```
 
 Next, enable this module:
 ```bash
-bin/magento module:enable Yireo_LokiComponents
+bin/magento module:enable Loki_Components
 ```

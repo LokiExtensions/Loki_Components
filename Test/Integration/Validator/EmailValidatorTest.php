@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Integration\Validator;
+namespace Loki\Components\Test\Integration\Validator;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\Config;
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Validator\EmailValidator;
+use Loki\Components\Validator\EmailValidator;
 
 #[AppArea('frontend')]
 class EmailValidatorTest extends TestCase
@@ -23,7 +23,7 @@ class EmailValidatorTest extends TestCase
      * @return void
      * @dataProvider getValues
      */
-    #[Config('yireo_loki_components/validators/enable_mx_validation_for_email', 1)]
+    #[Config('loki_components/validators/enable_mx_validation_for_email', true)]
     public function testWithVariousValues(string $email, true|string $expectedResult): void
     {
         $validator = ObjectManager::getInstance()->get(EmailValidator::class);

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Exception;
+namespace Loki\Components\Exception;
 
 use RuntimeException;
 

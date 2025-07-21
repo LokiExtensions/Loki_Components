@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Validator;
+namespace Loki\Components\Validator;
 
-use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Config\Config;
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Config\Config;
 
 class EmailValidator implements ValidatorInterface
 {

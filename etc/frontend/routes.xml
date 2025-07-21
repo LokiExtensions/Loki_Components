@@ -3,7 +3,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:App/etc/routes.xsd">
     <router id="standard">
         <route id="loki_components" frontName="loki_components">
-            <module name="Yireo_LokiComponents"/>
+            <module name="Loki_Components"/>
         </route>
     </router>
 </config>

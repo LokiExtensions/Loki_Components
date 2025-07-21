@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Plugin;
+namespace Loki\Components\Plugin;
 
 use Magento\Framework\View\Element\Template;
 use Yireo\CspUtilities\Util\ReplaceInlineScripts;

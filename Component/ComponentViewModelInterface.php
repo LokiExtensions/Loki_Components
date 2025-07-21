@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component;
+namespace Loki\Components\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Yireo\LokiComponents\Filter\Filter;
-use Yireo\LokiComponents\Validator\Validator;
+use Loki\Components\Filter\Filter;
+use Loki\Components\Validator\Validator;
 
 interface ComponentViewModelInterface extends ArgumentInterface
 {

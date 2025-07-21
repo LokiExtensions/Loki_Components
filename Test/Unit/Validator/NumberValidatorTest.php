@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Unit\Validator;
+namespace Loki\Components\Test\Unit\Validator;
 
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Validator\NumberValidator;
+use Loki\Components\Validator\NumberValidator;
 
 class NumberValidatorTest extends TestCase
 {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Config\XmlConfig;
+namespace Loki\Components\Config\XmlConfig;
 
 use Magento\Framework\Config\Dom;
 use Magento\Framework\Config\FileResolverInterface;

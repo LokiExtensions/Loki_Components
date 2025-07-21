@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Messages;
+namespace Loki\Components\Messages;
 
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\Message\Session as MessageSession;

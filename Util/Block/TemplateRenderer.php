@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util\Block;
+namespace Loki\Components\Util\Block;
 
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
@@ -16,10 +16,6 @@ class TemplateRenderer extends AbstractRenderer
         $blockAlias = $this->getBlockAlias(null, $ancestorBlock, $data);
         $blockName = $ancestorBlock->getNameInLayout() . '.' . $blockAlias;
         $block = $this->createBlockFromTemplate($templateName, $blockName);
-
-        if (false === $block instanceof AbstractBlock) {
-            throw new RuntimeException((string)__('No block found with template "%1"', $templateName));
-        }
 
         $this->populateBlock($block, $ancestorBlock, $data);
 
@@ -37,7 +33,7 @@ class TemplateRenderer extends AbstractRenderer
     private function createBlockFromTemplate(string $templateName, string $blockName): Template
     {
         if (false === str_contains($templateName, '::')) {
-            $templateName = 'Yireo_LokiComponents::' . $templateName;
+            $templateName = 'Loki_Components::' . $templateName;
         }
 
         if (false === str_contains($templateName, '.phtml')) {
@@ -49,6 +45,9 @@ class TemplateRenderer extends AbstractRenderer
             return $block;
         }
 
-        return $this->layout->createBlock(Template::class, $blockName)->setTemplate($templateName);
+        /** @var Template $block */
+        $block = $this->layout->createBlock(Template::class, $blockName);
+        $block->setTemplate($templateName); // @phpstan-ignore bitExpertMagento.setTemplateDisallowedForBlock
+        return $block;
     }
 }

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Unit\Validator;
+namespace Loki\Components\Test\Unit\Validator;
 
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Validator\DateValidator;
+use Loki\Components\Validator\DateValidator;
 
 class DateValidatorTest extends TestCase
 {

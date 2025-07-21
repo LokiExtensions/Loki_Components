@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component;
+namespace Loki\Components\Component;
 
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
-use Yireo\LokiComponents\Filter\Filter;
-use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
-use Yireo\LokiComponents\Messages\LocalMessageRegistry;
-use Yireo\LokiComponents\Messages\LocalMessageRegistryFactory;
-use Yireo\LokiComponents\Validator\Validator;
+use Loki\Components\Filter\Filter;
+use Loki\Components\Messages\GlobalMessageRegistry;
+use Loki\Components\Messages\LocalMessageRegistry;
+use Loki\Components\Messages\LocalMessageRegistryFactory;
+use Loki\Components\Validator\Validator;
 
 class Component implements ComponentInterface
 {

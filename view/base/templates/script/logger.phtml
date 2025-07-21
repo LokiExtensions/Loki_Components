@@ -1,7 +1,7 @@
 <?php declare(strict_types=1);
 
-use Yireo\LokiComponents\Config\Config;
-use Yireo\LokiComponents\Factory\ViewModelFactory;
+use Loki\Components\Config\Config;
+use Loki\Components\Factory\ViewModelFactory;
 
 /**
  * @var ViewModelFactory $viewModelFactory
@@ -12,7 +12,7 @@ $config = $viewModelFactory->create(Config::class);
 <script>
     const LokiComponentsLogger = {
         allowDebugging: <?= $config->isDebug() ? 'true' : 'false' ?>,
-        prefix: 'Yireo_LokiComponents',
+        prefix: 'Loki_Components',
         getColor(logType) {
             if (logType === 'notice') {
                 return '#6495ED';

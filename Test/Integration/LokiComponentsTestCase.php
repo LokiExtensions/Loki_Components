@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Integration;
+namespace Loki\Components\Test\Integration;
 
 use Laminas\Http\Header\GenericHeader;
 use Laminas\Http\Headers;
@@ -14,13 +14,13 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\AbstractController;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsEnabled;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertStoreConfigValueEquals;
-use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Filter\Filter;
-use Yireo\LokiComponents\Test\Integration\Traits\AssertComponentErrors;
-use Yireo\LokiComponents\Test\Integration\Traits\CreateComponent;
-use Yireo\LokiComponents\Test\Integration\Traits\GetComponent;
-use Yireo\LokiComponents\Util\IdConvertor;
-use Yireo\LokiComponents\Validator\Validator;
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Filter\Filter;
+use Loki\Components\Test\Integration\Traits\AssertComponentErrors;
+use Loki\Components\Test\Integration\Traits\CreateComponent;
+use Loki\Components\Test\Integration\Traits\GetComponent;
+use Loki\Components\Util\IdConvertor;
+use Loki\Components\Validator\Validator;
 
 class LokiComponentsTestCase extends AbstractController
 {
@@ -41,7 +41,7 @@ class LokiComponentsTestCase extends AbstractController
         $this->objectManager = Bootstrap::getObjectManager();
         $this->fixtures = DataFixtureStorageManager::getStorage();
 
-        $this->assertModuleIsEnabled('Yireo_LokiComponents');
+        $this->assertModuleIsEnabled('Loki_Components');
     }
 
     protected function getComponentByBlockName(string $blockName): ComponentInterface

@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util\Component;
+namespace Loki\Components\Util\Component;
 
 use Magento\Framework\View\Element\Block\ArgumentInterface;
-use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Util\CamelCaseConvertor;
-use Yireo\LokiComponents\Util\ComponentUtil;
-use Yireo\LokiComponents\Util\IdConvertor;
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Util\CamelCaseConvertor;
+use Loki\Components\Util\ComponentUtil;
+use Loki\Components\Util\IdConvertor;
 
 class JsDataProvider implements ArgumentInterface
 {

@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Validator;
+namespace Loki\Components\Validator;
 
 use InvalidArgumentException;
 

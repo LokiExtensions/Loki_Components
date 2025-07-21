@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Yireo_LokiComponents:etc/loki_components.xsd">
+<components xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Loki_Components:etc/loki_components.xsd">
     <group name="default"/>
 
     <component name="loki-components.modal" />
 
     <component
         name="loki-components.global-messages"
-        context="Yireo\LokiComponents\Component\GlobalMessages\GlobalMessagesContext"
-        viewModel="Yireo\LokiComponents\Component\GlobalMessages\GlobalMessagesViewModel">
+        context="Loki\Components\Component\GlobalMessages\GlobalMessagesContext"
+        viewModel="Loki\Components\Component\GlobalMessages\GlobalMessagesViewModel">
     </component>
 </components>

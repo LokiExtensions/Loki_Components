@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util\Controller;
+namespace Loki\Components\Util\Controller;
 
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\View\Element\AbstractBlock;
-use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Component\ComponentRepositoryInterface;
-use Yireo\LokiComponents\Filter\Filter;
-use Yireo\LokiComponents\Validator\Validator;
+use Loki\Components\Component\ComponentRegistry;
+use Loki\Components\Component\ComponentRepositoryInterface;
+use Loki\Components\Filter\Filter;
+use Loki\Components\Validator\Validator;
 
 class RepositoryDispatcher
 {

@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Integration\Traits;
+namespace Loki\Components\Test\Integration\Traits;
 
 use Magento\Framework\App\ObjectManager;
-use Yireo\LokiComponents\Component\Component;
-use Yireo\LokiComponents\Component\ComponentContext;
-use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Component\ComponentViewModel;
+use Loki\Components\Component\Component;
+use Loki\Components\Component\ComponentContext;
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Component\ComponentViewModel;
 
 trait CreateComponent
 {

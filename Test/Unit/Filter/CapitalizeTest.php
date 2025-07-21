@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Unit\Filter;
+namespace Loki\Components\Test\Unit\Filter;
 
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Filter\Capitalize;
+use Loki\Components\Filter\Capitalize;
 
 class CapitalizeTest extends TestCase
 {

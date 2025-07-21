@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Unit\Util;
+namespace Loki\Components\Test\Unit\Util;
 
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Util\CamelCaseConvertor;
+use Loki\Components\Util\CamelCaseConvertor;
 
 class CamelCaseConvertorTest extends TestCase
 {

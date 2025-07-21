@@ -1,11 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util\Controller;
+namespace Loki\Components\Util\Controller;
 
+use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
 use RuntimeException;
-use Yireo\LokiComponents\Util\Ajax;
+use Loki\Components\Util\Ajax;
 
 class RequestDataLoader
 {
@@ -17,7 +18,9 @@ class RequestDataLoader
 
     public function load(): array
     {
-        $data = json_decode($this->request->getContent(), true);
+        /** @var Http $request */
+        $request = $this->request;
+        $data = json_decode($request->getContent(), true);
         if (empty($data)) {
             throw new RuntimeException('Not a valid request');
         }

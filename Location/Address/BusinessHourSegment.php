@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Location\Address;
+namespace Loki\Components\Location\Address;
 
 class BusinessHourSegment
 {

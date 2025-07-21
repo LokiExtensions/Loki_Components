@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util\Block\CssClassParser;
+namespace Loki\Components\Util\Block\CssClassParser;
 
 use Magento\Framework\View\Element\AbstractBlock;
 

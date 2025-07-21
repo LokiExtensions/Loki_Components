@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Unit\Filter;
+namespace Loki\Components\Test\Unit\Filter;
 
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Filter\FilterInterface;
-use Yireo\LokiComponents\Filter\FilterRegistry;
+use Loki\Components\Filter\FilterInterface;
+use Loki\Components\Filter\FilterRegistry;
 
 class FilterRegistryTest extends TestCase
 {

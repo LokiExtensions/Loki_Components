@@ -1,5 +1,5 @@
 {
-    "name": "yireo/magento2-loki-components",
+    "name": "loki/magento2-components",
     "version": "1.0.8",
     "description": "N/A",
     "keywords": ["loki-components"],
@@ -23,7 +23,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Yireo\\LokiComponents\\": ""
+            "Loki\\Components\\": ""
         }
     }
 }

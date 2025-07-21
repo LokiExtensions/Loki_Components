@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Integration\Validator\Dummy;
+namespace Loki\Components\Test\Integration\Validator\Dummy;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\TestFramework\Fixture\AppArea;
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Test\Integration\Dummy\LengthViewModelDummy;
-use Yireo\LokiComponents\Validator\LengthValidator;
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Test\Integration\Dummy\LengthViewModelDummy;
+use Loki\Components\Validator\LengthValidator;
 
 #[AppArea('frontend')]
 class LengthValidatorTest extends TestCase

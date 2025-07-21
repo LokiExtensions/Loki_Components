@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component\GlobalMessages;
+namespace Loki\Components\Component\GlobalMessages;
 
-use Yireo\LokiComponents\Component\ComponentViewModel;
+use Loki\Components\Component\ComponentViewModel;
 
 /**
  * @method GlobalMessagesContext getContext()

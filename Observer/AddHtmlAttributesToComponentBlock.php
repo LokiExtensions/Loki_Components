@@ -1,16 +1,16 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Observer;
+namespace Loki\Components\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
-use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Exception\NoComponentFoundException;
-use Yireo\LokiComponents\Util\Component\JsDataProvider;
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Component\ComponentRegistry;
+use Loki\Components\Exception\NoComponentFoundException;
+use Loki\Components\Util\Component\JsDataProvider;
 
 class AddHtmlAttributesToComponentBlock implements ObserverInterface
 {

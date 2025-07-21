@@ -1,9 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util\Block;
+namespace Loki\Components\Util\Block;
 
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
-use Yireo\LokiComponents\Util\Block\CssClassParser\CssClassParserInterface;
+use Loki\Components\Util\Block\CssClassParser\CssClassParserInterface;
 
 class CssClass
 {
@@ -41,8 +42,9 @@ class CssClass
 
         // @todo: Beautify this
         $nameInLayout = $this->block->getNameInLayout();
+
         $defaultsBlock = $this->block->getLayout()->getBlock('loki-components.css_classes');
-        if ($defaultsBlock) {
+        if ($defaultsBlock instanceof AbstractBlock) {
             $blockData = $defaultsBlock->getData($nameInLayout);
             if (!empty($blockData)) {
                 $cssClasses = array_merge_recursive($cssClasses, $blockData);
@@ -81,7 +83,7 @@ class CssClass
 
         $defaultBlockName = 'loki-components.defaults.' . $templateId;
         $defaultBlock = $this->block->getLayout()->getBlock($defaultBlockName);
-        if (empty($defaultBlock)) {
+        if (false === $defaultBlock instanceof AbstractBlock) {
             return [];
         }
 

@@ -1,11 +1,11 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component;
+namespace Loki\Components\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
-use Yireo\LokiComponents\Config\XmlConfig;
-use Yireo\LokiComponents\Exception\NoComponentFoundException;
-use Yireo\LokiComponents\Util\IdConvertor;
+use Loki\Components\Config\XmlConfig;
+use Loki\Components\Exception\NoComponentFoundException;
+use Loki\Components\Util\IdConvertor;
 
 class ComponentRegistry
 {

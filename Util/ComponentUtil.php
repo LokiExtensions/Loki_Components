@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util;
+namespace Loki\Components\Util;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
@@ -61,7 +61,9 @@ class ComponentUtil implements ArgumentInterface
 
     public function getFormHtml(AbstractBlock $block): string
     {
-        return (string)$block->getLayout()->getBlock('loki-components.form_html')
+        /** @var AbstractBlock $formBlock */
+        $formBlock = $block->getLayout()->getBlock('loki-components.form_html');
+        return $formBlock
             ->setData('source_block', $block)
             ->toHtml();
     }

@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Validator;
+namespace Loki\Components\Validator;
 
-use Yireo\LokiComponents\Component\Behaviour\LengthBehaviourInterface;
-use Yireo\LokiComponents\Component\ComponentInterface;
+use Loki\Components\Component\Behaviour\LengthBehaviourInterface;
+use Loki\Components\Component\ComponentInterface;
 
 class LengthValidator implements ValidatorInterface
 {

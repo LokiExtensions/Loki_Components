@@ -1,14 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Observer;
+namespace Loki\Components\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
-use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Exception\NoComponentFoundException;
-use Yireo\LokiComponents\Util\ComponentUtil;
+use Loki\Components\Component\ComponentRegistry;
+use Loki\Components\Exception\NoComponentFoundException;
+use Loki\Components\Util\ComponentUtil;
 
 class AddComponentToBlock implements ObserverInterface
 {

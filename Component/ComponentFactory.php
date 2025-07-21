@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component;
+namespace Loki\Components\Component;
 
 use Magento\Framework\ObjectManagerInterface;
 use UnexpectedValueException;
-use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
+use Loki\Components\Config\XmlConfig\Definition\ComponentDefinition;
 
 class ComponentFactory
 {

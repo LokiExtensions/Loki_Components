@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component;
+namespace Loki\Components\Component;
 
-use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
-use Yireo\LokiComponents\Messages\LocalMessageRegistry;
+use Loki\Components\Messages\GlobalMessageRegistry;
+use Loki\Components\Messages\LocalMessageRegistry;
 
 // @todo: Move this into a trait, so that repository don't extend anymore?
 abstract class ComponentRepository implements ComponentRepositoryInterface

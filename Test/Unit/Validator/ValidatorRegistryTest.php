@@ -1,10 +1,10 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Unit\Validator;
+namespace Loki\Components\Test\Unit\Validator;
 
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Validator\ValidatorInterface;
-use Yireo\LokiComponents\Validator\ValidatorRegistry;
+use Loki\Components\Validator\ValidatorInterface;
+use Loki\Components\Validator\ValidatorRegistry;
 
 class ValidatorRegistryTest extends TestCase
 {

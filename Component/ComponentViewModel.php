@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component;
+namespace Loki\Components\Component;
 
 use Magento\Framework\View\Element\AbstractBlock;
-use Yireo\LokiComponents\Filter\Filter;
-use Yireo\LokiComponents\Messages\LocalMessage;
-use Yireo\LokiComponents\Validator\Validator;
+use Loki\Components\Filter\Filter;
+use Loki\Components\Messages\LocalMessage;
+use Loki\Components\Validator\Validator;
 
 class ComponentViewModel implements ComponentViewModelInterface
 {

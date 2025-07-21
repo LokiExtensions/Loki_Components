@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <virtualType name="Yireo\LokiComponents\Config\XmlConfig\VirtualFileReader" type="Magento\Framework\Config\Reader\Filesystem">
+    <virtualType name="Loki\Components\Config\XmlConfig\VirtualFileReader" type="Magento\Framework\Config\Reader\Filesystem">
         <arguments>
-            <argument name="converter" xsi:type="object">Yireo\LokiComponents\Config\XmlConfig\Converter</argument>
-            <argument name="schemaLocator" xsi:type="object">Yireo\LokiComponents\Config\XmlConfig\SchemaLocator</argument>
+            <argument name="converter" xsi:type="object">Loki\Components\Config\XmlConfig\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Loki\Components\Config\XmlConfig\SchemaLocator</argument>
             <argument name="fileName" xsi:type="string">loki_components.xml</argument>
             <argument name="idAttributes" xsi:type="array">
                 <item name="/components/group" xsi:type="array">
@@ -28,46 +28,46 @@
         </arguments>
     </virtualType>
 
-    <type name="Yireo\LokiComponents\Config\XmlConfig">
+    <type name="Loki\Components\Config\XmlConfig">
         <arguments>
-            <argument name="reader" xsi:type="object">Yireo\LokiComponents\Config\XmlConfig\VirtualFileReader</argument>
+            <argument name="reader" xsi:type="object">Loki\Components\Config\XmlConfig\VirtualFileReader</argument>
             <argument name="cacheId" xsi:type="string">loki_components</argument>
         </arguments>
     </type>
 
     <type name="Magento\Framework\View\Element\Template">
-        <plugin name="Yireo_LokiComponents::addCspInlineScripts" type="Yireo\LokiComponents\Plugin\AddCspInlineScripts"/>
+        <plugin name="Loki_Components::addCspInlineScripts" type="Loki\Components\Plugin\AddCspInlineScripts"/>
     </type>
 
-    <type name="Yireo\LokiComponents\Validator\ValidatorRegistry">
+    <type name="Loki\Components\Validator\ValidatorRegistry">
         <arguments>
             <argument name="validators" xsi:type="array">
-                <item name="required" xsi:type="object">Yireo\LokiComponents\Validator\RequiredValidator</item>
-                <item name="number" xsi:type="object">Yireo\LokiComponents\Validator\NumberValidator</item>
-                <item name="positive_number" xsi:type="object">Yireo\LokiComponents\Validator\PositiveNumberValidator</item>
-                <item name="length" xsi:type="object">Yireo\LokiComponents\Validator\LengthValidator</item>
-                <item name="email" xsi:type="object">Yireo\LokiComponents\Validator\EmailValidator</item>
-                <item name="date" xsi:type="object">Yireo\LokiComponents\Validator\DateValidator</item>
-                <item name="past_date" xsi:type="object">Yireo\LokiComponents\Validator\PastDateValidator</item>
+                <item name="required" xsi:type="object">Loki\Components\Validator\RequiredValidator</item>
+                <item name="number" xsi:type="object">Loki\Components\Validator\NumberValidator</item>
+                <item name="positive_number" xsi:type="object">Loki\Components\Validator\PositiveNumberValidator</item>
+                <item name="length" xsi:type="object">Loki\Components\Validator\LengthValidator</item>
+                <item name="email" xsi:type="object">Loki\Components\Validator\EmailValidator</item>
+                <item name="date" xsi:type="object">Loki\Components\Validator\DateValidator</item>
+                <item name="past_date" xsi:type="object">Loki\Components\Validator\PastDateValidator</item>
             </argument>
         </arguments>
     </type>
 
-    <type name="Yireo\LokiComponents\Filter\FilterRegistry">
+    <type name="Loki\Components\Filter\FilterRegistry">
         <arguments>
             <argument name="filters" xsi:type="array">
-                <item name="security" xsi:type="object">Yireo\LokiComponents\Filter\Security</item>
-                <item name="trim" xsi:type="object">Yireo\LokiComponents\Filter\Trim</item>
-                <item name="capitalize" xsi:type="object">Yireo\LokiComponents\Filter\Capitalize</item>
-                <item name="lowercase" xsi:type="object">Yireo\LokiComponents\Filter\Lowercase</item>
-                <item name="number" xsi:type="object">Yireo\LokiComponents\Filter\Number</item>
-                <item name="positive_number" xsi:type="object">Yireo\LokiComponents\Filter\PositiveNumber</item>
-                <item name="uppercase" xsi:type="object">Yireo\LokiComponents\Filter\Uppercase</item>
+                <item name="security" xsi:type="object">Loki\Components\Filter\Security</item>
+                <item name="trim" xsi:type="object">Loki\Components\Filter\Trim</item>
+                <item name="capitalize" xsi:type="object">Loki\Components\Filter\Capitalize</item>
+                <item name="lowercase" xsi:type="object">Loki\Components\Filter\Lowercase</item>
+                <item name="number" xsi:type="object">Loki\Components\Filter\Number</item>
+                <item name="positive_number" xsi:type="object">Loki\Components\Filter\PositiveNumber</item>
+                <item name="uppercase" xsi:type="object">Loki\Components\Filter\Uppercase</item>
             </argument>
         </arguments>
     </type>
 
-    <type name="Yireo\LokiComponents\Util\DefaultTargets">
+    <type name="Loki\Components\Util\DefaultTargets">
         <arguments>
             <argument name="targets" xsi:type="array">
                 <item name="messages-container" xsi:type="string">loki-components.utils.global-message-container</item>

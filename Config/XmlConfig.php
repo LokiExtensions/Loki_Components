@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Config;
+namespace Loki\Components\Config;
 
 use Magento\Framework\Config\Data as DataConfig;
-use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
+use Loki\Components\Config\XmlConfig\Definition\ComponentDefinition;
 
 class XmlConfig extends DataConfig
 {

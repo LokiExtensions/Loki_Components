@@ -2,7 +2,7 @@
 
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Controller\Adminhtml\Index;
+namespace Loki\Components\Controller\Adminhtml\Index;
 
 use Exception;
 use Magento\Backend\App\Action;
@@ -16,20 +16,20 @@ use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
-use Yireo\LokiComponents\Config\Config;
-use Yireo\LokiComponents\Controller\HtmlResult;
-use Yireo\LokiComponents\Controller\HtmlResultFactory;
-use Yireo\LokiComponents\Exception\NoBlockFoundException;
-use Yireo\LokiComponents\Exception\RedirectException;
-use Yireo\LokiComponents\Messages\GlobalMessageRegistry;
-use Yireo\LokiComponents\Util\Controller\LayoutLoader;
-use Yireo\LokiComponents\Util\Controller\RepositoryDispatcher;
-use Yireo\LokiComponents\Util\Controller\RequestDataLoader;
-use Yireo\LokiComponents\Util\Controller\TargetRenderer;
+use Loki\Components\Config\Config;
+use Loki\Components\Controller\HtmlResult;
+use Loki\Components\Controller\HtmlResultFactory;
+use Loki\Components\Exception\NoBlockFoundException;
+use Loki\Components\Exception\RedirectException;
+use Loki\Components\Messages\GlobalMessageRegistry;
+use Loki\Components\Util\Controller\LayoutLoader;
+use Loki\Components\Util\Controller\RepositoryDispatcher;
+use Loki\Components\Util\Controller\RequestDataLoader;
+use Loki\Components\Util\Controller\TargetRenderer;
 
 class Html  extends Action
 {
-    const ADMIN_RESOURCE = 'Yireo_LokiComponents::index';
+    const ADMIN_RESOURCE = 'Loki_Components::index';
 
     public function __construct(
         private readonly LayoutLoader $layoutLoader,

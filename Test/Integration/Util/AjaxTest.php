@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Integration\Util;
+namespace Loki\Components\Test\Integration\Util;
 
 use Laminas\Http\Headers;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Util\Ajax;
+use Loki\Components\Util\Ajax;
 
 class AjaxTest extends TestCase
 {

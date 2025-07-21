@@ -1,12 +1,12 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Validator;
+namespace Loki\Components\Validator;
 
 use Magento\Framework\Phrase;
-use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Config\Config;
-use Yireo\LokiComponents\Messages\LocalMessage;
-use Yireo\LokiComponents\Util\Ajax;
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Config\Config;
+use Loki\Components\Messages\LocalMessage;
+use Loki\Components\Util\Ajax;
 
 class Validator
 {

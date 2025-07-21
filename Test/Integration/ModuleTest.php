@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Integration;
+namespace Loki\Components\Test\Integration;
 
 use PHPUnit\Framework\TestCase;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsEnabled;
@@ -16,7 +16,7 @@ class ModuleTest extends TestCase
     public function testIfModuleIsEnabled()
     {
         $requiredModules = [
-            'Yireo_LokiComponents',
+            'Loki_Components',
         ];
         foreach ($requiredModules as $moduleName) {
             $this->assertModuleIsRegistered($moduleName);

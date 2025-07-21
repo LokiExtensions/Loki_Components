@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Integration\Util\Controller;
+namespace Loki\Components\Test\Integration\Util\Controller;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
 use Magento\TestFramework\Fixture\AppArea;
 use PHPUnit\Framework\TestCase;
-use Yireo\LokiComponents\Util\Controller\TargetRenderer;
+use Loki\Components\Util\Controller\TargetRenderer;
 
 #[AppArea('frontend')]
 class TargetRendererTest extends TestCase

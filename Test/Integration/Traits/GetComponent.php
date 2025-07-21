@@ -1,13 +1,13 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Integration\Traits;
+namespace Loki\Components\Test\Integration\Traits;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
-use Yireo\LokiComponents\Component\ComponentInterface;
-use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Util\Controller\LayoutLoader;
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Component\ComponentRegistry;
+use Loki\Components\Util\Controller\LayoutLoader;
 
 trait GetComponent
 {

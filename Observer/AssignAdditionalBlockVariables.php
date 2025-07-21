@@ -1,20 +1,20 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Observer;
+namespace Loki\Components\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
-use Yireo\LokiComponents\Component\ComponentRegistry;
-use Yireo\LokiComponents\Component\ComponentViewModelInterface;
-use Yireo\LokiComponents\Exception\NoComponentFoundException;
-use Yireo\LokiComponents\Factory\ViewModelFactory;
-use Yireo\LokiComponents\Util\Block\BlockRenderer;
-use Yireo\LokiComponents\Util\Block\ChildRenderer;
-use Yireo\LokiComponents\Util\Block\CssClassFactory;
-use Yireo\LokiComponents\Util\Block\TemplateRenderer;
+use Loki\Components\Component\ComponentRegistry;
+use Loki\Components\Component\ComponentViewModelInterface;
+use Loki\Components\Exception\NoComponentFoundException;
+use Loki\Components\Factory\ViewModelFactory;
+use Loki\Components\Util\Block\BlockRenderer;
+use Loki\Components\Util\Block\ChildRenderer;
+use Loki\Components\Util\Block\CssClassFactory;
+use Loki\Components\Util\Block\TemplateRenderer;
 
 class AssignAdditionalBlockVariables implements ObserverInterface
 {
@@ -62,7 +62,7 @@ class AssignAdditionalBlockVariables implements ObserverInterface
             return;
         }
 
-        $block->setTemplate('Yireo_LokiComponents::utils/not-rendered.phtml');
+        $block->setTemplate('Loki_Components::utils/not-rendered.phtml');
         $block->setNotRendered(true);
     }
 }

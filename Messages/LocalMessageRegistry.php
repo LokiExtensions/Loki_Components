@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Messages;
+namespace Loki\Components\Messages;
 
-use Yireo\LokiComponents\Component\ComponentInterface;
+use Loki\Components\Component\ComponentInterface;
 
 class LocalMessageRegistry
 {

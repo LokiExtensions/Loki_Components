@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Util\Block;
+namespace Loki\Components\Util\Block;
 
 use InvalidArgumentException;
 use Magento\Framework\View\Element\AbstractBlock;

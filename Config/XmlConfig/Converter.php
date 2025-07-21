@@ -1,15 +1,15 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Config\XmlConfig;
+namespace Loki\Components\Config\XmlConfig;
 
 use DOMDocument;
 use DOMNode;
 use Magento\Framework\Config\ConverterInterface;
 use RuntimeException;
-use Yireo\LokiComponents\Component\Component;
-use Yireo\LokiComponents\Component\ComponentViewModel;
-use Yireo\LokiComponents\Config\XmlConfig\Definition\ComponentDefinition;
-use Yireo\LokiComponents\Util\DefaultTargets;
+use Loki\Components\Component\Component;
+use Loki\Components\Component\ComponentViewModel;
+use Loki\Components\Config\XmlConfig\Definition\ComponentDefinition;
+use Loki\Components\Util\DefaultTargets;
 
 class Converter implements ConverterInterface
 {

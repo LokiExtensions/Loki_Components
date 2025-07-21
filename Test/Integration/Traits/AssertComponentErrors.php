@@ -1,8 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Test\Integration\Traits;
+namespace Loki\Components\Test\Integration\Traits;
 
-use Yireo\LokiComponents\Component\ComponentInterface;
+use Loki\Components\Component\ComponentInterface;
 
 trait AssertComponentErrors
 {

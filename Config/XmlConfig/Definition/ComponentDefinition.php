@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Config\XmlConfig\Definition;
+namespace Loki\Components\Config\XmlConfig\Definition;
 
 class ComponentDefinition
 {

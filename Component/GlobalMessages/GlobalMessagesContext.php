@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Component\GlobalMessages;
+namespace Loki\Components\Component\GlobalMessages;
 
-use Yireo\LokiComponents\Component\ComponentContextInterface;
-use Yireo\LokiComponents\Config\Config;
+use Loki\Components\Component\ComponentContextInterface;
+use Loki\Components\Config\Config;
 
 class GlobalMessagesContext implements ComponentContextInterface
 {

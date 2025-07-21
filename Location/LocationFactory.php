@@ -1,9 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Yireo\LokiComponents\Location;
+namespace Loki\Components\Location;
 
 use Magento\Framework\ObjectManagerInterface;
-use Yireo\LokiComponents\Location\Address\BusinessHours;
+use Loki\Components\Location\Address\BusinessHours;
 
 class LocationFactory
 {

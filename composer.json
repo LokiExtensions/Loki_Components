@@ -1,6 +1,6 @@
 {
     "name": "loki/magento2-components",
-    "version": "1.0.8",
+    "version": "1.0.9",
     "description": "N/A",
     "keywords": ["loki-components"],
     "type": "magento2-module",

@@ -198,4 +198,9 @@ class LokiComponentsTestCase extends AbstractController
     {
         return $this->getObjectManager()->get(Filter::class);
     }
+
+    public function getTestResultObject():\Magento\TestFramework\Event\PhpUnit
+    {
+        return new \Magento\TestFramework\Event\PhpUnit;
+    }
 }

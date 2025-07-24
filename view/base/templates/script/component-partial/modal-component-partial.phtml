@@ -1,5 +1,13 @@
 <script>
     const LokiModalComponentPartial = {
+        initModalClosing() {
+            const modal =this.$refs.modal;
+            modal.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.close();
+                }
+            });
+        },
         toggleModal() {
             if (this.isModalOpen()) {
                 this.$refs.modal.close();

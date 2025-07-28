@@ -47,7 +47,7 @@ class TemplateRenderer extends AbstractRenderer
 
         /** @var Template $block */
         $block = $this->layout->createBlock(Template::class, $blockName);
-        $block->setTemplate($templateName); // @phpstan-ignore
+        $block->setTemplate($templateName); // @phpstan-ignore bitExpertMagento.setTemplateDisallowedForBlock
         return $block;
     }
 }

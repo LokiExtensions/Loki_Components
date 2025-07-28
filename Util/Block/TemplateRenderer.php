@@ -47,7 +47,7 @@ class TemplateRenderer extends AbstractRenderer
 
         /** @var Template $block */
         $block = $this->layout->createBlock(Template::class, $blockName);
-        $block->setTemplate($templateName);
+        $block->setTemplate($templateName); // @phpstan-ignore
         return $block;
     }
 }

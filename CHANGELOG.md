@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.2] - 28 July 2025
+### Fixed
+- Add router for increased performance
+
 ## [2.0.1] - 24 July 2025
 ### Fixed
 - Allow closing modal by clicking outside of modal

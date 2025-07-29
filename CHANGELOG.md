@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.3] - 29 July 2025
+### Fixed
+- Remove ugly PHPUnit 10 work-around of getTestResultObject()
+
 ## [2.0.2] - 28 July 2025
 ### Fixed
 - Add router for increased performance

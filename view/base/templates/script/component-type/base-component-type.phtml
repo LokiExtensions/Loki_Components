@@ -53,20 +53,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 this.post({});
             }
         },
-        getAbortController() {
-            if (!LokiComponentAbortControllers[this.id]) {
-                LokiComponentAbortControllers[this.id] = new AbortController();
-            }
-
-            return LokiComponentAbortControllers[this.id];
-        },
-        handleAbortControllerOnPost() {
-            let abortController = this.getAbortController();
-            if (this.loading && abortController.signal) {
-                abortController.abort('Duplicate request');
-                LokiComponentAbortControllers[this.id] = new AbortController();
-            }
-        },
         async post(value) {
             if (value instanceof Event) {
                 value = null;
@@ -78,19 +64,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 
             this.handleAbortControllerOnPost();
             this.loading = true;
-
-            this.targets.forEach(target => {
-                const targetElement = document.getElementById(target);
-                if (targetElement) {
-                    targetElement.setAttribute('aria-busy', true);
-                }
-
-                const targetComponent = Alpine.store('components').getComponentByElementId(target);
-                if (targetComponent) {
-                    targetComponent.loading = true;
-                }
-            });
-
+            this.setTargetStateOnPost();
             this.beforePostValue = this.value;
 
             const showLoaderTimerId = setTimeout(() => {
@@ -98,23 +72,15 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             }, this.showLoaderTimeout);
 
             const abortController = this.getAbortController();
+            const bodyData = this.getBodyData();
+            bodyData.componentData = value;
+
             await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
                 signal: abortController.signal,
-                headers: {
-                    'X-Alpine-Request': true,
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    targets: this.targets,
-                    componentData: value,
-                    block: this.blockId,
-                    handles: <?= json_encode($componentUtil->getHandles($block)) ?>,
-                    currentUri: '<?= $componentUtil->getCurrentUri() ?>',
-                    request: <?= json_encode($componentUtil->getRequestParams()) ?>,
-                })
+                headers: this.getPostHeaders(),
+                body: JSON.stringify(bodyData)
             })
                 .then(response => {
                     if (response.ok) {
@@ -134,23 +100,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     } catch (e) {
                     }
 
-                    const parser = new DOMParser();
-                    const ajaxDocument = parser.parseFromString(html, "text/html");
-                    this.targets.forEach(target => {
-                        const targetElement = document.getElementById(target);
-                        const newTargetElement = ajaxDocument.getElementById(target);
-
-                        if (!targetElement || !newTargetElement) {
-                            return;
-                        }
-
-                        const targetComponent = Alpine.store('components').getComponentByElementId(target);
-                        if (targetComponent) {
-                            targetComponent.destroy();
-                        }
-
-                        targetElement.outerHTML = newTargetElement.outerHTML;
-                    });
+                    this.updateTargetsAfterPost(html);
 
                     if (!this.valid) {
                         this.value = this.beforePostValue;
@@ -173,22 +123,87 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 })
                 .finally(() => {
                     this.$nextTick(() => {
-                        this.targets.forEach(target => {
-                            const targetElement = document.getElementById(target);
-                            if (targetElement) {
-                                targetElement.removeAttribute('aria-busy');
-                            } else {
-                                LokiComponentsLogger.error('Target not found', target);
-                            }
-                        });
+                        this.setTargetStateAfterPost();
                     });
 
                     this.loading = false;
                     this.showLoader = false;
                     clearTimeout(showLoaderTimerId);
-
                     LokiComponentsFocusListener();
                 });
+        },
+        getAbortController() {
+            if (!LokiComponentAbortControllers[this.id]) {
+                LokiComponentAbortControllers[this.id] = new AbortController();
+            }
+
+            return LokiComponentAbortControllers[this.id];
+        },
+        handleAbortControllerOnPost() {
+            let abortController = this.getAbortController();
+            if (this.loading && abortController.signal) {
+                abortController.abort('Duplicate request');
+                LokiComponentAbortControllers[this.id] = new AbortController();
+            }
+        },
+        setTargetStateOnPost() {
+            this.targets.forEach(target => {
+                const targetElement = document.getElementById(target);
+                if (targetElement) {
+                    targetElement.setAttribute('aria-busy', true);
+                }
+
+                const targetComponent = Alpine.store('components').getComponentByElementId(target);
+                if (targetComponent) {
+                    targetComponent.loading = true;
+                }
+            });
+        },
+        setTargetStateAfterPost() {
+            this.targets.forEach(target => {
+                const targetElement = document.getElementById(target);
+                if (targetElement) {
+                    targetElement.removeAttribute('aria-busy');
+                } else {
+                    LokiComponentsLogger.error('Target not found', target);
+                }
+            });
+        },
+        getPostHeaders() {
+            return {
+                'X-Alpine-Request': true,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            };
+        },
+        getBodyData() {
+            return {
+                targets: this.targets,
+                block: this.blockId,
+                handles: <?= json_encode($componentUtil->getHandles($block)) ?>,
+                currentUri: '<?= $componentUtil->getCurrentUri() ?>',
+                request: <?= json_encode($componentUtil->getRequestParams()) ?>,
+            };
+        },
+        updateTargetsAfterPost(html) {
+            const parser = new DOMParser();
+            const ajaxDocument = parser.parseFromString(html, "text/html");
+
+            this.targets.forEach(target => {
+                const targetElement = document.getElementById(target);
+                const newTargetElement = ajaxDocument.getElementById(target);
+
+                if (!targetElement || !newTargetElement) {
+                    return;
+                }
+
+                const targetComponent = Alpine.store('components').getComponentByElementId(target);
+                if (targetComponent) {
+                    targetComponent.destroy();
+                }
+
+                targetElement.outerHTML = newTargetElement.outerHTML;
+            });
         },
         setValue(event) {
             this.value = event.target.value;

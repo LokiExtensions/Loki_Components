@@ -16,7 +16,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
     const LokiComponentFormKey = '<?= $componentUtil->getFormKey() ?>';
-    const LokiComponentRequests = {};
+    const LokiComponentAbortControllers = {};
 
     const LokiComponentType = {
         ...LokiDataLoaderComponentPartial,
@@ -53,6 +53,20 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 this.post({});
             }
         },
+        getAbortController() {
+            if (!LokiComponentAbortControllers[this.id]) {
+                LokiComponentAbortControllers[this.id] = new AbortController();
+            }
+
+            return LokiComponentAbortControllers[this.id];
+        },
+        handleAbortControllerOnPost() {
+            let abortController = this.getAbortController();
+            if (this.loading && abortController.signal) {
+                abortController.abort('Duplicate request');
+                LokiComponentAbortControllers[this.id] = new AbortController();
+            }
+        },
         async post(value) {
             if (value instanceof Event) {
                 value = null;
@@ -62,6 +76,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 value = this.value;
             }
 
+            this.handleAbortControllerOnPost();
             this.loading = true;
 
             this.targets.forEach(target => {
@@ -82,19 +97,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 this.showLoader = true;
             }, this.showLoaderTimeout);
 
-            let abortController;
-            if (LokiComponentRequests[this.id]) {
-                console.log('Existing abort controller');
-                abortController = LokiComponentRequests[this.id];
-                abortController.abort();
-                abortController = new AbortController();
-                LokiComponentRequests[this.id] = abortController;
-            } else {
-                console.log('New abort controller');
-                abortController = new AbortController();
-                LokiComponentRequests[this.id] = abortController;
-            }
-
+            const abortController = this.getAbortController();
             await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
@@ -162,6 +165,10 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     });
                 })
                 .catch(error => {
+                    if (error === 'Duplicate request') {
+                        return;
+                    }
+
                     this.addGlobalMessage('error', error);
                 })
                 .finally(() => {
@@ -213,16 +220,16 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             };
         },
         addGlobalSuccess(messageText) {
-            this.addGlobalMessage('success',  messageText);
+            this.addGlobalMessage('success', messageText);
         },
         addGlobalNotice(messageText) {
-            this.addGlobalMessage('notice',  messageText);
+            this.addGlobalMessage('notice', messageText);
         },
         addGlobalWarning(messageText) {
-            this.addGlobalMessage('warning',  messageText);
+            this.addGlobalMessage('warning', messageText);
         },
         addGlobalError(messageText) {
-            this.addGlobalMessage('error',  messageText);
+            this.addGlobalMessage('error', messageText);
         },
         addGlobalMessage(messageType, messageText) {
             const globalMessageComponent = Alpine.store('components').get('LokiComponentsGlobalMessages');

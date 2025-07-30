@@ -16,6 +16,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
     const LokiComponentFormKey = '<?= $componentUtil->getFormKey() ?>';
+    const LokiComponentRequests = {};
 
     const LokiComponentType = {
         ...LokiDataLoaderComponentPartial,
@@ -81,9 +82,23 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 this.showLoader = true;
             }, this.showLoaderTimeout);
 
+            let abortController;
+            if (LokiComponentRequests[this.id]) {
+                console.log('Existing abort controller');
+                abortController = LokiComponentRequests[this.id];
+                abortController.abort();
+                abortController = new AbortController();
+                LokiComponentRequests[this.id] = abortController;
+            } else {
+                console.log('New abort controller');
+                abortController = new AbortController();
+                LokiComponentRequests[this.id] = abortController;
+            }
+
             await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
+                signal: abortController.signal,
                 headers: {
                     'X-Alpine-Request': true,
                     'X-Requested-With': 'XMLHttpRequest',

@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.4] - 30 July 2025
+### Fixed
+- Special characters should not be converted to HTML chars
+- Move logic to helper methods
+- Implement better abort handling for AJAX requests
+- Cancel existing AJAX calls on subsequent requests
+
 ## [2.0.3] - 29 July 2025
 ### Fixed
 - Remove ugly PHPUnit 10 work-around of getTestResultObject()

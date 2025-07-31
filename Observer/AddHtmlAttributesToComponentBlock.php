@@ -32,7 +32,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
         }
 
         $transport = $observer->getEvent()->getTransport();
-        $html = $transport->getHtml();
+        $html = trim($transport->getHtml());
         if (empty($html)) {
             return;
         }

@@ -10,11 +10,10 @@ use Loki\Components\Component\ComponentViewModelInterface;
 
 abstract class AbstractRenderer implements ArgumentInterface
 {
-    private array $counters = [];
-
     public function __construct(
         protected LayoutInterface $layout,
         protected AppState $appState,
+        protected ChildCounter $childCounter,
     ) {
     }
 
@@ -35,14 +34,7 @@ abstract class AbstractRenderer implements ArgumentInterface
 
     protected function getCounter(AbstractBlock $block): int
     {
-        $nameInLayout = $block->getNameInLayout();
-        if (isset($this->counters[$nameInLayout])) {
-            $this->counters[$nameInLayout]++;
-        } else {
-            $this->counters[$nameInLayout] = 0;
-        }
-
-        return $this->counters[$nameInLayout];
+        return $this->childCounter->getCounter($block->getNameInLayout());
     }
 
     protected function getBlockAlias(

@@ -15,7 +15,13 @@ class ChildRenderer extends AbstractRenderer
     ): AbstractBlock {
         $block = $ancestorBlock->getChildBlock($blockAlias);
         if (false === $block instanceof AbstractBlock) {
-            throw new RuntimeException((string)__('No block alias "%1"', $blockAlias));
+            throw new RuntimeException(
+                (string)__(
+                    'No child alias "%1" for parent "%2"',
+                    $blockAlias,
+                    $ancestorBlock->getNameInLayout()
+                )
+            );
         }
 
         $this->populateBlock($block, $ancestorBlock, $data);
@@ -30,7 +36,8 @@ class ChildRenderer extends AbstractRenderer
         array $data = []
     ) {
         try {
-            return (string)$this->get($ancestorBlock, $blockAlias, $data)->toHtml();
+            return (string)$this->get($ancestorBlock, $blockAlias, $data)
+                ->toHtml();
         } catch (RuntimeException|InvalidArgumentException $e) {
             if ($this->isDeveloperMode()) {
                 return '<!-- ' . $e->getMessage() . ' -->';

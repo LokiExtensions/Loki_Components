@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.5] - 01 August 2025
+### Fixed
+- Add CSS wrapper in various templates
+- Make sure child block counter is used by all renderers
+- Move modal close button into separate PHTML
+- Trim HTML before trying to detect HTML elements within
+
 ## [2.0.4] - 30 July 2025
 ### Fixed
 - Special characters should not be converted to HTML chars

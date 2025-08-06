@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.6] - 06 August 2025
+### Fixed
+- Move initMethods and destroyMethods into component partials
+- Rename LokiDataLoaderComponentPartial to LokiLoadDataComponentPartial
+- Implement `aria-errormessage` together with existing `aria-invalid`
+- Do not display container of local messages, if there are no local messages
+- Set message area default to local
+- Allow XML layout to set message area to make component messages global or local
+- Lower PHP requirement to PHP 8.2+
+
 ## [2.0.5] - 01 August 2025
 ### Fixed
 - Add CSS wrapper in various templates

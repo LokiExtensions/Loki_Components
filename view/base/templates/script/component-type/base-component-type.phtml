@@ -26,6 +26,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         blockId: '',
         targets: [],
         messages: [],
+        messageArea: 'local',
         value: null,
         visible: false,
         loading: false,
@@ -252,6 +253,19 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 type: messageType,
                 text: messageText
             });
+        },
+        addLocalMessage(messageType, messageText) {
+            this.messages.push({type: messageType, text: messageText});
+        },
+        addMessage(messageType, messageText) {
+            if (this.messageArea === 'global') {
+                return this.addGlobalMessage(messageType, messageText);
+            }
+
+            return this.addLocalMessage(messageType, messageText);
+        },
+        addError(messageText) {
+            this.addMessage('error', messageText);
         },
         destroyActions: {
             clearAutofillListenerTimer() {

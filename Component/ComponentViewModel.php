@@ -90,6 +90,16 @@ class ComponentViewModel implements ComponentViewModelInterface
         return $this->component->getLocalMessageRegistry()->getMessagesByComponent($this->component);
     }
 
+    public function getMessageArea(): string
+    {
+        $messageArea = (string)$this->getBlock()->getMessageArea();
+        if (!empty($messageArea)) {
+            return $messageArea;
+        }
+
+        return 'global';
+    }
+
     public function getContext(): ComponentContextInterface
     {
         return $this->component->getContext();
@@ -152,6 +162,7 @@ class ComponentViewModel implements ComponentViewModelInterface
             ...(array)$this->getBlock()->getJsData(),
             'value' => $this->getValue(),
             'messages' => $this->getMessages(),
+            'messageArea' => $this->getMessageArea(),
             'valid' => $this->isValid(),
         ];
     }

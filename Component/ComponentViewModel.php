@@ -97,7 +97,7 @@ class ComponentViewModel implements ComponentViewModelInterface
             return $messageArea;
         }
 
-        return 'global';
+        return 'local';
     }
 
     public function getContext(): ComponentContextInterface

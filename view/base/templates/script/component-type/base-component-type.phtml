@@ -267,6 +267,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         addError(messageText) {
             this.addMessage('error', messageText);
         },
+        hasLocalMessages() {
+            return this.messages.length > 0;
+        },
         destroyActions: {
             clearAutofillListenerTimer() {
                 clearInterval(this.autofillListenerTimer);

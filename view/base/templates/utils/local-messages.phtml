@@ -7,8 +7,12 @@ use Loki\Components\Util\Block\CssClass;
 /** @var Template $block */
 /** @var CssClass $css */
 ?>
-<ul class="loki-components-messages <?= $css('') ?>">
+<template x-if="hasLocalMessages">
+<ul
+    class="loki-components-messages <?= $css('') ?>"
+    aria-errormessage="<?= $block->getAncestorBlock()->getId() ?>">
     <template x-for="message in messages">
         <li :class="message.type" x-html="message.text"></li>
     </template>
 </ul>
+</template>

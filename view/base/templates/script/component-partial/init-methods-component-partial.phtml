@@ -1,0 +1,13 @@
+<script>
+    const LokiLoadInitMethodsComponentPartial = {
+        loadInitMethods() {
+            const initMethods = Object.getOwnPropertyNames(this).filter((methodName) => {
+                return methodName.startsWith('init') && methodName !== 'init';
+            });
+
+            initMethods.forEach(methodName => {
+                this[methodName].apply(this);
+            });
+        },
+    };
+</script>

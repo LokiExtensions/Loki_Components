@@ -1,16 +1,11 @@
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('LokiModal', () => ({
+            ...LokiLoadInitMethodsComponentPartial,
+            ...LokiModalComponentPartial,
             async init() {
-                const initMethods = Object.getOwnPropertyNames(this).filter((methodName) => {
-                    return methodName.startsWith('init') && methodName !== 'init';
-                });
-
-                initMethods.forEach(methodName => {
-                    this[methodName].apply(this);
-                })
+                this.loadInitMethods();
             },
-            ...LokiModalComponentPartial
         }));
     });
 </script>

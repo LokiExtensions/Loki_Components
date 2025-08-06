@@ -1,0 +1,13 @@
+<script>
+    const LokiLoadDestroyMethodsComponentPartial = {
+        loadDestroyMethods() {
+            const destroyMethods = Object.getOwnPropertyNames(this).filter((methodName) => {
+                return methodName.startsWith('destroy') && methodName !== 'destroy';
+            });
+
+            destroyMethods.forEach(methodName => {
+                this[methodName].apply(this);
+            });
+        },
+    };
+</script>

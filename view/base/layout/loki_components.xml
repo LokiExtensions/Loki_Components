@@ -32,8 +32,14 @@
 
                 <container name="loki-component-partials">
                     <block
-                        name="loki-components.script.component-data-loader.modal"
+                        name="loki-components.script.component-partial.data-loader"
                         template="Loki_Components::script/component-partial/data-loader-component-partial.phtml"/>
+                    <block
+                        name="loki-components.script.component-partial.init-methods"
+                        template="Loki_Components::script/component-partial/init-methods-component-partial.phtml"/>
+                    <block
+                        name="loki-components.script.component-partial.destroy-methods"
+                        template="Loki_Components::script/component-partial/destroy-methods-component-partial.phtml"/>
                     <block
                         name="loki-components.script.component-partial.modal"
                         template="Loki_Components::script/component-partial/modal-component-partial.phtml"/>

@@ -20,6 +20,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 
     const LokiComponentType = {
         ...LokiLoadDataComponentPartial,
+        ...LokiLoadInitMethodsComponentPartial,
+        ...LokiLoadDestroyMethodsComponentPartial,
         id: '',
         name: '',
         elementId: '',
@@ -37,14 +39,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         autofillListenerTimer: null,
         async init() {
             this.loadData();
-
-            const initMethods = Object.getOwnPropertyNames(this).filter((methodName) => {
-                return methodName.startsWith('init') && methodName !== 'init';
-            });
-
-            initMethods.forEach(methodName => {
-                this[methodName].apply(this);
-            })
+            this.loadInitMethods();
         },
         initComponentRegistration() {
             Alpine.store('components').add(this);
@@ -270,15 +265,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         hasLocalMessages() {
             return this.messages.length > 0;
         },
-        destroyActions: {
-            clearAutofillListenerTimer() {
-                clearInterval(this.autofillListenerTimer);
-            }
+        destroy() {
+            this.loadDestroyMethods();
         },
-        async destroy() {
-            for ([key, callback] of Object.entries(this.destroyActions)) {
-                await callback.apply(this);
-            }
+        destroyAutofillListener() {
+            clearInterval(this.autofillListenerTimer);
         }
     }
 </script>

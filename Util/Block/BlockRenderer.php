@@ -14,7 +14,7 @@ class BlockRenderer extends AbstractRenderer
      * @param AbstractBlock $ancestorBlock
      * @param array $data
      *
-     * @return Template
+     * @return AbstractBlock
      */
     public function get(
         AbstractBlock $ancestorBlock,

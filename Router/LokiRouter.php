@@ -4,6 +4,7 @@ namespace Loki\Components\Router;
 
 use Loki\Components\Controller\Index\Html;
 use Magento\Framework\App\ActionFactory;
+use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\RouterInterface;
@@ -15,7 +16,7 @@ class LokiRouter implements RouterInterface
     ) {
     }
 
-    public function match(RequestInterface $request)
+    public function match(RequestInterface $request): ActionInterface|null
     {
         /** @var HttpRequest $request */
         $identifier = trim($request->getPathInfo(), '/');

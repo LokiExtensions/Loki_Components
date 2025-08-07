@@ -32,7 +32,7 @@ class Converter implements ConverterInterface
 
     /**
      * @param DOMDocument $source
-     * @return ComponentDefinition[]
+     * @return array[]
      */
     private function getComponentDefinitions(DOMDocument $source): array
     {

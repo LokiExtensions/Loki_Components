@@ -9,6 +9,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Loki\Components\Component\ComponentRegistry;
 use Loki\Components\Exception\NoComponentFoundException;
 use Loki\Components\Util\ComponentUtil;
+use Magento\Framework\View\Element\Template;
 
 class AddComponentToBlock implements ObserverInterface
 {
@@ -32,11 +33,17 @@ class AddComponentToBlock implements ObserverInterface
         }
 
         $viewModel = $component->getViewModel();
-        if ($viewModel->getTemplate() !== null && $viewModel->getTemplate() !== '' && $viewModel->getTemplate() !== '0') {
-            $block->setTemplate($viewModel->getTemplate());
+        $template = $viewModel->getTemplate();
+        if ($template !== null && $template !== '' && $template !== '0') {
+            $block->setTemplate($template);
         }
 
         $block->setViewModel($viewModel);
+
+        if (false === $block instanceof Template) {
+            return;
+        }
+
         $block->assign('viewModel', $viewModel);
         $block->assign('componentUtil', $this->componentUtil);
     }

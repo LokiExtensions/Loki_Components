@@ -3,6 +3,7 @@
 namespace Loki\Components\Config\XmlConfig;
 
 use DOMDocument;
+use DOMElement;
 use DOMNode;
 use Magento\Framework\Config\ConverterInterface;
 use RuntimeException;
@@ -71,7 +72,7 @@ class Converter implements ConverterInterface
         return $componentDefinitions;
     }
 
-    private function getGroupDefinitions(DOMNode $element): array
+    private function getGroupDefinitions(DOMDocument $element): array
     {
         $groupDefinitions = [];
         $groupElements = $element->getElementsByTagName('group');
@@ -99,7 +100,7 @@ class Converter implements ConverterInterface
         return $groupDefinitions;
     }
 
-    private function getTargets(DOMNode $element, string $blockName = '', array $targets = []): array
+    private function getTargets(DOMElement $element, string $blockName = '', array $targets = []): array
     {
         $disabledTargets = [];
         if ($blockName !== '' && $blockName !== '0') {
@@ -125,7 +126,7 @@ class Converter implements ConverterInterface
         return array_values(array_unique($targets));
     }
 
-    private function getValidators(DOMNode $element): array
+    private function getValidators(DOMElement $element): array
     {
         $validators = [];
         $validatorElements = $element->getElementsByTagName('validator');
@@ -141,7 +142,7 @@ class Converter implements ConverterInterface
         return $validators;
     }
 
-    private function getFilters(DOMNode $element): array
+    private function getFilters(DOMElement $element): array
     {
         $filters = [];
         $filterElements = $element->getElementsByTagName('filter');

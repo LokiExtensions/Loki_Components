@@ -14,9 +14,6 @@ class GlobalMessagesViewModel extends ComponentViewModel
         return 'LokiComponentsGlobalMessages';
     }
 
-    /**
-     * @return array|null
-     */
     public function getJsData(): array
     {
         return [

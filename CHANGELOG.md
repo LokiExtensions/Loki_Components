@@ -10,6 +10,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Fixed
 - Move loading features into separate component and component partial
 - Lift up to PHPStan level 3
+- Add escaping to templates
 
 ## [2.0.7] - 07 August 2025
 ### Fixed

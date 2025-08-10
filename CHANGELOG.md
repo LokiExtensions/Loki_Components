@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.8] - 10 August 2025
+### Fixed
+- Move loading features into separate component and component partial
+- Lift up to PHPStan level 3
+
 ## [2.0.7] - 07 August 2025
 ### Fixed
 - Lift up to PHPStan level 2

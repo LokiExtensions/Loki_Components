@@ -41,6 +41,9 @@
                         name="loki-components.script.component-partial.destroy-methods"
                         template="Loki_Components::script/component-partial/destroy-methods-component-partial.phtml"/>
                     <block
+                        name="loki-components.script.component-partial.loader"
+                        template="Loki_Components::script/component-partial/loader-component-partial.phtml"/>
+                    <block
                         name="loki-components.script.component-partial.modal"
                         template="Loki_Components::script/component-partial/modal-component-partial.phtml"/>
                     <block
@@ -64,6 +67,9 @@
                     <block
                         name="loki-components.script.component.form"
                         template="Loki_Components::script/component/form.phtml"/>
+                    <block
+                        name="loki-components.script.component.loader"
+                        template="Loki_Components::script/component/loader.phtml"/>
                     <block
                         name="loki-components.script.component.modal"
                         template="Loki_Components::script/component/modal.phtml"/>

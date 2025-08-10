@@ -22,6 +22,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         ...LokiLoadDataComponentPartial,
         ...LokiLoadInitMethodsComponentPartial,
         ...LokiLoadDestroyMethodsComponentPartial,
+        ...LokiLoaderComponentPartial,
         id: '',
         name: '',
         elementId: '',
@@ -31,9 +32,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         messageArea: 'local',
         value: null,
         visible: false,
-        loading: false,
-        showLoader: false,
-        showLoaderTimeout: 700,
         lazyLoad: false,
         beforePostValue: null,
         autofillListenerTimer: null,
@@ -144,25 +142,12 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         },
         setTargetStateOnPost() {
             this.targets.forEach(target => {
-                const targetElement = document.getElementById(target);
-                if (targetElement) {
-                    targetElement.setAttribute('aria-busy', true);
-                }
-
-                const targetComponent = Alpine.store('components').getComponentByElementId(target);
-                if (targetComponent) {
-                    targetComponent.loading = true;
-                }
+                this.setLoadingStateToElement(target, true);
             });
         },
         setTargetStateAfterPost() {
             this.targets.forEach(target => {
-                const targetElement = document.getElementById(target);
-                if (targetElement) {
-                    targetElement.removeAttribute('aria-busy');
-                } else {
-                    LokiComponentsLogger.error('Target not found', target);
-                }
+                this.setLoadingStateToElement(target, false);
             });
         },
         getPostHeaders() {

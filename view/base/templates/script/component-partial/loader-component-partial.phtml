@@ -1,0 +1,24 @@
+<script>
+    const LokiLoaderComponentPartial = {
+        loading: false,
+        showLoader: false,
+        showLoaderTimeout: 400,
+        setLoadingStateToElement(elementId, loadingState) {
+            const element = document.getElementById(elementId);
+            if (!element) {
+                return;
+            }
+
+            if (loadingState) {
+                element.setAttribute('aria-busy', true);
+            } else {
+                element.removeAttribute('aria-busy');
+            }
+
+            const component = Alpine.store('components').getComponentByElementId(elementId);
+            if (component) {
+                component.loading = loadingState;
+            }
+        }
+    };
+</script>

@@ -3,12 +3,14 @@ declare(strict_types=1);
 
 use Loki\Components\Factory\ViewModelFactory;
 use Loki\Components\Messages\GlobalMessageRegistry;
+use Magento\Framework\Escaper;
 
-/**
- * @var GlobalMessageRegistry $globalMessageRegistry
- * @var ViewModelFactory $viewModelFactory
- */
+/** @var GlobalMessageRegistry $globalMessageRegistry */
+/** @var ViewModelFactory $viewModelFactory */
+/** @var Escaper $escaper */
+
 $globalMessageRegistry = $viewModelFactory->create(GlobalMessageRegistry::class);
 ?>
 
-<div id="loki-components-utils-global-message-container" data-messages='<?= json_encode($globalMessageRegistry->toArray()) ?>'></div>
+<div id="loki-components-utils-global-message-container"
+     data-messages='<?= $escaper->escapeHtml(json_encode($globalMessageRegistry->toArray())) ?>'></div>

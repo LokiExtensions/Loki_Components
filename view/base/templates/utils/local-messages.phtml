@@ -1,16 +1,18 @@
 <?php
 declare(strict_types=1);
 
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Loki\Components\Util\Block\CssClass;
 
 /** @var Template $block */
+/** @var Escaper $escaper */
 /** @var CssClass $css */
 ?>
 <template x-if="hasLocalMessages">
     <ul
-        class="loki-components-messages <?= $css('') ?>"
-        id="<?= $block->getDomId() ?>">
+        class="loki-components-messages <?= /* @noEscape */ $css('') ?>"
+        id="<?= $escaper->escapeHtml($block->getDomId()) ?>">
         <template x-for="message in messages">
             <li :class="message.type" x-html="message.text"></li>
         </template>

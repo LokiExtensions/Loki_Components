@@ -1,12 +1,14 @@
 <?php
 declare(strict_types=1);
 
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Loki\Components\Config\Config;
 use Loki\Components\Factory\ViewModelFactory;
 use Loki\Components\Util\ComponentUtil;
 
 /** @var Template $block */
+/** @var Escaper $escaper */
 /** @var ViewModelFactory $viewModelFactory */
 /** @var Config $config */
 /** @var ComponentUtil $componentUtil */
@@ -15,7 +17,7 @@ $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
-    const LokiComponentFormKey = '<?= $componentUtil->getFormKey() ?>';
+    const LokiComponentFormKey = '<?= $escaper->escapeJs($componentUtil->getFormKey()) ?>';
     const LokiComponentAbortControllers = {};
 
     const LokiComponentType = {
@@ -69,7 +71,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             const bodyData = this.getBodyData();
             bodyData.componentData = value;
 
-            await fetch('<?= $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
+            await fetch('<?= /* @noEscape */ $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
                 signal: abortController.signal,
@@ -161,9 +163,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             return {
                 targets: this.targets,
                 block: this.blockId,
-                handles: <?= json_encode($componentUtil->getHandles($block)) ?>,
-                currentUri: '<?= $componentUtil->getCurrentUri() ?>',
-                request: <?= json_encode($componentUtil->getRequestParams()) ?>,
+                handles: <?= /** @noEscape */ json_encode($componentUtil->getHandles($block)) ?>,
+                currentUri: '<?= $escaper->escapeJs($componentUtil->getCurrentUri()) ?>',
+                request: <?= /** @noEscape */ json_encode($componentUtil->getRequestParams()) ?>,
             };
         },
         updateTargetsAfterPost(html) {

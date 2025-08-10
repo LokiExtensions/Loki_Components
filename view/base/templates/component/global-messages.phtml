@@ -1,22 +1,24 @@
 <?php
 declare(strict_types=1);
 
+use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Loki\Components\Component\GlobalMessages\GlobalMessagesViewModel;
 use Loki\Components\Util\Block\CssClass;
 
 /** @var Template $block */
+/** @var Escaper $escaper */
 /** @var GlobalMessagesViewModel $viewModel */
 /** @var CssClass $css */
 ?>
-<div class="<?= $css('fixed z-[300] w-full p-4') ?>" x-cloak x-show="hasMessages">
+<div class="<?= /* @noEscape */ $css('fixed z-[300] w-full p-4') ?>" x-cloak x-show="hasMessages">
     <template x-for="message in messages">
-        <div class="<?= $css('message', 'message') ?>" :class="message.type">
-            <div class="<?= $css('inline-block', 'message-text') ?>" x-html="message.text"></div>
+        <div class="<?= /* @noEscape */ $css('message', 'message') ?>" :class="message.type">
+            <div class="<?= /* @noEscape */ $css('inline-block', 'message-text') ?>" x-html="message.text"></div>
             <button
                 type="button"
-                class="<?= $css('text-gray-600 hover:text-black', 'button') ?>"
-                aria-label="<?= __('Close message') ?>"
+                class="<?= /* @noEscape */ $css('text-gray-600 hover:text-black', 'button') ?>"
+                aria-label="<?= $escaper->escapeHtml(__('Close message')) ?>"
                 :data-message="message.text"
                 @click.prevent="removeMessage">
                 x

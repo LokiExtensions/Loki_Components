@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Loki\Components\Observer;
 
+use Loki\Components\Util\Ajax;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -16,7 +17,8 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
 {
     public function __construct(
         private readonly ComponentRegistry $componentRegistry,
-        private readonly JsDataProvider $jsDataProvider
+        private readonly JsDataProvider $jsDataProvider,
+        private readonly Ajax $ajax
     ) {
     }
 
@@ -102,6 +104,10 @@ EOF;
     private function getJsData(ComponentInterface $component): string
     {
         $componentData = $this->jsDataProvider->getComponentData($component);
+
+        if ($this->ajax->isAjax()) {
+            $componentData['ajax'] = true;
+        }
 
         return json_encode($componentData);
     }

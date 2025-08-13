@@ -17,7 +17,9 @@ $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
-    const LokiComponentFormKey = '<?= $escaper->escapeJs($componentUtil->getFormKey()) ?>';
+    const LokiComponentFormKey = '<?= $escaper->escapeJs(
+        $componentUtil->getFormKey()
+    ) ?>';
     const LokiComponentAbortControllers = {};
 
     const LokiComponentType = {
@@ -35,6 +37,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         value: null,
         visible: false,
         lazyLoad: false,
+        ajax: false,
         beforePostValue: null,
         autofillListenerTimer: null,
         async init() {
@@ -71,7 +74,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             const bodyData = this.getBodyData();
             bodyData.componentData = value;
 
-            await fetch('<?= /* @noEscape */ $componentUtil->getPostUrl() ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
+            await fetch('<?= /* @noEscape */ $componentUtil->getPostUrl(
+            ) ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
                 signal: abortController.signal,
@@ -103,7 +107,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     }
 
                     this.$nextTick(() => {
-                        document.dispatchEvent(new CustomEvent('loki-components.component.update', {detail: {component: this}}));
+                        document.dispatchEvent(new CustomEvent('loki-components.component.update', {
+                            detail: {
+                                component: this
+                            }
+                        }));
 
                         if (document.lastFocusElementId) {
                             document.getElementById(document.lastFocusElementId).focus();
@@ -163,9 +171,15 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             return {
                 targets: this.targets,
                 block: this.blockId,
-                handles: <?= /** @noEscape */ json_encode($componentUtil->getHandles($block)) ?>,
-                currentUri: '<?= $escaper->escapeJs($componentUtil->getCurrentUri()) ?>',
-                request: <?= /** @noEscape */ json_encode($componentUtil->getRequestParams()) ?>,
+                handles: <?= /** @noEscape */ json_encode(
+                    $componentUtil->getHandles($block)
+                ) ?>,
+                currentUri: '<?= $escaper->escapeJs(
+                    $componentUtil->getCurrentUri()
+                ) ?>',
+                request: <?= /** @noEscape */ json_encode(
+                    $componentUtil->getRequestParams()
+                ) ?>,
             };
         },
         updateTargetsAfterPost(html) {
@@ -201,9 +215,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             }
 
             if (data.redirect) {
-                console.log('Redirecting to ' + data.redirect);
                 document.location.assign(data.redirect);
-                //window.location.replace(data.redirect); // @todo
             }
         },
         getDetailsString() {

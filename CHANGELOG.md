@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.10] - 15 August 2025
+### Fixed
+- Add new `$style()` variable in PHTML templates
+- Move config from Yireo tab to Loki tab
+
 ## [2.0.9] - 13 August 2025
 ### Fixed
 - Add data-valid attribute to fields

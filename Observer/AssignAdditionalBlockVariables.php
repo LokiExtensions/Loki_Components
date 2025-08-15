@@ -14,6 +14,7 @@ use Loki\Components\Factory\ViewModelFactory;
 use Loki\Components\Util\Block\BlockRenderer;
 use Loki\Components\Util\Block\ChildRenderer;
 use Loki\Components\Util\Block\CssClassFactory;
+use Loki\Components\Util\Block\CssStyleFactory;
 use Loki\Components\Util\Block\TemplateRenderer;
 
 class AssignAdditionalBlockVariables implements ObserverInterface
@@ -21,6 +22,7 @@ class AssignAdditionalBlockVariables implements ObserverInterface
     public function __construct(
         private readonly ViewModelFactory $viewModelFactory,
         private readonly CssClassFactory $cssClassFactory,
+        private readonly CssStyleFactory $cssStyleFactory,
         private readonly BlockRenderer $blockRenderer,
         private readonly ChildRenderer $childRenderer,
         private readonly TemplateRenderer $templateRenderer,
@@ -37,6 +39,10 @@ class AssignAdditionalBlockVariables implements ObserverInterface
 
         $cssClass = $this->cssClassFactory->create();
         $block->assign('css', $cssClass->setBlock($block));
+
+        $cssStyle = $this->cssStyleFactory->create();
+        $block->assign('style', $cssStyle->setBlock($block));
+
         $block->assign('viewModelFactory', $this->viewModelFactory);
         $block->assign('blockRenderer', $this->blockRenderer);
         $block->assign('childRenderer', $this->childRenderer);

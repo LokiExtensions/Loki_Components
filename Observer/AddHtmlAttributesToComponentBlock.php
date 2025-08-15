@@ -119,4 +119,8 @@ EOF;
         // @todo: Find all instances of this kind of thing and DRY
         return preg_replace('#([^a-zA-Z0-9]{1})#', '-', $nameInLayout);
     }
+
+    private function getInlineStyles(AbstractBlock $block): array
+    {
+    }
 }

@@ -5,6 +5,7 @@ namespace Loki\Components\Test\Integration;
 use Laminas\Http\Header\GenericHeader;
 use Laminas\Http\Headers;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\HttpInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\LayoutInterface;
@@ -44,8 +45,8 @@ class LokiComponentsTestCase extends AbstractController
         $this->assertModuleIsEnabled('Loki_Components');
     }
 
-    protected function getComponentByBlockName(string $blockName): ComponentInterface
-    {
+    protected function getComponentByBlockName(string $blockName
+    ): ComponentInterface {
         $layout = $this->getObjectManager()->get(LayoutInterface::class);
         $block = $layout->getBlock($blockName);
         $this->assertInstanceOf(Template::class, $block);
@@ -56,64 +57,74 @@ class LokiComponentsTestCase extends AbstractController
         return $component;
     }
 
-    protected function assertComponentExistsOnPage(string $componentName, bool $debug = false)
-    {
+    protected function assertComponentExistsOnPage(string $componentName,
+        bool $debug = false
+    ) {
         $component = $this->getComponent($componentName);
         $found = $this->existsComponentOnPage($component);
         $msg = 'Component "' . $component->getName() . '" not found';
 
         if ($debug) {
-            $msg .= "\n" . $this->getResponse()->getBody();
+            $msg .= "\n" . $this->getResponseBody();
         }
 
         $this->assertTrue($found, $msg);
     }
 
-    protected function assertComponentNotExistsOnPage(string $componentName, bool $debug = false)
-    {
+    protected function assertComponentNotExistsOnPage(string $componentName,
+        bool $debug = false
+    ) {
         $component = $this->getComponent($componentName);
         $found = $this->existsComponentOnPage($component);
         $msg = 'Component "' . $component->getName() . '" found anyway';
         if ($debug) {
-            $msg .= "\n" . $this->getResponse()->getBody();
+            $msg .= "\n" . $this->getResponseBody();
         }
 
         $this->assertFalse($found, $msg);
     }
 
-    protected function assertElementIdExistsOnPage(string $elementId, bool $debug = false)
-    {
+    protected function assertElementIdExistsOnPage(string $elementId,
+        bool $debug = false
+    ) {
         $found = $this->existsElementIdOnPage($elementId);
         $msg = 'Element ID "' . $elementId . '" not found';
         if ($debug) {
-            $msg .= "\n" . $this->getResponse()->getBody();
+            $msg .= "\n" . $this->getResponseBody();
         }
 
         $this->assertTrue($found, $msg);
     }
 
-    protected function assertElementIdNotExistsOnPage(string $elementId, bool $debug = false)
-    {
+    protected function assertElementIdNotExistsOnPage(string $elementId,
+        bool $debug = false
+    ) {
         $found = $this->existsElementIdOnPage($elementId);
         $msg = 'Element ID "' . $elementId . '" found anyway';
         if ($debug) {
-            $msg .= "\n" . $this->getResponse()->getBody();
+            $msg .= "\n" . $this->getResponseBody();
         }
 
         $this->assertFalse($found, $msg);
     }
 
-    protected function assertComponentValidators(array $expectedValidators, ComponentInterface $component)
-    {
+    protected function assertComponentValidators(array $expectedValidators,
+        ComponentInterface $component
+    ) {
         foreach ($expectedValidators as $expectedValidator) {
-            $this->assertContains($expectedValidator, $component->getValidators());
+            $this->assertContains(
+                $expectedValidator, $component->getValidators()
+            );
         }
     }
 
-    protected function assertComponentNoValidators(array $expectedValidators, ComponentInterface $component)
-    {
+    protected function assertComponentNoValidators(array $expectedValidators,
+        ComponentInterface $component
+    ) {
         foreach ($expectedValidators as $expectedValidator) {
-            $this->assertNotContains($expectedValidator, $component->getValidators());
+            $this->assertNotContains(
+                $expectedValidator, $component->getValidators()
+            );
         }
     }
 
@@ -127,9 +138,13 @@ class LokiComponentsTestCase extends AbstractController
         $result = $this->getValidator()->validate($component, $value);
 
         if (true === $expectedResult) {
-            $this->assertTrue($result, 'Validation did not succeed for value: ' . $value);
+            $this->assertTrue(
+                $result, 'Validation did not succeed for value: ' . $value
+            );
         } else {
-            $this->assertFalse($result, 'Validation did not fail for value: ' . $value);
+            $this->assertFalse(
+                $result, 'Validation did not fail for value: ' . $value
+            );
         }
 
         if (empty($expectedErrors)) {
@@ -143,7 +158,7 @@ class LokiComponentsTestCase extends AbstractController
 
     protected function existsElementIdOnPage(string $elementId): bool
     {
-        $body = $this->getResponse()->getBody();
+        $body = $this->getResponseBody();
         if (false === str_contains($body, ' id="' . $elementId . '"')) {
             return false;
         }
@@ -158,23 +173,31 @@ class LokiComponentsTestCase extends AbstractController
 
     protected function assertStringNotOccursOnPage(string $string): void
     {
-        $this->assertStringNotContainsString($string, $this->getResponse()->getBody());
+        $this->assertStringNotContainsString(
+            $string, $this->getResponse()->getBody()
+        );
     }
 
     protected function assertStringOccursOnPage(string $string): void
     {
-        $this->assertStringContainsString($string, $this->getResponse()->getBody());
+        $this->assertStringContainsString(
+            $string, $this->getResponse()->getBody()
+        );
     }
 
-    protected function existsComponentOnPage(ComponentInterface $component): bool
-    {
-        $elementId = $this->getObjectManager()->get(IdConvertor::class)->toElementId($component->getName());
-        $body = $this->getResponse()->getBody();
+    protected function existsComponentOnPage(ComponentInterface $component
+    ): bool {
+        $elementId = $this->getObjectManager()->get(IdConvertor::class)
+            ->toElementId($component->getName());
+        $body = $this->getResponseBody();
         if (false === str_contains($body, ' id="' . $elementId . '"')) {
             return false;
         }
 
-        if (str_contains($body, 'Not rendered: ' . $component->getName() . ' ')) {
+        if (str_contains(
+            $body, 'Not rendered: ' . $component->getName() . ' '
+        )
+        ) {
             return false;
         }
 
@@ -185,7 +208,9 @@ class LokiComponentsTestCase extends AbstractController
     {
         $headers = new Headers();
         $headers->addHeader(GenericHeader::fromString('X-Alpine-Request: 1'));
-        $this->getObjectManager()->get(HttpRequest::class)->setHeaders($headers);
+        $this->getObjectManager()->get(HttpRequest::class)->setHeaders(
+            $headers
+        );
 
     }
 
@@ -197,5 +222,12 @@ class LokiComponentsTestCase extends AbstractController
     protected function getFilter(): Filter
     {
         return $this->getObjectManager()->get(Filter::class);
+    }
+
+    protected function getResponseBody(): string
+    {
+        /** @var HttpInterface $response */
+        $response = $this->getResponse();
+        return $response->getBody();
     }
 }

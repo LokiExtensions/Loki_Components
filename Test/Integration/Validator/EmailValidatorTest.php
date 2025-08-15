@@ -19,7 +19,7 @@ class EmailValidatorTest extends TestCase
 
     /**
      * @param string $email
-     * @param bool $expectedResult
+     * @param true|string $expectedResult
      * @return void
      * @dataProvider getValues
      */

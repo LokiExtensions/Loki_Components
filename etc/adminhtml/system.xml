@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
-        <tab id="yireo" sortOrder="999" translate="label">
-            <label>Yireo</label>
+        <tab id="loki" sortOrder="999" translate="label">
+            <label>Loki</label>
         </tab>
         <section id="loki_components" translate="label" sortOrder="342" showInDefault="1" showInWebsite="1" showInStore="1">
             <label>Loki Components</label>
-            <tab>yireo</tab>
+            <tab>loki</tab>
             <resource>Loki_Components::configuration</resource>
             <group id="general" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Generic settings</label>

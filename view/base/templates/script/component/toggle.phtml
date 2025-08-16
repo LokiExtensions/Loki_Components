@@ -1,7 +1,7 @@
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('LokiToggle', () => ({
-            shown: true,
+            shown: false,
             hidden() {
                 return !this.shown;
             },

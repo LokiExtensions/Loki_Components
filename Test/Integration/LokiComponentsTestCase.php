@@ -5,7 +5,7 @@ namespace Loki\Components\Test\Integration;
 use Laminas\Http\Header\GenericHeader;
 use Laminas\Http\Headers;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\App\Response\HttpInterface;
+use Magento\Framework\App\Response\Http;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\LayoutInterface;
@@ -173,16 +173,12 @@ class LokiComponentsTestCase extends AbstractController
 
     protected function assertStringNotOccursOnPage(string $string): void
     {
-        $this->assertStringNotContainsString(
-            $string, $this->getResponse()->getBody()
-        );
+        $this->assertStringNotContainsString($string, $this->getResponseBody());
     }
 
     protected function assertStringOccursOnPage(string $string): void
     {
-        $this->assertStringContainsString(
-            $string, $this->getResponse()->getBody()
-        );
+        $this->assertStringContainsString($string, $this->getResponseBody());
     }
 
     protected function existsComponentOnPage(ComponentInterface $component
@@ -226,7 +222,7 @@ class LokiComponentsTestCase extends AbstractController
 
     protected function getResponseBody(): string
     {
-        /** @var HttpInterface $response */
+        /** @var Http $response */
         $response = $this->getResponse();
         return $response->getBody();
     }

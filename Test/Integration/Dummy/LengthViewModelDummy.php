@@ -36,7 +36,7 @@ class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehavio
     public function getBlock(): AbstractBlock
     {
         /** @var AbstractBlock $object */
-        $object = null;
+        $object = null; // @phpstan-ignore
         return $object;
     }
 
@@ -73,7 +73,7 @@ class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehavio
     public function getContext(): ComponentContextInterface
     {
         /** @var ComponentContextInterface $object */
-        $object = null;
+        $object = null; // @phpstan-ignore
         return $object;
     }
 

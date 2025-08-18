@@ -10,7 +10,7 @@ class PastDateValidatorTest extends TestCase
     /**
      * @dataProvider getTestData
      */
-    public function testWithNoSimpleValues(string $value, true|array $expectedResult): void
+    public function testWithNoSimpleValues(string $value, bool|array $expectedResult): void
     {
         $validator = new PastDateValidator();
         $result = $validator->validate($value);

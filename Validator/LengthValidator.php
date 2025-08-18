@@ -7,7 +7,7 @@ use Loki\Components\Component\ComponentInterface;
 
 class LengthValidator implements ValidatorInterface
 {
-    public function validate(mixed $value, ?ComponentInterface $component = null): true|array
+    public function validate(mixed $value, ?ComponentInterface $component = null): bool|array
     {
         if (false === is_string($value)) {
             return true;

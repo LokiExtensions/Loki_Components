@@ -6,7 +6,7 @@ use Loki\Components\Component\ComponentInterface;
 
 class PastDateValidator implements ValidatorInterface
 {
-    public function validate(mixed $value, ?ComponentInterface $component = null): true|array
+    public function validate(mixed $value, ?ComponentInterface $component = null): bool|array
     {
         $date = trim((string)$value);
         if ($date === '' || $date === '0') {

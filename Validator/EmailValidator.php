@@ -12,7 +12,7 @@ class EmailValidator implements ValidatorInterface
     ) {
     }
 
-    public function validate(mixed $value, ?ComponentInterface $component = null): true|array
+    public function validate(mixed $value, ?ComponentInterface $component = null): bool|array
     {
         $email = trim((string)$value);
 
@@ -34,7 +34,7 @@ class EmailValidator implements ValidatorInterface
         return true;
     }
 
-    private function checkMxRecord(string $email): true|array
+    private function checkMxRecord(string $email): bool|array
     {
         $parts = explode('@', $email);
         $domain = $parts[1];

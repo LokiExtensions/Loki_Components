@@ -6,7 +6,7 @@ use Loki\Components\Component\ComponentInterface;
 
 class PositiveNumberValidator implements ValidatorInterface
 {
-    public function validate(mixed $value, ?ComponentInterface $component = null): true|array
+    public function validate(mixed $value, ?ComponentInterface $component = null): bool|array
     {
         if (false === is_numeric($value)) {
             return [(string)__('Value must contain numbers only')];

@@ -2,6 +2,8 @@
 
 namespace Loki\Components\Test\Integration\Dummy;
 
+use Loki\Components\Component\ComponentContext;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Loki\Components\Component\Behaviour\LengthBehaviourInterface;
 use Loki\Components\Component\ComponentContextInterface;
@@ -35,9 +37,7 @@ class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehavio
 
     public function getBlock(): AbstractBlock
     {
-        /** @var AbstractBlock $object */
-        $object = null; // @phpstan-ignore
-        return $object;
+        return ObjectManager::getInstance()->create(AbstractBlock::class);
     }
 
     public function getValue(): mixed
@@ -72,9 +72,7 @@ class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehavio
 
     public function getContext(): ComponentContextInterface
     {
-        /** @var ComponentContextInterface $object */
-        $object = null; // @phpstan-ignore
-        return $object;
+        return ObjectManager::getInstance()->create(ComponentContext::class);
     }
 
     public function getTemplate(): ?string

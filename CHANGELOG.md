@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.11] - 18 August 2025
+### Fixed
+- Allow for PHP 8.1 compatibility
+- Lower requirements to PHP 8.1
+- Option to limit cart items in sidebar but collapse to entire list
+- Rename tab in Store Config from "Yireo" to "Loki"
+
 ## [2.0.10] - 15 August 2025
 ### Fixed
 - Add new `$style()` variable in PHTML templates

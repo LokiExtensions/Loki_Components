@@ -17,23 +17,19 @@ use Loki\Components\Util\Block\CssClass;
 $imageOutput = $viewModelFactory->create(ImageOutput::class);
 ?>
 <div
-    class="<?= /* @noEscape */
-    $css('fixed z-[300] w-full p-4') ?>"
+    class="<?= /* @noEscape */ $css('fixed z-[300] w-full p-4') ?>"
     x-cloak x-show="hasMessages">
     <template x-for="message in messages">
         <div
-            class="<?= /* @noEscape */
-            $css('message', 'message') ?>"
+            class="<?= /* @noEscape */ $css('message', 'message') ?>"
             :class="message.type">
             <div
-                class="<?= /* @noEscape */
-                $css('inline-block', 'message-text') ?>"
+                class="<?= /* @noEscape */ $css('inline-block', 'message-text') ?>"
                 x-html="message.text"
             ></div>
             <button
                 type="button"
-                class="<?= /* @noEscape */
-                $css('text-gray-600 hover:text-black w-3', 'button') ?>"
+                class="<?= /* @noEscape */ $css('text-gray-600 hover:text-black w-3', 'button') ?>"
                 aria-label="<?= $escaper->escapeHtml(__('Close message')) ?>"
                 :data-message="message.text"
                 @click.prevent="removeMessage"

@@ -1,12 +1,13 @@
 <?php declare(strict_types=1);
 
+use Loki\Components\Factory\ViewModelFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
-use Loki\Components\Component\ComponentViewModelInterface;
 
 /** @var Escaper $escaper */
 /** @var Template $block */
-/** @var ComponentViewModelInterface $viewModel */ ?>
+/** @var ViewModelFactory $viewModelFactory */
+?>
 <div aria-hidden="true" style="display:none; visibility: hidden;">
     <!-- Not rendered: <?= $escaper->escapeHtml($block->getNameInLayout()) ?> -->
 </div>

@@ -110,10 +110,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                                 component: this
                             }
                         }));
-
-                        if (document.lastFocusElementId) {
-                            document.getElementById(document.lastFocusElementId).focus();
-                        }
                     });
                 })
                 .catch(error => {

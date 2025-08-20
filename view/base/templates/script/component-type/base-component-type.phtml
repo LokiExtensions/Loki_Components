@@ -15,9 +15,9 @@ $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
-    const LokiComponentFormKey = '<?= $escaper->escapeJs(
+    const LokiComponentFormKey = '<?= $escaper->escapeHtml($escaper->escapeJs(
         $componentUtil->getFormKey()
-    ) ?>';
+    )) ?>';
     const LokiComponentAbortControllers = {};
 
     const LokiComponentType = {
@@ -172,9 +172,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 handles: <?= /** @noEscape */ json_encode(
                     $componentUtil->getHandles($block)
                 ) ?>,
-                currentUri: '<?= $escaper->escapeJs(
+                currentUri: '<?= $escaper->escapeHtml($escaper->escapeJs(
                     $componentUtil->getCurrentUri()
-                ) ?>',
+                )) ?>',
                 request: <?= /** @noEscape */ json_encode(
                     $componentUtil->getRequestParams()
                 ) ?>,

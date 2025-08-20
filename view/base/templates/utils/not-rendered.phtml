@@ -1,5 +1,4 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -7,10 +6,7 @@ use Loki\Components\Component\ComponentViewModelInterface;
 
 /** @var Escaper $escaper */
 /** @var Template $block */
-/** @var ComponentViewModelInterface $viewModel */
-?>
-<div
-     aria-hidden="true"
-     style="display:none; visibility: hidden;">
+/** @var ComponentViewModelInterface $viewModel */ ?>
+<div aria-hidden="true" style="display:none; visibility: hidden;">
     <!-- Not rendered: <?= $escaper->escapeHtml($block->getNameInLayout()) ?> -->
 </div>

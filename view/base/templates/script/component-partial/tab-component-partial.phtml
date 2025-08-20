@@ -4,7 +4,7 @@
         activeTabClass: 'tab-active',
         inactiveTabClass: 'tab-inactive',
         showActiveTab() {
-            // @todo: Use ref instead?
+
             const activeTab = this.$root.querySelector('[data-tab-id="' + this.activeTabId + '"]');
             this.toggleTabs({target: activeTab});
         },

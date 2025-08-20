@@ -2,28 +2,31 @@
 <page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <body>
         <referenceContainer name="after.body.start">
-            <block
-                name="loki-components.script.logger"
-                template="Loki_Components::script/logger.phtml"/>
+
             <block
                 name="loki-components.global-messages"
                 template="Loki_Components::component/global-messages.phtml"
                 before="-"/>
-            <block
-                name="loki-components.script.components-store"
-                template="Loki_Components::script/components-store.phtml"/>
+
         </referenceContainer>
 
         <referenceContainer name="before.body.end">
             <container name="loki-scripts">
+                <block
+                    name="loki-components.script.logger"
+                    template="Loki_Components::script/logger.phtml"/>
+                <block
+                    name="loki-components.script.local-storage"
+                    template="Loki_Components::script/local-storage.phtml"/>
+
                 <block
                     name="loki-components.alpinejs"
                     template="Loki_Components::script/alpine.phtml"
                     after="-"/>
 
                 <block
-                    name="loki-components.script.local-storage"
-                    template="Loki_Components::script/local-storage.phtml"/>
+                    name="loki-components.script.components-store"
+                    template="Loki_Components::script/components-store.phtml"/>
 
                 <container name="loki-component-partials">
                     <block

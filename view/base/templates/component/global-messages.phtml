@@ -1,6 +1,7 @@
-<?php
-declare(strict_types=1);
+<?php declare(strict_types=1);
 
+use Loki\Components\Factory\ViewModelFactory;
+use Loki\Field\ViewModel\ImageOutput;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Loki\Components\Component\GlobalMessages\GlobalMessagesViewModel;
@@ -10,19 +11,33 @@ use Loki\Components\Util\Block\CssClass;
 /** @var Escaper $escaper */
 /** @var GlobalMessagesViewModel $viewModel */
 /** @var CssClass $css */
+/** @var ViewModelFactory $viewModelFactory */
+/** @var ImageOutput $imageOutput */
+
+$imageOutput = $viewModelFactory->create(ImageOutput::class);
 ?>
-<div class="<?= /* @noEscape */ $css('fixed z-[300] w-full p-4') ?>" x-cloak x-show="hasMessages">
+<div
+    class="<?= /* @noEscape */
+    $css('fixed z-[300] w-full p-4') ?>"
+    x-cloak x-show="hasMessages">
     <template x-for="message in messages">
-        <div class="<?= /* @noEscape */ $css('message', 'message') ?>" :class="message.type">
-            <div class="<?= /* @noEscape */ $css('inline-block', 'message-text') ?>" x-html="message.text"></div>
+        <div
+            class="<?= /* @noEscape */
+            $css('message', 'message') ?>"
+            :class="message.type">
+            <div
+                class="<?= /* @noEscape */
+                $css('inline-block', 'message-text') ?>"
+                x-html="message.text"
+            ></div>
             <button
                 type="button"
-                class="<?= /* @noEscape */ $css('text-gray-600 hover:text-black', 'button') ?>"
+                class="<?= /* @noEscape */
+                $css('text-gray-600 hover:text-black w-3', 'button') ?>"
                 aria-label="<?= $escaper->escapeHtml(__('Close message')) ?>"
                 :data-message="message.text"
-                @click.prevent="removeMessage">
-                x
-            </button>
+                @click.prevent="removeMessage"
+            ><?= /** @noEscape */ $imageOutput->get('Loki_Components::images/xmark.svg') ?></button>
         </div>
     </template>
 </div>

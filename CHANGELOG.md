@@ -6,6 +6,21 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.12] - 21 August 2025
+### Fixed
+- New ViewModel `AppMode`
+- Remove obsolete call to LokiComponentsFocusListener
+- Move scripts from top of body to bottom of body
+- Remove old `focus-listener`
+- Add dep with `Loki_CssUtils`
+- Import right CssClass util
+- Fix newlines after comments
+- Declare used PHP namespaces
+- Add escaping of template code
+- Add missing `strict_types` declaration
+- Move CssClass and CssStyle to separate package
+- Use `xmark.svg` to close global messages
+
 ## [2.0.11] - 18 August 2025
 ### Fixed
 - Allow for PHP 8.1 compatibility

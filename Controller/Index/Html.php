@@ -24,6 +24,7 @@ use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
 use Loki\Components\Util\Controller\RequestDataLoader;
 use Loki\Components\Util\Controller\TargetRenderer;
+use Psr\Log\LoggerInterface;
 
 class Html implements HttpPostActionInterface, HttpGetActionInterface
 {
@@ -37,6 +38,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly GlobalMessageRegistry $globalMessageRegistry,
         private readonly Config $config,
         private readonly AppState $appState,
+        private readonly LoggerInterface $logger
     ) {
     }
 
@@ -52,12 +54,13 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
                 $data['componentData']
             );
         } catch (NoBlockFoundException $exception) {
-            // @todo: Write this to a dedicated log for debugging purpose
+            $this->logger->critical($exception);
 
         } catch (RedirectException $redirectException) {
             return $this->getJsonRedirect($redirectException->getMessage());
 
         } catch (Exception $exception) {
+            $this->logger->critical($exception);
             $this->addGlobalException($exception);
         }
 

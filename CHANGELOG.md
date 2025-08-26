@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.13] - 26 August 2025
+### Fixed
+- Make sure to log exceptions although they are caught
+
 ## [2.0.12] - 21 August 2025
 ### Fixed
 - New ViewModel `AppMode`

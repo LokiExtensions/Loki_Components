@@ -57,6 +57,7 @@ class Validator
                 }
 
                 // @todo: Allow for global message to be added too
+                //$component->getGlobalMessageRegistry()->addError($message);
                 $component->getLocalMessageRegistry()->addError($message);
             }
 

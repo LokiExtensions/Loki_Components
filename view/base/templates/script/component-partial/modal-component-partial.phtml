@@ -10,7 +10,11 @@ use Magento\Framework\View\Element\Template;
 <script>
     const LokiModalComponentPartial = {
         initModalClosing() {
-            const modal =this.$refs.modal;
+            const modal = this.$refs.modal;
+            if (!modal) {
+                return;
+            }
+
             modal.addEventListener('click', function(event) {
                 if (event.target === modal) {
                     modal.close();

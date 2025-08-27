@@ -18,6 +18,7 @@ class Component implements ComponentInterface
     protected ?ComponentRepositoryInterface $repository = null;
     protected ?AbstractBlock $block = null;
     protected ?LocalMessageRegistry $localMessageRegistry = null;
+    protected bool $isValidated = false;
 
     public function __construct(
         protected ObjectManagerInterface $objectManager,
@@ -157,5 +158,15 @@ class Component implements ComponentInterface
     public function getLocalMessageRegistry(): LocalMessageRegistry
     {
         return $this->localMessageRegistry;
+    }
+
+    public function isValidated(): bool
+    {
+        return $this->isValidated;
+    }
+
+    public function setIsValidated(bool $isValidated): void
+    {
+        $this->isValidated = $isValidated;
     }
 }

@@ -40,6 +40,8 @@ class Validator
         }
 
         $validators = $this->validatorRegistry->getApplicableValidators($component->getValidators());
+        $component->setIsValidated(true);
+
         foreach ($validators as $validator) {
             $result = $validator->validate($data, $component);
             if (true === $result) {

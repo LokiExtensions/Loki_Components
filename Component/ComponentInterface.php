@@ -34,4 +34,8 @@ interface ComponentInterface
     public function getGlobalMessageRegistry(): GlobalMessageRegistry;
 
     public function getLocalMessageRegistry(): LocalMessageRegistry;
+
+    public function isValidated(): bool;
+
+    public function setIsValidated(bool $isValidated): void;
 }

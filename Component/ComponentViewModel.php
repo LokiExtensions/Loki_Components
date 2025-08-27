@@ -44,7 +44,8 @@ class ComponentViewModel implements ComponentViewModelInterface
 
     public function getElementId(): string
     {
-        return preg_replace('/([^a-zA-Z0-9\-]+)/', '-', $this->block->getNameInLayout());
+        $nameInLayout = strtolower((string)$this->block->getNameInLayout());
+        return preg_replace('/([^a-zA-Z0-9\-]+)/', '-', $nameInLayout);
     }
 
     public function getValue(): mixed
@@ -55,7 +56,10 @@ class ComponentViewModel implements ComponentViewModelInterface
 
         $value = $this->getComponent()->getRepository()->getValue();
         $value = $this->filter->filter($this->getComponent()->getFilters(), $value);
-        $this->validator->validate($this->component, $value);
+
+        if (false === $this->component->isValidated()) {
+            $this->validator->validate($this->component, $value);
+        }
 
         return $value;
     }

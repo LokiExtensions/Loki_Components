@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.14] - 27 August 2025
+### Fixed
+- Make sure modal does not cause issue if there is no modal element
+- Convert all DOM classes and IDs to lowercase; Only validate components once
+- Add comment with global message
+
 ## [2.0.13] - 26 August 2025
 ### Fixed
 - Make sure to log exceptions although they are caught

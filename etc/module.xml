@@ -8,7 +8,6 @@
             <module name="Magento_Store"/>
             <module name="Loki_CssUtils"/>
             <module name="Yireo_CspUtilities"/>
-            <module name="Yireo_IntegrationTestHelper"/>
         </sequence>
     </module>
 </config>

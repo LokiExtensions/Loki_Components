@@ -4,8 +4,8 @@
         "Magento_Customer",
         "Magento_Backend",
         "Magento_Store",
-        "Yireo_CspUtilities",
-        "Yireo_IntegrationTestHelper"
+        "Loki_CssUtils",
+        "Yireo_CspUtilities"
     ],
     "components": [
         "loki-components.modal",

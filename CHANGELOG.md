@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.0.15] - 29 August 2025
+### Fixed
+- Add dep
+- Add recurring setup to check for modules to enable
+
 ## [2.0.14] - 27 August 2025
 ### Fixed
 - Make sure modal does not cause issue if there is no modal element

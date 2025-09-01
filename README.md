@@ -12,3 +12,5 @@ Next, enable this module:
 ```bash
 bin/magento module:enable Loki_Components
 ```
+## Usage
+See [loki-extensions.com/docs/components](https://loki-extensions.com/docs/components)

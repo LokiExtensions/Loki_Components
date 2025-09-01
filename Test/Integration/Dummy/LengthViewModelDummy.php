@@ -95,26 +95,6 @@ class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehavio
         return [];
     }
 
-    public function getMinLength(): int
-    {
-        return 0;
-    }
-
-    public function hasMinLength(): bool
-    {
-        return false;
-    }
-
-    public function getMaxLength(): int
-    {
-        return 0;
-    }
-
-    public function hasMaxLength(): bool
-    {
-        return false;
-    }
-
     public function isLazyLoad(): bool
     {
         return false;

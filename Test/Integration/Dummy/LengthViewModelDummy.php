@@ -5,14 +5,13 @@ namespace Loki\Components\Test\Integration\Dummy;
 use Loki\Components\Component\ComponentContext;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
-use Loki\Components\Component\Behaviour\LengthBehaviourInterface;
 use Loki\Components\Component\ComponentContextInterface;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Component\ComponentViewModelInterface;
 use Loki\Components\Filter\Filter;
 use Loki\Components\Validator\Validator;
 
-class LengthViewModelDummy implements ComponentViewModelInterface, LengthBehaviourInterface
+class LengthViewModelDummy implements ComponentViewModelInterface
 {
     public function setComponent(ComponentInterface $component): void
     {

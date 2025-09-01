@@ -2,8 +2,8 @@
 
 namespace Loki\Components\Validator;
 
-use Loki\Components\Component\Behaviour\LengthBehaviourInterface;
 use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Component\ComponentViewModelInterface;
 
 class LengthValidator implements ValidatorInterface
 {
@@ -14,7 +14,7 @@ class LengthValidator implements ValidatorInterface
         }
 
         $viewModel = $component->getViewModel();
-        if (false === $viewModel instanceof LengthBehaviourInterface) {
+        if (false === $viewModel instanceof ComponentViewModelInterface) {
             return true;
         }
 

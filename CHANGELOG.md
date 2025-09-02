@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.0] - 02 September 2025
+### Fixed
+- Add usage instructions to README
+- Refactor hard-coded field attributes to FieldViewModel::getFieldAttributes()
+
 ## [2.0.15] - 29 August 2025
 ### Fixed
 - Add dep

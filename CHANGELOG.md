@@ -6,6 +6,19 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.1] - 03 September 2025
+### Fixed
+- Move LokiFieldViewModelImageOutput to LokiComponentsUtilImageOutput to remove circular dependency
+- Copy generic CI/CD files
+
+## [2.1.0] - 02 September 2025
+### Added
+- Refactor hard-coded field attributes to FieldViewModel::getFieldAttributes()
+
+### Fixed
+- Remove LengthBehaviourInterface entirely
+- Add usage instructions to README
+
 ## [2.0.15] - 29 August 2025
 ### Fixed
 - Add dep

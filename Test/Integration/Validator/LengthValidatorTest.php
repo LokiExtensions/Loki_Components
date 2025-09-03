@@ -3,6 +3,8 @@
 namespace Loki\Components\Test\Integration\Validator\Dummy;
 
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Template;
 use Magento\TestFramework\Fixture\AppArea;
 use PHPUnit\Framework\TestCase;
 use Loki\Components\Component\ComponentInterface;
@@ -22,9 +24,11 @@ class LengthValidatorTest extends TestCase
     {
         $validator = ObjectManager::getInstance()->get(LengthValidator::class);
 
+        $block = ObjectManager::getInstance()->create(Template::class);
+        $block->setData('minlength', 2);
+
         $componentViewModel = $this->createMock(LengthViewModelDummy::class);
-        $componentViewModel->method('hasMinLength')->willReturn(true);
-        $componentViewModel->method('getMinLength')->willReturn(2);
+        $componentViewModel->method('getBlock')->willReturn($block);
 
         $component = $this->createMock(ComponentInterface::class);
         $component->method('getViewModel')->willReturn($componentViewModel);

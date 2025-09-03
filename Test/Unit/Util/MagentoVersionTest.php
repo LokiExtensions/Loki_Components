@@ -30,15 +30,15 @@ class MagentoVersionTest extends TestCase
     {
         return [
             ['2.4.6', 'eq', false],
-            ['2.4.6', 'gt', false],
-            ['2.4.7-p3', 'gt', false],
-            ['2.4.7-p3', 'lt', true],
+            ['2.4.6', 'gt', true],
+            ['2.4.7-p3', 'gt', true],
+            ['2.4.7-p3', 'lt', false],
             ['2.4.7-p4', 'eq', true],
-            ['2.4.7-p5', 'gt', true],
-            ['2.4.7-p5', 'lt', false],
+            ['2.4.7-p5', 'gt', false],
+            ['2.4.7-p5', 'lt', true],
             ['2.4.8', 'eq', false],
-            ['2.4.8', 'gt', true],
-            ['2.4.8', 'lt', false],
+            ['2.4.8', 'gt', false],
+            ['2.4.8', 'lt', true],
         ];
     }
 
@@ -61,15 +61,15 @@ class MagentoVersionTest extends TestCase
     static public function providerTestIsMageOSVersion(): array
     {
         return [
-            ['1.2.1-p2', 'lt', true],
+            ['1.2.1-p2', 'lt', false],
             ['1.2.1-p2', 'eq', false],
-            ['1.2.1-p2', 'gt', false],
+            ['1.2.1-p2', 'gt', true],
             ['1.3.0', 'eq', true],
             ['1.3.0', 'lt', false],
             ['1.3.0', 'gt', false],
-            ['1.3.1', 'lt', false],
+            ['1.3.1', 'lt', true],
             ['1.3.1', 'eq', false],
-            ['1.3.1', 'gt', true],
+            ['1.3.1', 'gt', false],
         ];
     }
 }

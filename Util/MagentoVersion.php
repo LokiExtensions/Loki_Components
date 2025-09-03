@@ -17,7 +17,7 @@ class MagentoVersion
             return false;
         }
 
-        return version_compare($requestedVersion, $this->productMetadata->getVersion(), $operator);
+        return version_compare($this->productMetadata->getVersion(), $requestedVersion, $operator);
     }
 
     public function isMageOSVersion(string $requestedVersion, string $operator = 'eq'): bool
@@ -26,7 +26,7 @@ class MagentoVersion
             return false;
         }
 
-        return version_compare($requestedVersion, $this->productMetadata->getVersion(), $operator);
+        return version_compare($this->productMetadata->getVersion(), $requestedVersion, $operator);
     }
 
     public function isMageOS(): bool

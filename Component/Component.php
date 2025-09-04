@@ -89,7 +89,7 @@ class Component implements ComponentInterface
             return $this->repository;
         }
 
-        if ($this->repositoryClass === null || $this->repositoryClass === '' || $this->repositoryClass === '0') {
+        if (strlen($this->repositoryClass) < 10) {
             return null;
         }
 
@@ -168,5 +168,18 @@ class Component implements ComponentInterface
     public function setIsValidated(bool $isValidated): void
     {
         $this->isValidated = $isValidated;
+    }
+
+    public function dispatchLocalMessages(): bool
+    {
+        $block = $this->getBlock();
+        if ($block instanceof AbstractBlock) {
+            $dispatchLocalMessages = $block->getDispatchLocalMessages();
+            if (is_bool($dispatchLocalMessages)) {
+                return $dispatchLocalMessages;
+            }
+        }
+
+        return true;
     }
 }

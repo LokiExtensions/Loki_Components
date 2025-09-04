@@ -1,15 +1,27 @@
 {
-    "modules": [
+    "sequence": [
+        "Loki_CssUtils",
+        "Magento_Backend",
         "Magento_Config",
         "Magento_Customer",
-        "Magento_Backend",
         "Magento_Store",
+        "Yireo_CspUtilities"
+    ],
+    "modules": [
         "Loki_CssUtils",
+        "Magento_Backend",
+        "Magento_Config",
+        "Magento_Csp",
+        "Magento_Customer",
+        "Magento_Directory",
+        "Magento_Eav",
+        "Magento_Store",
+        "Magento_Theme",
         "Yireo_CspUtilities"
     ],
     "components": [
-        "loki-components.modal",
-        "loki-components.global-messages"
+        "loki-components.global-messages",
+        "loki-components.modal"
     ],
     "config": [
         {
@@ -34,7 +46,7 @@
         }
     ],
     "tests": {
-        "unit": 16,
+        "unit": 18,
         "integration": 20,
         "functional": 0
     }

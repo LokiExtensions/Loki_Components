@@ -89,7 +89,7 @@ class Component implements ComponentInterface
             return $this->repository;
         }
 
-        if (strlen($this->repositoryClass) < 10) {
+        if (false === is_string($this->repositoryClass) || strlen($this->repositoryClass) < 10) {
             return null;
         }
 

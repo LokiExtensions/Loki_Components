@@ -13,8 +13,7 @@ use Magento\Framework\View\Element\Template;
         activeTabClass: 'tab-active',
         inactiveTabClass: 'tab-inactive',
         showActiveTab() {
-            const activeTab = this.$root.querySelector('[data-tab-id="' + this.activeTabId + '"]');
-            this.toggleTabs({target: activeTab});
+            this.toggleTab(this.activeTabId);
         },
         toggleTab(tabId) {
             this.$root.querySelectorAll('[data-tab-id]').forEach(tab => {
@@ -41,7 +40,16 @@ use Magento\Framework\View\Element\Template;
             }
         },
         toggleTabs(event) {
-            this.toggleTab(event.target.getAttribute('data-tab-id'));
+            if (!event || !event.target) {
+                return;
+            }
+
+            const tabId = event.target.getAttribute('data-tab-id');
+            if (!tabId) {
+                console.error('No tab ID found');
+                return;
+            }
+            this.toggleTab(tabId);
         }
     };
 </script>

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-/** @version 2.1.1 */
+/** @version 2.1.2 */
 
 use Magento\Framework\View\Element\Template;
 
@@ -13,9 +13,7 @@ use Magento\Framework\View\Element\Template;
         activeTabClass: 'tab-active',
         inactiveTabClass: 'tab-inactive',
         showActiveTab() {
-
-            const activeTab = this.$root.querySelector('[data-tab-id="' + this.activeTabId + '"]');
-            this.toggleTabs({target: activeTab});
+            this.toggleTab(this.activeTabId);
         },
         toggleTab(tabId) {
             this.$root.querySelectorAll('[data-tab-id]').forEach(tab => {
@@ -33,6 +31,7 @@ use Magento\Framework\View\Element\Template;
                 activeTab.classList.remove('tab-inactive');
                 activeTab.classList.add('tab-active');
             }
+            // @todo: Save active tab in session
 
             const activeContent = this.$root.querySelector('[data-tab-content="' + tabId + '"]');
             if (activeContent) {
@@ -41,7 +40,16 @@ use Magento\Framework\View\Element\Template;
             }
         },
         toggleTabs(event) {
-            this.toggleTab(event.target.getAttribute('data-tab-id'));
+            if (!event || !event.target) {
+                return;
+            }
+
+            const tabId = event.target.getAttribute('data-tab-id');
+            if (!tabId) {
+                console.error('No tab ID found');
+                return;
+            }
+            this.toggleTab(tabId);
         }
     };
 </script>

@@ -91,7 +91,7 @@ class ComponentViewModel implements ComponentViewModelInterface
 
     public function getMessages(): array
     {
-        return $this->component->getLocalMessageRegistry()->getMessagesByComponent($this->component);
+        return $this->component->getLocalMessageRegistry()->getMessages();
     }
 
     public function getMessageArea(): string

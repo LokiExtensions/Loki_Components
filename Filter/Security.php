@@ -10,12 +10,6 @@ class Security implements FilterInterface
             return $value;
         }
 
-        if (is_array($value)) {
-            foreach ($value as &$val) {
-                $val = $this->filter($val);
-            }
-        }
-
         $value = (string)$value;
         $value = strip_tags($value);
         $value = htmlspecialchars_decode($value);

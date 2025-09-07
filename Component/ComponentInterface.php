@@ -35,6 +35,8 @@ interface ComponentInterface
 
     public function getLocalMessageRegistry(): LocalMessageRegistry;
 
+    public function dispatchLocalMessages(): bool;
+
     public function isValidated(): bool;
 
     public function setIsValidated(bool $isValidated): void;

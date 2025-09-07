@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.2] - 04 September 2025
+### Fixed
+- Fix unit test
+- Add MagentoVersion util for later usage
+
 ## [2.1.1] - 03 September 2025
 ### Fixed
 - Move LokiFieldViewModelImageOutput to LokiComponentsUtilImageOutput to remove circular dependency

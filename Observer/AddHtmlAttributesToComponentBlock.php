@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Loki\Components\Observer;
 
 use Loki\Components\Util\Ajax;
+use Loki\Components\Util\AppMode;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -18,7 +19,8 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
     public function __construct(
         private readonly ComponentRegistry $componentRegistry,
         private readonly JsDataProvider $jsDataProvider,
-        private readonly Ajax $ajax
+        private readonly Ajax $ajax,
+        private readonly AppMode $appMode,
     ) {
     }
 
@@ -87,7 +89,10 @@ EOF;
         $attributes = (array)$block->getData('html_attributes');
         $attributes['id'] = $this->getElementId($block);
         $attributes['x-data'] = $this->jsDataProvider->getComponentName($component);
-        $attributes['x-title'] = $this->jsDataProvider->getComponentId($component);
+
+        if ($this->appMode->isDeveloperMode()) {
+            $attributes['x-title'] = $this->jsDataProvider->getComponentId($component);
+        }
 
         $htmlAttribute = '';
         foreach ($attributes as $attributeName => $attributeValue) {

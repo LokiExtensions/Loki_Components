@@ -20,7 +20,7 @@
                     template="Loki_Components::script/local-storage.phtml"/>
 
                 <block
-                    name="loki-components.alpinejs"
+                    name="loki.alpinejs"
                     template="Loki_Components::script/alpine.phtml"
                     after="-"/>
 

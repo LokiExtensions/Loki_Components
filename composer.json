@@ -11,6 +11,7 @@
         "magento/module-customer": "^103.0",
         "magento/module-store": "^101.0",
         "laminas/laminas-http": "^2.0",
+        "loki/magento2-base": "^1.0",
         "loki/magento2-css-utils": "^1.0",
         "yireo/magento2-csp-utilities": "^1.0",
         "psr/log": "^1.0 | ^2.0 | ^3.0",

@@ -1,0 +1,164 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Loki\Components\Config\Config;
+use Loki\Components\Factory\ViewModelFactory;
+use Loki\Components\Util\ComponentUtil;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+/** @var ViewModelFactory $viewModelFactory */
+/** @var Config $config */
+/** @var ComponentUtil $componentUtil */
+
+$config = $viewModelFactory->create(Config::class);
+$componentUtil = $viewModelFactory->create(ComponentUtil::class);
+?>
+<script>
+    const LokiAjaxQueue = {
+        requests: [],
+        interval: 100,
+        add(component, update) {
+            this.requests.push({
+                component,
+                update,
+            });
+        },
+        run() {
+            setInterval(async () => {
+                this.post();
+            }, this.interval);
+        },
+        async post() {
+            if (!this.requests.length > 0) {
+                return;
+            }
+
+            const requests = this.requests;
+            this.requests = [];
+
+            await fetch('<?= /* @noEscape */ $componentUtil->getPostUrl(
+            ) ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
+                method: 'POST',
+                mode: 'same-origin',
+                headers: this.getPostHeaders(),
+                body: JSON.stringify(this.buildBody(requests))
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text()
+                    }
+
+                    LokiComponentsLogger.error('Fetch error', response);
+                    throw new Error(response.statusText);
+                })
+                .then(html => {
+                    try {
+                        const data = JSON.parse(html);
+                        if (data) {
+                            this.handleJson(data);
+                            return;
+                        }
+                    } catch (e) {
+                    }
+
+                    this.updateTargetsAfterPost(requests, html);
+                    requests.forEach(request => {
+                        request.component.afterPostSuccess();
+                    });
+                })
+                .catch(error => {
+                    this.addGlobalMessage('error', error);
+                })
+                .finally(() => {
+                    requests.forEach(request => {
+                        request.component.afterPostFinally();
+                    });
+                });
+        },
+        getPostHeaders() {
+            return {
+                'X-Alpine-Request': true,
+                'X-Requested-With': 'XMLHttpRequest',
+                'Content-Type': 'application/json'
+            };
+        },
+        buildBody(requests) {
+            return {
+                updates: this.getUpdates(requests),
+                targets: this.getTargets(requests),
+                handles: <?= /** @noEscape */ json_encode(
+                    $componentUtil->getHandles($block)
+                ) ?>,
+                currentUri: '<?= $escaper->escapeHtml($escaper->escapeJs(
+                    $componentUtil->getCurrentUri()
+                )) ?>',
+                request: <?= /** @noEscape */ json_encode(
+                    $componentUtil->getRequestParams()
+                ) ?>,
+            };
+        },
+        handleJson(data) {
+            if (data.error) {
+                LokiComponentsLogger.error(data.error);
+                this.addGlobalMessage('error', data.error);
+            }
+
+            if (data.redirect) {
+                document.location.assign(data.redirect);
+            }
+        },
+        getUpdates(requests) {
+            const updates = [];
+            requests.forEach(request => {
+                updates.push({
+                    blockName: request.component.blockId,
+                    update: request.update,
+                });
+            });
+
+            return updates;
+        },
+        getTargets(requests) {
+            const targets = [];
+            requests.forEach(request => {
+                request.component.targets.forEach(target => {
+                    targets.push(target);
+                })
+            });
+
+            return targets;
+        },
+        updateTargetsAfterPost(requests, html) {
+            const parser = new DOMParser();
+            const ajaxDocument = parser.parseFromString(html, "text/html");
+
+            this.getTargets(requests).forEach(target => {
+                const targetElement = document.getElementById(target);
+                const newTargetElement = ajaxDocument.getElementById(target);
+
+                if (!targetElement || !newTargetElement) {
+                    return;
+                }
+
+                const targetComponent = Alpine.store('components').getComponentByElementId(target);
+                if (targetComponent) {
+                    targetComponent.destroy();
+                }
+
+                targetElement.outerHTML = newTargetElement.outerHTML;
+            });
+        },
+        addGlobalMessage(messageType, messageText) {
+            const globalMessageComponent = Alpine.store('components').get('LokiComponentsGlobalMessages');
+            globalMessageComponent.messages.push({
+                type: messageType,
+                text: messageText
+            }); // @todo: Alpine.store('messages').addMessage(messageType, messageText);
+        },
+    };
+
+    LokiAjaxQueue.run();
+</script>

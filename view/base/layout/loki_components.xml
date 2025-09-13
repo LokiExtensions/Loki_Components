@@ -15,9 +15,14 @@
                 <block
                     name="loki-components.script.logger"
                     template="Loki_Components::script/logger.phtml"/>
+
                 <block
                     name="loki-components.script.local-storage"
                     template="Loki_Components::script/local-storage.phtml"/>
+
+                <block
+                    name="loki-components.script.ajax-queue"
+                    template="Loki_Components::script/ajax-queue.phtml"/>
 
                 <block
                     name="loki.alpinejs"

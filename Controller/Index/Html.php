@@ -48,20 +48,22 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $this->requestDataLoader->mergeRequestParams();
         $layout = $this->layoutLoader->load($data['handles']);
 
-        try {
-            $this->repositoryDispatcher->dispatch(
-                $this->getBlock($layout, $data['block']),
-                $data['componentData']
-            );
-        } catch (NoBlockFoundException $exception) {
-            $this->logger->critical($exception);
+        foreach ($data['updates'] as $update) {
+            try {
+                $this->repositoryDispatcher->dispatch(
+                    $this->getBlock($layout, $update['blockName']),
+                    $update['update']
+                );
+            } catch (NoBlockFoundException $exception) {
+                $this->logger->critical($exception);
 
-        } catch (RedirectException $redirectException) {
-            return $this->getJsonRedirect($redirectException->getMessage());
+            } catch (RedirectException $redirectException) {
+                return $this->getJsonRedirect($redirectException->getMessage());
 
-        } catch (Exception $exception) {
-            $this->logger->critical($exception);
-            $this->addGlobalException($exception);
+            } catch (Exception $exception) {
+                $this->logger->critical($exception);
+                $this->addGlobalException($exception);
+            }
         }
 
         if ($this->allowRendering($data)) {
@@ -121,7 +123,20 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     private function allowRendering(array $data): bool
     {
-        return !isset($data['componentData']['render']) || $data['componentData']['render'] === 1;
+        // @todo: Double-check that this is still working
+        foreach ($data['updates'] as $update) {
+            if (!isset($update['render'])) {
+                continue;
+            }
+
+            if (1 === $update['render']) {
+                continue;
+            }
+
+            return false;
+        }
+
+        return true;
     }
 
     private function addGlobalException(Exception $exception): void

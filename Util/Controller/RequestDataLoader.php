@@ -54,7 +54,7 @@ class RequestDataLoader
             throw new RuntimeException('Not an Alpine request');
         }
 
-        $requiredFields = ['targets', 'componentData', 'block', 'handles'];
+        $requiredFields = ['targets', 'handles', 'updates'];
         foreach ($requiredFields as $requiredField) {
             if (false === array_key_exists($requiredField, $requestData)) {
                 throw new RuntimeException('No ' . $requiredField . ' in request');

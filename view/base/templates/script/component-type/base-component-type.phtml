@@ -1,13 +1,12 @@
 <?php declare(strict_types=1);
 
-/** @version 2.1.2 */
-
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 use Loki\Components\Config\Config;
 use Loki\Components\Factory\ViewModelFactory;
 use Loki\Components\Util\ComponentUtil;
 
+/** @version 2.1.2 */
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ViewModelFactory $viewModelFactory */
@@ -20,8 +19,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
     const LokiComponentFormKey = '<?= $escaper->escapeHtml($escaper->escapeJs(
         $componentUtil->getFormKey()
     )) ?>';
-    const LokiComponentAbortControllers = {};
-
     const LokiComponentType = {
         ...LokiLoadDataComponentPartial,
         ...LokiLoadInitMethodsComponentPartial,
@@ -40,6 +37,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         ajax: false,
         beforePostValue: null,
         autofillListenerTimer: null,
+        showLoaderTimerId: null,
         async init() {
             this.loadData();
             this.loadInitMethods();
@@ -61,89 +59,37 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 value = this.value;
             }
 
-            this.handleAbortControllerOnPost();
             this.loading = true;
             this.setTargetStateOnPost();
             this.beforePostValue = this.value;
 
-            const showLoaderTimerId = setTimeout(() => {
+            this.showLoaderTimerId = setTimeout(() => {
                 this.showLoader = true;
             }, this.showLoaderTimeout);
 
-            const abortController = this.getAbortController();
-            const bodyData = this.getBodyData();
-            bodyData.componentData = value;
-
-            await fetch('<?= /* @noEscape */ $componentUtil->getPostUrl(
-            ) ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
-                method: 'POST',
-                mode: 'same-origin',
-                signal: abortController.signal,
-                headers: this.getPostHeaders(),
-                body: JSON.stringify(bodyData)
-            })
-                .then(response => {
-                    if (response.ok) {
-                        return response.text()
-                    }
-
-                    LokiComponentsLogger.error('Fetch error', response);
-                    throw new Error(response.statusText);
-                })
-                .then(html => {
-                    try {
-                        const data = JSON.parse(html);
-                        if (data) {
-                            this.handleJson(data);
-                            return;
-                        }
-                    } catch (e) {
-                    }
-
-                    this.updateTargetsAfterPost(html);
-
-                    if (!this.valid) {
-                        this.value = this.beforePostValue;
-                    }
-
-                    this.$nextTick(() => {
-                        document.dispatchEvent(new CustomEvent('loki-components.component.update', {
-                            detail: {
-                                component: this
-                            }
-                        }));
-                    });
-                })
-                .catch(error => {
-                    if (error === 'Duplicate request') {
-                        return;
-                    }
-
-                    this.addGlobalMessage('error', error);
-                })
-                .finally(() => {
-                    this.$nextTick(() => {
-                        this.setTargetStateAfterPost();
-                    });
-
-                    this.loading = false;
-                    this.showLoader = false;
-                    clearTimeout(showLoaderTimerId);
-                });
+            return LokiAjaxQueue.add(this, value);
         },
-        getAbortController() {
-            if (!LokiComponentAbortControllers[this.id]) {
-                LokiComponentAbortControllers[this.id] = new AbortController();
+        afterPostSuccess() {
+            if (!this.valid) {
+                this.value = this.beforePostValue;
             }
 
-            return LokiComponentAbortControllers[this.id];
+            this.$nextTick(() => {
+                document.dispatchEvent(new CustomEvent('loki-components.component.update', {
+                    detail: {
+                        component: this
+                    }
+                }));
+            });
         },
-        handleAbortControllerOnPost() {
-            let abortController = this.getAbortController();
-            if (this.loading && abortController.signal) {
-                abortController.abort('Duplicate request');
-                LokiComponentAbortControllers[this.id] = new AbortController();
-            }
+        afterPostFinally() {
+            this.$nextTick(() => {
+                this.setTargetStateAfterPost();
+            });
+
+            this.loading = false;
+            this.showLoader = false;
+            clearTimeout(this.showLoaderTimerId);
         },
         setTargetStateOnPost() {
             this.targets.forEach(target => {
@@ -155,63 +101,11 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 this.setLoadingStateToElement(target, false);
             });
         },
-        getPostHeaders() {
-            return {
-                'X-Alpine-Request': true,
-                'X-Requested-With': 'XMLHttpRequest',
-                'Content-Type': 'application/json'
-            };
-        },
-        getBodyData() {
-            return {
-                targets: this.targets,
-                block: this.blockId,
-                handles: <?= /** @noEscape */ json_encode(
-                    $componentUtil->getHandles($block)
-                ) ?>,
-                currentUri: '<?= $escaper->escapeHtml($escaper->escapeJs(
-                    $componentUtil->getCurrentUri()
-                )) ?>',
-                request: <?= /** @noEscape */ json_encode(
-                    $componentUtil->getRequestParams()
-                ) ?>,
-            };
-        },
-        updateTargetsAfterPost(html) {
-            const parser = new DOMParser();
-            const ajaxDocument = parser.parseFromString(html, "text/html");
-
-            this.targets.forEach(target => {
-                const targetElement = document.getElementById(target);
-                const newTargetElement = ajaxDocument.getElementById(target);
-
-                if (!targetElement || !newTargetElement) {
-                    return;
-                }
-
-                const targetComponent = Alpine.store('components').getComponentByElementId(target);
-                if (targetComponent) {
-                    targetComponent.destroy();
-                }
-
-                targetElement.outerHTML = newTargetElement.outerHTML;
-            });
-        },
         setValue(event) {
             this.value = event.target.value;
         },
         notLoading() {
             return !this.loading;
-        },
-        handleJson(data) {
-            if (data.error) {
-                LokiComponentsLogger.error(data.error);
-                this.addGlobalMessage('error', data.error);
-            }
-
-            if (data.redirect) {
-                document.location.assign(data.redirect);
-            }
         },
         getDetailsString() {
             console.log(this.elementId, this.getDetails());

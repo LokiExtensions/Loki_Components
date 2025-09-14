@@ -24,7 +24,7 @@ use Magento\Framework\View\Element\Template;
                 const messages = JSON.parse(messageContainer.getAttribute('data-messages'));
                 messages.forEach(message => {
                     message.text = decodeURIComponent(message.text.replace(/\+/g, ' '));
-                    this.messages.push(message);
+                    Alpine.store('LokiMessageStore').addMessage(message.type, message.text);
                 });
             },
             initClearAfterTimeout() {

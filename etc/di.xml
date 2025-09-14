@@ -70,8 +70,7 @@
     <type name="Loki\Components\Util\DefaultTargets">
         <arguments>
             <argument name="targets" xsi:type="array">
-                <item name="messages-container" xsi:type="string">loki-components.utils.global-message-container</item>
-                <item name="messages" xsi:type="string">loki-components.global-messages</item>
+                <item name="global-messages" xsi:type="string">loki-components.global-messages</item>
             </argument>
         </arguments>
     </type>

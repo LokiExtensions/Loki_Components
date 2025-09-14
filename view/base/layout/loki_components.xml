@@ -3,15 +3,6 @@
     <update handle="loki_base"/>
 
     <body>
-        <referenceContainer name="after.body.start">
-
-            <block
-                name="loki-components.global-messages"
-                template="Loki_Components::component/global-messages.phtml"
-                before="-"/>
-
-        </referenceContainer>
-
         <referenceContainer name="before.body.end">
             <container name="loki-scripts">
                 <block
@@ -90,8 +81,8 @@
                 </container>
 
                 <block
-                    name="loki-components.utils.global-message-container"
-                    template="Loki_Components::script/global-messages-container.phtml"/>
+                    name="loki-components.global-messages"
+                    template="Loki_Components::script/global-messages.phtml"/>
             </container>
         </referenceContainer>
 

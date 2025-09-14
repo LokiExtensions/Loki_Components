@@ -1,76 +1,21 @@
 <?php
 declare(strict_types=1);
 
-/** @version 2.1.2 */
-
 use Magento\Framework\View\Element\Template;
 
+/** @version 2.1.2 */
 /** @var Template $block */
 ?>
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('LokiComponentsGlobalMessages', () => ({
-            ...LokiComponentType,
-            messages: [],
-            hasMessages() {
-                return Object.values(this.messages).length > 0;
-            },
-            initMessages() {
-                const messageContainer = document.getElementById('loki-components-utils-global-message-container');
-                if (!messageContainer) {
-                    return;
-                }
-
-                const messages = JSON.parse(messageContainer.getAttribute('data-messages'));
+            init() {
+                const messages = JSON.parse(this.$root.getAttribute('data-messages'));
                 messages.forEach(message => {
                     message.text = decodeURIComponent(message.text.replace(/\+/g, ' '));
                     Alpine.store('LokiMessageStore').addMessage(message.type, message.text);
                 });
             },
-            initClearAfterTimeout() {
-                if (this.timeout > 0) {
-                    setTimeout(() => {
-                        this.messages = [];
-                    }, this.timeout);
-                }
-            },
-            addNotice(text) {
-                this.messages.push({
-                    text: text,
-                    type: 'notice'
-                });
-            },
-            addSuccess(text) {
-                this.messages.push({
-                    text: text,
-                    type: 'success'
-                });
-            },
-            addWarning(text) {
-                this.messages.push({
-                    text: text,
-                    type: 'warning'
-                });
-            },
-            addError(text) {
-                this.messages.push({
-                    text: text,
-                    type: 'error'
-                });
-            },
-            addMessage(text, type) {
-                this.messages.push({
-                    text: text,
-                    type: type
-                });
-            },
-            clearMessages() {
-                this.messages = [];
-            },
-            removeMessage() {
-                const text = this.$el.getAttribute('data-message');
-                this.messages = this.messages.filter(message => message.text !== text);
-            }
         }));
     });
 </script>

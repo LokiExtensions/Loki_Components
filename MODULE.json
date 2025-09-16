@@ -1,5 +1,6 @@
 {
     "sequence": [
+        "Loki_Base",
         "Loki_CssUtils",
         "Magento_Backend",
         "Magento_Config",
@@ -8,6 +9,7 @@
         "Yireo_CspUtilities"
     ],
     "modules": [
+        "Loki_Base",
         "Loki_CssUtils",
         "Magento_Backend",
         "Magento_Config",

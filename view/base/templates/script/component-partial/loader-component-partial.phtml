@@ -1,17 +1,21 @@
 <?php
 declare(strict_types=1);
 
-/** @version 2.1.2 */
-
 use Magento\Framework\View\Element\Template;
 
+/** @version 2.1.2 */
 /** @var Template $block */
+
+$showLoaderTimeout = (int) $block->getShowLoaderTimeout();
+if (false === $showLoaderTimeout > 0) {
+    $showLoaderTimeout = 400;
+}
 ?>
 <script>
     const LokiLoaderComponentPartial = {
         loading: false,
         showLoader: false,
-        showLoaderTimeout: 400,
+        showLoaderTimeout: <?= (int)$showLoaderTimeout ?>,
         setLoadingStateToElement(elementId, loadingState) {
             const element = document.getElementById(elementId);
             if (!element) {

@@ -131,11 +131,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             this.addGlobalMessage('error', messageText);
         },
         addGlobalMessage(messageType, messageText) {
-            const globalMessageComponent = Alpine.store('components').get('LokiComponentsGlobalMessages');
-            globalMessageComponent.messages.push({
-                type: messageType,
-                text: messageText
-            });
+            Alpine.store('LokiMessageStore').addMessage(messageType, messageText);
         },
         addLocalSuccess(messageText) {
             this.addLocalMessage('success', messageText);

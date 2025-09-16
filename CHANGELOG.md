@@ -6,6 +6,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.3] - 16 September 2025
+### Fixed
+- Make showLoaderTimeout in components configurable
+- Make AJAX queue interval configurable via XML layout
+- Remove duplicate targets in AJAX queue
+- Simplify messaging in LokiCheckout components
+- Add todo
+- Refresh stored messages when global components are refreshed
+- Move LokiComponents global messages to regular messages template
+- Add new Loki_Base as dependency and move over common logic
+- Move AJAX behaviour into separate LokiAjaxQueue
+- Rename loki-components.alpinejs to loki.alpinejs
+- Add x-title only in Developer Mode
+- Simplify active tab selection
+- Create generic PHTML template for tab-buttons
+- Fix strlen issue
+- Allow a component to send validation messages globally via dispatch_local_messages=false
+- Simplify security filter because the loop is taken care off by the Filter class
+- Fix merge conflict
+- Cleanup event listener
+- Remove LengthBehaviourInterface
+
 ## [2.1.2] - 04 September 2025
 ### Fixed
 - Fix unit test

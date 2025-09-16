@@ -19,7 +19,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 <script>
     const LokiAjaxQueue = {
         requests: [],
-        interval: 100,
+        interval: 50,
         add(component, update) {
             this.requests.push({
                 component,
@@ -128,6 +128,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                     targets.push(target);
                 })
             });
+
+            // @todo: Make unique
 
             return targets;
         },

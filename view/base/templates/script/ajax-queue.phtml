@@ -15,11 +15,16 @@ use Loki\Components\Util\ComponentUtil;
 
 $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
+
+$interval = (int)$block->getInterval();
+if ($interval < 10) {
+    $interval = 50;
+}
 ?>
 <script>
     const LokiAjaxQueue = {
         requests: [],
-        interval: 50,
+        interval: <?= (int)$interval ?>,
         add(component, update) {
             this.requests.push({
                 component,

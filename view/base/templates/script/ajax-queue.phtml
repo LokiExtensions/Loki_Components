@@ -129,9 +129,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 })
             });
 
-            // @todo: Make unique
-
-            return targets;
+            return [...new Set(targets)];
         },
         updateTargetsAfterPost(requests, html) {
             const parser = new DOMParser();

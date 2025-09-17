@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.1.4] - 17 September 2025
+### Fixed
+- Fix new JSON strucure of component updates in admin controller
+
 ## [2.1.3] - 16 September 2025
 ### Fixed
 - Make showLoaderTimeout in components configurable

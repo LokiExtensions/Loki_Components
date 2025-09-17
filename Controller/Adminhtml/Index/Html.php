@@ -26,8 +26,9 @@ use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
 use Loki\Components\Util\Controller\RequestDataLoader;
 use Loki\Components\Util\Controller\TargetRenderer;
+use Psr\Log\LoggerInterface;
 
-class Html  extends Action
+class Html extends Action
 {
     const ADMIN_RESOURCE = 'Loki_Components::index';
 
@@ -41,7 +42,8 @@ class Html  extends Action
         private readonly GlobalMessageRegistry $globalMessageRegistry,
         private readonly Config $config,
         private readonly AppState $appState,
-        Context           $context,
+        private readonly LoggerInterface $logger,
+        Context $context,
     ) {
         parent::__construct($context);
     }
@@ -52,26 +54,29 @@ class Html  extends Action
         $this->requestDataLoader->mergeRequestParams();
         $layout = $this->layoutLoader->load($data['handles']);
 
-        try {
-            $this->repositoryDispatcher->dispatch(
-                $this->getBlock($layout, $data['block']),
-                $data['componentData']
-            );
-        } catch (NoBlockFoundException $exception) {
-            // @todo: Write this to a dedicated log for debugging purpose
+        foreach ($data['updates'] as $update) {
+            try {
+                $this->repositoryDispatcher->dispatch(
+                    $this->getBlock($layout, $update['blockName']),
+                    $update['update']
+                );
+            } catch (NoBlockFoundException $exception) {
+                $this->logger->critical($exception);
 
-        } catch (RedirectException $redirectException) {
-            return $this->getJsonRedirect($redirectException->getMessage());
+            } catch (RedirectException $redirectException) {
+                return $this->getJsonRedirect($redirectException->getMessage());
 
-        } catch (Exception $exception) {
-            // @phpcs:ignore
-            echo get_class($exception) . ': ' . $exception->getMessage() . "\n\n";
-            $this->addGlobalException($exception);
+            } catch (Exception $exception) {
+                $this->logger->critical($exception);
+                $this->addGlobalException($exception);
+            }
         }
 
         if ($this->allowRendering($data)) {
             try {
-                $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
+                $htmlParts = $this->targetRenderer->render(
+                    $layout, $data['targets']
+                );
             } catch (RedirectException $redirectException) {
                 return $this->getJsonRedirect($redirectException->getMessage());
             }
@@ -83,15 +88,17 @@ class Html  extends Action
         return $this->getHtmlResult($htmlParts);
     }
 
-    private function getBlock(LayoutInterface $layout, string $blockName): AbstractBlock
-    {
+    private function getBlock(LayoutInterface $layout, string $blockName
+    ): AbstractBlock {
         if ($blockName === '' || $blockName === '0') {
             throw new NoBlockFoundException('Block name not specified');
         }
 
         $block = $layout->getBlock($blockName);
         if (false === $block instanceof AbstractBlock) {
-            throw new NoBlockFoundException('Block with name "' . $blockName . '" is not found');
+            throw new NoBlockFoundException(
+                'Block with name "' . $blockName . '" is not found'
+            );
         }
 
         return $block;
@@ -124,15 +131,19 @@ class Html  extends Action
 
     private function allowRendering(array $data): bool
     {
-        return !isset($data['componentData']['render']) || $data['componentData']['render'] === 1;
+        return !isset($data['componentData']['render'])
+            || $data['componentData']['render'] === 1;
     }
 
     private function addGlobalException(Exception $exception): void
     {
         $error = $exception->getMessage();
 
-        if ($this->config->isDebug() && $this->appState->getMode() === AppState::MODE_DEVELOPER) {
-            $error .= '<br/> [' . $exception->getFile() . ' line ' . $exception->getLine() . '] <br/>';
+        if ($this->config->isDebug()
+            && $this->appState->getMode() === AppState::MODE_DEVELOPER
+        ) {
+            $error .= '<br/> [' . $exception->getFile() . ' line '
+                . $exception->getLine() . '] <br/>';
             $error .= $exception->getTraceAsString();
         }
 

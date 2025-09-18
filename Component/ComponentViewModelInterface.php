@@ -22,6 +22,8 @@ interface ComponentViewModelInterface extends ArgumentInterface
 
     public function getBlock(): AbstractBlock;
 
+    public function hasBlock(): bool;
+
     public function getValue(): mixed;
 
     public function getValidators(): array;

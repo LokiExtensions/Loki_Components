@@ -69,6 +69,11 @@ class ComponentViewModel implements ComponentViewModelInterface
         return $this->block;
     }
 
+    public function hasBlock(): bool
+    {
+        return $this->block instanceof AbstractBlock;
+    }
+
     public function getValidators(): array
     {
         return [];

@@ -27,6 +27,12 @@
                 template="Loki_Components::script/global-messages.phtml"/>
         </referenceContainer>
 
+        <referenceContainer name="loki.script.store">
+            <block
+                name="loki-components.script.components-store"
+                template="Loki_Components::script/components-store.phtml"/>
+        </referenceContainer>
+
         <referenceContainer name="loki.script.component-partial">
             <block
                 name="loki-components.script.component-partial.data-loader"
@@ -46,12 +52,6 @@
             <block
                 name="loki-components.script.component-partial.tab"
                 template="Loki_Components::script/component-partial/tab-component-partial.phtml"/>
-        </referenceContainer>
-
-        <referenceContainer name="loki.script.store">
-            <block
-                name="loki-components.script.components-store"
-                template="Loki_Components::script/components-store.phtml"/>
         </referenceContainer>
 
         <referenceContainer name="loki.script.component-type">

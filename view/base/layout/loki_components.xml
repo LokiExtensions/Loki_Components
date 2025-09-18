@@ -1,89 +1,90 @@
 <?xml version="1.0"?>
-<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
     <update handle="loki_base"/>
 
     <body>
-        <referenceContainer name="before.body.end">
-            <referenceContainer name="loki-scripts">
-                <block
-                    name="loki-components.script.logger"
-                    template="Loki_Components::script/logger.phtml"/>
+        <referenceContainer name="loki-scripts">
+            <block
+                name="loki-components.script.logger"
+                template="Loki_Components::script/logger.phtml"/>
 
-                <block
-                    name="loki-components.script.local-storage"
-                    template="Loki_Components::script/local-storage.phtml"/>
+            <block
+                name="loki-components.script.local-storage"
+                template="Loki_Components::script/local-storage.phtml"/>
 
-                <block
-                    name="loki-components.script.ajax-queue"
-                    template="Loki_Components::script/ajax-queue.phtml"/>
+            <block
+                name="loki-components.script.ajax-queue"
+                template="Loki_Components::script/ajax-queue.phtml"/>
 
-                <block
-                    name="loki.alpinejs"
-                    template="Loki_Components::script/alpine.phtml"
-                    after="-"/>
+            <block
+                name="loki.alpinejs"
+                template="Loki_Components::script/alpine.phtml"
+                after="-"/>
 
-                <block
-                    name="loki-components.script.components-store"
-                    template="Loki_Components::script/components-store.phtml"/>
+            <block
+                name="loki-components.global-messages"
+                template="Loki_Components::script/global-messages.phtml"/>
+        </referenceContainer>
 
-                <container name="loki-component-partials">
-                    <block
-                        name="loki-components.script.component-partial.data-loader"
-                        template="Loki_Components::script/component-partial/data-loader-component-partial.phtml"/>
-                    <block
-                        name="loki-components.script.component-partial.init-methods"
-                        template="Loki_Components::script/component-partial/init-methods-component-partial.phtml"/>
-                    <block
-                        name="loki-components.script.component-partial.destroy-methods"
-                        template="Loki_Components::script/component-partial/destroy-methods-component-partial.phtml"/>
-                    <block
-                        name="loki-components.script.component-partial.loader"
-                        template="Loki_Components::script/component-partial/loader-component-partial.phtml"/>
-                    <block
-                        name="loki-components.script.component-partial.modal"
-                        template="Loki_Components::script/component-partial/modal-component-partial.phtml"/>
-                    <block
-                        name="loki-components.script.component-partial.tab"
-                        template="Loki_Components::script/component-partial/tab-component-partial.phtml"/>
-                </container>
+        <referenceContainer name="loki.script.component-partial">
+            <block
+                name="loki-components.script.component-partial.data-loader"
+                template="Loki_Components::script/component-partial/data-loader-component-partial.phtml"/>
+            <block
+                name="loki-components.script.component-partial.init-methods"
+                template="Loki_Components::script/component-partial/init-methods-component-partial.phtml"/>
+            <block
+                name="loki-components.script.component-partial.destroy-methods"
+                template="Loki_Components::script/component-partial/destroy-methods-component-partial.phtml"/>
+            <block
+                name="loki-components.script.component-partial.loader"
+                template="Loki_Components::script/component-partial/loader-component-partial.phtml"/>
+            <block
+                name="loki-components.script.component-partial.modal"
+                template="Loki_Components::script/component-partial/modal-component-partial.phtml"/>
+            <block
+                name="loki-components.script.component-partial.tab"
+                template="Loki_Components::script/component-partial/tab-component-partial.phtml"/>
+        </referenceContainer>
 
-                <container name="loki-component-types">
-                    <block
-                        name="loki-components.script.component-type.base"
-                        template="Loki_Components::script/component-type/base-component-type.phtml"/>
-                </container>
+        <referenceContainer name="loki.script.store">
+            <block
+                name="loki-components.script.components-store"
+                template="Loki_Components::script/components-store.phtml"/>
+        </referenceContainer>
 
-                <container name="loki.script.component">
-                    <block
-                        name="loki-components.script.component.base-component"
-                        template="Loki_Components::script/component/base-component.phtml"/>
-                    <block
-                        name="loki-components.script.component.global-messages-component"
-                        template="Loki_Components::script/component/global-messages-component.phtml"/>
-                    <block
-                        name="loki-components.script.component.form"
-                        template="Loki_Components::script/component/form.phtml"/>
-                    <block
-                        name="loki-components.script.component.loader"
-                        template="Loki_Components::script/component/loader.phtml"/>
-                    <block
-                        name="loki-components.script.component.modal"
-                        template="Loki_Components::script/component/modal.phtml"/>
-                    <block
-                        name="loki-components.script.component.modal-component"
-                        template="Loki_Components::script/component/modal-component.phtml"/>
-                    <block
-                        name="loki-components.script.component.toggle"
-                        template="Loki_Components::script/component/toggle.phtml"/>
-                    <block
-                        name="loki-components.script.component.toggle-component"
-                        template="Loki_Components::script/component/toggle-component.phtml"/>
-                </container>
+        <referenceContainer name="loki.script.component-type">
+            <block
+                name="loki-components.script.component-type.base"
+                template="Loki_Components::script/component-type/base-component-type.phtml"/>
+        </referenceContainer>
 
-                <block
-                    name="loki-components.global-messages"
-                    template="Loki_Components::script/global-messages.phtml"/>
-            </referenceContainer>
+        <referenceContainer name="loki.script.component">
+            <block
+                name="loki-components.script.component.base-component"
+                template="Loki_Components::script/component/base-component.phtml"/>
+            <block
+                name="loki-components.script.component.global-messages-component"
+                template="Loki_Components::script/component/global-messages-component.phtml"/>
+            <block
+                name="loki-components.script.component.form"
+                template="Loki_Components::script/component/form.phtml"/>
+            <block
+                name="loki-components.script.component.loader"
+                template="Loki_Components::script/component/loader.phtml"/>
+            <block
+                name="loki-components.script.component.modal"
+                template="Loki_Components::script/component/modal.phtml"/>
+            <block
+                name="loki-components.script.component.modal-component"
+                template="Loki_Components::script/component/modal-component.phtml"/>
+            <block
+                name="loki-components.script.component.toggle"
+                template="Loki_Components::script/component/toggle.phtml"/>
+            <block
+                name="loki-components.script.component.toggle-component"
+                template="Loki_Components::script/component/toggle-component.phtml"/>
         </referenceContainer>
 
         <block

@@ -53,7 +53,7 @@
                         template="Loki_Components::script/component-type/base-component-type.phtml"/>
                 </container>
 
-                <container name="loki-components">
+                <container name="loki.components">
                     <block
                         name="loki-components.script.component.base-component"
                         template="Loki_Components::script/component/base-component.phtml"/>

@@ -4,7 +4,7 @@
     <update handle="loki_base"/>
 
     <body>
-        <referenceContainer name="loki-scripts">
+        <referenceContainer name="loki.script">
             <block
                 name="loki-components.script.logger"
                 template="Loki_Components::script/logger.phtml"/>

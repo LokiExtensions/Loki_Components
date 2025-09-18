@@ -4,7 +4,7 @@
 
     <body>
         <referenceContainer name="before.body.end">
-            <container name="loki-scripts">
+            <referenceContainer name="loki-scripts">
                 <block
                     name="loki-components.script.logger"
                     template="Loki_Components::script/logger.phtml"/>
@@ -53,7 +53,7 @@
                         template="Loki_Components::script/component-type/base-component-type.phtml"/>
                 </container>
 
-                <container name="loki.components">
+                <container name="loki-components">
                     <block
                         name="loki-components.script.component.base-component"
                         template="Loki_Components::script/component/base-component.phtml"/>
@@ -83,7 +83,7 @@
                 <block
                     name="loki-components.global-messages"
                     template="Loki_Components::script/global-messages.phtml"/>
-            </container>
+            </referenceContainer>
         </referenceContainer>
 
         <block

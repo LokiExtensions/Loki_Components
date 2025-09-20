@@ -19,12 +19,12 @@ use Loki\Components\Controller\HtmlResult;
 use Loki\Components\Controller\HtmlResultFactory;
 use Loki\Components\Exception\NoBlockFoundException;
 use Loki\Components\Exception\RedirectException;
-use Loki\Components\Messages\GlobalMessageRegistry;
 use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
 use Loki\Components\Util\Controller\RequestDataLoader;
 use Loki\Components\Util\Controller\TargetRenderer;
 use Psr\Log\LoggerInterface;
+use Magento\Framework\Message\ManagerInterface as MessageManager;
 
 class Html implements HttpPostActionInterface, HttpGetActionInterface
 {
@@ -35,7 +35,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly TargetRenderer $targetRenderer,
         private readonly HtmlResultFactory $htmlResultFactory,
         private readonly JsonResultFactory $jsonResultFactory,
-        private readonly GlobalMessageRegistry $globalMessageRegistry,
+        private readonly MessageManager $messageManager,
         private readonly Config $config,
         private readonly AppState $appState,
         private readonly LoggerInterface $logger
@@ -116,7 +116,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         ]);
 
         $json->setHeader('X-Loki-Redirect', $redirectUrl);
-        $this->globalMessageRegistry->toSession();
+        // @todo: Make sure messages sent to frontend are remembered
 
         return $json;
     }
@@ -152,6 +152,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             $error = $errorWrapper;
         }
 
-        $this->globalMessageRegistry->addError($error);
+        $this->messageManager->addErrorMessage($error);
     }
 }

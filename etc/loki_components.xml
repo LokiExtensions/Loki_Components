@@ -3,10 +3,4 @@
     <group name="default"/>
 
     <component name="loki-components.modal" />
-
-    <component
-        name="loki-components.global-messages"
-        context="Loki\Components\Component\GlobalMessages\GlobalMessagesContext"
-        viewModel="Loki\Components\Component\GlobalMessages\GlobalMessagesViewModel">
-    </component>
 </components>

@@ -70,7 +70,7 @@
     <type name="Loki\Components\Util\DefaultTargets">
         <arguments>
             <argument name="targets" xsi:type="array">
-                <item name="global-messages" xsi:type="string">loki-components.global-messages</item>
+                <item name="message-transfer" xsi:type="string">loki.script.message-transfer</item>
             </argument>
         </arguments>
     </type>

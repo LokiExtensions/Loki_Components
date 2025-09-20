@@ -22,7 +22,6 @@
         "Yireo_CspUtilities"
     ],
     "components": [
-        "loki-components.global-messages",
         "loki-components.modal"
     ],
     "config": [

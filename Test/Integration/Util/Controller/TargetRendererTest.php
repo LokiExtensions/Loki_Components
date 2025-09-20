@@ -20,11 +20,9 @@ class TargetRendererTest extends TestCase
         $resultPage->addHandle('loki_components');
 
         $layout = $resultPage->getLayout();
-        $block = $layout->getBlock('loki-components.global-messages');
-        $this->assertInstanceOf(AbstractBlock::class, $block);
 
         $targetRenderer = ObjectManager::getInstance()->get(TargetRenderer::class);
-        $htmlParts = $targetRenderer->render($layout, ['loki-components.global-messages']);
+        $htmlParts = $targetRenderer->render($layout, ['foobar']);
 
         $this->assertNotEmpty($htmlParts);
     }

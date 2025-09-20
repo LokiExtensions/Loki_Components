@@ -4,9 +4,11 @@ declare(strict_types=1);
 namespace Loki\Components\Messages;
 
 use Magento\Framework\Message\ManagerInterface as MessageManager;
-use Magento\Framework\Message\Session as MessageSession;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 
+/**
+ * @deprecated Use \Magento\Framework\Message\ManagerInterface directly
+ */
 class GlobalMessageRegistry implements ArgumentInterface
 {
     /** @var GlobalMessage[] */
@@ -14,89 +16,46 @@ class GlobalMessageRegistry implements ArgumentInterface
 
     public function __construct(
         private readonly MessageManager $messageManager,
-        private readonly MessageSession $messageSession
     ) {
     }
 
-    public function add(GlobalMessage $message): void
-    {
-        $this->messages[] = $message;
-    }
-
+    /**
+     * @param string $message
+     * @return void
+     * @deprecated Use \Magento\Framework\Message\ManagerInterface directly
+     */
     public function addSuccess(string $message): void
     {
-        $this->add(new GlobalMessage($message, GlobalMessage::TYPE_SUCCESS));
-    }
-
-    public function addNotice(string $message): void
-    {
-        $this->add(new GlobalMessage($message, GlobalMessage::TYPE_NOTICE));
-    }
-
-    public function addWarning(string $message): void
-    {
-        $this->add(new GlobalMessage($message, GlobalMessage::TYPE_WARNING));
-    }
-
-    public function addError(string $message): void
-    {
-        $this->add(new GlobalMessage($message, GlobalMessage::TYPE_ERROR));
+        $this->messageManager->addSuccessMessage($message);
     }
 
     /**
-     * @return GlobalMessage[]
+     * @param string $message
+     * @return void
+     * @deprecated Use \Magento\Framework\Message\ManagerInterface directly
      */
-    public function getMessages(): array
+    public function addNotice(string $message): void
     {
-        $messageCollection = $this->messageManager->getMessages(true, 'default');
-        foreach ($messageCollection->getItems() as $message) {
-            $this->add(GlobalMessage::fromMessage($message));
-        }
-
-        return array_unique($this->messages, SORT_REGULAR);
+        $this->messageManager->addNoticeMessage($message);
     }
 
-    public function toSession(): void
+    /**
+     * @param string $message
+     * @return void
+     * @deprecated Use \Magento\Framework\Message\ManagerInterface directly
+     */
+    public function addWarning(string $message): void
     {
-        foreach ($this->messages as $message) {
-            if ($message->getType() === 'notice') {
-                $this->messageManager->addNoticeMessage($message->getText());
-            }
-
-            if ($message->getType() === 'success') {
-                $this->messageManager->addSuccessMessage($message->getText());
-            }
-
-            if ($message->getType() === 'warning') {
-                $this->messageManager->addWarningMessage($message->getText());
-            }
-
-            if ($message->getType() === 'error') {
-                $this->messageManager->addErrorMessage($message->getText());
-            }
-        }
+        $this->messageManager->addWarningMessage($message);
     }
 
-    public function toArray(): array
+    /**
+     * @param string $message
+     * @return void
+     * @deprecated Use \Magento\Framework\Message\ManagerInterface directly
+     */
+    public function addError(string $message): void
     {
-        $messages = [];
-        foreach ($this->getMessages() as $message) {
-            $messages[] = [
-                'text' => urlencode($message->getText()),
-                'type' => $message->getType(),
-            ];
-        }
-
-        return $messages;
-    }
-
-    public function hasMessages(): bool
-    {
-        return $this->messages !== [];
-    }
-
-    public function clearMessages(): void
-    {
-        $this->messages = [];
+        $this->messageManager->addErrorMessage($message);
     }
 }

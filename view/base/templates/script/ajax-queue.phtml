@@ -77,7 +77,7 @@ if ($interval < 10) {
                     });
                 })
                 .catch(error => {
-                    this.addGlobalMessage('error', error);
+                    Alpine.store('LokiMessageStore').addErrorMessage(error);
                 })
                 .finally(() => {
                     requests.forEach(request => {
@@ -110,7 +110,7 @@ if ($interval < 10) {
         handleJson(data) {
             if (data.error) {
                 LokiComponentsLogger.error(data.error);
-                this.addGlobalMessage('error', data.error);
+                Alpine.store('LokiMessageStore').addErrorMessage(data.error);
             }
 
             if (data.redirect) {
@@ -142,6 +142,14 @@ if ($interval < 10) {
             const parser = new DOMParser();
             const ajaxDocument = parser.parseFromString(html, "text/html");
 
+            const messageScript = ajaxDocument.querySelector('script[type="text/x-loki-messages"]');
+            if (messageScript) {
+                const messages = JSON.parse(messageScript.innerHTML);
+                messages.forEach((message) => {
+                    Alpine.store('LokiMessageStore').addMessage(message.type, message.text);
+                });
+            }
+
             this.getTargets(requests).forEach(target => {
                 const targetElement = document.getElementById(target);
                 const newTargetElement = ajaxDocument.getElementById(target);
@@ -157,14 +165,7 @@ if ($interval < 10) {
 
                 targetElement.outerHTML = newTargetElement.outerHTML;
             });
-        },
-        addGlobalMessage(messageType, messageText) {
-            const globalMessageComponent = Alpine.store('components').get('LokiComponentsGlobalMessages');
-            globalMessageComponent.messages.push({
-                type: messageType,
-                text: messageText
-            }); // @todo: Alpine.store('messages').addMessage(messageType, messageText);
-        },
+        }
     };
 
     LokiAjaxQueue.run();

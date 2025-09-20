@@ -1,0 +1,14 @@
+<?php
+declare(strict_types=1);
+
+use Loki\Components\ViewModel\Messages;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Messages $messages */
+
+$messages = $block->getMessages();
+?>
+<script type="text/x-loki-messages">
+    <?= /* @noEscape */ $messages->getMessagesAsJson() ?>
+</script>

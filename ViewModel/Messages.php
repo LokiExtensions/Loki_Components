@@ -23,7 +23,7 @@ class Messages implements ArgumentInterface
         }
 
         $messages = [];
-        $messageCollection = $this->messageManager->getMessages(true, 'default');
+        $messageCollection = $this->messageManager->getMessages(true);
         foreach ($messageCollection->getItems() as $message) {
             /** @var MessageInterface $message */
             $messages[] = [

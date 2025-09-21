@@ -28,7 +28,7 @@ if (false === $showLoaderTimeout > 0) {
                 element.removeAttribute('aria-busy');
             }
 
-            const component = Alpine.store('components').getComponentByElementId(elementId);
+            const component = Alpine.store('LokiComponents').getComponentByElementId(elementId);
             if (component) {
                 component.loading = loadingState;
             }

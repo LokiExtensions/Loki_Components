@@ -158,7 +158,7 @@ if ($interval < 10) {
                     return;
                 }
 
-                const targetComponent = Alpine.store('components').getComponentByElementId(target);
+                const targetComponent = Alpine.store('LokiComponents').getComponentByElementId(target);
                 if (targetComponent) {
                     targetComponent.destroy();
                 }

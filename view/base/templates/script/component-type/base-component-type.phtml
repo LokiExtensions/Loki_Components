@@ -43,7 +43,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             this.loadInitMethods();
         },
         initComponentRegistration() {
-            Alpine.store('components').add(this);
+            Alpine.store('LokiComponents').add(this);
         },
         initLazyLoading() {
             if (this.lazyLoad) {

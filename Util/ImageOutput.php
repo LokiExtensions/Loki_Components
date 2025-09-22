@@ -77,12 +77,16 @@ class ImageOutput implements ArgumentInterface
         array $attributes = []
     ): string {
         $svgElement = new SimpleXMLElement($svgContents);
+        $svgElement->registerXPathNamespace('svg', 'http://www.w3.org/2000/svg');
+        $svgElement->registerXPathNamespace('xlink', 'http://www.w3.org/1999/xlink');
 
         foreach ($attributes as $attributeName => $attributeValue) {
-            $svgElement->addAttribute($attributeName, $attributeValue);
+            $svgElement->addAttribute($attributeName, (string)$attributeValue);
         }
 
-        return $svgContents;
+        $xmlString = (string)$svgElement->asXML();
+        $xmlString = str_replace("<?xml version=\"1.0\"?>\n", '', $xmlString);
+        return $xmlString;
     }
 
     private function getOutputError(string $error): string

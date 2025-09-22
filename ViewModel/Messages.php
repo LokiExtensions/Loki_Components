@@ -7,11 +7,13 @@ use Loki\Components\Util\Ajax;
 use Magento\Framework\Message\Manager as MessageManager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 class Messages implements ArgumentInterface
 {
     public function __construct(
         private readonly MessageManager $messageManager,
+        private readonly InterpretationStrategyInterface $interpretationStrategy,
         private readonly Ajax $ajax
     ) {
     }
@@ -28,7 +30,7 @@ class Messages implements ArgumentInterface
             /** @var MessageInterface $message */
             $messages[] = [
                 'type' => $message->getType(),
-                'text' => $message->getText(),
+                'text' => $this->interpretationStrategy->interpret($message),
             ];
         }
 

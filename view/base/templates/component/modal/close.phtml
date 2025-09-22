@@ -18,5 +18,5 @@ $imageOutput = $viewModelFactory->create(ImageOutput::class);
 <button
     aria-label="<?= $escaper->escapeHtml(__('Close')) ?>"
     @click.prevent="toggleModal"
-    class="<?= /* @noEscape */ $css('float-right m-4 cursor-pointer w-4') ?>"
+    class="<?= /* @noEscape */ $css('float-right cursor-pointer w-4') ?>"
 ><?= /** @noEscape */ $imageOutput->get('Loki_Components::images/xmark.svg') ?></button>

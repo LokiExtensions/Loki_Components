@@ -22,6 +22,8 @@ class ImageOutput implements ArgumentInterface
         private readonly AssetRepository $assetRepository,
         private readonly DirectoryList $directoryList,
         private readonly AppState $appState,
+        private readonly string $iconSet = 'default',
+        private readonly string $iconPrefix = 'Loki_Components::icon',
     ) {
         $this->fileDriver = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
@@ -49,12 +51,14 @@ class ImageOutput implements ArgumentInterface
         return $this->get($imageUrl, $attributes);
     }
 
-    public function icon(string $imageId, AbstractBlock $block)
+    public function icon(string $iconId, AbstractBlock $block)
     {
         $iconSize = (int)$block->getIconSize();
         if (false === $iconSize > 0) {
             $iconSize = 20;
         }
+
+        $imageId = $this->iconPrefix.'/'.$this->iconSet.'/'.$iconId.'.svg';
 
         return $this->get($imageId, [
             'width' => $iconSize,

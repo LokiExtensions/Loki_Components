@@ -9,6 +9,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\File as AssetFile;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use SimpleXMLElement;
 
@@ -46,6 +47,19 @@ class ImageOutput implements ArgumentInterface
     public function getByUrl(string $imageUrl, array $attributes = []): string
     {
         return $this->get($imageUrl, $attributes);
+    }
+
+    public function icon(string $imageId, AbstractBlock $block)
+    {
+        $iconSize = (int)$block->getIconSize();
+        if (false === $iconSize > 0) {
+            $iconSize = 20;
+        }
+
+        return $this->get($imageId, [
+            'width' => $iconSize,
+            'height' => $iconSize,
+        ]);
     }
 
     private function getImageTag(string $imageUrl, array $attributes = []): string

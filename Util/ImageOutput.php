@@ -23,15 +23,17 @@ class ImageOutput implements ArgumentInterface
         $this->fileDriver = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
 
-    public function get(string $imageId): string
+    public function get(string $imageId, array $arguments = []): string
     {
+        // @todo: Allow inline or as image
         $asset = $this->assetRepository->createAsset($imageId);
 
         return $this->getIconOutput($asset);
     }
 
-    public function getByUrl(string $imageUrl): string
+    public function getByUrl(string $imageUrl, array $arguments = []): string
     {
+        // @todo: Implement width and height, alt, lazyload
         return '<img src="'.$imageUrl.'" />';
     }
 

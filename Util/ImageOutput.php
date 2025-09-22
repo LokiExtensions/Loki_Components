@@ -5,6 +5,7 @@ namespace Loki\Components\Util;
 use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\File as AssetFile;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
@@ -26,22 +27,37 @@ class ImageOutput implements ArgumentInterface
 
     public function get(string $imageId, array $attributes = []): string
     {
-        // @todo: Allow inline or as image
         $asset = $this->assetRepository->createAsset($imageId);
 
-        return $this->getIconOutput($asset, $attributes);
+        if (str_ends_with($imageId, '.svg')) {
+            return $this->getIconOutput($asset, $attributes);
+        }
+
+        return $this->getImageTag($asset->getUrl(), $attributes);
     }
 
+    /**
+     * @param string $imageUrl
+     * @param array $attributes
+     * @return string
+     * @throws LocalizedException
+     * @deprecated Use get() instead
+     */
     public function getByUrl(string $imageUrl, array $attributes = []): string
     {
+        return $this->get($imageUrl, $attributes);
+    }
+
+    private function getImageTag(string $imageUrl, array $attributes = []): string
+    {
         $htmlAttributes = [];
-        foreach ($htmlAttributes as $htmlAttributeName => $htmlAttributeValue) {
-            $htmlAttributes[] = $htmlAttributeName . '="' . $htmlAttributeValue
-                . '"';
+        foreach ($attributes as $attributeName => $attributeValue) {
+            $htmlAttributes[] = $attributeName.'="'.$attributeValue.'"';
         }
 
         $htmlAttributes = implode(' ', $htmlAttributes);
-        return '<img src="' . $imageUrl . '" ' . $htmlAttributes . ' />';
+
+        return '<img src="'.$imageUrl.'" '.$htmlAttributes.' />';
     }
 
     private function getIconOutput(AssetFile $asset, array $attributes = []): string
@@ -53,16 +69,20 @@ class ImageOutput implements ArgumentInterface
 
         if (false === $this->fileDriver->isFile($sourceFile)) {
             return $this->getOutputError(
-                'Source file "' . $sourceFile . '" does not exist'
+                'Source file "'.$sourceFile.'" does not exist'
             );
         }
 
         if (str_ends_with($sourceFile, '.svg')) {
             $iconPath = str_replace(
-                $this->directoryList->getRoot() . '/', '', $sourceFile
+                $this->directoryList->getRoot().'/',
+                '',
+                $sourceFile
             );
+
             try {
                 $svgContents = $this->fileDriver->readFile($iconPath);
+
                 return $this->parseSvgAttributes($svgContents, $attributes);
             } catch (Exception $e) {
                 return $this->getOutputError($e->getMessage());
@@ -86,13 +106,14 @@ class ImageOutput implements ArgumentInterface
 
         $xmlString = (string)$svgElement->asXML();
         $xmlString = str_replace("<?xml version=\"1.0\"?>\n", '', $xmlString);
+
         return $xmlString;
     }
 
     private function getOutputError(string $error): string
     {
         if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
-            return '<!-- ' . $error . ' -->';
+            return '<!-- '.$error.' -->';
         }
 
         return '';

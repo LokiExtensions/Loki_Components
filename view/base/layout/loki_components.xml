@@ -12,7 +12,7 @@
             </arguments>
         </block>
 
-        <referenceContainer name="loki.script">
+        <referenceBlock name="loki.script">
             <block
                 name="loki-components.script.logger"
                 template="Loki_Components::script/logger.phtml"/>
@@ -29,7 +29,7 @@
                 name="loki.alpinejs"
                 template="Loki_Components::script/alpine.phtml"
                 after="-"/>
-        </referenceContainer>
+        </referenceBlock>
 
         <referenceBlock name="loki.script.store">
             <block

@@ -1,0 +1,6 @@
+{
+  "ignore": [
+    "Loki_Base",
+    "loki/magento2-base"
+  ]
+}

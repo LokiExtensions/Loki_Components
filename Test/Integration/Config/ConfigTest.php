@@ -37,27 +37,6 @@ class ConfigTest extends TestCase
         $this->assertFalse($config->onlyValidateAjax());
     }
 
-    #[ConfigFixture('loki_components/global_messages/timeout', 0)]
-    public function testGlobalMessagesTimeoutWithEmptyValue()
-    {
-        $config = ObjectManager::getInstance()->get(Config::class);
-        $this->assertSame(0, $config->getGlobalMessagesTimeout());
-    }
-
-    #[ConfigFixture('loki_components/global_messages/timeout', 42)]
-    public function testGlobalMessagesTimeoutWithPositiveValue()
-    {
-        $config = ObjectManager::getInstance()->get(Config::class);
-        $this->assertSame(42, $config->getGlobalMessagesTimeout());
-    }
-
-    #[ConfigFixture('loki_components/global_messages/timeout', -42)]
-    public function testGlobalMessagesTimeoutWithNegativeValue()
-    {
-        $config = ObjectManager::getInstance()->get(Config::class);
-        $this->assertSame(0, $config->getGlobalMessagesTimeout());
-    }
-
     #[ConfigFixture('loki_components/validators/enable_mx_validation_for_email', 1)]
     public function testMxValidationForEmailEnabled()
     {

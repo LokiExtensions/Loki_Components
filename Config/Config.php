@@ -22,16 +22,6 @@ class Config implements ArgumentInterface
         return (bool)$this->scopeConfig->getValue('loki_components/general/only_validate_ajax');
     }
 
-    public function getGlobalMessagesTimeout(): int
-    {
-        $timeout = (int)$this->scopeConfig->getValue('loki_components/global_messages/timeout');
-        if ($timeout < 0) {
-            return 0;
-        }
-
-        return $timeout;
-    }
-
     public function enableMxValidationForEmail(): bool
     {
         return (bool)$this->scopeConfig->getValue('loki_components/validators/enable_mx_validation_for_email');

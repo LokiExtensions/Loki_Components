@@ -6,9 +6,6 @@
                 <debug>0</debug>
                 <only_validate_ajax>1</only_validate_ajax>
             </general>
-            <global_messages>
-                <timeout>5000</timeout>
-            </global_messages>
             <validators>
                 <enable_mx_validation_for_email>1</enable_mx_validation_for_email>
             </validators>

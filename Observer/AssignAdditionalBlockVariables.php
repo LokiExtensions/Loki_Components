@@ -37,33 +37,36 @@ class AssignAdditionalBlockVariables implements ObserverInterface
             return;
         }
 
-        $this->addComponent($block);
+        $block = $this->addComponent($block);
         $this->addVariables($block);
     }
 
-    private function addComponent(Template $block): void
+    private function addComponent(Template $block): Template
     {
         try {
             $component = $this->componentRegistry->getComponentFromBlock($block);
         } catch (NoComponentFoundException $exception) {
-            return;
+            return $block;
         }
 
         $viewModel = $component->getViewModel();
-        $template = $viewModel->getTemplate();
-        if ($template !== null && $template !== '' && $template !== '0') {
+        $template = (string)$viewModel->getTemplate();
+        if (strlen($template) > 0) {
             $block->setTemplate($template);
         }
 
         $block->setViewModel($viewModel);
+        $block->setViewModelInstance($viewModel);
 
         if (false === $viewModel->isAllowRendering()) {
             $block->setTemplate('Loki_Components::utils/not-rendered.phtml');
             $block->setNotRendered(true);
+            return $block;
         }
 
         $block->assign('viewModel', $viewModel);
         $block->assign('componentUtil', $this->componentUtil);
+        return $block;
     }
 
     private function addVariables(Template $block): void
@@ -73,10 +76,10 @@ class AssignAdditionalBlockVariables implements ObserverInterface
         }
 
         $block->assign('viewModelFactory', $this->viewModelFactory);
-        $block->assign('blockRenderer', $this->blockRenderer->setAncestorBlock($block));
-        $block->assign('childRenderer', $this->childRenderer->setAncestorBlock($block));
-        $block->assign('templateRenderer', $this->templateRenderer->setAncestorBlock($block));
-        $block->assign('imageRenderer', $this->imageRenderer->setBlock($block));
+        $block->assign('blockRenderer', $this->blockRenderer);
+        $block->assign('childRenderer', $this->childRenderer);
+        $block->assign('templateRenderer', $this->templateRenderer);
+        $block->assign('imageRenderer', $this->imageRenderer);
     }
 
     private function allowVariables(AbstractBlock $block): bool

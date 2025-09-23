@@ -7,6 +7,7 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\LayoutInterface;
 use Loki\Components\Component\ComponentViewModelInterface;
+use RuntimeException;
 
 abstract class AbstractRenderer implements ArgumentInterface
 {
@@ -19,19 +20,13 @@ abstract class AbstractRenderer implements ArgumentInterface
     ) {
     }
 
-    public function setAncestorBlock(AbstractBlock $block): AbstractRenderer
-    {
-        $this->ancestorBlock = $block;
-        return $this;
-    }
-
     protected function populateBlock(
         AbstractBlock $block,
         array $data = []
     ): void {
+        $block->addData($data);
         $block->setAncestorBlock($this->ancestorBlock);
         $block->setUniqId($this->getUniqId($block));
-        $block->addData($data);
 
         $viewModel = $this->ancestorBlock->getViewModel();
         if ($viewModel instanceof ComponentViewModelInterface) {

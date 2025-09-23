@@ -15,9 +15,11 @@ class BlockRenderer extends AbstractRenderer
      * @return AbstractBlock
      */
     public function get(
+        AbstractBlock $ancestorBlock,
         string $blockName,
         array $data = []
     ): AbstractBlock {
+        $this->ancestorBlock = $ancestorBlock;
         $block = $this->layout->getBlock($blockName);
         if (false === $block instanceof AbstractBlock) {
             throw new RuntimeException((string)__('No block found with name "%1"', $blockName));
@@ -38,14 +40,15 @@ class BlockRenderer extends AbstractRenderer
      * @return string
      */
     public function html(
+        AbstractBlock $ancestorBlock,
         string $blockName,
         array $data = []
     ): string {
         try {
-            return $this->get($blockName, $data)->toHtml();
+            return $this->get($ancestorBlock, $blockName, $data)->toHtml();
         } catch (InvalidArgumentException|RuntimeException $e) {
             if ($this->isDeveloperMode()) {
-                return '<!-- Block with name "' . $blockName . '": ' . $e->getMessage() . ' -->';
+                return '<!-- WARNING: Block with name "' . $blockName . '": ' . $e->getMessage() . ' -->';
             }
 
             return '';

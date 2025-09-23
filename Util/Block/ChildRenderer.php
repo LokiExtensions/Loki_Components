@@ -9,9 +9,11 @@ use RuntimeException;
 class ChildRenderer extends AbstractRenderer
 {
     public function get(
+        AbstractBlock $ancestorBlock,
         string $blockAlias,
         array $data = [],
     ): AbstractBlock {
+        $this->ancestorBlock = $ancestorBlock;
         $block = $this->ancestorBlock->getChildBlock($blockAlias);
         if (false === $block instanceof AbstractBlock) {
             throw new RuntimeException(
@@ -30,15 +32,16 @@ class ChildRenderer extends AbstractRenderer
     }
 
     public function html(
+        AbstractBlock $ancestorBlock,
         string $blockAlias,
         array $data = []
     ) {
         try {
-            return (string)$this->get($blockAlias, $data)
+            return (string)$this->get($ancestorBlock, $blockAlias, $data)
                 ->toHtml();
         } catch (RuntimeException|InvalidArgumentException $e) {
             if ($this->isDeveloperMode()) {
-                return '<!-- ' . $e->getMessage() . ' -->';
+                return '<!-- WARNING: ' . $e->getMessage() . ' -->';
             }
 
             return '';

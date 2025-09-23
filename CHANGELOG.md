@@ -6,6 +6,32 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.0] - 23 September 2025
+### Added
+- Add Loki Component exception as complex message
+- Output SVG with given XML attributes properly
+- New ImageRenderer::icon() method
+- Add new block variable "imageRenderer"
+- Move new login component to `LokiCheckout_Core` and beautify
+
+### Fixed
+- Enhance modals under Luma a bit
+- Remove redundant CSS classes from icon containers
+- Fix block rendering of static blocks
+- Move messages timeout configuration from `Loki_Components` to `Loki_Base`
+- Fuse observers to avoid ordering conflict
+- Implement new blockRenderer and childRenderer arguments
+- Remove block argument from templateRenderer
+- Configure block prefixes via DI type
+- Only allow Loki block variables on block starting with "loki"
+- Rename loki.script from container to block to allow caching
+- Change containers into blocks to allow for caching
+- Rename Alpine stores
+- Add `.prevent` modifier to `@click` event handler
+- Rename Alpine store checkout to LokiCheckout, components to LokiComponents
+- Rewrite transfer of global messages from components to be a lot simpler
+- Allow steps to have no block yet (outside of checkout)
+
 ## [2.1.4] - 17 September 2025
 ### Fixed
 - Fix new JSON strucure of component updates in admin controller

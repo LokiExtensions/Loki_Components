@@ -10,11 +10,19 @@ use Loki\Components\Component\ComponentViewModelInterface;
 
 abstract class AbstractRenderer implements ArgumentInterface
 {
+    protected ?AbstractBlock $ancestorBlock = null;
+
     public function __construct(
         protected LayoutInterface $layout,
         protected AppState $appState,
         protected ChildCounter $childCounter,
     ) {
+    }
+
+    public function setAncestorBlock(AbstractBlock $block): AbstractRenderer
+    {
+        $this->ancestorBlock = $block;
+        return $this;
     }
 
     protected function populateBlock(

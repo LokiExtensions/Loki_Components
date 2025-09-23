@@ -2,32 +2,28 @@
 
 namespace Loki\Components\Util\Block;
 
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
-use RuntimeException;
 
 class TemplateRenderer extends AbstractRenderer
 {
     public function get(
-        AbstractBlock $ancestorBlock,
         string $templateName,
         array $data = []
     ): Template {
-        $blockAlias = $this->getBlockAlias(null, $ancestorBlock, $data);
-        $blockName = $ancestorBlock->getNameInLayout() . '.' . $blockAlias;
+        $blockAlias = $this->getBlockAlias(null, $this->ancestorBlock, $data);
+        $blockName = $this->ancestorBlock->getNameInLayout() . '.' . $blockAlias;
         $block = $this->createBlockFromTemplate($templateName, $blockName);
 
-        $this->populateBlock($block, $ancestorBlock, $data);
+        $this->populateBlock($block, $this->ancestorBlock, $data);
 
         return $block;
     }
 
     public function html(
-        AbstractBlock $ancestorBlock,
         string $templateName,
         array $data = []
     ): string {
-        return $this->get($ancestorBlock, $templateName, $data)->toHtml();
+        return $this->get($templateName, $data)->toHtml();
     }
 
     private function createBlockFromTemplate(string $templateName, string $blockName): Template

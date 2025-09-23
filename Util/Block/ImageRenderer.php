@@ -31,9 +31,10 @@ class ImageRenderer implements ArgumentInterface
         $this->fileDriver = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
 
-    public function setBlock(AbstractBlock $block): self
+    public function setBlock(AbstractBlock $block): ImageRenderer
     {
         $this->block = $block;
+        return $this;
     }
 
     public function get(string $imageId, array $attributes = []): string

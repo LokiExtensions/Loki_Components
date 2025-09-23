@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Loki\Components\Observer;
 
+use Loki\Components\Util\Block\ImageRenderer;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -22,7 +23,11 @@ class AssignAdditionalBlockVariables implements ObserverInterface
         private readonly BlockRenderer $blockRenderer,
         private readonly ChildRenderer $childRenderer,
         private readonly TemplateRenderer $templateRenderer,
-        private readonly ComponentRegistry $componentRegistry
+        private readonly ImageRenderer $imageRenderer,
+        private readonly ComponentRegistry $componentRegistry,
+        private readonly array $blockPrefixes = [
+            'loki'
+        ]
     ) {
     }
 
@@ -33,10 +38,15 @@ class AssignAdditionalBlockVariables implements ObserverInterface
             return;
         }
 
+        if (false === $this->allowVariables($block)) {
+            return;
+        }
+
         $block->assign('viewModelFactory', $this->viewModelFactory);
         $block->assign('blockRenderer', $this->blockRenderer);
         $block->assign('childRenderer', $this->childRenderer);
         $block->assign('templateRenderer', $this->templateRenderer);
+        $block->assign('imageRenderer', $this->imageRenderer);
 
         $this->disallowRendering($block);
     }
@@ -60,5 +70,16 @@ class AssignAdditionalBlockVariables implements ObserverInterface
 
         $block->setTemplate('Loki_Components::utils/not-rendered.phtml');
         $block->setNotRendered(true);
+    }
+
+    private function allowVariables(AbstractBlock $block): bool
+    {
+        foreach ($this->blockPrefixes as $blockPrefix) {
+            if (str_starts_with($block->getNameInLayout(), $blockPrefix)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

@@ -31,12 +31,6 @@ class ImageRenderer implements ArgumentInterface
         $this->fileDriver = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
 
-    public function setBlock(AbstractBlock $block): ImageRenderer
-    {
-        $this->block = $block;
-        return $this;
-    }
-
     public function get(string $imageId, array $attributes = []): string
     {
         $asset = $this->assetRepository->createAsset($imageId);
@@ -52,7 +46,6 @@ class ImageRenderer implements ArgumentInterface
      * @param string $imageUrl
      * @param array $attributes
      * @return string
-     * @throws LocalizedException
      * @deprecated Use get() instead
      */
     public function getByUrl(string $imageUrl, array $attributes = []): string
@@ -60,8 +53,9 @@ class ImageRenderer implements ArgumentInterface
         return $this->get($imageUrl, $attributes);
     }
 
-    public function icon(string $iconId)
+    public function icon(AbstractBlock $block, string $iconId)
     {
+        $this->block = $block;
         $iconSize = $this->getIconSize($iconId);
         $imageId = $this->iconPrefix.'/'.$this->iconSet.'/'.$iconId.'.svg';
 
@@ -75,7 +69,7 @@ class ImageRenderer implements ArgumentInterface
     {
         $iconConfiguration = $this->getIconConfiguration();
         if (isset($iconConfiguration[$iconId]['size'])) {
-            return $iconConfiguration[$iconId]['size'];
+            return (int)$iconConfiguration[$iconId]['size'];
         }
 
         return $this->iconSize;

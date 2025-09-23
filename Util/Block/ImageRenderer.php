@@ -5,7 +5,6 @@ namespace Loki\Components\Util\Block;
 use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State as AppState;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\File as AssetFile;
 use Magento\Framework\View\Asset\Repository as AssetRepository;

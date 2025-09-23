@@ -1,0 +1,21 @@
+<?php declare(strict_types=1);
+
+use Loki\Components\Factory\ViewModelFactory;
+use Loki\Components\Util\Block\ImageRenderer;
+use Loki\CssUtils\Util\CssClass;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var CssClass $css */
+
+$label = $block->getLabel();
+?>
+<button
+    @click="toggleModal"
+    class="<?= /* noEscape */
+    /* @noEscape */ $css('btn btn-primary mt-4', '') ?>"
+>
+    <span><?= $escaper->escapeHtml($label) ?></span>
+</button>

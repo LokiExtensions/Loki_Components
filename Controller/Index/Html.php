@@ -62,7 +62,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
             } catch (Exception $exception) {
                 $this->logger->critical($exception);
-                $this->addGlobalException($exception);
+                $this->addExceptionMessage($exception);
             }
         }
 
@@ -139,19 +139,25 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         return true;
     }
 
-    private function addGlobalException(Exception $exception): void
+    private function addExceptionMessage(Exception $exception): void
     {
-        $error = $exception->getMessage();
-
         if ($this->config->isDebug() && $this->appState->getMode() === AppState::MODE_DEVELOPER) {
-            $errorWrapper = '<details>';
-            $errorWrapper .= '<summary>'.$error.'</summary>';
-            $errorWrapper .= '<br/> ['.$exception->getFile().' line '.$exception->getLine().'] <br/>';
-            $errorWrapper .= '<small>'.nl2br($exception->getTraceAsString()).'</small>';
-            $errorWrapper .= '</details>';
-            $error = $errorWrapper;
+            $traceLines = explode("\n", $exception->getTraceAsString());
+
+            $this->messageManager->addComplexErrorMessage(
+                'lokiComponentException',
+                [
+                    'message' => (string)$exception->getMessage(),
+                    'trace' => $traceLines,
+                    'code' => $exception->getCode(),
+                    'file' => (string)$exception->getFile(),
+                    'line' => (string)$exception->getLine(),
+                ]
+            );
+
+            return;
         }
 
-        $this->messageManager->addErrorMessage($error);
+        $this->messageManager->addErrorMessage($exception->getMessage());
     }
 }

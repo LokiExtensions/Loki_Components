@@ -9,4 +9,4 @@ use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 ?>
 <?= /* @noEscape */ $block->getChildHtml() ?>
-<script defer src="<?= /* @noEscape */ $escaper->escapeUrl($block->getViewFileUrl("Loki_Components::js/alpine.min.js")) ?>"></script>
+<script defer src="<?= $escaper->escapeUrl($block->getViewFileUrl("Loki_Components::js/alpine.min.js")) ?>"></script>

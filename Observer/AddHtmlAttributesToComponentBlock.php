@@ -56,7 +56,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
         }
 
         $htmlAttributes = $this->getHtmlAttributes($component, $html);
-        if ($htmlAttributes === '' || $htmlAttributes === '0') {
+        if (false === strlen($htmlAttributes) > 0) {
             return;
         }
 
@@ -119,9 +119,12 @@ EOF;
 
     private function getElementId(AbstractBlock $block): string
     {
-        $nameInLayout = strtolower((string)$block->getNameInLayout());
+        $uniqId = (string)$block->getUniqId();
+        if (strlen($uniqId) > 0) {
+            return $uniqId;
+        }
 
-        // @todo: Find all instances of this kind of thing and DRY
+        $nameInLayout = strtolower((string)$block->getNameInLayout());
         return preg_replace('#([^a-zA-Z0-9]{1})#', '-', $nameInLayout);
     }
 }

@@ -15,6 +15,7 @@ class ChildRenderer extends AbstractRenderer
     ): AbstractBlock {
         $this->ancestorBlock = $ancestorBlock;
         $block = $this->ancestorBlock->getChildBlock($blockAlias);
+        $block->setAlias($blockAlias);
 
         if (false === $block instanceof AbstractBlock) {
             throw new RuntimeException(

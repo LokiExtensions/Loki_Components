@@ -26,7 +26,7 @@ abstract class AbstractRenderer implements ArgumentInterface
     ): void {
         $block->addData($data);
         $block->setAncestorBlock($this->ancestorBlock);
-        $block->setUniqId($this->getUniqId($block));
+        $block->setUniqId($this->getUniqId($block, $data));
 
         $viewModel = $this->ancestorBlock->getViewModel();
         if ($viewModel instanceof ComponentViewModelInterface) {
@@ -64,12 +64,19 @@ abstract class AbstractRenderer implements ArgumentInterface
     protected function setNameInLayout(AbstractBlock $block): void
     {
         $alias = $this->getBlockAlias($block);
-        $block->setNameInLayout($this->ancestorBlock->getNameInLayout() . '.' . $alias);
+        $block->setNameInLayout(
+            $this->ancestorBlock->getNameInLayout() . '.' . $alias
+        );
     }
 
-    protected function getUniqId(AbstractBlock $block): string
+    protected function getUniqId(AbstractBlock $block, array $data = []): string
     {
         $ancestorId = $this->ancestorBlock->getNameInLayout();
+
+        if (isset($data['uniq'])) {
+            return $ancestorId . '-' . $data['uniq'];
+        }
+
         $blockParts = explode('.', $block->getNameInLayout());
         return $ancestorId . '-' . array_pop($blockParts);
     }

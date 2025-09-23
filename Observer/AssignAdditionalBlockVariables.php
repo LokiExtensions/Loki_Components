@@ -25,9 +25,7 @@ class AssignAdditionalBlockVariables implements ObserverInterface
         private readonly TemplateRenderer $templateRenderer,
         private readonly ImageRenderer $imageRenderer,
         private readonly ComponentRegistry $componentRegistry,
-        private readonly array $blockPrefixes = [
-            'loki'
-        ]
+        private readonly array $blockPrefixes = []
     ) {
     }
 
@@ -76,6 +74,10 @@ class AssignAdditionalBlockVariables implements ObserverInterface
     {
         foreach ($this->blockPrefixes as $blockPrefix) {
             if (str_starts_with($block->getNameInLayout(), $blockPrefix)) {
+                return true;
+            }
+
+            if ($block->getNameInLayout() === $blockPrefix) {
                 return true;
             }
         }

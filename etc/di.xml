@@ -67,6 +67,14 @@
         </arguments>
     </type>
 
+    <type name="Loki\Components\Observer\AssignAdditionalBlockVariables">
+        <arguments>
+            <argument name="blockPrefixes" xsi:type="array">
+                <item name="loki" xsi:type="string">loki</item>
+            </argument>
+        </arguments>
+    </type>
+
     <type name="Loki\Components\Util\DefaultTargets">
         <arguments>
             <argument name="targets" xsi:type="array">

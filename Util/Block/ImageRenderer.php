@@ -1,6 +1,6 @@
 <?php declare(strict_types=1);
 
-namespace Loki\Components\Util;
+namespace Loki\Components\Util\Block;
 
 use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -13,9 +13,11 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use SimpleXMLElement;
 
-class ImageOutput implements ArgumentInterface
+class ImageRenderer implements ArgumentInterface
 {
     private ?Filesystem\Directory\ReadInterface $fileDriver = null;
+
+    private ?AbstractBlock $block = null;
 
     public function __construct(
         Filesystem $filesystem,
@@ -24,8 +26,14 @@ class ImageOutput implements ArgumentInterface
         private readonly AppState $appState,
         private readonly string $iconSet = 'default',
         private readonly string $iconPrefix = 'Loki_Components::icon',
+        private readonly int $iconSize = 20,
     ) {
         $this->fileDriver = $filesystem->getDirectoryRead(DirectoryList::ROOT);
+    }
+
+    public function setBlock(AbstractBlock $block): self
+    {
+        $this->block = $block;
     }
 
     public function get(string $imageId, array $attributes = []): string
@@ -51,19 +59,34 @@ class ImageOutput implements ArgumentInterface
         return $this->get($imageUrl, $attributes);
     }
 
-    public function icon(string $iconId, AbstractBlock $block)
+    public function icon(string $iconId)
     {
-        $iconSize = (int)$block->getIconSize();
-        if (false === $iconSize > 0) {
-            $iconSize = 20;
-        }
-
+        $iconSize = $this->getIconSize($iconId);
         $imageId = $this->iconPrefix.'/'.$this->iconSet.'/'.$iconId.'.svg';
 
         return $this->get($imageId, [
             'width' => $iconSize,
             'height' => $iconSize,
         ]);
+    }
+
+    private function getIconSize(string $iconId): int
+    {
+        $iconConfiguration = $this->getIconConfiguration();
+        if (isset($iconConfiguration[$iconId]['size'])) {
+            return $iconConfiguration[$iconId]['size'];
+        }
+
+        return $this->iconSize;
+    }
+
+    private function getIconConfiguration(): array
+    {
+        if (false === $this->block instanceof AbstractBlock) {
+            return [];
+        }
+
+        return (array) $this->block->getIcons();
     }
 
     private function getImageTag(string $imageUrl, array $attributes = []): string

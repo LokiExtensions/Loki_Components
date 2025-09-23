@@ -73,11 +73,16 @@ class AssignAdditionalBlockVariables implements ObserverInterface
     private function allowVariables(AbstractBlock $block): bool
     {
         foreach ($this->blockPrefixes as $blockPrefix) {
-            if (str_starts_with($block->getNameInLayout(), $blockPrefix)) {
+            $blockName = (string)$block->getNameInLayout();
+            if (empty($blockName)) {
+                continue;
+            }
+
+            if (str_starts_with($blockName, $blockPrefix)) {
                 return true;
             }
 
-            if ($block->getNameInLayout() === $blockPrefix) {
+            if ($blockName === $blockPrefix) {
                 return true;
             }
         }

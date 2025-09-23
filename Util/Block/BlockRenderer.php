@@ -4,6 +4,7 @@ namespace Loki\Components\Util\Block;
 
 use InvalidArgumentException;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Template;
 use RuntimeException;
 
 class BlockRenderer extends AbstractRenderer
@@ -27,7 +28,7 @@ class BlockRenderer extends AbstractRenderer
 
         $this->populateBlock($block, $data);
 
-        if (empty($block->getTemplate())) {
+        if ($block instanceof Template && false === strlen($block->getTemplate()) > 0) {
             throw new RuntimeException((string)__('No template found with block "%1"', $blockName));
         }
 

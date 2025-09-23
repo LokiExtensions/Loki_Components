@@ -15,6 +15,7 @@ class ChildRenderer extends AbstractRenderer
     ): AbstractBlock {
         $this->ancestorBlock = $ancestorBlock;
         $block = $this->ancestorBlock->getChildBlock($blockAlias);
+
         if (false === $block instanceof AbstractBlock) {
             throw new RuntimeException(
                 (string)__(
@@ -25,8 +26,8 @@ class ChildRenderer extends AbstractRenderer
             );
         }
 
-        $this->populateBlock($block, $data);
         $this->setNameInLayout($block);
+        $this->populateBlock($block, $data);
 
         return $block;
     }

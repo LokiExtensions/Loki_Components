@@ -3,7 +3,7 @@
 /** @version 2.1.4 */
 
 use Loki\Components\Factory\ViewModelFactory;
-use Loki\Components\Util\ImageOutput;
+use Loki\Components\Util\Block\ImageRenderer;
 use Loki\CssUtils\Util\CssClass;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -12,11 +12,11 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var CssClass $css */
 /** @var ViewModelFactory $viewModelFactory */
-/** @var ImageOutput $imageOutput */
-$imageOutput = $viewModelFactory->create(ImageOutput::class);
+/** @var ImageRenderer $imageRenderer */
+
 ?>
 <button
     aria-label="<?= $escaper->escapeHtml(__('Close')) ?>"
     @click.prevent="toggleModal"
     class="<?= /* @noEscape */ $css('float-right cursor-pointer') ?>"
-><?= /** @noEscape */ $imageOutput->icon('xmark', $block) ?></button>
+><?= /** @noEscape */ $imageRenderer->icon('xmark') ?></button>

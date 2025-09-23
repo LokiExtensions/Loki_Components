@@ -103,4 +103,9 @@ class LengthViewModelDummy implements ComponentViewModelInterface
     {
         return false;
     }
+
+    public function hasBlock(): bool
+    {
+        return true;
+    }
 }

@@ -27,14 +27,13 @@ abstract class AbstractRenderer implements ArgumentInterface
 
     protected function populateBlock(
         AbstractBlock $block,
-        AbstractBlock $ancestorBlock,
         array $data = []
     ): void {
-        $block->setAncestorBlock($ancestorBlock);
-        $block->setUniqId($this->getUniqId($block, $ancestorBlock));
+        $block->setAncestorBlock($this->ancestorBlock);
+        $block->setUniqId($this->getUniqId($block));
         $block->addData($data);
 
-        $viewModel = $ancestorBlock->getViewModel();
+        $viewModel = $this->ancestorBlock->getViewModel();
         if ($viewModel instanceof ComponentViewModelInterface) {
             $block->setViewModel($viewModel);
         }
@@ -47,7 +46,6 @@ abstract class AbstractRenderer implements ArgumentInterface
 
     protected function getBlockAlias(
         ?AbstractBlock $block = null,
-        ?AbstractBlock $ancestorBlock = null,
         array $data = []
     ): string {
         if ($block instanceof AbstractBlock) {
@@ -61,22 +59,22 @@ abstract class AbstractRenderer implements ArgumentInterface
             return $data['alias'];
         }
 
-        if ($ancestorBlock instanceof AbstractBlock) {
-            return 'block' . $this->getCounter($ancestorBlock);
+        if ($this->ancestorBlock instanceof AbstractBlock) {
+            return 'block' . $this->getCounter($this->ancestorBlock);
         }
 
         return '';
     }
 
-    protected function setNameInLayout(AbstractBlock $block, AbstractBlock $ancestorBlock): void
+    protected function setNameInLayout(AbstractBlock $block): void
     {
-        $alias = $this->getBlockAlias($block, $ancestorBlock);
-        $block->setNameInLayout($ancestorBlock->getNameInLayout() . '.' . $alias);
+        $alias = $this->getBlockAlias($block);
+        $block->setNameInLayout($this->ancestorBlock->getNameInLayout() . '.' . $alias);
     }
 
-    protected function getUniqId(AbstractBlock $block, AbstractBlock $ancestorBlock): string
+    protected function getUniqId(AbstractBlock $block): string
     {
-        $ancestorId = $ancestorBlock->getNameInLayout();
+        $ancestorId = $this->ancestorBlock->getNameInLayout();
         $blockParts = explode('.', $block->getNameInLayout());
         return $ancestorId . '-' . array_pop($blockParts);
     }

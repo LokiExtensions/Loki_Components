@@ -10,11 +10,11 @@ class TemplateRenderer extends AbstractRenderer
         string $templateName,
         array $data = []
     ): Template {
-        $blockAlias = $this->getBlockAlias(null, $this->ancestorBlock, $data);
+        $blockAlias = $this->getBlockAlias(null, $data);
         $blockName = $this->ancestorBlock->getNameInLayout() . '.' . $blockAlias;
         $block = $this->createBlockFromTemplate($templateName, $blockName);
 
-        $this->populateBlock($block, $this->ancestorBlock, $data);
+        $this->populateBlock($block, $data);
 
         return $block;
     }

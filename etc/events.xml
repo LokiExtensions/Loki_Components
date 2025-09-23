@@ -4,8 +4,6 @@
 >
     <event name="view_block_abstract_to_html_before">
         <observer name="Loki_Components::assignAdditionalBlockVariables" instance="Loki\Components\Observer\AssignAdditionalBlockVariables"/>
-
-        <observer name="Loki_Components::addComponentToBlock" instance="Loki\Components\Observer\AddComponentToBlock"/>
     </event>
 
     <event name="view_block_abstract_to_html_after">

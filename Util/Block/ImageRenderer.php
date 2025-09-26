@@ -124,7 +124,7 @@ class ImageRenderer implements ArgumentInterface
             }
         }
 
-        return $this->getByUrl($asset->getUrl());
+        return $this->get($asset->getUrl());
     }
 
     private function parseSvgAttributes(
@@ -148,7 +148,7 @@ class ImageRenderer implements ArgumentInterface
     private function getOutputError(string $error): string
     {
         if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
-            return '<!-- '.$error.' -->';
+            return '<!-- ERROR: '.$error.' -->';
         }
 
         return '';

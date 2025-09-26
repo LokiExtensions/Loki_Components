@@ -52,14 +52,14 @@ class AssignAdditionalBlockVariables implements ObserverInterface
         $viewModel = $component->getViewModel();
         $template = (string)$viewModel->getTemplate();
         if (strlen($template) > 0) {
-            $block->setTemplate($template);
+            $block->setTemplate($template); // @phpstan-ignore bitExpertMagento.setTemplateDisallowedForBlock
         }
 
         $block->setViewModel($viewModel);
         $block->setViewModelInstance($viewModel);
 
         if (false === $viewModel->isAllowRendering()) {
-            $block->setTemplate('Loki_Components::utils/not-rendered.phtml');
+            $block->setTemplate('Loki_Components::utils/not-rendered.phtml'); // @phpstan-ignore bitExpertMagento.setTemplateDisallowedForBlock
             $block->setNotRendered(true);
             return $block;
         }

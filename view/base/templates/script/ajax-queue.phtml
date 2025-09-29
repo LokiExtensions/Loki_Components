@@ -46,8 +46,8 @@ if ($interval < 10) {
             const requests = this.requests;
             this.requests = [];
 
-            await fetch('<?= /* @noEscape */ $componentUtil->getPostUrl(
-            ) ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
+            await fetch('<?= $escaper->escapeUrl($componentUtil->getPostUrl(
+            )) ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
                 headers: this.getPostHeaders(),
@@ -96,15 +96,15 @@ if ($interval < 10) {
             return {
                 updates: this.getUpdates(requests),
                 targets: this.getTargets(requests),
-                handles: <?= /** @noEscape */ json_encode(
+                handles: <?= $escaper->escapeHtml(json_encode(
                     $componentUtil->getHandles($block)
-                ) ?>,
+                )) ?>,
                 currentUri: '<?= $escaper->escapeHtml($escaper->escapeJs(
                     $componentUtil->getCurrentUri()
                 )) ?>',
-                request: <?= /** @noEscape */ json_encode(
+                request: <?= $escaper->escapeHtml(json_encode(
                     $componentUtil->getRequestParams()
-                ) ?>,
+                )) ?>,
             };
         },
         handleJson(data) {

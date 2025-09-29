@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.1] - 29 September 2025
+### Fixed
+- Optimize image rendering
+- Prevent child renderer exception when child is empty
+- Fix PHPStan issue with setTemplate() being called
+
 ## [2.2.0] - 23 September 2025
 ### Added
 - Add Loki Component exception as complex message

@@ -41,9 +41,5 @@
             "description": "When a specific Loki Component is declared in a file `etc\/loki_components.xml` with a validator `email`, then basic email validation is applied. With this setting enabled, the validation includes also a DNS MX lookup of the domain part of the email."
         }
     ],
-    "tests": {
-        "unit": 18,
-        "integration": 17,
-        "functional": 0
-    }
+    "tests": []
 }

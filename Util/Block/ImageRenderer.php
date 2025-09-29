@@ -32,18 +32,23 @@ class ImageRenderer implements ArgumentInterface
 
     public function get(string $imageId, array $attributes = []): string
     {
-        $asset = $this->assetRepository->createAsset($imageId);
+        if (preg_match('/^([A-Z][A-Za-z0-9_]+)::(.+)$/', $imageId)) {
+            $asset = $this->assetRepository->createAsset($imageId);
 
-        if (str_ends_with($imageId, '.svg')) {
-            return $this->getIconOutput($asset, $attributes);
+            if (str_ends_with($imageId, '.svg')) {
+                return $this->getIconOutput($asset, $attributes);
+            }
+
+            return $this->getImageTag($asset->getUrl(), $attributes);
         }
 
-        return $this->getImageTag($asset->getUrl(), $attributes);
+        throw new \RuntimeException('Not an asset ID: '.$imageId);
     }
 
     /**
      * @param string $imageUrl
-     * @param array $attributes
+     * @param array  $attributes
+     *
      * @return string
      * @deprecated Use get() instead
      */
@@ -56,10 +61,13 @@ class ImageRenderer implements ArgumentInterface
     {
         $this->block = $block;
         $iconSize = $this->getIconSize($iconId);
-        $imageId = $this->iconPrefix.'/'.$this->iconSet.'/'.$iconId.'.svg';
+        $imageId = $this->iconPrefix
+            . '/' . $this->iconSet
+            . '/' . $iconId
+            . '.svg';
 
         return $this->get($imageId, [
-            'width' => $iconSize,
+            'width'  => $iconSize,
             'height' => $iconSize,
         ]);
     }
@@ -80,23 +88,27 @@ class ImageRenderer implements ArgumentInterface
             return [];
         }
 
-        return (array) $this->block->getIcons();
+        return (array)$this->block->getIcons();
     }
 
-    private function getImageTag(string $imageUrl, array $attributes = []): string
-    {
+    private function getImageTag(
+        string $imageUrl,
+        array $attributes = []
+    ): string {
         $htmlAttributes = [];
         foreach ($attributes as $attributeName => $attributeValue) {
-            $htmlAttributes[] = $attributeName.'="'.$attributeValue.'"';
+            $htmlAttributes[] = $attributeName . '="' . $attributeValue . '"';
         }
 
         $htmlAttributes = implode(' ', $htmlAttributes);
 
-        return '<img src="'.$imageUrl.'" '.$htmlAttributes.' />';
+        return '<img src="' . $imageUrl . '" ' . $htmlAttributes . ' />';
     }
 
-    private function getIconOutput(AssetFile $asset, array $attributes = []): string
-    {
+    private function getIconOutput(
+        AssetFile $asset,
+        array $attributes = []
+    ): string {
         $sourceFile = $asset->getSourceFile();
         if (false === $sourceFile) {
             return $this->getOutputError('No source file');
@@ -104,27 +116,27 @@ class ImageRenderer implements ArgumentInterface
 
         if (false === $this->fileDriver->isFile($sourceFile)) {
             return $this->getOutputError(
-                'Source file "'.$sourceFile.'" does not exist'
+                'Source file "' . $sourceFile . '" does not exist'
             );
         }
 
-        if (str_ends_with($sourceFile, '.svg')) {
-            $iconPath = str_replace(
-                $this->directoryList->getRoot().'/',
-                '',
-                $sourceFile
-            );
-
-            try {
-                $svgContents = $this->fileDriver->readFile($iconPath);
-
-                return $this->parseSvgAttributes($svgContents, $attributes);
-            } catch (Exception $e) {
-                return $this->getOutputError($e->getMessage());
-            }
+        if (false === str_ends_with($sourceFile, '.svg')) {
+            return $this->get($asset->getUrl());
         }
 
-        return $this->get($asset->getUrl());
+        $iconPath = str_replace(
+            $this->directoryList->getRoot() . '/',
+            '',
+            $sourceFile
+        );
+
+        try {
+            $svgContents = $this->fileDriver->readFile($iconPath);
+
+            return $this->parseSvgAttributes($svgContents, $attributes);
+        } catch (Exception $e) {
+            return $this->getOutputError($e->getMessage());
+        }
     }
 
     private function parseSvgAttributes(
@@ -132,8 +144,12 @@ class ImageRenderer implements ArgumentInterface
         array $attributes = []
     ): string {
         $svgElement = new SimpleXMLElement($svgContents);
-        $svgElement->registerXPathNamespace('svg', 'http://www.w3.org/2000/svg');
-        $svgElement->registerXPathNamespace('xlink', 'http://www.w3.org/1999/xlink');
+        $svgElement->registerXPathNamespace(
+            'svg', 'http://www.w3.org/2000/svg'
+        );
+        $svgElement->registerXPathNamespace(
+            'xlink', 'http://www.w3.org/1999/xlink'
+        );
 
         foreach ($attributes as $attributeName => $attributeValue) {
             $svgElement->addAttribute($attributeName, (string)$attributeValue);
@@ -148,7 +164,7 @@ class ImageRenderer implements ArgumentInterface
     private function getOutputError(string $error): string
     {
         if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
-            return '<!-- ERROR: '.$error.' -->';
+            return '<!-- ' . $error . ' -->';
         }
 
         return '';

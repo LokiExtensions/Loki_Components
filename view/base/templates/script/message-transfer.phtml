@@ -12,5 +12,5 @@ use Magento\Framework\View\Element\Template;
 $messages = $block->getMessages();
 ?>
 <script type="text/x-loki-messages">
-    <?= $escaper->escapeHtml($messages->getMessagesAsJson()) ?>
+    <?= /* @noEscape */ $messages->getMessagesAsJson() ?>
 </script>

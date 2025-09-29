@@ -16,9 +16,9 @@ $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
-    const LokiComponentFormKey = '<?= $escaper->escapeHtml($escaper->escapeJs(
+    const LokiComponentFormKey = '<?= $escaper->escapeJs(
         $componentUtil->getFormKey()
-    )) ?>';
+    ) ?>';
     const LokiComponentType = {
         ...LokiLoadDataComponentPartial,
         ...LokiLoadInitMethodsComponentPartial,

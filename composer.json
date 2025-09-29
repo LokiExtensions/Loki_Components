@@ -2,24 +2,26 @@
     "name": "loki/magento2-components",
     "version": "2.2.1",
     "description": "N/A",
-    "keywords": ["loki-components"],
+    "keywords": [
+        "loki-components"
+    ],
     "type": "magento2-module",
     "require": {
+        "ext-dom": "*",
+        "ext-json": "*",
+        "ext-pcre": "*",
+        "ext-simplexml": "*",
+        "laminas/laminas-http": "^2.0",
+        "loki/magento2-base": "^1.0",
+        "loki/magento2-css-utils": "^1.0",
         "magento/framework": "^103.0",
         "magento/module-backend": "^102.0",
         "magento/module-config": "^101.0",
         "magento/module-customer": "^103.0",
         "magento/module-store": "^101.0",
-        "laminas/laminas-http": "^2.0",
-        "loki/magento2-base": "^1.0",
-        "loki/magento2-css-utils": "^1.0",
-        "yireo/magento2-csp-utilities": "^1.0",
-        "psr/log": "^1.0 | ^2.0 | ^3.0",
         "php": "^8.1",
-        "ext-json": "*",
-        "ext-pcre": "*",
-        "ext-simplexml": "*",
-        "ext-dom": "*"
+        "psr/log": "^1.0 | ^2.0 | ^3.0",
+        "yireo/magento2-csp-utilities": "^1.0"
     },
     "require-dev": {
         "yireo/magento2-integration-test-helper": "~0.0"

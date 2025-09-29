@@ -96,15 +96,15 @@ if ($interval < 10) {
             return {
                 updates: this.getUpdates(requests),
                 targets: this.getTargets(requests),
-                handles: <?= $escaper->escapeHtml(json_encode(
+                handles: <?= /* @noEscape */ json_encode(
                     $componentUtil->getHandles($block)
-                )) ?>,
-                currentUri: '<?= $escaper->escapeHtml($escaper->escapeJs(
+                ) ?>,
+                currentUri: '<?= $escaper->escapeJs(
                     $componentUtil->getCurrentUri()
-                )) ?>',
-                request: <?= $escaper->escapeHtml(json_encode(
+                ) ?>',
+                request: <?= /* @noEscape */ json_encode(
                     $componentUtil->getRequestParams()
-                )) ?>,
+                ) ?>,
             };
         },
         handleJson(data) {

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.3] - 29 September 2025
+### Fixed
+- Fix wrong escaping in JS
+
 ## [2.2.2] - 29 September 2025
 ### Fixed
 - Fix wrong escaping in JS

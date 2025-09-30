@@ -26,20 +26,21 @@
     ],
     "config": [
         {
-            "path": "loki_components\/general\/debug",
+            "path": "loki_components/general/debug",
             "label": "Generic settings > Debug",
             "description": "When debugging is enabled, on various levels, detailed information comes available. For instance, in the browser Error Console, more debugging messages are displayed, allowing you to inspect issues on the JavaScript level. Whenever an exception occurs within the AJAX call, the exception message is appended to the AJAX output."
         },
         {
-            "path": "loki_components\/general\/only_validate_ajax",
+            "path": "loki_components/general/only_validate_ajax",
             "label": "Generic settings > Only validate AJAX calls",
             "description": "Any Loki Component allows for changing a value on the Magento server-side and before changing this value validation occurs. If validation fails, the LokiComponent is able to display an error, mark the input field with a red border, etcetera. However, when this happens when the page is loading, it might disturb the UI. This setting allows you to only trigger validation, when an actual change happens. It depends on your own customizations, whether you like this or not."
         },
         {
-            "path": "loki_components\/validators\/enable_mx_validation_for_email",
+            "path": "loki_components/validators/enable_mx_validation_for_email",
             "label": "Validators > Enable MX Validation for Email Values",
-            "description": "When a specific Loki Component is declared in a file `etc\/loki_components.xml` with a validator `email`, then basic email validation is applied. With this setting enabled, the validation includes also a DNS MX lookup of the domain part of the email."
+            "description": "When a specific Loki Component is declared in a file `etc/loki_components.xml` with a validator `email`, then basic email validation is applied. With this setting enabled, the validation includes also a DNS MX lookup of the domain part of the email."
         }
     ],
-    "tests": []
+    "tests": [],
+    "phpcs_severity": "9"
 }

@@ -10,6 +10,7 @@ use Magento\Framework\View\Asset\File as AssetFile;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use RuntimeException;
 use SimpleXMLElement;
 
 class ImageRenderer implements ArgumentInterface
@@ -30,19 +31,32 @@ class ImageRenderer implements ArgumentInterface
         $this->fileDriver = $filesystem->getDirectoryRead(DirectoryList::ROOT);
     }
 
-    public function get(string $imageId, array $attributes = []): string
+    public function get(string $image, array $attributes = []): string
     {
-        if (preg_match('/^([A-Z][A-Za-z0-9_]+)::(.+)$/', $imageId)) {
-            $asset = $this->assetRepository->createAsset($imageId);
-
-            if (str_ends_with($imageId, '.svg')) {
-                return $this->getIconOutput($asset, $attributes);
-            }
-
-            return $this->getImageTag($asset->getUrl(), $attributes);
+        if ($this->isAssetId($image)) {
+            return $this->getByAssetId($image, $attributes);
         }
 
-        throw new \RuntimeException('Not an asset ID: '.$imageId);
+        if ($this->fileDriver->isFile($image)) {
+            return $this->getByFile($image, $attributes);
+        }
+
+        return $this->getImageTag($image, $attributes);
+    }
+
+    public function getByAssetId(string $assetId, array $attributes = []): string
+    {
+        if (!preg_match('/^([A-Z][A-Za-z0-9_]+)::(.+)$/', $assetId)) {
+            throw new RuntimeException('Not an asset ID: '.$assetId);
+        }
+
+        $asset = $this->assetRepository->createAsset($assetId);
+
+        if (str_ends_with($assetId, '.svg')) {
+            return $this->getIconOutput($asset->getSourceFile(), $attributes);
+        }
+
+        return $this->getImageTag($asset->getUrl(), $attributes);
     }
 
     /**
@@ -57,6 +71,15 @@ class ImageRenderer implements ArgumentInterface
         return $this->get($imageUrl, $attributes);
     }
 
+    public function getByFile(string $imageFile, array $attributes = []): string
+    {
+        if (str_ends_with($imageFile, '.svg')) {
+            return $this->getIconOutput($imageFile, $attributes);
+        }
+
+        throw new RuntimeException('Unable to convert file into image URL: '.$imageFile);
+    }
+
     public function icon(AbstractBlock $block, string $iconId)
     {
         $this->block = $block;
@@ -66,10 +89,39 @@ class ImageRenderer implements ArgumentInterface
             . '/' . $iconId
             . '.svg';
 
-        return $this->get($imageId, [
+        return $this->getIconOutput($imageId, [
             'width'  => $iconSize,
             'height' => $iconSize,
         ]);
+    }
+
+    public function getIconOutput(
+        string $sourceFile,
+        array $attributes = []
+    ): string {
+        if (false === $sourceFile) {
+            return $this->getOutputError('No source file');
+        }
+
+        if (false === $this->fileDriver->isFile($sourceFile)) {
+            return $this->getOutputError(
+                'Source file "' . $sourceFile . '" does not exist'
+            );
+        }
+
+        $iconPath = str_replace(
+            $this->directoryList->getRoot() . '/',
+            '',
+            $sourceFile
+        );
+
+        try {
+            $svgContents = $this->fileDriver->readFile($iconPath);
+
+            return $this->parseSvgAttributes($svgContents, $attributes);
+        } catch (Exception $e) {
+            return $this->getOutputError($e->getMessage());
+        }
     }
 
     private function getIconSize(string $iconId): int
@@ -105,40 +157,6 @@ class ImageRenderer implements ArgumentInterface
         return '<img src="' . $imageUrl . '" ' . $htmlAttributes . ' />';
     }
 
-    private function getIconOutput(
-        AssetFile $asset,
-        array $attributes = []
-    ): string {
-        $sourceFile = $asset->getSourceFile();
-        if (false === $sourceFile) {
-            return $this->getOutputError('No source file');
-        }
-
-        if (false === $this->fileDriver->isFile($sourceFile)) {
-            return $this->getOutputError(
-                'Source file "' . $sourceFile . '" does not exist'
-            );
-        }
-
-        if (false === str_ends_with($sourceFile, '.svg')) {
-            return $this->get($asset->getUrl());
-        }
-
-        $iconPath = str_replace(
-            $this->directoryList->getRoot() . '/',
-            '',
-            $sourceFile
-        );
-
-        try {
-            $svgContents = $this->fileDriver->readFile($iconPath);
-
-            return $this->parseSvgAttributes($svgContents, $attributes);
-        } catch (Exception $e) {
-            return $this->getOutputError($e->getMessage());
-        }
-    }
-
     private function parseSvgAttributes(
         string $svgContents,
         array $attributes = []
@@ -155,6 +173,8 @@ class ImageRenderer implements ArgumentInterface
             $svgElement->addAttribute($attributeName, (string)$attributeValue);
         }
 
+        $svgElement->addAttribute('x-ignore', '');
+
         $xmlString = (string)$svgElement->asXML();
         $xmlString = str_replace("<?xml version=\"1.0\"?>\n", '', $xmlString);
 
@@ -168,5 +188,14 @@ class ImageRenderer implements ArgumentInterface
         }
 
         return '';
+    }
+
+    private function isAssetId(string $assetId): bool
+    {
+        if (preg_match('/^([A-Z][A-Za-z0-9_]+)::(.+)$/', $assetId)) {
+            return true;
+        }
+
+        return false;
     }
 }

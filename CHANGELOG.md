@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.6] - 30 September 2025
+### Fixed
+- Restructure of methods of imageRenderer to make more sense
+- Add `x-ignore` to SVG output
+
 ## [2.2.5] - 29 September 2025
 ### Fixed
 - Fix wrong escaping

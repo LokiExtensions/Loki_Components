@@ -64,11 +64,10 @@ class ImageRenderer implements ArgumentInterface
      * @param array  $attributes
      *
      * @return string
-     * @deprecated Use get() instead
      */
     public function getByUrl(string $imageUrl, array $attributes = []): string
     {
-        return $this->get($imageUrl, $attributes);
+        return $this->getImageTag($imageUrl, $attributes);
     }
 
     public function getByFile(string $imageFile, array $attributes = []): string
@@ -152,6 +151,7 @@ class ImageRenderer implements ArgumentInterface
             $htmlAttributes[] = $attributeName . '="' . $attributeValue . '"';
         }
 
+        $htmlAttributes[] = 'loading="lazy"';
         $htmlAttributes = implode(' ', $htmlAttributes);
 
         return '<img src="' . $imageUrl . '" ' . $htmlAttributes . ' />';

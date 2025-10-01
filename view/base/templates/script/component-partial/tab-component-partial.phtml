@@ -19,6 +19,7 @@ use Magento\Framework\View\Element\Template;
             this.$root.querySelectorAll('[data-tab-id]').forEach(tab => {
                 tab.classList.remove('tab-active');
                 tab.classList.add('tab-inactive');
+                tab.removeAttribute('disabled');
             });
 
             this.$root.querySelectorAll('[data-tab-content]').forEach(tabContent => {
@@ -30,6 +31,7 @@ use Magento\Framework\View\Element\Template;
             if (activeTab) {
                 activeTab.classList.remove('tab-inactive');
                 activeTab.classList.add('tab-active');
+                activeTab.setAttribute('disabled', '');
             }
             // @todo: Save active tab in session
 

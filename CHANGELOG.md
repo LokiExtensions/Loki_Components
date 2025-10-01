@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.7] - 01 October 2025
+### Fixed
+- Improve image rendering
+
 ## [2.2.6] - 30 September 2025
 ### Fixed
 - Restructure of methods of imageRenderer to make more sense

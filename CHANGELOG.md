@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.8] - 06 October 2025
+### Fixed
+- Wrap CSS classes in `$css()`
+- Add disabled state for active tab
+
 ## [2.2.7] - 01 October 2025
 ### Fixed
 - Improve image rendering

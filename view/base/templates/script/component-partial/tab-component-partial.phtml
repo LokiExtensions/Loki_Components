@@ -40,6 +40,8 @@ use Magento\Framework\View\Element\Template;
                 activeContent.classList.remove('hidden');
                 activeContent.classList.add('block');
             }
+
+            this.activeTabId = tabId;
         },
         toggleTabs(event) {
             if (!event || !event.target) {
@@ -51,6 +53,7 @@ use Magento\Framework\View\Element\Template;
                 console.error('No tab ID found');
                 return;
             }
+
             this.toggleTab(tabId);
         }
     };

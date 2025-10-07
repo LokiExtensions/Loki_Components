@@ -22,17 +22,6 @@
                     <tooltip>When debugging is enabled, on various levels, detailed information comes available. For instance, in the browser Error Console, more debugging messages are displayed, allowing you to inspect issues on the JavaScript level. Whenever an exception occurs within the AJAX call, the exception message is appended to the AJAX output.</tooltip>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="only_validate_ajax"
-                       translate="label"
-                       type="select"
-                       sortOrder="1"
-                       showInDefault="1"
-                       showInWebsite="1"
-                       showInStore="0">
-                    <label>Only validate AJAX calls</label>
-                    <tooltip>Any Loki Component allows for changing a value on the Magento server-side and before changing this value validation occurs. If validation fails, the LokiComponent is able to display an error, mark the input field with a red border, etcetera. However, when this happens when the page is loading, it might disturb the UI. This setting allows you to only trigger validation, when an actual change happens. It depends on your own customizations, whether you like this or not.</tooltip>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
             </group>
             <group id="validators" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Validators</label>

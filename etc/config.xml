@@ -4,7 +4,6 @@
         <loki_components>
             <general>
                 <debug>0</debug>
-                <only_validate_ajax>1</only_validate_ajax>
             </general>
             <validators>
                 <enable_mx_validation_for_email>1</enable_mx_validation_for_email>

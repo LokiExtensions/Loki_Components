@@ -23,20 +23,6 @@ class ConfigTest extends TestCase
         $this->assertFalse($config->isDebug());
     }
 
-    #[ConfigFixture('loki_components/general/only_validate_ajax', 1)]
-    public function testOnlyValidateAjaxEnabled()
-    {
-        $config = ObjectManager::getInstance()->get(Config::class);
-        $this->assertTrue($config->onlyValidateAjax());
-    }
-
-    #[ConfigFixture('loki_components/general/only_validate_ajax', 0)]
-    public function testOnlyValidateAjaxDisabled()
-    {
-        $config = ObjectManager::getInstance()->get(Config::class);
-        $this->assertFalse($config->onlyValidateAjax());
-    }
-
     #[ConfigFixture('loki_components/validators/enable_mx_validation_for_email', 1)]
     public function testMxValidationForEmailEnabled()
     {

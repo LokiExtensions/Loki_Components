@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.10] - 07 October 2025
+### Fixed
+- Support icons passed as asset ID
+
 ## [2.2.9] - 07 October 2025
 ### Fixed
 - Register activeTabId when switching

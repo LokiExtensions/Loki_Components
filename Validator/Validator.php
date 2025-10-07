@@ -23,7 +23,7 @@ class Validator
             return true;
         }
 
-        if (empty($data) && false === in_array('required', $component->getValidators())) {
+        if (empty($data) && true === in_array('required', $component->getValidators())) {
             return false;
         }
 

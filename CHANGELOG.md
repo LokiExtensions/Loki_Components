@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.9] - 07 October 2025
+### Fixed
+- Register activeTabId when switching
+- Make sure required values that are empty are validated
+- Remove option "validate_on_ajax" and simply allow empty required values on-load
+
 ## [2.2.8] - 06 October 2025
 ### Fixed
 - Wrap CSS classes in `$css()`

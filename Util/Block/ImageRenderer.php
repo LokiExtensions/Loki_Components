@@ -88,10 +88,16 @@ class ImageRenderer implements ArgumentInterface
             . '/' . $iconId
             . '.svg';
 
-        return $this->getIconOutput($imageId, [
+        $attributes = [
             'width'  => $iconSize,
             'height' => $iconSize,
-        ]);
+        ];
+
+        if ($this->isAssetId($imageId)) {
+            return $this->getByAssetId($imageId, $attributes);
+        }
+
+        return $this->getIconOutput($imageId, $attributes);
     }
 
     public function getIconOutput(

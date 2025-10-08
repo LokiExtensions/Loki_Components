@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.13] - 08 October 2025
+### Fixed
+- Add dev-mode warning when rendering of sorted childeren fails
+
 ## [2.2.12] - 08 October 2025
 ### Fixed
 - Allow sorting of children via block argument "sort_order"

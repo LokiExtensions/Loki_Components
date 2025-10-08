@@ -8,6 +8,31 @@ use RuntimeException;
 
 class ChildRenderer extends AbstractRenderer
 {
+    public function all(
+        AbstractBlock $parentBlock
+    ): string {
+        $html = '';
+        $childNames = $parentBlock->getChildNames();
+        $children = [];
+
+        foreach ($childNames as $childName) {
+            $childBlock = $parentBlock->getLayout()->getBlock($childName);
+            if (false === $childBlock instanceof AbstractBlock) {
+                continue;
+            }
+
+            $children[] = $childBlock;
+        }
+
+        $sortedChildren = $this->sortBlocks($children);
+
+        foreach ($sortedChildren as $sortedChild) {
+            $html .= $sortedChild->toHtml();
+        }
+
+        return $html;
+    }
+
     public function get(
         AbstractBlock $ancestorBlock,
         string $blockAlias,
@@ -48,5 +73,14 @@ class ChildRenderer extends AbstractRenderer
 
             return '';
         }
+    }
+
+    private function sortBlocks(array $blocks): array
+    {
+        usort($blocks, function (AbstractBlock $blockA, AbstractBlock $blockB) {
+            return (int)$blockA->getSortOrder() <=> (int)$blockB->getSortOrder();
+        });
+
+        return $blocks;
     }
 }

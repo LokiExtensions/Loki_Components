@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.12] - 08 October 2025
+### Fixed
+- Allow sorting of children via block argument "sort_order"
+
 ## [2.2.11] - 08 October 2025
 ### Fixed
 - Allow any component to have a :cssClass

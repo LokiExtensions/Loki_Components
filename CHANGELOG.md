@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.14] - 10 October 2025
+### Fixed
+- Apply proper ARIA attributes to tab components
+
 ## [2.2.13] - 08 October 2025
 ### Fixed
 - Add dev-mode warning when rendering of sorted childeren fails

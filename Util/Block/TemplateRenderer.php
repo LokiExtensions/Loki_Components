@@ -14,7 +14,7 @@ class TemplateRenderer extends AbstractRenderer
     ): Template {
         $this->ancestorBlock = $ancestorBlock;
         $blockAlias = $this->getBlockAlias(null, $data);
-        $blockName = $ancestorBlock->getNameInLayout() . '.' . $blockAlias;
+        $blockName = $ancestorBlock->getNameInLayout().'.'.$blockAlias;
         $block = $this->createBlockFromTemplate($templateName, $blockName);
 
         $this->populateBlock($block, $data);
@@ -33,7 +33,7 @@ class TemplateRenderer extends AbstractRenderer
     private function createBlockFromTemplate(string $templateName, string $blockName): Template
     {
         if (false === str_contains($templateName, '::')) {
-            $templateName = 'Loki_Components::' . $templateName;
+            $templateName = 'Loki_Components::'.$templateName;
         }
 
         if (false === str_contains($templateName, '.phtml')) {
@@ -48,6 +48,7 @@ class TemplateRenderer extends AbstractRenderer
         /** @var Template $block */
         $block = $this->layout->createBlock(Template::class, $blockName);
         $block->setTemplate($templateName); // @phpstan-ignore bitExpertMagento.setTemplateDisallowedForBlock
+
         return $block;
     }
 }

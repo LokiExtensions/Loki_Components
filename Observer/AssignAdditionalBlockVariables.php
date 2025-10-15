@@ -90,6 +90,10 @@ class AssignAdditionalBlockVariables implements ObserverInterface
 
     private function allowVariables(AbstractBlock $block): bool
     {
+        if (str_starts_with((string)$block->getTemplate(), 'Loki')) {
+            return true;
+        }
+
         foreach ($this->blockPrefixes as $blockPrefix) {
             $blockName = (string)$block->getNameInLayout();
             if (empty($blockName)) {

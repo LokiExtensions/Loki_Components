@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Loki\Components\Observer;
 
+use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Util\Block\ImageRenderer;
 use Loki\Components\Util\ComponentUtil;
 use Magento\Framework\Event\Observer;
@@ -37,18 +38,27 @@ class AssignAdditionalBlockVariables implements ObserverInterface
             return;
         }
 
-        $block = $this->addComponent($block);
-        $this->addVariables($block);
-    }
-
-    private function addComponent(Template $block): Template
-    {
-        try {
-            $component = $this->componentRegistry->getComponentFromBlock($block);
-        } catch (NoComponentFoundException $exception) {
-            return $block;
+        $component = $this->getComponent($block);
+        if ($component instanceof ComponentInterface) {
+            $block = $this->addComponent($block, $component);
         }
 
+        if ($component instanceof ComponentInterface || $this->allowVariables($block)) {
+            $this->addVariables($block);
+        }
+    }
+
+    private function getComponent(Template $block): ?ComponentInterface
+    {
+        try {
+            return $this->componentRegistry->getComponentFromBlock($block);
+        } catch (NoComponentFoundException $exception) {
+            return null;
+        }
+    }
+
+    private function addComponent(Template $block, ComponentInterface $component): Template
+    {
         $viewModel = $component->getViewModel();
         $template = (string)$viewModel->getTemplate();
         if (strlen($template) > 0) {
@@ -71,10 +81,6 @@ class AssignAdditionalBlockVariables implements ObserverInterface
 
     private function addVariables(Template $block): void
     {
-        if (false === $this->allowVariables($block)) {
-            return;
-        }
-
         $block->assign('viewModelFactory', $this->viewModelFactory);
         $block->assign('blockRenderer', $this->blockRenderer);
         $block->assign('childRenderer', $this->childRenderer);
@@ -102,3 +108,4 @@ class AssignAdditionalBlockVariables implements ObserverInterface
         return false;
     }
 }
+

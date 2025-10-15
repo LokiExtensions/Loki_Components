@@ -16,9 +16,4 @@ class Config implements ArgumentInterface
     {
         return (bool)$this->scopeConfig->getValue('loki_components/general/debug');
     }
-
-    public function enableMxValidationForEmail(): bool
-    {
-        return (bool)$this->scopeConfig->getValue('loki_components/validators/enable_mx_validation_for_email');
-    }
 }

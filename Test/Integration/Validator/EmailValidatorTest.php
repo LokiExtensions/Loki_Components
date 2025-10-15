@@ -43,7 +43,6 @@ class EmailValidatorTest extends TestCase
             ['jane@example.com', true],
             ['jane@example', 'Invalid email'],
             ['jane', 'Invalid email'],
-            ['jane@example.comcom', 'is not reachable for mail'],
         ];
     }
 }

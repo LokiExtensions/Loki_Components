@@ -5,9 +5,6 @@
             <general>
                 <debug>0</debug>
             </general>
-            <validators>
-                <enable_mx_validation_for_email>1</enable_mx_validation_for_email>
-            </validators>
         </loki_components>
     </default>
 </config>

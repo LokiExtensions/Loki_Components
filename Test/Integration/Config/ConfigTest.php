@@ -22,18 +22,4 @@ class ConfigTest extends TestCase
         $config = ObjectManager::getInstance()->get(Config::class);
         $this->assertFalse($config->isDebug());
     }
-
-    #[ConfigFixture('loki_components/validators/enable_mx_validation_for_email', 1)]
-    public function testMxValidationForEmailEnabled()
-    {
-        $config = ObjectManager::getInstance()->get(Config::class);
-        $this->assertTrue($config->enableMxValidationForEmail());
-    }
-
-    #[ConfigFixture('loki_components/validators/enable_mx_validation_for_email', 0)]
-    public function testMxValidationForEmailDisabled()
-    {
-        $config = ObjectManager::getInstance()->get(Config::class);
-        $this->assertFalse($config->enableMxValidationForEmail());
-    }
 }

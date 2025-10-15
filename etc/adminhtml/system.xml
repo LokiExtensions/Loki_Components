@@ -23,20 +23,6 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
             </group>
-            <group id="validators" translate="label" type="text" sortOrder="2" showInDefault="1" showInWebsite="1" showInStore="1">
-                <label>Validators</label>
-                <field id="enable_mx_validation_for_email"
-                       translate="label"
-                       type="select"
-                       sortOrder="1"
-                       showInDefault="1"
-                       showInWebsite="1"
-                       showInStore="0">
-                    <label>Enable MX Validation for Email Values</label>
-                    <tooltip>When a specific Loki Component is declared in a file `etc/loki_components.xml` with a validator `email`, then basic email validation is applied. With this setting enabled, the validation includes also a DNS MX lookup of the domain part of the email.</tooltip>
-                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
-                </field>
-            </group>
         </section>
     </system>
 </config>

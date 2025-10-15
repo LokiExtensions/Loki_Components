@@ -163,7 +163,14 @@ if ($interval < 10) {
                     targetComponent.destroy();
                 }
 
-                targetElement.outerHTML = newTargetElement.outerHTML;
+                Alpine.mutateDom(() => {
+                    LokiHtmlReplacer.replace(targetElement, newTargetElement.innerHTML);
+                    Alpine.destroyTree(targetElement);
+                    Alpine.initTree(targetElement);
+
+                });
+
+                //targetElement.outerHTML = newTargetElement.outerHTML;
             });
         }
     };

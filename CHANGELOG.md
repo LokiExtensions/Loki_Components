@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.15] - 15 October 2025
+### Fixed
+- Automatically assign template vars to any template starting with Loki module-prefix
+- Allow any Loki-driven block to use Loki template variables
+
 ## [2.2.14] - 10 October 2025
 ### Fixed
 - Apply proper ARIA attributes to tab components

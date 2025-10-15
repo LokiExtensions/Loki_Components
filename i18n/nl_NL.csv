@@ -1,6 +1,5 @@
 "Value is required","Waarde is verplicht"
 "Invalid email","Ongeldig emailadres"
-"Domain ""%s"" is not reachable for mail","Domein ""%s"" is niet bereikbaar voor email"
 "Value should have more than %1 characters","Waarde moet minimaal %1 karakters bevatten"
 "Value should have no more than %1 characters","Waarde mag maximaal %1 karakters bevatten"
 "Value must contain numbers only","Waarde mag alleen getallen bevatten"

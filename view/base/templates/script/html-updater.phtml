@@ -4,7 +4,7 @@
             if (!(root instanceof Element)) {
                 throw new TypeError('`root` must be an Element');
             }
-            if (root.hasAttribute('date-skip')) return;
+            if (root.hasAttribute('x-ignore')) return;
 
             const incomingFrag = this._parseHTML(incomingHTML);
 

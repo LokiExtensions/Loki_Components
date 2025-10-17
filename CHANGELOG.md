@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.16] - 17 October 2025
+### Fixed
+- Optimize AJAX queue and HTML updater
+- Move LokiHtmlUpdater from LokiCheckout to Loki_Components
+- Move all MX logic to separate module Loki_EmailMxValidator
+- Allow overriding SVG attributes if they already exist
+- Formatting
+
 ## [2.2.15] - 15 October 2025
 ### Fixed
 - Automatically assign template vars to any template starting with Loki module-prefix

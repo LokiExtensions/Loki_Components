@@ -11,13 +11,13 @@ use Magento\Framework\View\Element\Template;
         add(extensionId, extenderFunction) {
             this.extensions[extensionId] = extenderFunction;
         },
-        addMixin(extensionId, componentId, mixin) {
-            this.extensions[extensionId] = (original) => {
-                if (matchId === componentId) {
-                    return Object.assign({}, original, mixin);
+        addMixin(extensionId, matchComponentName, mixin) {
+            this.extensions[extensionId] = (componentName) => {
+                if (matchComponentName === componentName) {
+                    return mixin;
                 }
 
-                return original;
+                return {};
             };
         }
     };

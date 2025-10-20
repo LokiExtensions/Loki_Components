@@ -1,29 +1,23 @@
 <script>
     const LokiHtmlReplacer = {
         replace(root, incomingHTML) {
-            if (!(root instanceof Element)) {
-                throw new TypeError('`root` must be an Element');
+            if (root.hasAttribute('x-ignore')) {
+                return;
             }
-            if (root.hasAttribute('x-ignore')) return;
 
-            const incomingFrag = this._parseHTML(incomingHTML);
-
+            const incomingFrag = this.parseHTML(incomingHTML);
             const existingSkips = root.querySelectorAll('[x-ignore]');
+
             existingSkips.forEach(oldEl => {
                 const ancestor = oldEl.parentElement?.closest('[x-ignore]');
-                if (ancestor && ancestor !== oldEl) return;
+                if (ancestor && ancestor !== oldEl) {
+                    return;
+                }
 
-                const key = oldEl.getAttribute('x-ignore');
-                let counterpart = null;
-
-                if (key && key.length > 0) {
-                    counterpart = incomingFrag.querySelector(`[x-ignore="${this._cssEscape(key)}"]`);
-                } else {
-                    const path = this._pathFromRoot(root, oldEl);
-                    counterpart = this._nodeByPath(incomingFrag, path);
-                    if (counterpart && !(counterpart instanceof Element && counterpart.hasAttribute('x-ignore'))) {
-                        counterpart = null;
-                    }
+                const path = this.pathFromRoot(root, oldEl);
+                let counterpart = this.nodeByPath(incomingFrag, path);
+                if (counterpart && !(counterpart instanceof Element && counterpart.hasAttribute('x-ignore'))) {
+                    counterpart = null;
                 }
 
                 if (counterpart) {
@@ -34,24 +28,13 @@
             root.replaceChildren(...incomingFrag.childNodes);
         },
 
-        _parseHTML(html) {
+        parseHTML(html) {
             const tpl = document.createElement('template');
             tpl.innerHTML = String(html ?? '').trim();
             return tpl.content;
         },
 
-        _cssEscape(ident) {
-            if (window.CSS && typeof window.CSS.escape === 'function') {
-                return window.CSS.escape(ident);
-            }
-            return String(ident)
-                .replace(/[\0-\x1F\x7F]/g, '\uFFFD')
-                .replace(/(^-?\d)|[^a-zA-Z0-9_\u00A0-\uFFFF-]/g, (ch, d) =>
-                    d ? `\\3${d} ` : `\\${ch}`
-                );
-        },
-
-        _pathFromRoot(rootEl, el) {
+        pathFromRoot(rootEl, el) {
             const path = [];
             let cur = el;
             while (cur && cur !== rootEl) {
@@ -69,7 +52,7 @@
             return path;
         },
 
-        _nodeByPath(rootLike, path) {
+        nodeByPath(rootLike, path) {
             let node = rootLike;
             for (const idx of path) {
                 const children = (node instanceof DocumentFragment)

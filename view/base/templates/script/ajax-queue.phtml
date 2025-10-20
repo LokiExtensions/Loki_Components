@@ -152,6 +152,8 @@ if ($interval < 10) {
 
             this.getTargets(requests).forEach(target => {
                 const targetElement = document.getElementById(target);
+                console.log('updating', target, targetElement);
+
                 const newTargetElement = ajaxDocument.getElementById(target);
 
                 if (!targetElement || !newTargetElement) {

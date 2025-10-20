@@ -22,6 +22,10 @@
                 template="Loki_Components::script/local-storage.phtml"/>
 
             <block
+                name="loki-components.script.component-extender"
+                template="Loki_Components::script/component-extender.phtml"/>
+
+            <block
                 name="loki-components.script.html-updater"
                 template="Loki_Components::script/html-updater.phtml"/>
 

@@ -1,0 +1,56 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+?>
+<script>
+    const LokiComponentExtender = {
+        extensions: {},
+        add(extensionId, extenderFunction) {
+            this.extensions[extensionId] = extenderFunction;
+        },
+        addMixin(extensionId, componentId, mixin) {
+            this.extensions[extensionId] = (original) => {
+                if (matchId === componentId) {
+                    return Object.assign({}, original, mixin);
+                }
+
+                return original;
+            };
+        }
+    };
+</script>
+
+<?= $block->getChildHtml() ?>
+
+<script>
+    document.addEventListener('alpine:init', () => {
+        const originalAlpineData = Alpine.data;
+
+        Alpine.data = (componentName, componentFactory) => {
+            let componentMixin = {};
+            Object.values(LokiComponentExtender.extensions).forEach(extenderFunction => {
+                const mixin = extenderFunction(componentName);
+                if (typeof mixin !== 'object') {
+                    return;
+                }
+
+                componentMixin = Object.assign(componentMixin, mixin);
+            });
+
+            if (Object.values(componentMixin).length > 0) {
+                const wrapped = (...args) => {
+                    const base = componentFactory(...args);
+                    return Object.assign({}, base, componentMixin);
+                };
+
+                return originalAlpineData(componentName, wrapped);
+            }
+
+            return originalAlpineData(componentName, componentFactory);
+        };
+    });
+</script>
+

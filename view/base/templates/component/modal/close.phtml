@@ -18,5 +18,5 @@ use Magento\Framework\View\Element\Template;
 <button
     aria-label="<?= $escaper->escapeHtml(__('Close')) ?>"
     @click.prevent="toggleModal"
-    class="<?= $escaper->escapeHtmlAttr($css('float-right cursor-pointer')) ?>"
+    class="<?= $escaper->escapeHtml($css('float-right cursor-pointer')) ?>"
 ><?= /* @noEscape */ $imageRenderer->icon($block, 'xmark') ?></button>

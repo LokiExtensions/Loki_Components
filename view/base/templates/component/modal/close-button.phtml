@@ -16,7 +16,7 @@ $label = $block->getLabel();
 ?>
 <button
     @click="toggleModal"
-    class="<?= $escaper->escapeHtmlAttr($css('btn btn-primary mt-4', '')) ?>"
+    class="<?= $escaper->escapeHtml($css('btn btn-primary mt-4', '')) ?>"
 >
     <span><?= $escaper->escapeHtml($label) ?></span>
 </button>

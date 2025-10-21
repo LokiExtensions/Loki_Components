@@ -63,7 +63,9 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
         $html = preg_replace('/^<([a-z]{2,})/', '<\1 ' . $htmlAttributes, $html);
 
         $initialDataElement = $this->getInitialDataElement($component);
-        $html = preg_replace('/^<([^>]+)>/', '<\1>' . $initialDataElement, $html);
+
+        $html = preg_replace('/^<([^>]+)>/', '<\1>[X-LOKI-INIT-BLOCK]', $html);
+        $html = str_replace('[X-LOKI-INIT-BLOCK]', $initialDataElement, $html);
 
         $transport->setHtml($html);
     }

@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.17] - 22 October 2025
+### Fixed
+- Prevent preg_replace from removing slashes in x-loki-init script
+- Do not escape `$css()` with `escapeHtmlAttr()` but `escapeHtml()`
+- Skin down LokiHtmlReplacer a bit
+- Add LokiComponentExtender.addMixin()
+- Add LokiComponentExtender for mixins and other modifications
+- Newlines
+
 ## [2.2.16] - 17 October 2025
 ### Fixed
 - Optimize AJAX queue and HTML updater

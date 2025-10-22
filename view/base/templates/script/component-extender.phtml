@@ -25,7 +25,7 @@ use Magento\Framework\View\Element\Template;
     };
 </script>
 
-<?= $block->getChildHtml() ?>
+<?= /* @noEscape */ $block->getChildHtml() ?>
 
 <script>
     document.addEventListener('alpine:init', () => {

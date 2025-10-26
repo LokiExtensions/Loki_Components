@@ -42,16 +42,20 @@ class ComponentUtil implements ArgumentInterface
         return $block->getLayout()->getUpdate()->getHandles();
     }
 
-    public function getRequestParams(): array
-    {
-        return $this->request->getParams();
-    }
-
-    public function getCurrentUri(): string
+    public function getRequestData(): array
     {
         /** @var Http $request */
         $request = $this->request;
-        return $request->getFullActionName();
+
+        return [
+            'params' => $request->getParams(),
+            'route_name' => $request->getRouteName(),
+            'module_name' => $request->getModuleName(),
+            'controller_module' => $request->getControllerModule(),
+            'controller_name' => $request->getControllerName(),
+            'action_name' => $request->getActionName(),
+            'request_uri' => $request->getRequestUri(),
+        ];
     }
 
     public function getPostUrl(): string

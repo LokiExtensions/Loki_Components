@@ -99,12 +99,9 @@ if ($interval < 10) {
                 handles: <?= /* @noEscape */ json_encode(
                     $componentUtil->getHandles($block)
                 ) ?>,
-                currentUri: '<?= $escaper->escapeJs(
-                    $componentUtil->getCurrentUri()
-                ) ?>',
                 request: <?= /* @noEscape */ json_encode(
-                    $componentUtil->getRequestParams()
-                ) ?>,
+                    $componentUtil->getRequestData()
+                ) ?>
             };
         },
         handleJson(data) {

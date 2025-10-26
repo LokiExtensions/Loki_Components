@@ -5,6 +5,7 @@ namespace Loki\Components\Util\Controller;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\DataObject;
 use RuntimeException;
 use Loki\Components\Util\Ajax;
 
@@ -30,21 +31,26 @@ class RequestDataLoader
         return $data;
     }
 
-    public function mergeRequestParams()
+    public function mergeRequestParams(): void
     {
         $data = $this->load();
+        if (empty($data['request'])) {
+            return;
+        }
+
+        $requestData = new DataObject((array)$data['request']);
 
         /** @var HttpRequest $request */
         $request = $this->request;
-        if (!empty($data['currentUri'])) {
-            $currentUri = explode('_', $data['currentUri']);
-            $request->setParam('currentUri', $data['currentUri']);
-            $request->setModuleName($currentUri[0]);
-            $request->setControllerName($currentUri[1]);
-            $request->setActionName($currentUri[2]);
-        }
+        $request->setParam('currentUri', (string)$requestData->getRequestUri());
+        $request->setRequestUri((string)$request->getRequestUri());
+        $request->setRouteName((string)$requestData->getRouteName());
+        $request->setModuleName((string)$requestData->getModuleName());
+        $request->setControllerName((string)$requestData->getControllerName());
+        $request->setControllerModule((string)$requestData->getControllerModule());
+        $request->setActionName((string)$requestData->getActionName());
 
-        $params = array_merge($data['request'], $this->request->getParams());
+        $params = array_merge((array)$requestData->getParams(), $this->request->getParams());
         $this->request->setParams($params);
     }
 
@@ -57,7 +63,7 @@ class RequestDataLoader
         $requiredFields = ['targets', 'handles', 'updates'];
         foreach ($requiredFields as $requiredField) {
             if (false === array_key_exists($requiredField, $requestData)) {
-                throw new RuntimeException('No ' . $requiredField . ' in request');
+                throw new RuntimeException('No '.$requiredField.' in request');
             }
         }
     }

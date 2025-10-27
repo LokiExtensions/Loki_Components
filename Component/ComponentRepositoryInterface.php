@@ -11,5 +11,6 @@ interface ComponentRepositoryInterface
 
     public function getValue(): mixed;
     public function getDefaultValue(): mixed;
+    public function getPriority(): int;
 
 }

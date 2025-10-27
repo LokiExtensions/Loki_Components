@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Loki\Components\Controller\Index;
 
 use Exception;
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Component\ComponentRegistry;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ResponseInterface;
@@ -38,7 +40,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly MessageManager $messageManager,
         private readonly Config $config,
         private readonly AppState $appState,
-        private readonly LoggerInterface $logger
+        private readonly LoggerInterface $logger,
+        private readonly ComponentRegistry $componentRegistry
     ) {
     }
 
@@ -48,10 +51,14 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $this->requestDataLoader->mergeRequestParams();
         $layout = $this->layoutLoader->load($data['handles']);
 
-        foreach ($data['updates'] as $update) {
+        $updates = $this->enrichUpdates($data['updates'], $layout);
+        $updates = $this->sortUpdates($updates);
+
+        foreach ($updates as $update) {
+            echo "UPDATE: ".$update['blockName']."\n";
             try {
                 $this->repositoryDispatcher->dispatch(
-                    $this->getBlock($layout, $update['blockName']),
+                    $update['component'],
                     $update['update']
                 );
             } catch (NoBlockFoundException $exception) {
@@ -79,6 +86,31 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         }
 
         return $this->getHtmlResult($htmlParts);
+    }
+
+    private function enrichUpdates(array $updates, LayoutInterface $layout): array
+    {
+        foreach ($updates as $updateIndex => $update) {
+            $update['block'] = $this->getBlock($layout, $update['blockName']);
+            $update['component'] = $this->componentRegistry->getComponentFromBlock($update['block']);
+            $updates[$updateIndex] = $update;
+        }
+
+        return $updates;
+    }
+
+    private function sortUpdates(array $updates): array
+    {
+        usort($updates, function (array $a, array $b) {
+            /** @var ComponentInterface $componentA */
+            /** @var ComponentInterface $componentB */
+            $componentA = $a['component'];
+            $componentB = $b['component'];
+
+            return $componentA->getRepository()?->getPriority() <=> $componentB->getRepository()?->getPriority();
+        });
+
+        return $updates;
     }
 
     private function getBlock(LayoutInterface $layout, string $blockName): AbstractBlock
@@ -116,6 +148,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         ]);
 
         $json->setHeader('X-Loki-Redirect', $redirectUrl);
+
         // @todo: Make sure messages sent to frontend are remembered
 
         return $json;

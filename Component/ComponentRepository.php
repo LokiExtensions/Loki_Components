@@ -49,4 +49,9 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
     {
         return $this->component->getContext();
     }
+
+    public function getPriority(): int
+    {
+        return 0;
+    }
 }

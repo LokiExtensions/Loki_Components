@@ -32,9 +32,9 @@ class RequestDataLoaderTest extends TestCase
     {
         $requestData = [
             'targets' => [],
-            'componentData' => 1,
-            'block' => 'foobar',
             'handles' => [],
+            'updates' => [],
+            'request' => [],
         ];
 
         $requestDataLoader = $this->getRequestDataLoader($requestData, $this->getValidHeaders());

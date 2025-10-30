@@ -17,12 +17,13 @@ class TargetRendererTest extends TestCase
         $resultPageFactory = ObjectManager::getInstance()->get(ResultPageFactory::class);
         $resultPage = $resultPageFactory->create();
         $resultPage->addHandle('default');
+        $resultPage->addHandle('loki_base');
         $resultPage->addHandle('loki_components');
 
         $layout = $resultPage->getLayout();
 
         $targetRenderer = ObjectManager::getInstance()->get(TargetRenderer::class);
-        $htmlParts = $targetRenderer->render($layout, ['foobar']);
+        $htmlParts = $targetRenderer->render($layout, ['loki-messages']);
 
         $this->assertNotEmpty($htmlParts);
     }

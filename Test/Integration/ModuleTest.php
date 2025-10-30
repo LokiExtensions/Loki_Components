@@ -16,6 +16,8 @@ class ModuleTest extends TestCase
     public function testIfModuleIsEnabled()
     {
         $requiredModules = [
+            'Loki_Base',
+            'Loki_CssUtils',
             'Loki_Components',
         ];
         foreach ($requiredModules as $moduleName) {

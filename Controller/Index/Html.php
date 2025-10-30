@@ -55,7 +55,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $updates = $this->sortUpdates($updates);
 
         foreach ($updates as $update) {
-            echo "UPDATE: ".$update['blockName']."\n";
             try {
                 $this->repositoryDispatcher->dispatch(
                     $update['component'],

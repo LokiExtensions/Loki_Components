@@ -163,7 +163,6 @@ class LokiComponentsTestCase extends AbstractController
             return false;
         }
 
-        echo 'Not rendered: ' . $elementId;
         if (str_contains($body, 'Not rendered: ' . $elementId)) {
             return false;
         }

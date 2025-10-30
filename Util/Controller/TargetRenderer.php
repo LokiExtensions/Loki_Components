@@ -2,6 +2,7 @@
 
 namespace Loki\Components\Util\Controller;
 
+use Loki\Components\Util\IdConvertor;
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\View\Element\BlockInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -11,7 +12,8 @@ class TargetRenderer
 {
     public function __construct(
         private readonly EventManager $eventManager,
-        private readonly ComponentRegistry $componentRegistry,
+        private readonly LayoutInterface $layout,
+        private readonly IdConvertor $idConvertor,
     ) {
     }
 
@@ -44,9 +46,21 @@ class TargetRenderer
 
     private function convertTargetsToBlockNames(array $targets): array
     {
+        $allBlockNames = array_keys($this->layout->getAllBlocks());
+
         $blockNames = [];
         foreach ($targets as $target) {
-            $blockNames[] = $this->componentRegistry->getBlockNameFromElementId($target);
+            if (in_array($target, $allBlockNames, true)) {
+                $blockNames[] = $target;
+                continue;
+            }
+
+            foreach ($allBlockNames as $blockName) {
+                $elementId = $this->idConvertor->toElementId($blockName);
+                if ($elementId === $target) {
+                    $blockNames[] = $blockName;
+                }
+            }
         }
 
         return $blockNames;

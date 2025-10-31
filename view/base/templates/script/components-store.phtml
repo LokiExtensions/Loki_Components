@@ -43,6 +43,11 @@ use Magento\Framework\View\Element\Template;
                     return component.elementId === elementId;
                 });
             },
+            getComponentByBlockId(blockId) {
+                return this.getComponentArray().find((component) => {
+                    return component.blockId === blockId;
+                });
+            },
             exists(component) {
                 return document.getElementById(component.elementId);
             },

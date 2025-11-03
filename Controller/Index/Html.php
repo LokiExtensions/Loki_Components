@@ -102,8 +102,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         usort($updates, function (array $a, array $b) {
             /** @var ComponentInterface $componentA */
-            /** @var ComponentInterface $componentB */
             $componentA = $a['component'];
+            /** @var ComponentInterface $componentB */
             $componentB = $b['component'];
 
             return $componentA->getRepository()?->getPriority() <=> $componentB->getRepository()?->getPriority();

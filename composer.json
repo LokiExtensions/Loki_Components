@@ -3,7 +3,6 @@
     "version": "2.2.17",
     "description": "N/A",
     "keywords": [
-        "loki-core",
         "loki-components"
     ],
     "type": "magento2-module",

@@ -6,9 +6,20 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.18] - 03 November 2025
+### Fixed
+- Update composer keywords
+- Fetch component by blockId via `Alpine.store('components').getComponentByBlockId()`
+- Cleanup of debugging statements
+- Fix broken test
+- Allow target to be any block, not just components
+- Add component repository repository so when bulking, country is saved first
+- Simplify request data via AJAX and fix issue with edit URL
+- New container to allow for CSS prop and child sorting
+
 ## [2.2.17] - 22 October 2025
 ### Fixed
-- Prevent preg_replace from removing slashes in x-loki-init script
+- Prevent `preg_replace` from removing slashes in x-loki-init script
 - Do not escape `$css()` with `escapeHtmlAttr()` but `escapeHtml()`
 - Skin down LokiHtmlReplacer a bit
 - Add LokiComponentExtender.addMixin()
@@ -18,8 +29,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [2.2.16] - 17 October 2025
 ### Fixed
 - Optimize AJAX queue and HTML updater
-- Move LokiHtmlUpdater from LokiCheckout to Loki_Components
-- Move all MX logic to separate module Loki_EmailMxValidator
+- Move LokiHtmlUpdater from LokiCheckout to `Loki_Components`
+- Move all MX logic to separate module `Loki_EmailMxValidator`
 - Allow overriding SVG attributes if they already exist
 - Formatting
 

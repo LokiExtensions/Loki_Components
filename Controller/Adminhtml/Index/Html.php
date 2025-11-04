@@ -5,10 +5,10 @@ declare(strict_types=1);
 namespace Loki\Components\Controller\Adminhtml\Index;
 
 use Exception;
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Component\ComponentRegistry;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Controller\Result\Json as JsonResult;
@@ -43,6 +43,7 @@ class Html extends Action
         private readonly Config $config,
         private readonly AppState $appState,
         private readonly LoggerInterface $logger,
+        private readonly ComponentRegistry $componentRegistry,
         Context $context,
     ) {
         parent::__construct($context);
@@ -54,10 +55,13 @@ class Html extends Action
         $this->requestDataLoader->mergeRequestParams();
         $layout = $this->layoutLoader->load($data['handles']);
 
+        $updates = $this->enrichUpdates($data['updates'], $layout);
+        $updates = $this->sortUpdates($updates);
+
         foreach ($data['updates'] as $update) {
             try {
                 $this->repositoryDispatcher->dispatch(
-                    $this->getBlock($layout, $update['blockName']),
+                    $update['component'],
                     $update['update']
                 );
             } catch (NoBlockFoundException $exception) {
@@ -75,7 +79,8 @@ class Html extends Action
         if ($this->allowRendering($data)) {
             try {
                 $htmlParts = $this->targetRenderer->render(
-                    $layout, $data['targets']
+                    $layout,
+                    $data['targets']
                 );
             } catch (RedirectException $redirectException) {
                 return $this->getJsonRedirect($redirectException->getMessage());
@@ -88,8 +93,33 @@ class Html extends Action
         return $this->getHtmlResult($htmlParts);
     }
 
-    private function getBlock(LayoutInterface $layout, string $blockName
-    ): AbstractBlock {
+    private function enrichUpdates(array $updates, LayoutInterface $layout): array
+    {
+        foreach ($updates as $updateIndex => $update) {
+            $update['block'] = $this->getBlock($layout, $update['blockName']);
+            $update['component'] = $this->componentRegistry->getComponentFromBlock($update['block']);
+            $updates[$updateIndex] = $update;
+        }
+
+        return $updates;
+    }
+
+    private function sortUpdates(array $updates): array
+    {
+        usort($updates, function (array $a, array $b) {
+            /** @var ComponentInterface $componentA */
+            $componentA = $a['component'];
+            /** @var ComponentInterface $componentB */
+            $componentB = $b['component'];
+
+            return $componentA->getRepository()?->getPriority() <=> $componentB->getRepository()?->getPriority();
+        });
+
+        return $updates;
+    }
+
+    private function getBlock(LayoutInterface $layout, string $blockName): AbstractBlock
+    {
         if ($blockName === '' || $blockName === '0') {
             throw new NoBlockFoundException('Block name not specified');
         }

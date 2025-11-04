@@ -58,7 +58,7 @@ class Html extends Action
         $updates = $this->enrichUpdates($data['updates'], $layout);
         $updates = $this->sortUpdates($updates);
 
-        foreach ($data['updates'] as $update) {
+        foreach ($updates as $update) {
             try {
                 $this->repositoryDispatcher->dispatch(
                     $update['component'],

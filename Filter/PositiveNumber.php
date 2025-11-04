@@ -6,6 +6,10 @@ class PositiveNumber implements FilterInterface
 {
     public function filter(mixed $value): mixed
     {
-        return abs((int)$value);
+        if ($value > 0) {
+            return $value;
+        }
+
+        return 0;
     }
 }

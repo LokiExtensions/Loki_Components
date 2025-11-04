@@ -2,6 +2,7 @@
 
 namespace Loki\Components\Validator;
 
+use Loki\Components\Util\IsEmpty;
 use Magento\Framework\Phrase;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Messages\LocalMessage;
@@ -12,6 +13,7 @@ class Validator
     public function __construct(
         private readonly ValidatorRegistry $validatorRegistry,
         private readonly Ajax $ajax,
+        private readonly IsEmpty $isEmpty,
     ) {
     }
 
@@ -19,11 +21,13 @@ class Validator
         ComponentInterface $component,
         mixed $data = null
     ): bool {
-        if ($this->isRequiredButEmpty($component, $data) && false === $this->ajax->isAjax()) {
+        if ($this->isRequired($component)
+            && $this->isEmpty->execute($component, $data)
+            && false === $this->ajax->isAjax()) {
             return true;
         }
 
-        if (empty($data) && true === in_array('required', $component->getValidators())) {
+        if ($this->isRequired($component) && $this->isEmpty->execute($component, $data)) {
             return false;
         }
 
@@ -69,8 +73,8 @@ class Validator
         return true;
     }
 
-    private function isRequiredButEmpty(ComponentInterface $component, mixed $data): bool
+    private function isRequired(ComponentInterface $component): bool
     {
-        return empty($data) && in_array('required', $component->getValidators());
+        return in_array('required', $component->getValidators());
     }
 }

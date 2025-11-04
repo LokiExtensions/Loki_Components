@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.19] - 04 November 2025
+### Fixed
+- Apply new dispatching to admin controller too
+
 ## [2.2.18] - 03 November 2025
 ### Fixed
 - Update composer keywords

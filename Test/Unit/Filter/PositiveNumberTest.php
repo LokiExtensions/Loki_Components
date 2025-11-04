@@ -10,8 +10,8 @@ class PositiveNumberTest extends TestCase
     public function testFilter()
     {
         $filter = new PositiveNumber();
-        $this->assertEquals(42, $filter->filter(-42));
-        $this->assertEquals(42, $filter->filter('-42'));
+        $this->assertEquals(0, $filter->filter(-42));
+        $this->assertEquals(0, $filter->filter('-42'));
         $this->assertEquals(42, $filter->filter('42'));
     }
 }

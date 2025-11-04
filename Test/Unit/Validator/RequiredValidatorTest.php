@@ -2,6 +2,8 @@
 
 namespace Loki\Components\Test\Unit\Validator;
 
+use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Util\IsEmpty;
 use PHPUnit\Framework\TestCase;
 use Loki\Components\Validator\RequiredValidator;
 
@@ -9,10 +11,12 @@ class RequiredValidatorTest extends TestCase
 {
     public function testWithNoSimpleValues(): void
     {
-        $validator = new RequiredValidator();
-        $this->assertTrue($validator->validate(1));
-        $this->assertIsArray($validator->validate(0));
-        $this->assertIsArray($validator->validate(''));
-        $this->assertIsArray($validator->validate(null));
+        $component = $this->createMock(ComponentInterface::class);
+
+        $validator = new RequiredValidator(new IsEmpty());
+        $this->assertTrue($validator->validate(1, $component));
+        $this->assertIsArray($validator->validate(0, $component));
+        $this->assertIsArray($validator->validate('', $component));
+        $this->assertIsArray($validator->validate(null, $component));
     }
 }

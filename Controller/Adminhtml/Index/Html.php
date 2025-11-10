@@ -49,7 +49,7 @@ class Html extends Action
         parent::__construct($context);
     }
 
-    public function execute(): ResultInterface|ResponseInterface
+    public function execute(): ResultInterface
     {
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();

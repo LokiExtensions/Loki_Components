@@ -45,7 +45,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     ) {
     }
 
-    public function execute(): ResultInterface
+    public function execute(): ResultInterface|ResponseInterface
     {
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();

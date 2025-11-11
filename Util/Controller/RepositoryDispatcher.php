@@ -17,7 +17,7 @@ class RepositoryDispatcher
     ) {
     }
 
-    public function dispatch(ComponentInterface $component, $componentData): void
+    public function dispatch(ComponentInterface $component, mixed $componentData): void
     {
         $this->eventManager->dispatch('loki_components_repository_dispatch', ['component' => $component]);
 

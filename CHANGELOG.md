@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.22] - 12 November 2025
+### Fixed
+- Undo removal of M2.4.5 workarounds, use patch instead
+- Make components visible by default
+- Rename LokiMessageStore to Message
+- Fix unit tests
+
 ## [2.2.21] - 04 November 2025
 ### Fixed
 - Make sure required numerical value is valid when zero

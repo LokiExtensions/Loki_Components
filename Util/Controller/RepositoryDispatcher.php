@@ -26,7 +26,7 @@ class RepositoryDispatcher
             return;
         }
 
-        $componentData = $this->filter->filter($component->getFilters(), $componentData);
+        $componentData = $this->filter->filter($component, $componentData);
         if (false === $this->validator->validate($component, $componentData)) {
             return;
         }

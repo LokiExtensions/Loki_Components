@@ -19,7 +19,8 @@ class Validator
 
     public function validate(
         ComponentInterface $component,
-        mixed $data = null
+        mixed $data = null,
+        string $scope = ''
     ): bool {
         if ($this->isRequired($component)
             && $this->isEmpty->execute($component, $data)

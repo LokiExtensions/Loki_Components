@@ -2,11 +2,9 @@
 
 namespace Loki\Components\Filter;
 
-use Loki\Components\Component\ComponentInterface;
-
 class Trim implements FilterInterface
 {
-    public function filter(mixed $value, ?ComponentInterface $component = null, ?string $scope = null): mixed
+    public function filter(mixed $value, FilterScope $scope): mixed
     {
         return trim((string)$value);
     }

@@ -55,7 +55,7 @@ class ComponentViewModel implements ComponentViewModelInterface
         }
 
         $value = $this->getComponent()->getRepository()->getValue();
-        $value = $this->filter->filter($this->getComponent()->getFilters(), $value);
+        $value = $this->filter->filter($this->getComponent(), $value);
 
         if (false === $this->component->isValidated()) {
             $this->validator->validate($this->component, $value);

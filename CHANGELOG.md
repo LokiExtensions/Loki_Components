@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.23] - 14 November 2025
+### Fixed
+- Add FilterScope to every Filter
+- Add component and scope args to FilterInterface::filter()
+
 ## [2.2.22] - 12 November 2025
 ### Fixed
 - Undo removal of M2.4.5 workarounds, use patch instead

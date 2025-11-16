@@ -1,11 +1,14 @@
 <?php
 declare(strict_types=1);
 
-/** @version 2.2.23 */
 
+use Loki\Components\Util\Block\ChildRenderer;
 use Magento\Framework\View\Element\Template;
 
+/** @version 2.2.23 */
 /** @var Template $block */
+/** @var ChildRenderer $childRenderer */
+
 ?>
 <script>
     const LokiComponentExtender = {
@@ -25,7 +28,7 @@ use Magento\Framework\View\Element\Template;
     };
 </script>
 
-<?= /* @noEscape */ $block->getChildHtml() ?>
+<?= /* @noEscape */ $childRenderer->all($block) ?>
 
 <script>
     document.addEventListener('alpine:init', () => {

@@ -83,8 +83,7 @@ class ChildRenderer extends AbstractRenderer
     private function sortBlocks(array $blocks): array
     {
         usort($blocks, function (AbstractBlock $blockA, AbstractBlock $blockB) {
-            return (int)$blockA->getSortOrder() <=>
-                (int)$blockB->getSortOrder();
+            return (int)$blockA->getSortOrder() <=> (int)$blockB->getSortOrder();
         });
 
         return $blocks;

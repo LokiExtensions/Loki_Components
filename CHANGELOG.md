@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.24] - 21 November 2025
+### Fixed
+- Move AJAX check towards RequiredValidator class
+- Move Integration Test assertion away from setUp into separate assertion method
+- Replace `$block->getChildHtml()` with `$childRenderer->all()` including better sorting
+
 ## [2.2.23] - 14 November 2025
 ### Fixed
 - Add FilterScope to every Filter

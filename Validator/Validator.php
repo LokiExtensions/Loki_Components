@@ -22,6 +22,7 @@ class Validator
         mixed $data = null,
         string $scope = ''
     ): bool {
+        // @todo: Move this to the RequiredValidator class
         if ($this->isRequired($component)
             && $this->isEmpty->execute($component, $data)
             && false === $this->ajax->isAjax()) {

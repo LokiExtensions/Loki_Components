@@ -40,9 +40,17 @@ class LokiComponentsTestCase extends AbstractController
         parent::setUp();
 
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->fixtures = DataFixtureStorageManager::getStorage();
+        $this->fixtures = $this->objectManager->get(DataFixtureStorageManager::class)->getStorage();
+    }
 
+    protected function assertLokiComponentsIsEnabled(): void
+    {
         $this->assertModuleIsEnabled('Loki_Components');
+    }
+
+    protected function getObjectManager(): ObjectManagerInterface
+    {
+        return $this->objectManager;
     }
 
     protected function getComponentByBlockName(string $blockName

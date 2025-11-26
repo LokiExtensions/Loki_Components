@@ -71,10 +71,11 @@ abstract class AbstractRenderer implements ArgumentInterface
 
     protected function getUniqId(AbstractBlock $block, array $data = []): string
     {
-        $ancestorId = $this->ancestorBlock->getNameInLayout();
+        $ancestorId = preg_replace('/([^a-zA-Z0-9\-]+)/', '-', $this->ancestorBlock->getNameInLayout());
 
         if (isset($data['uniq'])) {
-            return $ancestorId . '-' . $data['uniq'];
+            $uniq = preg_replace('/([^a-zA-Z0-9\-]+)/', '-', $data['uniq']);
+            return $ancestorId . '-' . $uniq;
         }
 
         $blockParts = explode('.', $block->getNameInLayout());

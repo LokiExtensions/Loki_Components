@@ -14,7 +14,7 @@ class RequiredValidatorTest extends TestCase
     {
         $component = $this->createMock(ComponentInterface::class);
         $ajax = $this->createMock(Ajax::class);
-        $ajax->method('isEmpty')->willReturn(true);
+        $ajax->method('isAjax')->willReturn(true);
 
         $validator = new RequiredValidator(new IsEmpty(), $ajax);
         $this->assertTrue($validator->validate(1, $component));

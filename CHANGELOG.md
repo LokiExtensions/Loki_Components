@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.25] - 27 November 2025
+### Fixed
+- Make sure generated element ID contains only alphanumeric plus dash
+
 ## [2.2.24] - 21 November 2025
 ### Fixed
 - Move AJAX check towards RequiredValidator class

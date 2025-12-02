@@ -1,10 +1,19 @@
 <script>
     const LokiHtmlReplacer = {
-        replace(root, incomingHTML) {
+        replace(root, newRoot) {
             if (root.hasAttribute('x-ignore')) {
                 return;
             }
 
+            root.getAttributeNames().forEach(attributeName => {
+                root.removeAttribute(attributeName);
+            });
+
+            newRoot.getAttributeNames().forEach(attributeName => {
+                root.setAttribute(attributeName, newRoot.getAttribute(attributeName));
+            });
+
+            const incomingHTML = newRoot.innerHTML;
             const incomingFrag = this.parseHTML(incomingHTML);
             const existingSkips = root.querySelectorAll('[x-ignore]');
 

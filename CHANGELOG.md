@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.26] - 02 December 2025
+### Fixed
+- Replace `@` with `x-on:` and `:` with `x-bind:` when updating HTML attributes
+- Properly switch HTML attributes of root node when updating via AJAX
+
 ## [2.2.25] - 27 November 2025
 ### Fixed
 - Make sure generated element ID contains only alphanumeric plus dash

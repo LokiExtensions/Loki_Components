@@ -7,6 +7,8 @@ namespace Loki\Components\Controller\Index;
 use Exception;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Component\ComponentRegistry;
+use Loki\Components\Util\Controller\ComponentUpdate;
+use Loki\Components\Util\Controller\ComponentUpdateFactory;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ResponseInterface;
@@ -41,7 +43,8 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly Config $config,
         private readonly AppState $appState,
         private readonly LoggerInterface $logger,
-        private readonly ComponentRegistry $componentRegistry
+        private readonly ComponentRegistry $componentRegistry,
+        private readonly ComponentUpdateFactory $componentUpdateFactory
     ) {
     }
 
@@ -51,17 +54,17 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         $this->requestDataLoader->mergeRequestParams();
         $layout = $this->layoutLoader->load($data['handles']);
 
-        $updates = $this->enrichUpdates($data['updates'], $layout);
+        $updates = $this->getComponentUpdates($data['updates'], $layout);
         $updates = $this->sortUpdates($updates);
 
         foreach ($updates as $update) {
             try {
-                $debugMessage = 'Component update: '.$update['block']->getNameInLayout();
+                $debugMessage = 'Component update: '.$update->getBlock()->getNameInLayout();
                 $this->logger->debug($debugMessage);
 
                 $this->repositoryDispatcher->dispatch(
-                    $update['component'],
-                    $update['update']
+                    $update->getComponent(),
+                    $update->getComponentData(),
                 );
             } catch (NoBlockFoundException $exception) {
                 $this->logger->critical($exception);
@@ -92,24 +95,39 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         return $this->getHtmlResult($htmlParts);
     }
 
-    private function enrichUpdates(array $updates, LayoutInterface $layout): array
+    /**
+     * @param array           $updates
+     * @param LayoutInterface $layout
+     *
+     * @return ComponentUpdate[]
+     */
+    private function getComponentUpdates(array $updates, LayoutInterface $layout): array
     {
+        $componentUpdates = [];
         foreach ($updates as $updateIndex => $update) {
-            $update['block'] = $this->getBlock($layout, $update['blockName']);
-            $update['component'] = $this->componentRegistry->getComponentFromBlock($update['block']);
-            $updates[$updateIndex] = $update;
+            $block =$this->getBlock($layout, $update['blockName']);
+            $componentUpdate = $this->componentUpdateFactory->create([
+                'block' => $block,
+                'component' => $this->componentRegistry->getComponentFromBlock($block),
+                'componentData' => $update['update'],
+            ]);
+
+            $componentUpdates[$updateIndex] = $componentUpdate;
         }
 
-        return $updates;
+        return $componentUpdates;
     }
 
+    /**
+     * @param ComponentUpdate[] $updates
+     *
+     * @return ComponentUpdate[]
+     */
     private function sortUpdates(array $updates): array
     {
-        usort($updates, function (array $a, array $b) {
-            /** @var ComponentInterface $componentA */
-            $componentA = $a['component'];
-            /** @var ComponentInterface $componentB */
-            $componentB = $b['component'];
+        usort($updates, function (ComponentUpdate $a, ComponentUpdate $b) {
+            $componentA = $a->getComponent();
+            $componentB = $b->getComponent();
 
             return $componentA->getRepository()?->getPriority() <=> $componentB->getRepository()?->getPriority();
         });

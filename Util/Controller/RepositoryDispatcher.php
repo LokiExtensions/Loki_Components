@@ -33,4 +33,9 @@ class RepositoryDispatcher
 
         $repository->saveValue($componentData);
     }
+
+    public function postDispatch(): void
+    {
+        $this->eventManager->dispatch('loki_components_repository_post_dispatch');
+    }
 }

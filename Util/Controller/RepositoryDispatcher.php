@@ -7,6 +7,7 @@ use Magento\Framework\Event\Manager as EventManager;
 use Loki\Components\Component\ComponentRepositoryInterface;
 use Loki\Components\Filter\Filter;
 use Loki\Components\Validator\Validator;
+use Magento\Framework\View\LayoutInterface;
 
 class RepositoryDispatcher
 {
@@ -34,11 +35,12 @@ class RepositoryDispatcher
         $repository->saveValue($componentData);
     }
 
-    public function postDispatch(array $updates): void
+    public function postDispatch(LayoutInterface $layout, array $updates): void
     {
         $this->eventManager->dispatch(
             'loki_components_repository_post_dispatch',
             [
+                'layout' => $layout,
                 'updates' => $updates
             ]
         );

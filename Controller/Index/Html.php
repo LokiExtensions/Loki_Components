@@ -105,7 +105,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         $componentUpdates = [];
         foreach ($updates as $updateIndex => $update) {
-            $block =$this->getBlock($layout, $update['blockName']);
+            $block = $this->getBlock($layout, $update['blockName']);
             $componentUpdate = $this->componentUpdateFactory->create([
                 'block' => $block,
                 'component' => $this->componentRegistry->getComponentFromBlock($block),

@@ -56,6 +56,9 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
         foreach ($updates as $update) {
             try {
+                $debugMessage = 'Component update: '.$update['block']->getNameInLayout();
+                $this->logger->debug($debugMessage);
+
                 $this->repositoryDispatcher->dispatch(
                     $update['component'],
                     $update['update']

@@ -75,7 +75,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             }
         }
 
-        $this->repositoryDispatcher->postDispatch();
+        $this->repositoryDispatcher->postDispatch($updates);
 
         if ($this->allowRendering($data)) {
             try {

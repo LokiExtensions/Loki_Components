@@ -34,8 +34,13 @@ class RepositoryDispatcher
         $repository->saveValue($componentData);
     }
 
-    public function postDispatch(): void
+    public function postDispatch(array $updates): void
     {
-        $this->eventManager->dispatch('loki_components_repository_post_dispatch');
+        $this->eventManager->dispatch(
+            'loki_components_repository_post_dispatch',
+            [
+                'updates' => $updates
+            ]
+        );
     }
 }

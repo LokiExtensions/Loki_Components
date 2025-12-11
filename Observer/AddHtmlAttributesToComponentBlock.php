@@ -86,7 +86,7 @@ EOF;
             return $currentHtml;
         }
 
-        $firstTagHtml = $currentHtml[0];
+        $firstTagHtml = $match[0];
 
         $attributes = (array)$block->getData('html_attributes');
         $attributes['id'] = $this->getElementId($block);

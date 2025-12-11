@@ -82,4 +82,32 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Loki\Base\ViewModel\Block\ChildRenderer">
+        <plugin
+            name="Loki_Components::addComponentViewModelToBaseChildRenderer"
+            type="Loki\Components\Plugin\AddComponentViewModelToRendererPlugin"
+            />
+    </type>
+
+    <type name="Loki\Components\Util\Block\ChildRenderer">
+        <plugin
+            name="Loki_Components::addComponentViewModelToChildRenderer"
+            type="Loki\Components\Plugin\AddComponentViewModelToRendererPlugin"
+        />
+    </type>
+
+    <type name="Loki\Components\Util\Block\TemplateRenderer">
+        <plugin
+            name="Loki_Components::addComponentViewModelToTemplateRenderer"
+            type="Loki\Components\Plugin\AddComponentViewModelToRendererPlugin"
+        />
+    </type>
+
+    <type name="Loki\Components\Util\Block\BlockRenderer">
+        <plugin
+            name="Loki_Components::addComponentViewModelToBlockRenderer"
+            type="Loki\Components\Plugin\AddComponentViewModelToRendererPlugin"
+        />
+    </type>
 </config>

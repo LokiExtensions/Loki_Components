@@ -60,10 +60,9 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
             return;
         }
 
-        $html = preg_replace('/^<([a-z]{2,})/', '<\1 ' . $htmlAttributes, $html);
+        $html = preg_replace('/^<([a-z]{2,})([^>]+)>/', '<\1 ' . $htmlAttributes . '>', $html);
 
         $initialDataElement = $this->getInitialDataElement($component);
-
         $html = preg_replace('/^<([^>]+)>/', '<\1>[X-LOKI-INIT-BLOCK]', $html);
         $html = str_replace('[X-LOKI-INIT-BLOCK]', $initialDataElement, $html);
 
@@ -82,7 +81,7 @@ EOF;
     {
         $block = $component->getBlock();
 
-        if (!preg_match('/^<([^>]+)>/', $currentHtml, $match)) {
+        if (!preg_match('/^<([a-z]{2,})([^>]+)>/', $currentHtml, $match)) {
             return $currentHtml;
         }
 
@@ -96,16 +95,19 @@ EOF;
             $attributes['x-title'] = $this->jsDataProvider->getComponentId($component);
         }
 
-        $htmlAttribute = '';
+        $htmlAttributes = [];
         foreach ($attributes as $attributeName => $attributeValue) {
             if (str_contains($firstTagHtml, ' ' . $attributeName . '="')) {
                 continue;
             }
 
-            $htmlAttribute .= ' ' . $attributeName . '="' . $attributeValue . '"';
+            $htmlAttributes[] = $attributeName . '="' . $attributeValue . '"';
         }
 
-        return trim($htmlAttribute);
+        $allAttributes = $match[2] .' '. implode(' ', $htmlAttributes);
+        $allAttributes = preg_replace('/@([a-z.\-]+)=/', ' x-on:\1=', $allAttributes);
+
+        return $allAttributes;
     }
 
     private function getJsData(ComponentInterface $component): string

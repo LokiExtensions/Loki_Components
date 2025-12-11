@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.29] - 11 December 2025
+### Fixed
+- Fix InvalidCharacterError because of `@` in HTML root element
+- First tag match was never used
+
 ## [2.2.28] - 11 December 2025
 ### Fixed
 - Move dependency ComponentViewModelInterface from `Loki_Base` to `Loki_Components`

@@ -10,8 +10,6 @@
             });
 
             newRoot.getAttributeNames().forEach(attributeName => {
-                attributeName = attributeName.replace(/^@/, 'x-on:');
-                attributeName = attributeName.replace(/^:/, 'x-bind:');
                 root.setAttribute(attributeName, newRoot.getAttribute(attributeName));
             });
 

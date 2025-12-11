@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.27] - 11 December 2025
+### Fixed
+- Move childRenderer class from `Loki_Components` to `Loki_Base`
+- Do not convert HTML attributes like `@` to `x-on` when updating HTML
+- Pass layout to `loki_components_repository_post_dispatch`
+- Convert update error into ComponentUpdate value object
+- Pass updates to event `loki_components_repository_post_dispatch` to give context
+- Add debug message to component update
+- Trigger `loki_components_repository_post_dispatch` event after repository updates are done
+
 ## [2.2.26] - 02 December 2025
 ### Fixed
 - Replace `@` with `x-on:` and `:` with `x-bind:` when updating HTML attributes

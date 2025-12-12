@@ -60,7 +60,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
             return;
         }
 
-        $html = preg_replace('/^<([a-z]{2,})([^>]+)>/', '<\1 ' . $htmlAttributes . '>', $html);
+        $html = preg_replace('/^<([a-z]{2,})([^>]{0,})>/', '<\1 ' . $htmlAttributes . '>', $html);
 
         $initialDataElement = $this->getInitialDataElement($component);
         $html = preg_replace('/^<([^>]+)>/', '<\1>[X-LOKI-INIT-BLOCK]', $html);
@@ -81,11 +81,9 @@ EOF;
     {
         $block = $component->getBlock();
 
-        if (!preg_match('/^<([a-z]{2,})([^>]+)>/', $currentHtml, $match)) {
+        if (!preg_match('/^<([a-z]{2,})([^>]{0,})/i', $currentHtml, $match)) {
             return $currentHtml;
         }
-
-        $firstTagHtml = $match[0];
 
         $attributes = (array)$block->getData('html_attributes');
         $attributes['id'] = $this->getElementId($block);
@@ -96,6 +94,7 @@ EOF;
         }
 
         $htmlAttributes = [];
+        $firstTagHtml = $match[0];
         foreach ($attributes as $attributeName => $attributeValue) {
             if (str_contains($firstTagHtml, ' ' . $attributeName . '="')) {
                 continue;
@@ -107,7 +106,7 @@ EOF;
         $allAttributes = $match[2] .' '. implode(' ', $htmlAttributes);
         $allAttributes = preg_replace('/@([a-z.\-]+)=/', ' x-on:\1=', $allAttributes);
 
-        return $allAttributes;
+        return trim($allAttributes);
     }
 
     private function getJsData(ComponentInterface $component): string
@@ -129,6 +128,6 @@ EOF;
         }
 
         $nameInLayout = strtolower((string)$block->getNameInLayout());
-        return preg_replace('#([^a-zA-Z0-9]{1})#', '-', $nameInLayout);
+        return preg_replace('#([^a-zA-Z0-9]+)#', '-', $nameInLayout);
     }
 }

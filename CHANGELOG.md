@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.30] - 12 December 2025
+### Fixed
+- Fix bug when component has empty output like `<div></div>`
+
 ## [2.2.29] - 11 December 2025
 ### Fixed
 - Fix InvalidCharacterError because of `@` in HTML root element

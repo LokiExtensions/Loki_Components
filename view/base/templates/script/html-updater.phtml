@@ -15,8 +15,8 @@
 
             const incomingHTML = newRoot.innerHTML;
             const incomingFrag = this.parseHTML(incomingHTML);
-            const existingSkips = root.querySelectorAll('[x-ignore]');
 
+            const existingSkips = root.querySelectorAll('[x-ignore]');
             existingSkips.forEach(oldEl => {
                 const ancestor = oldEl.parentElement?.closest('[x-ignore]');
                 if (ancestor && ancestor !== oldEl) {
@@ -25,13 +25,19 @@
 
                 const path = this.pathFromRoot(root, oldEl);
                 let counterpart = this.nodeByPath(incomingFrag, path);
-                if (counterpart && !(counterpart instanceof Element && counterpart.hasAttribute('x-ignore'))) {
-                    counterpart = null;
+                if (!counterpart) {
+                    return;
                 }
 
-                if (counterpart) {
-                    counterpart.replaceWith(oldEl);
+                if (!counterpart instanceof Element) {
+                    return;
                 }
+
+                if (!counterpart.hasAttribute('x-ignore')) {
+                    return;
+                }
+
+                counterpart.replaceWith(oldEl);
             });
 
             root.replaceChildren(...incomingFrag.childNodes);

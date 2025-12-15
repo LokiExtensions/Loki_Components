@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace Loki\Components\Controller\Index;
 
 use Exception;
-use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Component\ComponentRegistry;
 use Loki\Components\Util\Controller\ComponentUpdate;
 use Loki\Components\Util\Controller\ComponentUpdateFactory;
@@ -44,7 +43,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly AppState $appState,
         private readonly LoggerInterface $logger,
         private readonly ComponentRegistry $componentRegistry,
-        private readonly ComponentUpdateFactory $componentUpdateFactory
+        private readonly ComponentUpdateFactory $componentUpdateFactory,
     ) {
     }
 

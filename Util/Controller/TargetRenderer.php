@@ -4,9 +4,8 @@ namespace Loki\Components\Util\Controller;
 
 use Loki\Components\Util\IdConvertor;
 use Magento\Framework\Event\Manager as EventManager;
-use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
-use Loki\Components\Component\ComponentRegistry;
 
 class TargetRenderer
 {
@@ -24,12 +23,21 @@ class TargetRenderer
 
     private function renderBlocks(LayoutInterface $layout, array $blockNames): array
     {
-        $htmlParts = [];
+        $blocks = [];
         foreach ($blockNames as $blockName) {
             $block = $layout->getBlock($blockName);
-            if ($block instanceof BlockInterface) {
-                $htmlParts[] = $block->toHtml();
+            if ($block instanceof AbstractBlock) {
+                $blocks[] = $block;
             }
+        }
+
+        usort($blocks, function (AbstractBlock $a, AbstractBlock $b) {
+            return (int)$a->getRenderOrder() <=> (int)$b->getRenderOrder();
+        });
+
+        $htmlParts = [];
+        foreach ($blocks as $block) {
+            $htmlParts[] = $block->toHtml();
         }
 
         return $htmlParts;

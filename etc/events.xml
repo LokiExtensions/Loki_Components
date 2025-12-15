@@ -8,5 +8,7 @@
 
     <event name="view_block_abstract_to_html_after">
         <observer name="Loki_Components::addHtmlAttributesToComponentBlock" instance="Loki\Components\Observer\AddHtmlAttributesToComponentBlock"/>
+
+        <observer name="Loki_Components::addDomIdToBlock" instance="Loki\Components\Observer\AddDomIdToBlock"/>
     </event>
 </config>

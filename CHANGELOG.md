@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.32] - 06 January 2026
+### Fixed
+- Only load Alpine if MageOS_AlpineLoader is disabled
+
 ## [2.2.31] - 15 December 2025
 ### Fixed
 - Order component targets by XML layout `render_order` (if there at all)

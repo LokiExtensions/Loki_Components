@@ -36,7 +36,11 @@
             <block
                 name="loki.alpinejs"
                 template="Loki_Components::script/alpine.phtml"
-                after="-"/>
+                after="-">
+                <arguments>
+                    <argument name="module_config" xsi:type="object">Loki\Base\ViewModel\ModuleConfig</argument>
+                </arguments>
+            </block>
         </referenceBlock>
 
         <referenceBlock name="loki.script.store">

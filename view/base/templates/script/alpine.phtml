@@ -1,5 +1,6 @@
 <?php declare(strict_types=1);
 
+use Loki\Base\ViewModel\ModuleConfig;
 use Loki\Components\Util\Block\ChildRenderer;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
@@ -8,6 +9,13 @@ use Magento\Framework\View\Element\Template;
 /** @var Template $block */
 /** @var Escaper $escaper */
 /** @var ChildRenderer $childRenderer */
+/** @var ModuleConfig $moduleConfig */
+
+$moduleConfig = $block->getModuleConfig();
+if ($moduleConfig->isEnabled('MageOS_AlpineLoader')) {
+    return;
+}
 ?>
 <?= /* @noEscape */ $childRenderer->all($block) ?>
 <script defer src="<?= $escaper->escapeUrl($block->getViewFileUrl("Loki_Components::js/alpine.min.js")) ?>"></script>
+

@@ -53,7 +53,8 @@ class LokiComponentsTestCase extends AbstractController
         return $this->objectManager;
     }
 
-    protected function getComponentByBlockName(string $blockName
+    protected function getComponentByBlockName(
+        string $blockName
     ): ComponentInterface {
         $layout = $this->getObjectManager()->get(LayoutInterface::class);
         $block = $layout->getBlock($blockName);
@@ -65,73 +66,81 @@ class LokiComponentsTestCase extends AbstractController
         return $component;
     }
 
-    protected function assertComponentExistsOnPage(string $componentName,
+    protected function assertComponentExistsOnPage(
+        string $componentName,
         bool $debug = false
     ) {
         $component = $this->getComponent($componentName);
         $found = $this->existsComponentOnPage($component);
-        $msg = 'Component "' . $component->getName() . '" not found';
+        $msg = 'Component "'.$component->getName().'" not found';
 
         if ($debug) {
-            $msg .= "\n" . $this->getResponseBody();
+            $msg .= "\n".$this->getResponseBody();
         }
 
         $this->assertTrue($found, $msg);
     }
 
-    protected function assertComponentNotExistsOnPage(string $componentName,
+    protected function assertComponentNotExistsOnPage(
+        string $componentName,
         bool $debug = false
     ) {
         $component = $this->getComponent($componentName);
         $found = $this->existsComponentOnPage($component);
-        $msg = 'Component "' . $component->getName() . '" found anyway';
+        $msg = 'Component "'.$component->getName().'" found anyway';
         if ($debug) {
-            $msg .= "\n" . $this->getResponseBody();
+            $msg .= "\n".$this->getResponseBody();
         }
 
         $this->assertFalse($found, $msg);
     }
 
-    protected function assertElementIdExistsOnPage(string $elementId,
+    protected function assertElementIdExistsOnPage(
+        string $elementId,
         bool $debug = false
     ) {
         $found = $this->existsElementIdOnPage($elementId);
-        $msg = 'Element ID "' . $elementId . '" not found';
+        $msg = 'Element ID "'.$elementId.'" not found';
         if ($debug) {
-            $msg .= "\n" . $this->getResponseBody();
+            $msg .= "\n".$this->getResponseBody();
         }
 
         $this->assertTrue($found, $msg);
     }
 
-    protected function assertElementIdNotExistsOnPage(string $elementId,
+    protected function assertElementIdNotExistsOnPage(
+        string $elementId,
         bool $debug = false
     ) {
         $found = $this->existsElementIdOnPage($elementId);
-        $msg = 'Element ID "' . $elementId . '" found anyway';
+        $msg = 'Element ID "'.$elementId.'" found anyway';
         if ($debug) {
-            $msg .= "\n" . $this->getResponseBody();
+            $msg .= "\n".$this->getResponseBody();
         }
 
         $this->assertFalse($found, $msg);
     }
 
-    protected function assertComponentValidators(array $expectedValidators,
+    protected function assertComponentValidators(
+        array $expectedValidators,
         ComponentInterface $component
     ) {
         foreach ($expectedValidators as $expectedValidator) {
             $this->assertContains(
-                $expectedValidator, $component->getValidators()
+                $expectedValidator,
+                $component->getValidators()
             );
         }
     }
 
-    protected function assertComponentNoValidators(array $expectedValidators,
+    protected function assertComponentNoValidators(
+        array $expectedValidators,
         ComponentInterface $component
     ) {
         foreach ($expectedValidators as $expectedValidator) {
             $this->assertNotContains(
-                $expectedValidator, $component->getValidators()
+                $expectedValidator,
+                $component->getValidators()
             );
         }
     }
@@ -147,11 +156,13 @@ class LokiComponentsTestCase extends AbstractController
 
         if (true === $expectedResult) {
             $this->assertTrue(
-                $result, 'Validation did not succeed for value: ' . $value
+                $result,
+                'Validation did not succeed for value: '.$value
             );
         } else {
             $this->assertFalse(
-                $result, 'Validation did not fail for value: ' . $value
+                $result,
+                'Validation did not fail for value: '.$value
             );
         }
 
@@ -167,11 +178,11 @@ class LokiComponentsTestCase extends AbstractController
     protected function existsElementIdOnPage(string $elementId): bool
     {
         $body = $this->getResponseBody();
-        if (false === str_contains($body, ' id="' . $elementId . '"')) {
+        if (false === str_contains($body, ' id="'.$elementId.'"')) {
             return false;
         }
 
-        if (str_contains($body, 'Not rendered: ' . $elementId)) {
+        if (str_contains($body, 'Not rendered: '.$elementId)) {
             return false;
         }
 
@@ -193,12 +204,13 @@ class LokiComponentsTestCase extends AbstractController
         $elementId = $this->getObjectManager()->get(IdConvertor::class)
             ->toElementId($component->getName());
         $body = $this->getResponseBody();
-        if (false === str_contains($body, ' id="' . $elementId . '"')) {
+        if (false === str_contains($body, ' id="'.$elementId.'"')) {
             return false;
         }
 
         if (str_contains(
-            $body, 'Not rendered: ' . $component->getName() . ' '
+            $body,
+            'Not rendered: '.$component->getName().' '
         )
         ) {
             return false;
@@ -214,7 +226,6 @@ class LokiComponentsTestCase extends AbstractController
         $this->getObjectManager()->get(HttpRequest::class)->setHeaders(
             $headers
         );
-
     }
 
     protected function getValidator(): Validator
@@ -231,6 +242,7 @@ class LokiComponentsTestCase extends AbstractController
     {
         /** @var Http $response */
         $response = $this->getResponse();
+
         return $response->getBody();
     }
 }

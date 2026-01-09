@@ -1,23 +1,19 @@
-<?php declare(strict_types=1);
+<?php
+declare(strict_types=1);
 
 namespace Loki\Components\Filter;
 
 use Magento\Framework\ObjectManagerInterface;
 
-class FilterScopeFactory
+final class FilterScopeFactory
 {
     public function __construct(
         private ObjectManagerInterface $objectManager,
     ){
     }
 
-    /**
-     * @phpstan-return FilterScope
-     */
-    public function create(): FilterScope
+    public function create(array $data = []): FilterScope
     {
-        /** @var FilterScope $filterScope */
-        $filterScope = $this->objectManager->create(FilterScope::class);
-        return $filterScope;
+        return $this->objectManager->create(FilterScope::class, $data);
     }
 }

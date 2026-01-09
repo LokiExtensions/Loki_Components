@@ -13,6 +13,8 @@ class FilterScopeFactory
 
     public function create(): FilterScope
     {
-        return $this->objectManager->create(FilterScope::class);
+        /** @var FilterScope $filterScope */
+        $filterScope = $this->objectManager->create(FilterScope::class);
+        return $filterScope;
     }
 }

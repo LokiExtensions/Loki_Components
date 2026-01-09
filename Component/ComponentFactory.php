@@ -36,7 +36,9 @@ class ComponentFactory
         $componentClass = $componentDefinition->getClassName();
 
         try {
-            return $this->objectManager->create($componentClass, $arguments);
+            /** @var Component $component */
+            $component = $this->objectManager->create($componentClass, $arguments);
+            return $component;
         } catch (UnexpectedValueException $exception) {
             throw new UnexpectedValueException("Failed to create component: \n"
             . json_encode($arguments) . "\n"

@@ -11,6 +11,9 @@ class FilterScopeFactory
     ){
     }
 
+    /**
+     * @phpstan-return FilterScope
+     */
     public function create(): FilterScope
     {
         /** @var FilterScope $filterScope */

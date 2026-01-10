@@ -11,8 +11,7 @@ use Magento\Framework\View\Element\Template;
 /** @var ChildRenderer $childRenderer */
 /** @var ModuleConfig $moduleConfig */
 
-$moduleConfig = $block->getModuleConfig();
-if ($moduleConfig->isEnabled('MageOS_AlpineLoader')) {
+if ($block->getLayout()->getBlock('alpine-js.loader')) {
     return;
 }
 ?>

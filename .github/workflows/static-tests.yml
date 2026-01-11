@@ -2,9 +2,25 @@ name: Magento 2 Static Tests
 on: ['push', 'pull_request']
 
 jobs:
+  phpcs:
+    name: Magento PHPCS
+    runs-on: ubuntu-latest
+    container:
+        image: yireo/magento2installed:2.4.8-p3
+    steps:
+      - name: Checkout sources
+        uses: actions/checkout@v4
+
+      - name: Run Magento 2 PHPCS Tests
+        run: |
+          export PHPCS_LEVEL=$(jq -r '.phpcs_severity // 10' MODULE.json)
+          test -z "$PHPCS_LEVEL" && PHPCS_LEVEL=10
+          echo "Testing for PHPCS severity $PHPCS_LEVEL"
+          cd /tmp/magento
+          php vendor/bin/phpcs --standard=Magento2 --ignore=Test/,node_modules/ --colors --extensions=php,phtml --severity=$PHPCS_LEVEL ${GITHUB_WORKSPACE}
+
   phpstan:
     name: Magento PHPStan
-    #runs-on: self-hosted
     runs-on: ubuntu-latest
     container:
         image: yireo/magento2installed:2.4.8-p3
@@ -31,7 +47,7 @@ jobs:
           composer remove --dev magento/magento-coding-standard
           test -z "$COMPOSER_DEV_REQUIREMENTS" || composer require --dev $COMPOSER_DEV_REQUIREMENTS
           composer require --dev --prefer-source -- phpstan/phpstan:^2.0 bitexpert/phpstan-magento:^0.42 phpstan/extension-installer
-          composer require --prefer-source -- ${COMPOSER_NAME}:@dev
+          composer require --prefer-source -- ${COMPOSER_NAME}:@dev yireo/magento2-integration-test-helper
 
       - name: Run Magento 2 PHPStan Tests
         run: |

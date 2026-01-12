@@ -6,6 +6,17 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.33] - 12 January 2026
+### Fixed
+- Add new GitHub Action workflows
+- Check for AlpineJS loader block instead of module being enabled
+- Try fix PHPStan issues
+- Fixes
+- Lower PHPStan level from 3 to 2
+- A type-hinting for PHPStan
+- Copy generic CI/CD files
+- Copy generic CI/CD files
+
 ## [2.2.32] - 06 January 2026
 ### Fixed
 - Only load Alpine if MageOS_AlpineLoader is disabled

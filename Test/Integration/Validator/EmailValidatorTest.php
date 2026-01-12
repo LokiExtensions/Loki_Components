@@ -14,7 +14,8 @@ class EmailValidatorTest extends TestCase
     public function testWithNoValue(): void
     {
         $validator = ObjectManager::getInstance()->get(EmailValidator::class);
-        $this->assertTrue($validator->validate(null));
+        $result = $validator->validate(null);
+        $this->assertTrue($result);
     }
 
     /**
@@ -33,6 +34,7 @@ class EmailValidatorTest extends TestCase
             return;
         }
 
+        $this->assertIsArray($actualResult);
         $error = array_pop($actualResult);
         $this->assertStringContainsString($expectedResult, $error, var_export($actualResult, true));
     }

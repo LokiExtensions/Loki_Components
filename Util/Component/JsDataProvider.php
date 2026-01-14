@@ -2,6 +2,7 @@
 
 namespace Loki\Components\Util\Component;
 
+use Loki\Components\Util\Block\GetElementId;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Util\CamelCaseConvertor;
@@ -12,6 +13,7 @@ class JsDataProvider implements ArgumentInterface
 {
     public function __construct(
         private readonly ComponentUtil $componentUtil,
+        private readonly GetElementId $getElementId,
         private readonly IdConvertor $idConvertor,
         private readonly CamelCaseConvertor $camelCaseConvertor,
     ) {
@@ -26,7 +28,7 @@ class JsDataProvider implements ArgumentInterface
 
         $block = $component->getBlock();
         $data['blockId'] = $block->getNameInLayout();
-        $data['elementId'] = $this->componentUtil->convertToElementId($block->getNameInLayout());
+        $data['elementId'] = $this->getElementId->execute($block);
         $data['validators'] = $component->getValidators();
         $data['filters'] = $component->getFilters();
 

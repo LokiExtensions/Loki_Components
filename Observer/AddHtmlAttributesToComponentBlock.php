@@ -5,6 +5,7 @@ namespace Loki\Components\Observer;
 
 use Loki\Components\Util\Ajax;
 use Loki\Components\Util\AppMode;
+use Loki\Components\Util\Block\GetElementId;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -21,6 +22,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
         private readonly JsDataProvider $jsDataProvider,
         private readonly Ajax $ajax,
         private readonly AppMode $appMode,
+        private readonly GetElementId $getElementId
     ) {
     }
 
@@ -86,7 +88,7 @@ EOF;
         }
 
         $attributes = (array)$block->getData('html_attributes');
-        $attributes['id'] = $this->getElementId($block);
+        $attributes['id'] = $this->getElementId->execute($block);
         $attributes['x-data'] = $this->jsDataProvider->getComponentName($component);
 
         if ($this->appMode->isDeveloperMode()) {
@@ -118,16 +120,5 @@ EOF;
         }
 
         return json_encode($componentData);
-    }
-
-    private function getElementId(AbstractBlock $block): string
-    {
-        $uniqId = (string)$block->getUniqId();
-        if (strlen($uniqId) > 0) {
-            return $uniqId;
-        }
-
-        $nameInLayout = strtolower((string)$block->getNameInLayout());
-        return preg_replace('#([^a-zA-Z0-9]+)#', '-', $nameInLayout);
     }
 }

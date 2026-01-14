@@ -3,10 +3,13 @@ declare(strict_types=1);
 
 namespace Loki\Components\Component;
 
+use Loki\Components\Util\Block\GetElementId;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Loki\Components\Filter\Filter;
 use Loki\Components\Messages\LocalMessage;
 use Loki\Components\Validator\Validator;
+use Magento\Setup\Model\ObjectManagerProvider;
 
 class ComponentViewModel implements ComponentViewModelInterface
 {
@@ -44,8 +47,7 @@ class ComponentViewModel implements ComponentViewModelInterface
 
     public function getElementId(): string
     {
-        $nameInLayout = strtolower((string)$this->block->getNameInLayout());
-        return preg_replace('/([^a-zA-Z0-9\-]+)/', '-', $nameInLayout);
+        return ObjectManager::getInstance()->get(GetElementId::class)->execute($this->block);
     }
 
     public function getValue(): mixed

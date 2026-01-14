@@ -3,14 +3,15 @@ declare(strict_types=1);
 
 namespace Loki\Components\Observer;
 
+use Loki\Components\Util\Block\GetElementId;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
 
 class AddDomIdToBlock implements ObserverInterface
 {
     public function __construct(
+        private readonly GetElementId $getElementId,
         private readonly array $blockNames = [],
     ) {
     }
@@ -45,22 +46,11 @@ class AddDomIdToBlock implements ObserverInterface
             return;
         }
 
-        $elementId = $this->getElementId($block);
+        $elementId = $this->getElementId->execute($block);
         $originalString = '<'.$match[1].$match[2];
         $newString = '<'.$match[1].' id="'.$elementId.'"'.$match[2];
         $html = preg_replace('#^'.$originalString.'#', $newString, $html);
 
         $transport->setHtml($html);
-    }
-
-    private function getElementId(AbstractBlock $block): string
-    {
-        $uniqId = (string)$block->getUniqId();
-        if (strlen($uniqId) > 0) {
-            return $uniqId;
-        }
-
-        $nameInLayout = strtolower((string)$block->getNameInLayout());
-        return preg_replace('#([^a-zA-Z0-9]+)#', '-', $nameInLayout);
     }
 }

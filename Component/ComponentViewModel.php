@@ -9,7 +9,6 @@ use Magento\Framework\View\Element\AbstractBlock;
 use Loki\Components\Filter\Filter;
 use Loki\Components\Messages\LocalMessage;
 use Loki\Components\Validator\Validator;
-use Magento\Setup\Model\ObjectManagerProvider;
 
 class ComponentViewModel implements ComponentViewModelInterface
 {

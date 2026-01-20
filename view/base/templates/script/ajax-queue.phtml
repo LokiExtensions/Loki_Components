@@ -32,6 +32,10 @@ if ($interval < 10) {
                 component,
                 update,
             });
+
+            if (component.lazyUpdate) {
+
+            }
         },
         run() {
             setInterval(async () => {
@@ -44,6 +48,15 @@ if ($interval < 10) {
             }
 
             const requests = this.requests;
+            const hasNonLazyUpdate = requests.some(request => request.component.lazyUpdate === false);
+            if (false === hasNonLazyUpdate) {
+                return;
+            }
+
+            requests.forEach(request => {
+                request.component.beforePost();
+            });
+
             this.requests = [];
 
             await fetch('<?= $escaper->escapeUrl($componentUtil->getPostUrl(

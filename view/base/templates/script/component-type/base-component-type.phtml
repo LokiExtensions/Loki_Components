@@ -59,6 +59,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 value = this.value;
             }
 
+            return LokiAjaxQueue.add(this, value);
+        },
+        beforePost() {
             this.loading = true;
             this.setTargetStateOnPost();
             this.beforePostValue = this.value;
@@ -66,8 +69,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             this.showLoaderTimerId = setTimeout(() => {
                 this.showLoader = true;
             }, this.showLoaderTimeout);
-
-            return LokiAjaxQueue.add(this, value);
         },
         afterPostSuccess() {
             if (!this.valid) {

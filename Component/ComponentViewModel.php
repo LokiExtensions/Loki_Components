@@ -16,7 +16,7 @@ class ComponentViewModel implements ComponentViewModelInterface
     protected ?Validator $validator = null;
     protected ?Filter $filter = null;
     protected ?AbstractBlock $block = null;
-    protected bool $lazyLoad = true;
+    protected bool $lazyLoad = false;
     protected bool $lazyUpdate = false;
     protected bool $allowRendering = true;
 
@@ -190,6 +190,8 @@ class ComponentViewModel implements ComponentViewModelInterface
     {
         return [
             ...(array)$this->getBlock()->getJsData(),
+            'lazyLoad' => $this->isLazyLoad(),
+            'lazyUpdate' => $this->isLazyUpdate(),
             'value' => $this->getValue(),
             'messages' => $this->getMessages(),
             'messageArea' => $this->getMessageArea(),

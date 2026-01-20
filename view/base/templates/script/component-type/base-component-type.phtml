@@ -16,9 +16,7 @@ $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
-    const LokiComponentFormKey = '<?= $escaper->escapeJs(
-        $componentUtil->getFormKey()
-    ) ?>';
+    const LokiComponentFormKey = '<?= $escaper->escapeJs($componentUtil->getFormKey()) ?>';
     const LokiComponentType = {
         ...LokiLoadDataComponentPartial,
         ...LokiLoadInitMethodsComponentPartial,
@@ -35,6 +33,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         value: null,
         visible: true,
         lazyLoad: false,
+        lazyUpdate: false,
         ajax: false,
         beforePostValue: null,
         autofillListenerTimer: null,
@@ -47,6 +46,9 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             Alpine.store('LokiComponents').add(this);
         },
         initLazyLoading() {
+            console.log('component lazy load', this.id, this.lazyLoad);
+            console.log('component lazy update', this.id, this.lazyUpdate);
+
             if (this.lazyLoad) {
                 this.post({});
             }

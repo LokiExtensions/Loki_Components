@@ -5,7 +5,7 @@ namespace Loki\Components\Filter;
 
 use Magento\Framework\ObjectManagerInterface;
 
-final class FilterScopeFactory
+class FilterScopeFactory
 {
     public function __construct(
         private ObjectManagerInterface $objectManager,

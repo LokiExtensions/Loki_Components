@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.34] - 20 January 2026
+### Fixed
+- Implement lazy updating of components
+- Implement `lazy_update` as component property
+- Allow overriding `lazy_load` and `lazy_update` via XML layout
+- Based AlpineJS elementId upon `GetElementId` logic
+- Unify element IDs based on blocks
+- Fix integration tests
+
 ## [2.2.33] - 12 January 2026
 ### Fixed
 - Add new GitHub Action workflows
@@ -19,7 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.32] - 06 January 2026
 ### Fixed
-- Only load Alpine if MageOS_AlpineLoader is disabled
+- Only load Alpine if `MageOS_AlpineLoader is` disabled
 
 ## [2.2.31] - 15 December 2025
 ### Fixed

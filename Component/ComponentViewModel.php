@@ -17,6 +17,7 @@ class ComponentViewModel implements ComponentViewModelInterface
     protected ?Filter $filter = null;
     protected ?AbstractBlock $block = null;
     protected bool $lazyLoad = true;
+    protected bool $lazyUpdate = false;
     protected bool $allowRendering = true;
 
     public function setComponent(ComponentInterface $component): void
@@ -158,7 +159,26 @@ class ComponentViewModel implements ComponentViewModelInterface
      */
     public function isLazyLoad(): bool
     {
+        if ($this->hasBlock()) {
+            $lazyLoad = $this->getBlock()->getLazyLoad();
+            if (is_bool($lazyLoad)) {
+                return $lazyLoad;
+            }
+        }
+
         return $this->lazyLoad;
+    }
+
+    public function isLazyUpdate(): bool
+    {
+        if ($this->hasBlock()) {
+            $lazyUpdate = $this->getBlock()->getLazyUpdate();
+            if (is_bool($lazyUpdate)) {
+                return $lazyUpdate;
+            }
+        }
+
+        return $this->lazyUpdate;
     }
 
     public function isAllowRendering(): bool

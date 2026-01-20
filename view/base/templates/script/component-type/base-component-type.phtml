@@ -46,9 +46,6 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
             Alpine.store('LokiComponents').add(this);
         },
         initLazyLoading() {
-            console.log('component lazy load', this.id, this.lazyLoad);
-            console.log('component lazy update', this.id, this.lazyUpdate);
-
             if (this.lazyLoad) {
                 this.post({});
             }

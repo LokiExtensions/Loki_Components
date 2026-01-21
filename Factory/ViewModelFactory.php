@@ -13,9 +13,22 @@ class ViewModelFactory
     ) {
     }
 
-    public function create(string $viewModelClass): ArgumentInterface
+    public function get(string $viewModelClass): ArgumentInterface
     {
         $viewModel = $this->objectManager->get($viewModelClass);
+        $this->validateViewModel($viewModel, $viewModelClass);
+        return $viewModel;
+    }
+
+    public function create(string $viewModelClass, array $data): ArgumentInterface
+    {
+        $viewModel = $this->objectManager->create($viewModelClass, $data);
+        $this->validateViewModel($viewModel, $viewModelClass);
+        return $viewModel;
+    }
+
+    private function validateViewModel(mixed $viewModel, string $viewModelClass): void
+    {
         if (empty($viewModel)) {
             throw new RuntimeException('ViewModel "' . $viewModelClass . '" could not be instantiated');
         }
@@ -23,7 +36,5 @@ class ViewModelFactory
         if (false === $viewModel instanceof ArgumentInterface) {
             throw new RuntimeException('Class "' . $viewModelClass . '" is not a ViewModel');
         }
-
-        return $viewModel;
     }
 }

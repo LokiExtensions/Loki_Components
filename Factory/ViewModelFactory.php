@@ -20,7 +20,7 @@ class ViewModelFactory
         return $viewModel;
     }
 
-    public function create(string $viewModelClass, array $data): ArgumentInterface
+    public function create(string $viewModelClass, array $data = []): ArgumentInterface
     {
         $viewModel = $this->objectManager->create($viewModelClass, $data);
         $this->validateViewModel($viewModel, $viewModelClass);

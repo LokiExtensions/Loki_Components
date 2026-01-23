@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.36] - 23 January 2026
+### Fixed
+- Update MODULE.json with PHPStan level 3
+- Remove final word
+
 ## [2.2.35] - 23 January 2026
 ### Fixed
 - Make create() `$data` argument optional

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.35] - 23 January 2026
+### Fixed
+- Make create() `$data` argument optional
+- Allow ViewModelFactory::create() and get()
+
 ## [2.2.34] - 20 January 2026
 ### Fixed
 - Implement lazy updating of components

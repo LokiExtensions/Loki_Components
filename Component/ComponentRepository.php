@@ -21,6 +21,11 @@ abstract class ComponentRepository implements ComponentRepositoryInterface
         return $this->component;
     }
 
+    public function getViewModel(): ComponentViewModelInterface
+    {
+        return $this->component->getViewModel();
+    }
+
     public function getComponentName(): string
     {
         return $this->component->getName();

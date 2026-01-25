@@ -57,7 +57,7 @@ class Address
         return $this->longitude;
     }
 
-    public function render(): string
+    public function getInnerHtml(): string
     {
         return $this->addressRenderer->getHtml($this);
     }

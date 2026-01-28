@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.37] - 28 January 2026
+### Fixed
+- Rename Address::render() to Address::getInnerHtml()
+- Add getViewModel() in repository directly
+
 ## [2.2.36] - 23 January 2026
 ### Fixed
 - Update MODULE.json with PHPStan level 3

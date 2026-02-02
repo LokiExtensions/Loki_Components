@@ -3,24 +3,15 @@ declare(strict_types=1);
 
 namespace Loki\Components\Component;
 
-use Magento\Customer\Model\Session as CustomerSession;
-use Magento\Framework\UrlFactory;
-
-class ComponentContext implements ComponentContextInterface
+/**
+ * @method \Magento\Customer\Model\Session getCustomerSession()
+ * @method \Magento\Framework\UrlFactory getUrlFactory()
+ */
+class ComponentContext extends AbstractComponentContext
 {
     public function __construct(
-        private readonly CustomerSession $customerSession,
-        private readonly UrlFactory $urlFactory,
+        protected array $dependencies = []
     ) {
-    }
-
-    public function getCustomerSession(): CustomerSession
-    {
-        return $this->customerSession;
-    }
-
-    public function getUrlFactory(): UrlFactory
-    {
-        return $this->urlFactory;
+        parent::__construct($dependencies);
     }
 }

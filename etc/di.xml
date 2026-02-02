@@ -110,4 +110,13 @@
             type="Loki\Components\Plugin\AddComponentViewModelToRendererPlugin"
         />
     </type>
+
+    <type name="Loki\Components\Component\ComponentContext">
+        <arguments>
+            <argument name="dependencies" xsi:type="array">
+                <item name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</item>
+                <item name="urlFactory" xsi:type="object">Magento\Framework\UrlFactory\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

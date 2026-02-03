@@ -13,18 +13,6 @@ class AbstractComponentContext implements ComponentContextInterface
     ) {
     }
 
-    public function hasMethod(string $methodName)
-    {
-        if (str_starts_with($methodName, 'get')) {
-            $objectName = lcfirst(substr($methodName, 3));
-            if (array_key_exists($objectName, $this->dependencies)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
     public function __call(string $methodName, array $arguments)
     {
         $objectName = lcfirst(substr($methodName, 3));

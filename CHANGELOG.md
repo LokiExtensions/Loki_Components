@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.38] - 03 February 2026
+### Fixed
+- Rewrite to composable AbstractComponentContext
+- Remove unused structure
+- Make sure GitHub Actions PHPStan uses right sources
+
 ## [2.2.37] - 28 January 2026
 ### Fixed
 - Rename Address::render() to Address::getInnerHtml()

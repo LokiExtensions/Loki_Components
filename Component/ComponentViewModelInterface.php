@@ -45,6 +45,7 @@ interface ComponentViewModelInterface extends ArgumentInterface
     public function isLazyLoad(): bool;
 
     public function isAllowRendering(): bool;
+    public function isVisible(): bool;
 
     public function getJsComponentName(): ?string;
 

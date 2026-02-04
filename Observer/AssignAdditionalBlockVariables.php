@@ -68,6 +68,10 @@ class AssignAdditionalBlockVariables implements ObserverInterface
         $block->setViewModel($viewModel);
         $block->setViewModelInstance($viewModel);
 
+        if (false === $viewModel->isVisible()) {
+            $block->setTemplate('Loki_Components::utils/not-visible.phtml'); // @phpstan-ignore bitExpertMagento.setTemplateDisallowedForBlock
+        }
+
         if (false === $viewModel->isAllowRendering()) {
             $block->setTemplate('Loki_Components::utils/not-rendered.phtml'); // @phpstan-ignore bitExpertMagento.setTemplateDisallowedForBlock
             $block->setNotRendered(true);

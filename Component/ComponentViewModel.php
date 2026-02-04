@@ -19,6 +19,7 @@ class ComponentViewModel implements ComponentViewModelInterface
     protected bool $lazyLoad = false;
     protected bool $lazyUpdate = false;
     protected bool $allowRendering = true;
+    protected bool $visible = true;
 
     public function setComponent(ComponentInterface $component): void
     {
@@ -184,6 +185,11 @@ class ComponentViewModel implements ComponentViewModelInterface
     public function isAllowRendering(): bool
     {
         return $this->allowRendering;
+    }
+
+    public function isVisible(): bool
+    {
+        return $this->visible;
     }
 
     public function getJsData(): array

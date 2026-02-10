@@ -1,16 +1,19 @@
 <?php
 declare(strict_types=1);
 
-/** @version 2.2.38 */
-
 use Magento\Framework\View\Element\Template;
 
+/** @version 2.2.38 */
 /** @var Template $block */
 ?>
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.data('LokiLoader', () => ({
             ...LokiLoaderComponentPartial,
+            init() {
+                this.id = this.$root.getAttribute('x-title');
+                Alpine.store('LokiComponents').add(this);
+            }
         }));
     });
 </script>

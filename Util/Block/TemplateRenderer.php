@@ -17,7 +17,7 @@ class TemplateRenderer extends AbstractRenderer
         $blockName = $ancestorBlock->getNameInLayout().'.'.$blockAlias;
 
         $block = $this->createBlockFromTemplate($templateName, $blockName);
-        $block->setTemplate($templateName);
+        $block->setTemplate($templateName); // @phpstan-ignore bitExpertMagento.setTemplateDisallowedForBlock
 
         $this->populateBlock($block, $data);
 

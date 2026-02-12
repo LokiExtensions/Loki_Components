@@ -108,4 +108,9 @@ class LengthViewModelDummy implements ComponentViewModelInterface
     {
         return true;
     }
+
+    public function isVisible(): bool
+    {
+        return true;
+    }
 }

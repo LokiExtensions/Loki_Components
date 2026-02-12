@@ -9,14 +9,14 @@ use Loki\Components\Config\Config;
 
 class ConfigTest extends TestCase
 {
-    #[ConfigFixture('loki_components/general/debug', 1)]
+    #[ConfigFixture('loki_components/general/debug', 1, 'store', 'default')]
     public function testIsDebugEnabled()
     {
         $config = ObjectManager::getInstance()->get(Config::class);
         $this->assertTrue($config->isDebug());
     }
 
-    #[ConfigFixture('loki_components/general/debug', 0)]
+    #[ConfigFixture('loki_components/general/debug', 0, 'store', 'default')]
     public function testIsDebugDisabled()
     {
         $config = ObjectManager::getInstance()->get(Config::class);

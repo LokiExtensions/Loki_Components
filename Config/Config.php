@@ -4,6 +4,7 @@ namespace Loki\Components\Config;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Magento\Store\Model\ScopeInterface;
 
 class Config implements ArgumentInterface
 {
@@ -14,6 +15,9 @@ class Config implements ArgumentInterface
 
     public function isDebug(): bool
     {
-        return (bool)$this->scopeConfig->getValue('loki_components/general/debug');
+        return (bool)$this->scopeConfig->getValue(
+            'loki_components/general/debug',
+            ScopeInterface::SCOPE_STORE
+        );
     }
 }

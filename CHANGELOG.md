@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.39] - 12 February 2026
+### Fixed
+- If TemplateRenderer renders new block that already exists, reset template
+- Allow PHP Config to read from current store level
+- Allow LokiLoader components to be registered in LokiComponents store too
+- Add template non-visible.phtml
+- Add isVisible() component flag to skip rendering entirely
+
 ## [2.2.38] - 03 February 2026
 ### Fixed
 - Rewrite to composable AbstractComponentContext

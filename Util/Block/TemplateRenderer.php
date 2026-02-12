@@ -15,7 +15,9 @@ class TemplateRenderer extends AbstractRenderer
         $this->ancestorBlock = $ancestorBlock;
         $blockAlias = $this->getBlockAlias(null, $data);
         $blockName = $ancestorBlock->getNameInLayout().'.'.$blockAlias;
+
         $block = $this->createBlockFromTemplate($templateName, $blockName);
+        $block->setTemplate($templateName);
 
         $this->populateBlock($block, $data);
 

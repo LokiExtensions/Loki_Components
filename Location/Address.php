@@ -2,19 +2,26 @@
 
 namespace Loki\Components\Location;
 
-class Address
+use Magento\Framework\DataObject;
+
+class Address extends DataObject
 {
     public function __construct(
         private readonly AddressRenderer $addressRenderer,
         private readonly string $street,
         private readonly string $houseNumber,
+        private readonly string $houseNumberAddition,
         private readonly string $postcode,
         private readonly string $city,
         private readonly string $countryId,
         private readonly ?float $latitude = null,
         private readonly ?float $longitude = null,
+        private readonly string $phone = '',
         private readonly string $comment = '',
+        private readonly string $company = '',
+        array $data = []
     ) {
+        parent::__construct($data);
     }
 
     public function getStreet(): string
@@ -60,5 +67,20 @@ class Address
     public function getInnerHtml(): string
     {
         return $this->addressRenderer->getHtml($this);
+    }
+
+    public function getCompany(): string
+    {
+        return $this->company;
+    }
+
+    public function getHouseNumberAddition(): string
+    {
+        return $this->houseNumberAddition;
+    }
+
+    public function getPhone(): string
+    {
+        return $this->phone;
     }
 }

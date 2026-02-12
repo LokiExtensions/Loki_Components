@@ -2,14 +2,18 @@
 
 namespace Loki\Components\Location\Address;
 
-class BusinessHourSegment
+use Magento\Framework\DataObject;
+
+class BusinessHourSegment extends DataObject
 {
     public function __construct(
         private readonly string $day,
         private readonly string $openingHour,
         private readonly string $closingHour,
         private readonly string $comment = '',
+        array $data = [],
     ) {
+        parent::__construct($data);
     }
 
     public function getDay(): string

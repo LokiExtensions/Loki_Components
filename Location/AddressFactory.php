@@ -14,22 +14,30 @@ class AddressFactory
     public function create(
         string $street,
         string $houseNumber,
+        string $houseNumberAddition,
         string $postcode,
         string $city,
         string $countryId,
         ?float $latitude = null,
         ?float $longitude = null,
+        string $phone = '',
         string $comment = '',
+        string $company = '',
+        array $data = [],
     ): Address {
         return $this->objectManager->create(Address::class, [
             'street' => $street,
             'houseNumber' => $houseNumber,
+            'houseNumberAddition' => $houseNumberAddition,
             'postcode' => $postcode,
             'city' => $city,
             'countryId' => $countryId,
             'latitude' => $latitude,
             'longitude' => $longitude,
+            'phone' => $phone,
             'comment' => $comment,
+            'company' => $company,
+            'data' => $data,
         ]);
     }
 }

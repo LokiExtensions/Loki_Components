@@ -13,24 +13,26 @@ class LocationFactory
     }
 
     public function create(
-        string $id,
-        string $code,
-        string $label,
-        int $distance,
         Address $address,
         ?BusinessHours $businessHours = null,
+        string $id = '',
+        string $code = '',
+        string $label = '',
+        int $distance = 0,
         ?string $pickupFrom = null,
         ?int $price = null,
+        array $data = [],
     ): Location {
         return $this->objectManager->create(Location::class, [
+            'address' => $address,
+            'businessHours' => $businessHours,
             'id' => $id,
             'code' => $code,
             'label' => $label,
             'distance' => $distance,
-            'address' => $address,
-            'businessHours' => $businessHours,
             'pickupFrom' => $pickupFrom,
             'price' => $price,
+            'data' => $data
         ]);
     }
 }

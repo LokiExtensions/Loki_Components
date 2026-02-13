@@ -9,28 +9,43 @@ use Magento\Framework\View\Element\Template;
 ?>
 <script>
     const LokiModalComponentPartial = {
+        modalOpen: false,
         initModalClosing() {
-            const modal = this.$refs.modal;
-            if (!modal) {
-                return;
-            }
 
-            modal.addEventListener('click', function(event) {
-                if (event.target === modal) {
-                    modal.close();
+            this.$watch('modalOpen', (modalOpen) => {
+                if (false === modalOpen) {
+                    this.$refs.modal.close();
+                } else {
+                    this.$refs.modal.showModal();
                 }
+            });
+
+            this.$nextTick(() => {
+                this.modalOpen = this.$refs.modal.open;
+
+                const modal = this.$refs.modal;
+                if (!modal) {
+                    return;
+                }
+
+                modal.addEventListener('click', (event) => {
+                    if (event.target === modal) {
+                        this.modalOpen = false;
+                    }
+                });
             });
         },
         toggleModal() {
-            if (this.isModalOpen()) {
-                this.$refs.modal.close();
-                return;
-            }
-
-            this.$refs.modal.showModal();
+            this.modalOpen = !this.modalOpen;
+        },
+        closeModal() {
+            this.modalOpen = false;
+        },
+        openModal() {
+            this.modalOpen = true;
         },
         isModalOpen() {
-            return this.$refs.modal.open;
+            return this.modalOpen;
         },
         isModalClosed() {
             return !this.isModalOpen();

@@ -194,8 +194,10 @@ class ComponentViewModel implements ComponentViewModelInterface
 
     public function getJsData(): array
     {
+        $jsDataFromBlock = (array)$this->getBlock()->getJsData();
+
         return [
-            ...(array)$this->getBlock()->getJsData(),
+            ...(array)$jsDataFromBlock,
             'lazyLoad' => $this->isLazyLoad(),
             'lazyUpdate' => $this->isLazyUpdate(),
             'value' => $this->getValue(),

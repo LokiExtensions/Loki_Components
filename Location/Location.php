@@ -23,17 +23,17 @@ class Location extends DataObject
 
     public function getId(): string
     {
-        return $this->id ?? $this->getLabel();
+        return !empty($this->id) ? $this->id : $this->getLabel();
     }
 
     public function getCode(): string
     {
-        return $this->code ?? $this->getId();
+        return !empty($this->code) ? $this->code : $this->getId();
     }
 
     public function getLabel(): string
     {
-        return $this->label ?? $this->address->getCompany();
+        return !empty($this->label) ? $this->label : $this->address->getCompany();
     }
 
     public function getDistance(): int

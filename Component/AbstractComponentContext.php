@@ -5,6 +5,7 @@ namespace Loki\Components\Component;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Phrase;
+use Throwable;
 
 class AbstractComponentContext implements ComponentContextInterface
 {
@@ -25,6 +26,15 @@ class AbstractComponentContext implements ComponentContextInterface
         if (isset($this->dependencies['parentContext'])) {
             $parentContext = $this->dependencies['parentContext'];
             return $parentContext->{$methodName}(...$arguments);
+        }
+
+        if (isset($this->dependencies['parentContexts'])) {
+            foreach ($this->dependencies['parentContexts'] as $parentContext) {
+                try {
+                    return $parentContext->{$methodName}(...$arguments);
+                } catch (Throwable $e) {
+                }
+            }
         }
 
         throw new LocalizedException(

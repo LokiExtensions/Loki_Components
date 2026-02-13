@@ -119,6 +119,6 @@ EOF;
             $componentData['ajax'] = true;
         }
 
-        return json_encode($componentData);
+        return json_encode($componentData, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES);
     }
 }

@@ -6,6 +6,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.40] - 13 February 2026
+### Fixed
+- Do not escape Unicode and slashes while building the x-ref script-block
+- Refactor modal component-partial to have more sensible API
+- Allow for parsing an address before usage via DI type
+- Add oneline renderer to AddressRenderer
+- Add numerous fields to Address-object
+- Allow for one ComponentContext to inherit from multiple others
+- Heavily refactor Location, Address and Marker objects and factories
+
 ## [2.2.39] - 12 February 2026
 ### Fixed
 - If TemplateRenderer renders new block that already exists, reset template

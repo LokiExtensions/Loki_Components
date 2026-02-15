@@ -156,6 +156,15 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 
             return this.addLocalMessage(messageType, messageText);
         },
+        addSuccess(messageText) {
+            this.addMessage('success', messageText);
+        },
+        addNotice(messageText) {
+            this.addMessage('notice', messageText);
+        },
+        addWarning(messageText) {
+            this.addMessage('warning', messageText);
+        },
         addError(messageText) {
             this.addMessage('error', messageText);
         },

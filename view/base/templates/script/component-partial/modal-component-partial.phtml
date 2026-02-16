@@ -21,7 +21,11 @@ use Magento\Framework\View\Element\Template;
             });
 
             this.$nextTick(() => {
-                this.modalOpen = this.$refs.modal.open;
+                if (this.$refs.modal) {
+                    this.modalOpen = this.$refs.modal.open;
+                } else {
+                    this.modalOpen = false;
+                }
 
                 const modal = this.$refs.modal;
                 if (!modal) {

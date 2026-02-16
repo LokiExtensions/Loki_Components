@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.41] - 16 February 2026
+### Fixed
+- Add missing methods addSuccess(), addWarning(), addNotice()
+- Move component context parentContexts outside of deps
+
 ## [2.2.40] - 13 February 2026
 ### Fixed
 - Do not escape Unicode and slashes while building the x-ref script-block

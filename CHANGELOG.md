@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.42] - 17 February 2026
+### Fixed
+- Issue with removed modal giving JS warning
+
 ## [2.2.41] - 16 February 2026
 ### Fixed
 - Add missing methods addSuccess(), addWarning(), addNotice()

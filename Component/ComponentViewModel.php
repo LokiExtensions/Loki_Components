@@ -20,6 +20,7 @@ class ComponentViewModel implements ComponentViewModelInterface
     protected bool $lazyUpdate = false;
     protected bool $allowRendering = true;
     protected bool $visible = true;
+    protected bool $skipValidation = false;
 
     public function setComponent(ComponentInterface $component): void
     {
@@ -204,6 +205,7 @@ class ComponentViewModel implements ComponentViewModelInterface
             'messages' => $this->getMessages(),
             'messageArea' => $this->getMessageArea(),
             'valid' => $this->isValid(),
+            'skipValidation' => $this->skipValidation,
         ];
     }
 }

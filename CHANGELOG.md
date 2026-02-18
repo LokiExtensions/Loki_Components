@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.43] - 18 February 2026
+### Fixed
+- Set skipValidation = false for any component by default
+- Do not show required-errors if address is reset after country change
+
 ## [2.2.42] - 17 February 2026
 ### Fixed
 - Issue with removed modal giving JS warning

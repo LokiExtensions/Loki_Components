@@ -5,11 +5,13 @@ namespace Loki\Components\Validator;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Util\Ajax;
 use Loki\Components\Util\IsEmpty;
+use Magento\Framework\App\RequestInterface;
 
 class RequiredValidator implements ValidatorInterface
 {
     public function __construct(
         private readonly IsEmpty $isEmpty,
+        private readonly RequestInterface $request,
         private readonly Ajax $ajax,
     ) {
     }
@@ -17,6 +19,10 @@ class RequiredValidator implements ValidatorInterface
     public function validate(mixed $value, ?ComponentInterface $component = null): bool|array
     {
         if (false === $this->ajax->isAjax()) {
+            return true;
+        }
+
+        if (true === $this->request->getParam('address_reset')) {
             return true;
         }
 

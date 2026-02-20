@@ -22,8 +22,8 @@ class RequiredValidator implements ValidatorInterface
             return true;
         }
 
-        if (true === $this->request->getParam('address_reset')) {
-            return true;
+        if (true === $this->request->getParam('skip_validation')) {
+            return true; // @todo: Set this flag in an internal place only
         }
 
         if ($this->isEmpty->execute($component, $value)) {

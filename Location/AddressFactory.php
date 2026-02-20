@@ -3,7 +3,7 @@
 namespace Loki\Components\Location;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Quote\Api\Data\AddressInterface;
+use Magento\Quote\Model\Quote\Address as QuoteAddress;
 
 class AddressFactory
 {
@@ -61,7 +61,7 @@ class AddressFactory
         return $this->addressParserComposite->parse($address);
     }
 
-    public function createFromQuoteAddress(AddressInterface $quoteAddress): Address
+    public function createFromQuoteAddress(QuoteAddress $quoteAddress): Address
     {
         return $this->create(
             street:  (string)$quoteAddress->getStreetLine(1),

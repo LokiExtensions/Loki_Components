@@ -36,6 +36,7 @@ class LocalMessage implements JsonSerializable
         ];
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
         return $this->toArray();

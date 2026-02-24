@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.45] - 24 February 2026
+### Fixed
+- Add re-usable ComponentContextMock for unit tests
+- Surpress required-errors on next step
+- Fix PHPStan issue and PHP unit test
+
 ## [2.2.44] - 20 February 2026
 ### Fixed
 - Add `#[\ReturnTypeWillChange]` to allow for removal of `mixed` type hint

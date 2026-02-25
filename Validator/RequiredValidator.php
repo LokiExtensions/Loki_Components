@@ -27,7 +27,15 @@ class RequiredValidator implements ValidatorInterface
         }
 
         if ($this->isEmpty->execute($component, $value)) {
-            return [(string)__('Value is required')];
+            $errorMessage = (string)__('Value is required');
+            if ($component instanceof ComponentInterface) {
+                $requiredErrorMessage = trim((string)$component->getBlock()->getRequiredErrorMessage());
+                if (!empty($requiredErrorMessage)) {
+                    $errorMessage = $requiredErrorMessage;
+                }
+            }
+
+            return [$errorMessage];
         }
 
         return true;

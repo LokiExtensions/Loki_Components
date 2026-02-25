@@ -27,6 +27,7 @@ if ($interval < 10) {
     const LokiAjaxQueue = {
         requests: [],
         interval: <?= (int)$interval ?>,
+        loading: false,
         add(component, update) {
             this.requests.push({
                 component,
@@ -37,6 +38,10 @@ if ($interval < 10) {
             setInterval(async () => {
                 this.post();
             }, this.interval);
+        },
+        setLoading(loading) {
+            this.loading = loading;
+            document.dispatchEvent(new CustomEvent('loki-components.ajax.loading', {detail: loading}));
         },
         async post() {
             if (!this.requests.length > 0) {
@@ -53,6 +58,7 @@ if ($interval < 10) {
                 request.component.beforePost();
             });
 
+            this.setLoading(true);
             this.requests = [];
 
             await fetch('<?= $escaper->escapeUrl($componentUtil->getPostUrl(
@@ -92,6 +98,8 @@ if ($interval < 10) {
                     requests.forEach(request => {
                         request.component.afterPostFinally();
                     });
+
+                    this.setLoading(false);
                 });
         },
         getPostHeaders() {

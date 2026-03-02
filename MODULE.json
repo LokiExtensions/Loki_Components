@@ -31,5 +31,9 @@
             "description": "When debugging is enabled, on various levels, detailed information comes available. For instance, in the browser Error Console, more debugging messages are displayed, allowing you to inspect issues on the JavaScript level. Whenever an exception occurs within the AJAX call, the exception message is appended to the AJAX output."
         }
     ],
-    "tests": []
+    "tests": {
+        "unit": 18,
+        "integration": 13,
+        "functional": 0
+    }
 }

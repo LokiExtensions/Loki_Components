@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.46] - 02 March 2026
+### Fixed
+- Allow required error-message to be configured via block arg `required_error_message`
+- Allow monitoring the AJAX queue via event `loki-components.ajax.loading`
+
 ## [2.2.45] - 24 February 2026
 ### Fixed
 - Add re-usable ComponentContextMock for unit tests

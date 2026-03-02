@@ -5,6 +5,7 @@
         "Magento_Backend",
         "Magento_Config",
         "Magento_Customer",
+        "Magento_Quote",
         "Magento_Store",
         "Yireo_CspUtilities"
     ],
@@ -17,6 +18,7 @@
         "Magento_Customer",
         "Magento_Directory",
         "Magento_Eav",
+        "Magento_Quote",
         "Magento_Store",
         "Magento_Theme",
         "Yireo_CspUtilities"
@@ -26,7 +28,7 @@
     ],
     "config": [
         {
-            "path": "loki_components/general/debug",
+            "path": "loki_components\/general\/debug",
             "label": "Generic settings > Debug",
             "description": "When debugging is enabled, on various levels, detailed information comes available. For instance, in the browser Error Console, more debugging messages are displayed, allowing you to inspect issues on the JavaScript level. Whenever an exception occurs within the AJAX call, the exception message is appended to the AJAX output."
         }
@@ -35,7 +37,5 @@
         "unit": 18,
         "integration": 13,
         "functional": 0
-    },
-    "phpcs_severity": "9",
-    "phpstan_level": "3"
+    }
 }

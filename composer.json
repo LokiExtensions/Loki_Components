@@ -7,7 +7,7 @@
     ],
     "type": "magento2-module",
     "require": {
-       "ext-json": "*",
+        "ext-json": "*",
         "ext-pcre": "*",
         "laminas/laminas-http": "^2.23",
         "loki/magento2-base": "^1.1",

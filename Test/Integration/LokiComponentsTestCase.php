@@ -199,20 +199,20 @@ class LokiComponentsTestCase extends AbstractController
         $this->assertStringContainsString($string, $this->getResponseBody());
     }
 
-    protected function existsComponentOnPage(ComponentInterface $component
-    ): bool {
-        $elementId = $this->getObjectManager()->get(IdConvertor::class)
-            ->toElementId($component->getName());
+    protected function existsOnPage(string $match): bool
+    {
         $body = $this->getResponseBody();
-        if (false === str_contains($body, ' id="'.$elementId.'"')) {
+        return str_contains($body, $match);
+    }
+
+    protected function existsComponentOnPage(ComponentInterface $component): bool
+    {
+        $elementId = $this->getObjectManager()->get(IdConvertor::class)->toElementId($component->getName());
+        if (false === $this->existsOnPage(' id="'.$elementId.'"')) {
             return false;
         }
 
-        if (str_contains(
-            $body,
-            'Not rendered: '.$component->getName().' '
-        )
-        ) {
+        if ($this->existsOnPage('Not rendered: '.$component->getName().' ')) {
             return false;
         }
 

@@ -18,6 +18,7 @@ class ComponentViewModel implements ComponentViewModelInterface
     protected ?AbstractBlock $block = null;
     protected bool $lazyLoad = false;
     protected bool $lazyUpdate = false;
+    protected int $lazyUpdateTimeout = 0;
     protected bool $allowRendering = true;
     protected bool $visible = true;
     protected bool $skipValidation = false;
@@ -176,11 +177,23 @@ class ComponentViewModel implements ComponentViewModelInterface
         if ($this->hasBlock()) {
             $lazyUpdate = $this->getBlock()->getLazyUpdate();
             if (is_bool($lazyUpdate)) {
-                return $lazyUpdate;
+                return (bool)$lazyUpdate;
             }
         }
 
         return $this->lazyUpdate;
+    }
+
+    public function getLazyUpdateTimeout(): int
+    {
+        if ($this->hasBlock()) {
+            $lazyUpdateTimeout = $this->getBlock()->getLazyUpdateTimeout();
+            if (is_numeric($lazyUpdateTimeout)) {
+                return (int)$lazyUpdateTimeout;
+            }
+        }
+
+        return $this->lazyUpdateTimeout;
     }
 
     public function isAllowRendering(): bool
@@ -201,6 +214,7 @@ class ComponentViewModel implements ComponentViewModelInterface
             ...(array)$jsDataFromBlock,
             'lazyLoad' => $this->isLazyLoad(),
             'lazyUpdate' => $this->isLazyUpdate(),
+            'lazyUpdateTimeout' => $this->getLazyUpdateTimeout(),
             'value' => $this->getValue(),
             'messages' => $this->getMessages(),
             'messageArea' => $this->getMessageArea(),

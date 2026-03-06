@@ -1,0 +1,71 @@
+<?php declare(strict_types=1);
+
+use Loki\Components\Util\ComponentUtil;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Loki\Components\Config\Config;
+use Loki\Components\Factory\ViewModelFactory;
+
+/** @var Template $block */
+/** @var ViewModelFactory $viewModelFactory */
+/** @var Config $config */
+/** @var Config $componentUtil */
+/** @var ComponentUtil $componentUtil */
+/** @var Escaper $escaper */
+
+$config = $viewModelFactory->create(Config::class);
+$componentUtil = $viewModelFactory->create(ComponentUtil::class);
+$interval = $this->getPollingInterval();
+if ($interval < 500) {
+    return;
+}
+?>
+<script>
+    (() => {
+        setInterval(() => {
+            fetch('<?= $escaper->escapeUrl($componentUtil->getPollingUrl()) ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
+                method: 'GET',
+                headers: {
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'Content-Type': 'application/json'
+                },
+            })
+                .then(response => {
+                    if (response.ok) {
+                        return response.text()
+                    }
+
+                    LokiComponentsLogger.error('Fetch error', response);
+                    throw new Error(response.statusText);
+                })
+                .then(html => {
+                    try {
+                        const data = JSON.parse(html);
+                        if (data) {
+                            data.forEach(dataPart => {
+                                if (dataPart.message) {
+                                    const messageType = dataPart.messageType ?? 'notice';
+                                    Alpine.store('Message').addMessage(messageType, dataPart.message);
+                                }
+
+                                if (dataPart.redirectUrl) {
+                                    if (dataPart.redirectMessage) {
+                                        Alpine.store('Message').addWarningMessage(dataPart.redirectMessage);
+                                    }
+
+                                    const seconds = 3;
+                                    setTimeout(() => {
+                                        window.location = dataPart.redirectUrl;
+                                    }, seconds * 1000)
+                                }
+                            });
+                        }
+                    } catch (e) {
+                    }
+                })
+                .catch(error => {
+                    Alpine.store('Message').addErrorMessage(error);
+                });
+        }, <?= $interval ?>);
+    })();
+</script>

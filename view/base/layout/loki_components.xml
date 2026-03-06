@@ -14,6 +14,10 @@
 
         <referenceBlock name="loki.script">
             <block
+                name="loki-components.script.polling"
+                template="Loki_Components::script/polling.phtml"/>
+
+            <block
                 name="loki-components.script.logger"
                 template="Loki_Components::script/logger.phtml"/>
 

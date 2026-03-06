@@ -63,6 +63,11 @@ class ComponentUtil implements ArgumentInterface
         return $this->urlFactory->create()->getUrl('loki_components/index/html');
     }
 
+    public function getPollingUrl(): string
+    {
+        return $this->urlFactory->create()->getUrl('loki_components/index/polling');
+    }
+
     public function getFormHtml(AbstractBlock $block): string
     {
         /** @var AbstractBlock $formBlock */

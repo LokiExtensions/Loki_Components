@@ -22,6 +22,17 @@
                     <tooltip>When debugging is enabled, on various levels, detailed information comes available. For instance, in the browser Error Console, more debugging messages are displayed, allowing you to inspect issues on the JavaScript level. Whenever an exception occurs within the AJAX call, the exception message is appended to the AJAX output.</tooltip>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
+                <field id="polling_interval"
+                       translate="label"
+                       type="text"
+                       sortOrder="1"
+                       showInDefault="1"
+                       showInWebsite="1"
+                       showInStore="0">
+                    <label>Polling Interval</label>
+                    <tooltip>If you have added polling handlers, set this to an interval with which you want those polling handlers to act.</tooltip>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                </field>
             </group>
         </section>
     </system>

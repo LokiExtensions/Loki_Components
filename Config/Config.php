@@ -13,6 +13,14 @@ class Config implements ArgumentInterface
     ) {
     }
 
+    public function getPollingInterval(): int
+    {
+        return (int)$this->scopeConfig->getValue(
+            'loki_components/general/polling_interval',
+            ScopeInterface::SCOPE_STORE
+        );
+    }
+
     public function isDebug(): bool
     {
         return (bool)$this->scopeConfig->getValue(

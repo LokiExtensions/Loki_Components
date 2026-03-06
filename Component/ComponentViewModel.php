@@ -19,6 +19,7 @@ class ComponentViewModel implements ComponentViewModelInterface
     protected bool $lazyLoad = false;
     protected bool $lazyUpdate = false;
     protected int $lazyUpdateTimeout = 0;
+    protected bool $skipQueue = false;
     protected bool $allowRendering = true;
     protected bool $visible = true;
     protected bool $skipValidation = false;
@@ -215,11 +216,24 @@ class ComponentViewModel implements ComponentViewModelInterface
             'lazyLoad' => $this->isLazyLoad(),
             'lazyUpdate' => $this->isLazyUpdate(),
             'lazyUpdateTimeout' => $this->getLazyUpdateTimeout(),
+            'skipQueue' => $this->isSkipQueue(),
             'value' => $this->getValue(),
             'messages' => $this->getMessages(),
             'messageArea' => $this->getMessageArea(),
             'valid' => $this->isValid(),
             'skipValidation' => $this->skipValidation,
         ];
+    }
+
+    public function isSkipQueue(): bool
+    {
+        if ($this->hasBlock()) {
+            $skipQueue = $this->getBlock()->getSkipQueue();
+            if (is_bool($skipQueue)) {
+                return (bool)$skipQueue;
+            }
+        }
+
+        return $this->skipQueue;
     }
 }

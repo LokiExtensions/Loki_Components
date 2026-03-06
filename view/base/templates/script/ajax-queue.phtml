@@ -20,7 +20,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 
 $interval = (int)$block->getInterval();
 if ($interval < 10) {
-    $interval = 50;
+    $interval = 40;
 }
 ?>
 <script>
@@ -29,6 +29,11 @@ if ($interval < 10) {
         interval: <?= (int)$interval ?>,
         loading: false,
         add(component, update) {
+            if (component.skipQueue) {
+                this.post([{component, update}]);
+                return;
+            }
+
             this.requests.push({
                 component,
                 update,
@@ -42,14 +47,14 @@ if ($interval < 10) {
         },
         run() {
             setInterval(async () => {
-                this.post();
+                await this.postQueue();
             }, this.interval);
         },
         setLoading(loading) {
             this.loading = loading;
             document.dispatchEvent(new CustomEvent('loki-components.ajax.loading', {detail: loading}));
         },
-        async post() {
+        async postQueue() {
             if (!this.requests.length > 0) {
                 return;
             }
@@ -64,8 +69,11 @@ if ($interval < 10) {
                 request.component.beforePost();
             });
 
-            this.setLoading(true);
             this.requests = [];
+            this.post(requests);
+        },
+        async post(requests) {
+            this.setLoading(true);
 
             await fetch('<?= $escaper->escapeUrl($componentUtil->getPostUrl(
             )) ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {

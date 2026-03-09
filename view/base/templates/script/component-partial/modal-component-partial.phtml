@@ -11,7 +11,6 @@ use Magento\Framework\View\Element\Template;
     const LokiModalComponentPartial = {
         modalOpen: false,
         initModalClosing() {
-
             this.$watch('modalOpen', (modalOpen) => {
                 if (false === modalOpen) {
                     this.$refs.modal.close();
@@ -31,6 +30,11 @@ use Magento\Framework\View\Element\Template;
                 if (!modal) {
                     return;
                 }
+
+                modal.addEventListener("cancel", (event) => {
+                    this.modalOpen = false;
+                    event.preventDefault();
+                });
 
                 modal.addEventListener('click', (event) => {
                     if (event.target === modal) {

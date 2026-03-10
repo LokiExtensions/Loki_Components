@@ -6,13 +6,11 @@ use Loki\Components\Util\Block\GetElementId;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Util\CamelCaseConvertor;
-use Loki\Components\Util\ComponentUtil;
 use Loki\Components\Util\IdConvertor;
 
 class JsDataProvider implements ArgumentInterface
 {
     public function __construct(
-        private readonly ComponentUtil $componentUtil,
         private readonly GetElementId $getElementId,
         private readonly IdConvertor $idConvertor,
         private readonly CamelCaseConvertor $camelCaseConvertor,

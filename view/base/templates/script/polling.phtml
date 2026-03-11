@@ -66,6 +66,6 @@ if ($interval < 500) {
                 .catch(error => {
                     Alpine.store('Message').addErrorMessage(error);
                 });
-        }, <?= $interval ?>);
+        }, <?= $escaper->escapeHtml($interval) ?>);
     })();
 </script>

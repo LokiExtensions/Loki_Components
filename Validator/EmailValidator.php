@@ -10,7 +10,7 @@ class EmailValidator implements ValidatorInterface
     {
         $email = trim((string)$value);
 
-        if ($email === '' || $email === '0') {
+        if (strlen($email) === 0) {
             return true;
         }
 

@@ -28,7 +28,7 @@ if ($interval < 10) {
         requests: [],
         interval: <?= (int)$interval ?>,
         loading: false,
-        activeElement: false,
+        activeElementId: false,
         add(component, update) {
             if (component.skipQueue) {
                 this.post([{component, update}]);
@@ -49,7 +49,9 @@ if ($interval < 10) {
         run() {
             document.addEventListener('focusin', (e) => {
                 if (['input', 'textarea', 'select'].includes(e.target.tagName.toLowerCase())) {
-                    this.activeElement = e.target;
+                    if (e.target.id) {
+                        this.activeElementId = e.target.id;
+                    }
                 }
             });
 
@@ -205,9 +207,8 @@ if ($interval < 10) {
                 });
             });
 
-            if (this.activeElement) {
-                console.log('active element', this.activeElement);
-                this.activeElement.focus();
+            if (this.activeElementId) {
+                document.getElementById(this.activeElementId).focus();
             }
         }
     };

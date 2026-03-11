@@ -212,6 +212,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             return;
         }
 
-        $this->messageManager->addErrorMessage($exception->getMessage());
+        $this->messageManager->addErrorMessage(__($exception->getMessage()));
     }
 }

@@ -28,6 +28,7 @@ if ($interval < 10) {
         requests: [],
         interval: <?= (int)$interval ?>,
         loading: false,
+        activeElement: false,
         add(component, update) {
             if (component.skipQueue) {
                 this.post([{component, update}]);
@@ -46,6 +47,12 @@ if ($interval < 10) {
             }
         },
         run() {
+            document.addEventListener('focusin', (e) => {
+                if (['input', 'textarea', 'select'].includes(e.target.tagName.toLowerCase())) {
+                    this.activeElement = e.target;
+                }
+            });
+
             setInterval(async () => {
                 await this.postQueue();
             }, this.interval);
@@ -197,6 +204,11 @@ if ($interval < 10) {
                     Alpine.initTree(targetElement);
                 });
             });
+
+            if (this.activeElement) {
+                console.log('active element', this.activeElement);
+                this.activeElement.focus();
+            }
         }
     };
 

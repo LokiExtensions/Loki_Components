@@ -15,7 +15,7 @@ use Loki\Components\Factory\ViewModelFactory;
 
 $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
-$interval = $this->getPollingInterval();
+$interval = $block->getPollingInterval();
 if ($interval < 500) {
     return;
 }

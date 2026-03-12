@@ -208,7 +208,10 @@ if ($interval < 10) {
             });
 
             if (this.activeElementId) {
-                document.getElementById(this.activeElementId).focus();
+                const activeElement = document.getElementById(this.activeElementId);
+                if (activeElement) {
+                    activeElement.focus();
+                }
             }
         }
     };

@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.48] - 12 March 2026
+### Fixed
+- Skip activeElement for focussing if it does not exist
+
 ## [2.2.47] - 12 March 2026
 ### Fixed
 - Improve autofocus behaviour

@@ -4,6 +4,7 @@ on: ['push', 'pull_request']
 jobs:
   compile:
     name: Magento 2 DI compilation
+    #runs-on: self-hosted
     runs-on: ubuntu-latest
     strategy:
       matrix:

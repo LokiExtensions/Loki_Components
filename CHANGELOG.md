@@ -6,6 +6,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.47] - 12 March 2026
+### Fixed
+- Improve autofocus behaviour
+- Allow for more translations
+- Make sure to read `polling_interval` from block
+- Rewrite email validator logic to be more readable
+- Do not set an interval but a timeout for lazyUpdateTimeout
+- Set default lazyUpdateTimeout of 0 in JS as well
+- Make sure that modalOpen is used when closing modal via ESC
+- Add optional polling behaviour
+- Allow for component to skip queue
+- Allow lazy updates to be submitted after timeout
+- Add simple helper functions for matching strings in body
+- Allow older versions of psr/log
+- Lower requirement of Laminas to laminas/laminas-http
+
 ## [2.2.46] - 02 March 2026
 ### Fixed
 - Allow required error-message to be configured via block arg `required_error_message`

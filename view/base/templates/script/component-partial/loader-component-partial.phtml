@@ -16,6 +16,9 @@ if (false === $showLoaderTimeout > 0) {
         loading: false,
         showLoader: false,
         showLoaderTimeout: <?= (int)$showLoaderTimeout ?>,
+        loaderOverlayCss() {
+            return this.showLoader ? 'flex' : '';
+        },
         setLoadingStateToElement(elementId, loadingState) {
             const element = document.getElementById(elementId);
             if (!element) {

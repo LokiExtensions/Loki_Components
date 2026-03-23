@@ -26,7 +26,7 @@ class BlockRenderer extends AbstractRenderer
             throw new RuntimeException((string)__('No block found with name "%1"', $blockName));
         }
 
-        $this->populateBlock($block, $data);
+        $this->populateBlock($block, $data, $ancestorBlock);
 
         if ($block instanceof Template && false === strlen($block->getTemplate()) > 0) {
             throw new RuntimeException((string)__('No template found with block "%1"', $blockName));

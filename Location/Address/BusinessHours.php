@@ -2,39 +2,49 @@
 
 namespace Loki\Components\Location\Address;
 
+use JsonSerializable;
+use Loki\Components\Location\Address\BusinessHour\Day;
+use Loki\Components\Location\Address\BusinessHour\DayFactory;
 use Magento\Framework\DataObject;
 
-class BusinessHours extends DataObject
+class BusinessHours extends DataObject implements JsonSerializable
 {
-    private array $businessHourSegments = [];
+    private array $days = [];
 
     public function __construct(
-        private readonly BusinessHourSegmentFactory $businessHourSegmentFactory,
+        private readonly DayFactory $dayFactory,
         array $data = [],
     ) {
         parent::__construct($data);
     }
 
-    public function addSegment(BusinessHourSegment $businessHourSegment): void
+    public function addDay(Day $day): void
     {
-        $this->businessHourSegments[] = $businessHourSegment;
+        $this->days[] = $day;
     }
 
-    public function add(string $day, string $openingHour = '', string $closingHour = '', string $comment = ''): void
+    public function createDay(string $day, array $dayParts = [], string $comment = ''): Day
     {
-        $this->businessHourSegments[] = $this->businessHourSegmentFactory->create([
-            'day' => $day,
-            'openingHour' => $openingHour,
-            'closingHour' => $closingHour,
+        return $this->dayFactory->create([
+            'label' => $day,
+            'dayParts' => $dayParts,
             'comment' => $comment,
         ]);
     }
 
     /**
-     * @return BusinessHourSegment[]
+     * @return Day[]
      */
-    public function get(): array
+    public function getDays(): array
     {
-        return $this->businessHourSegments;
+        return $this->days;
+    }
+
+    public function jsonSerialize(): mixed
+    {
+        return [
+            'days' => $this->getDays(),
+            'data' => $this->getData(),
+        ];
     }
 }

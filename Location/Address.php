@@ -172,9 +172,18 @@ class Address extends DataObject
         return $this->addressRenderer->getLine($this);
     }
 
-    public function getInnerHtml(): string
+    public function getAddressHtml(): string
     {
         return $this->addressRenderer->getHtml($this);
+    }
+
+    /**
+     * @deprecated Use getAddressHtml()
+     * @return string
+     */
+    public function getInnerHtml(): string
+    {
+        return $this->getAddressHtml();
     }
 
     public function getCompany(): string
@@ -230,5 +239,40 @@ class Address extends DataObject
     public function getVatId(): string
     {
         return $this->vatId;
+    }
+
+    public function getAttributes(): array
+    {
+        $attributes = [
+            'street' => $this->getStreet(),
+            'houseNumber' => $this->getHouseNumber(),
+            'houseNumberAddition' => $this->getHouseNumberAddition(),
+            'postcode' => $this->getPostcode(),
+            'city' => $this->getCity(),
+            'region' => $this->getRegion(),
+            'countryId' => $this->getCountryId(),
+            'latitude' => $this->getLatitude(),
+            'longitude' => $this->getLongitude(),
+            'vatId' => $this->getVatId(),
+            'comment' => $this->getComment(),
+            'company' => $this->getCompany(),
+            'prefix' => $this->getPrefix(),
+            'firstname' => $this->getFirstname(),
+            'middlename' => $this->getMiddlename(),
+            'lastname' => $this->getLastname(),
+            'suffix' => $this->getSuffix(),
+            'fax' => $this->getFax(),
+            'telephone' => $this->getTelephone(),
+            'addressLine' => $this->getAddressLine(),
+            'addressHtml' => $this->getAddressHtml(),
+        ];
+
+        return $attributes;
+    }
+
+    #[\ReturnTypeWillChange]
+    public function jsonSerialize(): mixed
+    {
+        return $this->getAttributes();
     }
 }

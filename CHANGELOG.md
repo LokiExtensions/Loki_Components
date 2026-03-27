@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.50] - 27 March 2026
+### Fixed
+- Split up BusinessHours into smaller entities Day and DayPart
+- Sanitize ValueObjects like Address, BusinessHours, Location
+- Allow properties of ancestor block to populate child block
+
 ## [2.2.49] - 17 March 2026
 ### Fixed
 - Do not set `flex` CSS class on loader when it is hidden (fixing Breeze issue)

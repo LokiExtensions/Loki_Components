@@ -40,6 +40,7 @@ class BusinessHours extends DataObject implements JsonSerializable
         return $this->days;
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
         return [

@@ -29,6 +29,7 @@ class DayPart extends DataObject implements \JsonSerializable
         return $this->closingHour;
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
         return [

@@ -45,6 +45,7 @@ class Day extends DataObject implements JsonSerializable
         return (string)__($this->comment);
     }
 
+    #[\ReturnTypeWillChange]
     public function jsonSerialize(): mixed
     {
         return [

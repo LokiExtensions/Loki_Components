@@ -243,7 +243,7 @@ class Address extends DataObject
 
     public function getAttributes(): array
     {
-        $attributes = [
+        return [
             'street' => $this->getStreet(),
             'houseNumber' => $this->getHouseNumber(),
             'houseNumberAddition' => $this->getHouseNumberAddition(),
@@ -266,8 +266,6 @@ class Address extends DataObject
             'addressLine' => $this->getAddressLine(),
             'addressHtml' => $this->getAddressHtml(),
         ];
-
-        return $attributes;
     }
 
     #[\ReturnTypeWillChange]

@@ -65,7 +65,7 @@ class Location extends DataObject implements JsonSerializable
     public function getAttributes(): array
     {
         $attributes = [
-            'address' => $this->getAddress(),
+            ...$this->getAddress()->getAttributes(),
             'id' => $this->getId(),
             'label' => $this->getLabel(),
             'value' => $this->getValue(),

@@ -4,7 +4,6 @@ on: ['push', 'pull_request']
 jobs:
   compile:
     name: Magento 2 DI compilation
-    #runs-on: self-hosted
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -18,6 +17,8 @@ jobs:
       - name: Configure Yireo GitLab
         run: |
           test -n "${{ secrets.GITLAB_TOKEN }}" || exit 0
+          source ${GITHUB_WORKSPACE}/.module.ini
+          grep -q SKIP_MAGENTO_VERSIONS .module.ini && [[ " ${SKIP_MAGENTO_VERSIONS[*]} " == *" $MAGENTO_VERSION "* ]] && exit 0
           cd /tmp/magento
           ls ${GITHUB_WORKSPACE}
           test -f ${GITHUB_WORKSPACE}/.github/workflows/composer-additional.sh && source ${GITHUB_WORKSPACE}/.github/workflows/composer-additional.sh

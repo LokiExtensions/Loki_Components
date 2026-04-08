@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.52] - 08 April 2026
+### Fixed
+- Merge all JS attributes of Address into Location
+
 ## [2.2.51] - 28 March 2026
 ### Fixed
 - Add ReturnTypeWillChange to jsonSerialize to fix 2.4.5 compile issue

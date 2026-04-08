@@ -4,7 +4,6 @@ on: ['push', 'pull_request']
 jobs:
   integration-tests:
     name: Magento 2 Integration Tests
-    #runs-on: self-hosted
     runs-on: ubuntu-latest
     container:
       image: yireo/magento2installed:2.4.8-p3

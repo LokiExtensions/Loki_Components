@@ -71,21 +71,33 @@ jobs:
         with:
           fetch-depth: 1
 
+      - name: Detecting Playwright tests
+        run: |
+          test -d $GITHUB_WORKSPACE/Test/Playwright || exit 0
+
+      - name: Setting up module variables
+        run: |
+          echo COMPOSER_NAME=`jq '.name' composer.json -r` >> $GITHUB_ENV
+          echo MAGENTO_MODULE=`jq '.module_name' MODULE.json -r` >> $GITHUB_ENV
+
+      - name: Configure Yireo GitLab
+        run: |
+          test -n "${{ secrets.GITLAB_TOKEN }}" || exit 0
+          cd /tmp/magento
+          composer config gitlab-domains gitlab.yireo.com
+          composer config --global --auth http-basic.gitlab.yireo.com yireo "${GITLAB_TOKEN}"
+          composer config repositories.loki-third-party composer https://gitlab.yireo.com/api/v4/group/loki-third-party/-/packages/composer/packages.json
+          composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
+
       - name: Run Magento Playwright setup and tests
         shell: bash
         run: |
           cd "$GITHUB_WORKSPACE"
-          source .module.ini
-
           cd /tmp/magento
 
           test -f "$GITHUB_WORKSPACE/.github/workflows/composer-additional.sh" && source "$GITHUB_WORKSPACE/.github/workflows/composer-additional.sh"
           test -f "$GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh" && source "$GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh"
 
-          composer config gitlab-domains gitlab.yireo.com
-          composer config --global --auth http-basic.gitlab.yireo.com yireo "${GITLAB_TOKEN}"
-          composer config repositories.loki-third-party composer https://gitlab.yireo.com/api/v4/group/loki-third-party/-/packages/composer/packages.json
-          composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
           composer config repositories.local-source path "$GITHUB_WORKSPACE"
           composer require --prefer-source -- "${COMPOSER_NAME}:@dev" loki-checkout/magento2-functional-tests:@dev yireo/magento2-enable-module-sequence
 
@@ -93,7 +105,7 @@ jobs:
 
           bin/magento module:enable Yireo_EnableModuleSequence
           bin/magento module:sequence LokiCheckout_FunctionalTests
-          bin/magento module:sequence "${EXTENSION_VENDOR}_${EXTENSION_NAME}"
+          bin/magento module:sequence "${MAGENTO_MODULE}"
           bin/magento setup:upgrade
 
           magerun2 config:store:set loki_functional_tests/general/token loki -n
@@ -107,4 +119,4 @@ jobs:
           echo "TEST_URL=${MAGENTO_BASE_URL}" >> .env
           echo "TEST_TOKEN=loki" >> .env
 
-          npx playwright test --project="${EXTENSION_VENDOR}_${EXTENSION_NAME}"
+          npx playwright test --project="${MAGENTO_MODULE}"

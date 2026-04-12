@@ -112,9 +112,6 @@ jobs:
       - name: Prepare Magento Playwright setup
         if: env.SKIP_JOB != 'true'
         uses: docker://mcr.microsoft.com/playwright:v1.57.0-noble
-        env:
-          MAGENTO_MODULE: ${{ env.MAGENTO_MODULE }}
-          MAGENTO_BASE_URL: ${{ env.MAGENTO_BASE_URL }}
         with:
           args: >
             bash -lc "
@@ -122,8 +119,6 @@ jobs:
               npm install
               npx playwright install
               touch .env
-              echo $MAGENTO_BASE_URL
-              echo $MAGENTO_MODULE
               echo TEST_URL=$MAGENTO_BASE_URL >> .env
               echo TEST_TOKEN=loki >> .env
               npx playwright test --project=$MAGENTO_MODULE

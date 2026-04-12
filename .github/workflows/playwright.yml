@@ -112,6 +112,9 @@ jobs:
       - name: Prepare Magento Playwright setup
         if: env.SKIP_JOB != 'true'
         uses: docker://mcr.microsoft.com/playwright:v1.57.0-noble
+        env:
+          MAGENTO_MODULE: ${{ env.MAGENTO_MODULE }}
+          MAGENTO_BASE_URL: ${{ env.MAGENTO_BASE_URL }}
         with:
           args: >
             bash -lc "

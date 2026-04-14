@@ -85,8 +85,8 @@ jobs:
         if: env.SKIP_JOB != 'true'
         run: |
           cd "$GITHUB_WORKSPACE"
-          cp -R /tmp/magento $GITHUB_WORKSPACE/magento
-          cd $GITHUB_WORKSPACE/magento
+
+          cd /tmp/magento
 
           test -f "$GITHUB_WORKSPACE/.github/workflows/composer-additional.sh" && source "$GITHUB_WORKSPACE/.github/workflows/composer-additional.sh"
           test -f "$GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh" && source "$GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh"
@@ -96,6 +96,8 @@ jobs:
           composer require --prefer-source -- "${COMPOSER_NAME}:@dev" loki-checkout/magento2-core-cli:@dev loki-checkout/magento2-functional-tests:@dev yireo/magento2-enable-module-sequence
 
           $GITHUB_WORKSPACE/.github/workflows/magento-install.sh
+          cp -R /tmp/magento $GITHUB_WORKSPACE/magento
+          cd $GITHUB_WORKSPACE/magento
 
           bin/magento deploy:mode:set developer
           bin/magento module:enable Yireo_EnableModuleSequence

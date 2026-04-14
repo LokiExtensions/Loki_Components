@@ -94,6 +94,7 @@ jobs:
           test -f "$GITHUB_WORKSPACE/.github/workflows/composer-additional.sh" && source "$GITHUB_WORKSPACE/.github/workflows/composer-additional.sh"
           test -f "$GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh" && source "$GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh"
 
+          git config --global --add safe.directory /__w
           composer config repositories.local-source path "$GITHUB_WORKSPACE"
           composer require --prefer-source -- "${COMPOSER_NAME}:@dev" loki-checkout/magento2-core-cli:@dev loki-checkout/magento2-functional-tests:@dev yireo/magento2-enable-module-sequence
 
@@ -105,6 +106,7 @@ jobs:
           bin/magento module:sequence "${MAGENTO_MODULE}"
           bin/magento setup:upgrade
           bin/magento loki-checkout:modules:dump
+          cat app/etc/loki-checkout.json
 
           magerun2 config:store:set loki_functional_tests/general/token loki -n
           cp -R /tmp/magento $GITHUB_WORKSPACE/magento

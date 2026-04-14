@@ -84,8 +84,6 @@ jobs:
       - name: Prepare Magento Playwright setup
         if: env.SKIP_JOB != 'true'
         run: |
-          cd "$GITHUB_WORKSPACE"
-
           cd /tmp/magento
           git config --global --add safe.directory /__w/Loki_Components/Loki_Components
 
@@ -106,33 +104,31 @@ jobs:
           bin/magento loki-checkout:modules:dump
 
           magerun2 config:store:set loki_functional_tests/general/token loki -n
-          cp -R /tmp/magento $GITHUB_WORKSPACE/magento
-
-      #- name: Prepare Magento Playwright setup
-      #  if: env.SKIP_JOB != 'true'
-      #  run: |
-      #      docker run --rm --network host -v "$GITHUB_WORKSPACE:/work" -w /work \
-      #        docker://mcr.microsoft.com/playwright:v1.59.1-noble bash -lc "
-      #          cd /work/magento/vendor/loki-checkout/magento2-functional-tests/Test/Playwright/
-      #          npm install
-      #          touch .env
-      #          echo TEST_URL=$MAGENTO_BASE_URL >> .env
-      #          echo TEST_TOKEN=loki >> .env
-      #          MAGENTO_ROOT=/work/magento npx playwright test --project=$MAGENTO_MODULE
-      #          "
+          cp -R /tmp/magento $GITHUB_WORKSPACE/
 
       - name: Prepare Magento Playwright setup
         if: env.SKIP_JOB != 'true'
-        uses: docker://mcr.microsoft.com/playwright:v1.59.1-noble
-        with:
-          args: >
-            bash -lc "
-              cd $GITHUB_WORKSPACE/magento/vendor/loki-checkout/magento2-functional-tests/Test/Playwright/
-              cat $GITHUB_WORKSPACE/magento/app/etc/loki-checkout.json
-              npm install
-              #npx playwright install
-              touch .env
-              echo TEST_URL=http://localhost:8888 >> .env
-              echo TEST_TOKEN=loki >> .env
-              MAGENTO_ROOT=$GITHUB_WORKSPACE/magento npx playwright test --project=$MAGENTO_MODULE
-            "
+        run: |
+            docker run --rm --network host --ipc=host -v "$GITHUB_WORKSPACE:/work" -w /work \
+              mcr.microsoft.com/playwright:v1.59.1-noble bash -lc '
+                ls -al /work
+                cd /work/magento/vendor/loki-checkout/magento2-functional-tests/Test/Playwright/
+                npm install
+                printf "TEST_URL=http://127.0.0.1:8888\nTEST_TOKEN=loki\n" > .env
+                MAGENTO_ROOT=/work/magento npx playwright test --project=$MAGENTO_MODULE
+                '
+
+      #- name: Prepare Magento Playwright setup
+      #  if: env.SKIP_JOB != 'true'
+      #  uses: docker://mcr.microsoft.com/playwright:v1.59.1-noble
+      #  with:
+      #    args: >
+      #      bash -lc "
+      #        cd $GITHUB_WORKSPACE/magento/vendor/loki-checkout/magento2-functional-tests/Test/Playwright/
+      #        cat $GITHUB_WORKSPACE/magento/app/etc/loki-checkout.json
+      #        npm install
+      #        #npx playwright install
+      #        echo TEST_URL=http://localhost:8888 >> .env
+      #        echo TEST_TOKEN=loki >> .env
+      #        MAGENTO_ROOT=$GITHUB_WORKSPACE/magento npx playwright test --project=$MAGENTO_MODULE
+      #      "

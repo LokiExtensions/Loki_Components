@@ -19,7 +19,7 @@ mariadb -h"${MYSQL_HOST}" -P"${MYSQL_PORT}" -uroot -p"${MYSQL_ROOT_PASSWORD}" -e
 
 echo "Waiting for OpenSearch (${OPENSEARCH_HOST}:${OPENSEARCH_PORT})"
 ready=0
-for i in {1..60}; do
+for i in {1..120}; do
   if curl -s "http://${OPENSEARCH_HOST}:${OPENSEARCH_PORT}" | grep -q '"tagline"'; then
     echo "OK"
     ready=1

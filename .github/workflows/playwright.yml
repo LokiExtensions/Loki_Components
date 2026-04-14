@@ -97,6 +97,7 @@ jobs:
 
           $GITHUB_WORKSPACE/.github/workflows/magento-install.sh
 
+          bin/magento deploy:mode:set developer
           bin/magento module:enable Yireo_EnableModuleSequence
           bin/magento module:sequence LokiCheckout_FunctionalTests 
           bin/magento module:sequence LokiCheckout_CoreCli

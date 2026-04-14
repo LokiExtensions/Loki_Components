@@ -4,6 +4,8 @@ on: ['push', 'pull_request']
 jobs:
   playwright:
     runs-on: ubuntu-latest
+    container:
+      image: yireo/magento2playwright:2.4.8-p3
     
     env:
       GIT_DEPTH: 1
@@ -79,83 +81,41 @@ jobs:
           echo COMPOSER_NAME=`jq '.name' composer.json -r` >> $GITHUB_ENV
           echo MAGENTO_MODULE=`jq '.module_name' MODULE.json -r` >> $GITHUB_ENV
 
-      - name: Setup Magento in Docker
+      - name: Setup Magento
         if: env.SKIP_JOB != 'true'
         run: |
-          docker run --rm \
-            --network host \
-            -v "$GITHUB_WORKSPACE:/workspace" \
-            -w /workspace \
-            -e MAGENTO_BASE_URL="${MAGENTO_BASE_URL}" \
-            -e MAGENTO_BACKEND_FRONTNAME="${MAGENTO_BACKEND_FRONTNAME}" \
-            -e MAGENTO_ADMIN_FIRSTNAME="${MAGENTO_ADMIN_FIRSTNAME}" \
-            -e MAGENTO_ADMIN_LASTNAME="${MAGENTO_ADMIN_LASTNAME}" \
-            -e MAGENTO_ADMIN_EMAIL="${MAGENTO_ADMIN_EMAIL}" \
-            -e MAGENTO_ADMIN_USER="${MAGENTO_ADMIN_USER}" \
-            -e MAGENTO_ADMIN_PASSWORD="${MAGENTO_ADMIN_PASSWORD}" \
-            -e MAGENTO_LANGUAGE="${MAGENTO_LANGUAGE}" \
-            -e MAGENTO_CURRENCY="${MAGENTO_CURRENCY}" \
-            -e MAGENTO_TIMEZONE="${MAGENTO_TIMEZONE}" \
-            -e MAGENTO_USE_REWRITES="${MAGENTO_USE_REWRITES}" \
-            -e MAGENTO_SEARCH_ENGINE="${MAGENTO_SEARCH_ENGINE}" \
-            -e COMPOSER_ALLOW_SUPERUSER="${COMPOSER_ALLOW_SUPERUSER}" \
-            -e COMPOSER_MEMORY_LIMIT="${COMPOSER_MEMORY_LIMIT}" \
-            -e MYSQL_HOST="${MYSQL_HOST}" \
-            -e MYSQL_USER="${MYSQL_USER}" \
-            -e MYSQL_PASSWORD="${MYSQL_PASSWORD}" \
-            -e MYSQL_DATABASE="${MYSQL_DATABASE}" \
-            -e MYSQL_ROOT_PASSWORD="${MYSQL_ROOT_PASSWORD}" \
-            -e MYSQL_PORT="${MYSQL_PORT}" \
-            -e OPENSEARCH_HOST="${OPENSEARCH_HOST}" \
-            -e OPENSEARCH_PORT="${OPENSEARCH_PORT}" \
-            -e MAGENTO_VERSION="${MAGENTO_VERSION}" \
-            -e GITLAB_TOKEN="${GITLAB_TOKEN}" \
-            -e COMPOSER_NAME="${COMPOSER_NAME}" \
-            -e MAGENTO_MODULE="${MAGENTO_MODULE}" \
-            yireo/magento2playwright:2.4.8-p3 \
-            sh -c '
-              set -e
+          cd /tmp/magento
+          
+          if [ -n "${GITLAB_TOKEN}" ]; then
+            composer config gitlab-domains gitlab.yireo.com
+            composer config --global --auth http-basic.gitlab.yireo.com yireo "${GITLAB_TOKEN}"
+            composer config repositories.loki-third-party composer https://gitlab.yireo.com/api/v4/group/loki-third-party/-/packages/composer/packages.json
+            composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
+          fi
+          
+          test -f "$GITHUB_WORKSPACE/.github/workflows/composer-additional.sh" && source "$GITHUB_WORKSPACE/.github/workflows/composer-additional.sh"
+          test -f "$GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh" && source "$GITHUB_WORKSPACE/.github/workflows/composer-${MAGENTO_VERSION}.sh"
+          
+          composer config repositories.local-source "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"
+          composer require --prefer-source -- "${COMPOSER_NAME}:@dev" loki-checkout/magento2-core-cli:@dev loki-checkout/magento2-functional-tests:@dev yireo/magento2-enable-module-sequence
               
-              # Create Magento in /tmp first (fast on tmpfs)
-              cd /tmp/magento
+          $GITHUB_WORKSPACE/.github/workflows/magento-install.sh
+          
+          bin/magento deploy:mode:set developer
+          bin/magento module:enable Yireo_EnableModuleSequence
+          bin/magento module:sequence LokiCheckout_FunctionalTests
+          bin/magento module:sequence LokiCheckout_CoreCli
+          bin/magento module:sequence "${MAGENTO_MODULE}"
+          bin/magento setup:upgrade
+          bin/magento loki-checkout:modules:dump
               
-              if [ -n "${GITLAB_TOKEN}" ]; then
-                composer config gitlab-domains gitlab.yireo.com
-                composer config --global --auth http-basic.gitlab.yireo.com yireo "${GITLAB_TOKEN}"
-                composer config repositories.loki-third-party composer https://gitlab.yireo.com/api/v4/group/loki-third-party/-/packages/composer/packages.json
-                composer config repositories.loki-checkout composer https://gitlab.yireo.com/api/v4/group/loki-checkout/-/packages/composer/packages.json
-              fi
+          magerun2 config:store:set loki_functional_tests/general/token loki -n
               
-              # Run version-specific composer scripts if they exist
-              test -f "/workspace/.github/workflows/composer-additional.sh" && source "/workspace/.github/workflows/composer-additional.sh"
-              test -f "/workspace/.github/workflows/composer-${MAGENTO_VERSION}.sh" && source "/workspace/.github/workflows/composer-${MAGENTO_VERSION}.sh"
+          echo "Copying Magento to workspace..."
+          mkdir -p $GITHUB_WORKSPACE/magento/
+          cp -R /tmp/magento/* $GITHUB_WORKSPACE/magento/
               
-              # Add local module and dependencies
-              composer config repositories.local-source "{\"type\": \"path\", \"url\": \"/workspace\", \"options\": {\"symlink\": false}}"
-              composer require --prefer-source -- "${COMPOSER_NAME}:@dev" loki-checkout/magento2-core-cli:@dev loki-checkout/magento2-functional-tests:@dev yireo/magento2-enable-module-sequence
-              
-              # Install Magento
-              /workspace/.github/workflows/magento-install.sh
-              
-              # Configure Magento
-              bin/magento deploy:mode:set developer
-              bin/magento module:enable Yireo_EnableModuleSequence
-              bin/magento module:sequence LokiCheckout_FunctionalTests
-              bin/magento module:sequence LokiCheckout_CoreCli
-              bin/magento module:sequence "${MAGENTO_MODULE}"
-              bin/magento setup:upgrade
-              bin/magento loki-checkout:modules:dump
-              
-              # Set test token
-              magerun2 config:store:set loki_functional_tests/general/token loki -n
-              
-              # Copy to workspace (this is mounted from host, so it persists)
-              echo "Copying Magento to workspace..."
-              cp -R /tmp/magento/* /workspace/magento/
-              
-              echo "Magento setup complete"
-              ls -la /workspace/magento/
-            '
+          echo "Magento setup complete"
 
       - name: Verify Magento installation
         if: env.SKIP_JOB != 'true'
@@ -172,39 +132,21 @@ jobs:
           echo "GITHUB_WORKSPACE: $GITHUB_WORKSPACE"
           echo "MAGENTO_MODULE: $MAGENTO_MODULE"
           
-          # Run Playwright in its own container
-          docker run --rm \
-            --network host \
-            --ipc=host \
-            -v "$GITHUB_WORKSPACE:/work" \
-            -w /work \
-            -e MAGENTO_MODULE="${MAGENTO_MODULE}" \
-            mcr.microsoft.com/playwright:v1.59.1-noble \
-            bash -lc '
-              set -e
+          if [ ! -d "$GITHUB_WORKSPACE/magento" ]; then
+            echo "ERROR: magento directory not found"
+            exit 1
+          fi
               
-              echo "Playwright container started"
-              echo "Checking /work directory..."
-              ls -la /work/
+          echo "Navigating to Playwright test directory..."
+          cd $GITHUB_WORKSPACE/magento/vendor/loki-checkout/magento2-functional-tests/Test/Playwright/
               
-              if [ ! -d "/work/magento" ]; then
-                echo "ERROR: /work/magento directory not found"
-                exit 1
-              fi
+          echo "Installing npm dependencies..."
+          npm install
+          npx playwright install chromium
+          
+          echo "Creating .env file..."
+          printf "TEST_URL=http://127.0.0.1:8888\nTEST_TOKEN=loki\n" > .env
+          cat .env
               
-              echo "Magento directory found, contents:"
-              ls -la /work/magento/
-              
-              echo "Navigating to Playwright test directory..."
-              cd /work/magento/vendor/loki-checkout/magento2-functional-tests/Test/Playwright/
-              
-              echo "Installing npm dependencies..."
-              npm install
-              
-              echo "Creating .env file..."
-              printf "TEST_URL=http://127.0.0.1:8888\nTEST_TOKEN=loki\n" > .env
-              cat .env
-              
-              echo "Running Playwright tests for project: ${MAGENTO_MODULE}"
-              MAGENTO_ROOT=/work/magento npx playwright test --project=${MAGENTO_MODULE}
-            '
+          echo "Running Playwright tests for project: ${MAGENTO_MODULE}"
+          MAGENTO_ROOT=$GITWORK_WORKSPACE/magento npx playwright test --project=${MAGENTO_MODULE}

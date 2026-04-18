@@ -79,7 +79,7 @@ class ImageRenderer implements ArgumentInterface
         throw new RuntimeException('Unable to convert file into image URL: '.$imageFile);
     }
 
-    public function icon(AbstractBlock $block, string $iconId)
+    public function icon(AbstractBlock $block, string $iconId, array $attributes = [])
     {
         $this->block = $block;
         $iconSize = $this->getIconSize($iconId);
@@ -89,6 +89,7 @@ class ImageRenderer implements ArgumentInterface
             . '.svg';
 
         $attributes = [
+            ...$attributes,
             'width'  => $iconSize,
             'height' => $iconSize,
         ];

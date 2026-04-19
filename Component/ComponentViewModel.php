@@ -199,6 +199,13 @@ class ComponentViewModel implements ComponentViewModelInterface
 
     public function isAllowRendering(): bool
     {
+        if ($this->hasBlock()) {
+            $allowRendering = $this->getBlock()->getAllowRendering();
+            if (is_bool($allowRendering)) {
+                return $allowRendering;
+            }
+        }
+
         return $this->allowRendering;
     }
 

@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.53] - 22 April 2026
+### Fixed
+- Add message to RedirectException
+- Make sure LengthValidator also reads from `min` and `max`
+- Allow setting `allow_rendering` via XML layout
+- Allow for `icon()` to be passed HTML properties for SVG
+
 ## [2.2.52] - 08 April 2026
 ### Fixed
 - Merge all JS attributes of Address into Location

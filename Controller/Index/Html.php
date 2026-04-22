@@ -80,7 +80,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         try {
             $this->repositoryDispatcher->postDispatch($layout, $updates);
         } catch (RedirectException $redirectException) {
-            throw $redirectException;
             return $this->getJsonRedirect($redirectException);
         }
 

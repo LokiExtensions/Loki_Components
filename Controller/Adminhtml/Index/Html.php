@@ -21,7 +21,6 @@ use Loki\Components\Controller\HtmlResult;
 use Loki\Components\Controller\HtmlResultFactory;
 use Loki\Components\Exception\NoBlockFoundException;
 use Loki\Components\Exception\RedirectException;
-use Loki\Components\Messages\GlobalMessageRegistry;
 use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
 use Loki\Components\Util\Controller\RequestDataLoader;
@@ -39,7 +38,6 @@ class Html extends Action
         private readonly TargetRenderer $targetRenderer,
         private readonly HtmlResultFactory $htmlResultFactory,
         private readonly JsonResultFactory $jsonResultFactory,
-        private readonly GlobalMessageRegistry $globalMessageRegistry,
         private readonly Config $config,
         private readonly AppState $appState,
         private readonly LoggerInterface $logger,
@@ -68,7 +66,7 @@ class Html extends Action
                 $this->logger->critical($exception);
 
             } catch (RedirectException $redirectException) {
-                return $this->getJsonRedirect($redirectException->getMessage());
+                return $this->getJsonRedirect($redirectException);
 
             } catch (Exception $exception) {
                 $this->logger->critical($exception);
@@ -83,7 +81,7 @@ class Html extends Action
                     $data['targets']
                 );
             } catch (RedirectException $redirectException) {
-                return $this->getJsonRedirect($redirectException->getMessage());
+                return $this->getJsonRedirect($redirectException);
             }
 
         } else {
@@ -148,13 +146,18 @@ class Html extends Action
         return $htmlResult;
     }
 
-    private function getJsonRedirect(string $redirectUrl): JsonResult
+    private function getJsonRedirect(RedirectException $redirectException): JsonResult
     {
+        $message = $redirectException->getMessage();
+        if ($message) {
+            $this->messageManager->addErrorMessage($message);
+        }
+
         $json = $this->jsonResultFactory->create()->setData([
-            'redirect' => $redirectUrl,
+            'redirect' => $redirectException->getUrl(),
         ]);
 
-        $json->setHeader('X-Loki-Redirect', $redirectUrl);
+        $json->setHeader('X-Loki-Redirect', $redirectException->getUrl());
 
         return $json;
     }
@@ -177,6 +180,6 @@ class Html extends Action
             $error .= $exception->getTraceAsString();
         }
 
-        $this->globalMessageRegistry->addError($error);
+        $this->messageManager->addErrorMessage($error);
     }
 }

@@ -69,7 +69,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
                 $this->logger->critical($exception);
 
             } catch (RedirectException $redirectException) {
-                return $this->getJsonRedirect($redirectException->getMessage());
+                return $this->getJsonRedirect($redirectException);
 
             } catch (Exception $exception) {
                 $this->logger->critical($exception);
@@ -77,25 +77,28 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
             }
         }
 
-        $this->repositoryDispatcher->postDispatch($layout, $updates);
+        try {
+            $this->repositoryDispatcher->postDispatch($layout, $updates);
+        } catch (RedirectException $redirectException) {
+            throw $redirectException;
+            return $this->getJsonRedirect($redirectException);
+        }
 
+        $htmlParts = [];
         if ($this->allowRendering($data)) {
             try {
                 $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
 
             } catch (RedirectException $redirectException) {
-                return $this->getJsonRedirect($redirectException->getMessage());
+                return $this->getJsonRedirect($redirectException);
             }
-
-        } else {
-            $htmlParts = [];
         }
 
         return $this->getHtmlResult($htmlParts);
     }
 
     /**
-     * @param array           $updates
+     * @param array $updates
      * @param LayoutInterface $layout
      *
      * @return ComponentUpdate[]
@@ -162,15 +165,18 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         return $htmlResult;
     }
 
-    private function getJsonRedirect(string $redirectUrl): JsonResult
+    private function getJsonRedirect(RedirectException $redirectException): JsonResult
     {
+        $message = $redirectException->getMessage();
+        if ($message) {
+            $this->messageManager->addErrorMessage($message);
+        }
+
         $json = $this->jsonResultFactory->create()->setData([
-            'redirect' => $redirectUrl,
+            'redirect' => $redirectException->getUrl(),
         ]);
 
-        $json->setHeader('X-Loki-Redirect', $redirectUrl);
-
-        // @todo: Make sure messages sent to frontend are remembered
+        $json->setHeader('X-Loki-Redirect', $redirectException->getUrl());
 
         return $json;
     }

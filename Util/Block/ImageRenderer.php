@@ -83,10 +83,13 @@ class ImageRenderer implements ArgumentInterface
     {
         $this->block = $block;
         $iconSize = $this->getIconSize($iconId);
-        $imageId = $this->iconPrefix
-            . '/' . $this->iconSet
-            . '/' . $iconId
-            . '.svg';
+
+        if (preg_match('/^([A-Za-z0-9]+)::(.+)$/', $iconId)) {
+            $iconId = $this->iconPrefix
+                . '/' . $this->iconSet
+                . '/' . $iconId
+                . '.svg';
+        }
 
         $attributes = [
             ...$attributes,
@@ -94,11 +97,11 @@ class ImageRenderer implements ArgumentInterface
             'height' => $iconSize,
         ];
 
-        if ($this->isAssetId($imageId)) {
-            return $this->getByAssetId($imageId, $attributes);
+        if ($this->isAssetId($iconId)) {
+            return $this->getByAssetId($iconId, $attributes);
         }
 
-        return $this->getIconOutput($imageId, $attributes);
+        return $this->getIconOutput($iconId, $attributes);
     }
 
     public function getIconOutput(

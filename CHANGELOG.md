@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.54] - 04 May 2026
+### Fixed
+- Allow ImageRenderer::icon() to be passed full asset ID
+- Skip HTML attributes that wrongfully have an array-value
+
 ## [2.2.53] - 22 April 2026
 ### Fixed
 - Add message to RedirectException

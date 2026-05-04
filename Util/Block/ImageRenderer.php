@@ -177,6 +177,10 @@ class ImageRenderer implements ArgumentInterface
         );
 
         foreach ($attributes as $attributeName => $attributeValue) {
+            if (is_array($attributeValue)) {
+                continue;
+            }
+
             $existingAttribute = array_keys(iterator_to_array($svgElement->attributes()));
             if (in_array($attributeName, $existingAttribute)) {
                 $svgElement->attributes()->$attributeName = $attributeValue;

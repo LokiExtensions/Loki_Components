@@ -13,9 +13,9 @@ use Magento\Framework\View\Element\Template;
         initModalClosing() {
             this.$watch('modalOpen', (modalOpen) => {
                 if (false === modalOpen) {
-                    this.$refs.modal.close();
+                    this.$nextTick(() => this.$refs.modal.close());
                 } else {
-                    this.$refs.modal.showModal();
+                    this.$nextTick(() => this.$refs.modal.showModal());
                 }
             });
 

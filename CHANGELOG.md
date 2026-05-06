@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.56] - 06 May 2026
+### Fixed
+- When activeElement is not an input, set it to false
+- When focusing upon activeElement, jump to end of input value
+
 ## [2.2.55] - 06 May 2026
 ### Fixed
 - Add `remove_spaces` filter

@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.55] - 06 May 2026
+### Fixed
+- Add `remove_spaces` filter
+- Move references to modal to nextClick just to be sure
+
 ## [2.2.54] - 04 May 2026
 ### Fixed
 - Allow ImageRenderer::icon() to be passed full asset ID

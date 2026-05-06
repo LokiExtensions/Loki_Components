@@ -58,6 +58,7 @@
             <argument name="filters" xsi:type="array">
                 <item name="security" xsi:type="object">Loki\Components\Filter\Security</item>
                 <item name="trim" xsi:type="object">Loki\Components\Filter\Trim</item>
+                <item name="remove_spaces" xsi:type="object">Loki\Components\Filter\RemoveSpaces</item>
                 <item name="capitalize" xsi:type="object">Loki\Components\Filter\Capitalize</item>
                 <item name="lowercase" xsi:type="object">Loki\Components\Filter\Lowercase</item>
                 <item name="number" xsi:type="object">Loki\Components\Filter\Number</item>

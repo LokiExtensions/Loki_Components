@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.57] - 07 May 2026
+### Fixed
+- Simplify modal behaviour without reactivity
+- Issue with input[type=number] and selectionStart
+
 ## [2.2.56] - 06 May 2026
 ### Fixed
 - When activeElement is not an input, set it to false

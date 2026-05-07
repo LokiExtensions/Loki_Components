@@ -9,54 +9,65 @@ use Magento\Framework\View\Element\Template;
 ?>
 <script>
     const LokiModalComponentPartial = {
-        modalOpen: false,
         initModalClosing() {
-            this.$watch('modalOpen', (modalOpen) => {
-                if (false === modalOpen) {
-                    this.$nextTick(() => this.$refs.modal.close());
-                } else {
-                    this.$nextTick(() => this.$refs.modal.showModal());
-                }
+            if (!this.$refs.modal) {
+                return;
+            }
+
+            if (this.getModalState()) {
+                this.openModal();
+            }
+
+            this.$refs.modal.addEventListener('cancel', (event) => {
+                this.closeModal();
+                event.preventDefault();
             });
 
-            this.$nextTick(() => {
-                if (this.$refs.modal) {
-                    this.modalOpen = this.$refs.modal.open;
-                } else {
-                    this.modalOpen = false;
-                }
-
-                const modal = this.$refs.modal;
-                if (!modal) {
-                    return;
-                }
-
-                modal.addEventListener("cancel", (event) => {
-                    this.modalOpen = false;
+            this.$refs.modal.addEventListener('click', (event) => {
+                if (event.target === this.$refs.modal) {
+                    this.closeModal();
                     event.preventDefault();
-                });
-
-                modal.addEventListener('click', (event) => {
-                    if (event.target === modal) {
-                        this.modalOpen = false;
-                    }
-                });
+                }
             });
+        },
+        setModalState(state) {
+            if (state) {
+                this.$refs.modal.showModal();
+            } else {
+                this.$refs.modal.close();
+            }
+
+            this.saveModalState();
         },
         toggleModal() {
-            this.modalOpen = !this.modalOpen;
+            this.setModalState(!this.isModalOpen());
         },
         closeModal() {
-            this.modalOpen = false;
+            this.setModalState(false);
         },
         openModal() {
-            this.modalOpen = true;
+            this.setModalState(true);
+            this.$refs.modal.dispatchEvent(new CustomEvent('open'));
         },
         isModalOpen() {
-            return this.modalOpen;
+            return !!this.$refs.modal.open;
         },
         isModalClosed() {
             return !this.isModalOpen();
         },
+        saveModalState() {
+            const modals = JSON.parse(localStorage.getItem('loki-modals')) ?? {};
+            if (this.isModalOpen()) {
+                modals[this.$root.id] = true;
+            } else {
+                delete modals[this.$root.id];
+            }
+
+            localStorage.setItem('loki-modals', JSON.stringify(modals));
+        },
+        getModalState() {
+            const modals = JSON.parse(localStorage.getItem('loki-modals')) ?? {};
+            return modals[this.$root.id] ?? false;
+        }
     };
 </script>

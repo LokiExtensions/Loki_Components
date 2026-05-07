@@ -213,7 +213,10 @@ if ($interval < 10) {
                 const activeElement = document.getElementById(this.activeElementId);
                 if (activeElement) {
                     activeElement.focus();
-                    activeElement.selectionStart = activeElement.selectionEnd = activeElement.value.length;
+                    try {
+                        activeElement.selectionStart = activeElement.selectionEnd = activeElement.value.length;
+                    } catch (e) {
+                    }
                 }
             }
         }

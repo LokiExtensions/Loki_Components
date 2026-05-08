@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<page xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd">
+    <update handle="loki_base"/>
+
+    <body>
+        <block
+            name="loki.script.message-transfer"
+            template="Loki_Components::script/message-transfer.phtml">
+            <arguments>
+                <argument name="messages" xsi:type="object">Loki\Components\ViewModel\Messages</argument>
+            </arguments>
+        </block>
+
+        <block
+            name="loki-components.utils.local-messages"
+            template="Loki_Components::utils/local-messages.phtml"/>
+    </body>
+</page>

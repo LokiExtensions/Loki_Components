@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.58] - 08 May 2026
+### Fixed
+- Extract messages into separate loki_messages handler for usage elsewhere
+
 ## [2.2.57] - 07 May 2026
 ### Fixed
 - Simplify modal behaviour without reactivity

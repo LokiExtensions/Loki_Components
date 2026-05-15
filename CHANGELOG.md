@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.59] - 15 May 2026
+### Fixed
+- Prevent type-error when LengthValidator is populated from XML layout
+
 ## [2.2.58] - 08 May 2026
 ### Fixed
 - Extract messages into separate loki_messages handler for usage elsewhere

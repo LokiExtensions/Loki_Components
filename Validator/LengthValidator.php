@@ -42,7 +42,7 @@ class LengthValidator implements ValidatorInterface
 
             $fieldAttributes = (array)$block->getFieldAttributes();
             if (!empty($fieldAttributes[$possibleValue])) {
-                return $fieldAttributes[$possibleValue];
+                return (int)$fieldAttributes[$possibleValue];
             }
         }
 
@@ -59,7 +59,7 @@ class LengthValidator implements ValidatorInterface
 
             $fieldAttributes = (array)$block->getFieldAttributes();
             if (!empty($fieldAttributes[$possibleValue])) {
-                return $fieldAttributes[$possibleValue];
+                return (int)$fieldAttributes[$possibleValue];
             }
         }
 

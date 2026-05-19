@@ -5,8 +5,10 @@ namespace Loki\Components\Util\Block;
 use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\File as AssetFile;
+use Magento\Framework\View\Asset\File\NotFoundException;
 use Magento\Framework\View\Asset\Repository as AssetRepository;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
@@ -44,7 +46,7 @@ class ImageRenderer implements ArgumentInterface
         return $this->getImageTag($image, $attributes);
     }
 
-    public function getByAssetId(string $assetId, array $attributes = []): string
+    public function getByAssetId(string $assetId, array $attributes = []): ?string
     {
         if (!preg_match('/^([A-Z][A-Za-z0-9_]+)::(.+)$/', $assetId)) {
             throw new RuntimeException('Not an asset ID: '.$assetId);
@@ -84,11 +86,14 @@ class ImageRenderer implements ArgumentInterface
         $this->block = $block;
         $iconSize = $this->getIconSize($iconId);
 
-        if (preg_match('/^([A-Za-z0-9]+)::(.+)$/', $iconId)) {
+        if (!preg_match('/^([A-Za-z0-9_]+)::(.+)$/', $iconId)) {
             $iconId = $this->iconPrefix
                 . '/' . $this->iconSet
-                . '/' . $iconId
-                . '.svg';
+                . '/' . $iconId;
+        }
+
+        if (false === str_ends_with($iconId, '.svg')) {
+            $iconId .= '.svg';
         }
 
         $attributes = [

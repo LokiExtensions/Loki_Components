@@ -13,6 +13,12 @@ use Magento\Framework\View\Element\Template;
             hidden() {
                 return !this.shown;
             },
+            show() {
+                this.shown = true;
+            },
+            hide() {
+               this.shown = false;
+            },
             toggle() {
                 this.shown = !this.shown;
             }

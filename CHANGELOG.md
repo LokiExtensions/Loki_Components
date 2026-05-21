@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.2.60] - 21 May 2026
+### Fixed
+- Allow for better UI of help-toggling
+- Non-Loki_Components icons were not rendering
+
 ## [2.2.59] - 15 May 2026
 ### Fixed
 - Prevent type-error when LengthValidator is populated from XML layout

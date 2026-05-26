@@ -58,7 +58,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
         foreach ($updates as $update) {
             try {
-                $debugMessage = 'Component update: '.$update->getBlock()->getNameInLayout();
+                $debugMessage = 'Component update: '.$update->getComponent()->getName();
                 $this->logger->debug($debugMessage);
 
                 $this->repositoryDispatcher->dispatch(
@@ -102,14 +102,12 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
      *
      * @return ComponentUpdate[]
      */
-    private function getComponentUpdates(array $updates, LayoutInterface $layout): array
+    private function getComponentUpdates(array $updates): array
     {
         $componentUpdates = [];
         foreach ($updates as $updateIndex => $update) {
-            $block = $this->getBlock($layout, $update['blockName']);
             $componentUpdate = $this->componentUpdateFactory->create([
-                'block' => $block,
-                'component' => $this->componentRegistry->getComponentFromBlock($block),
+                'component' => $this->componentRegistry->getComponentByName($update['blockName']),
                 'componentData' => $update['update'],
             ]);
 

@@ -2,6 +2,7 @@
 
 namespace Loki\Components\Util\Controller;
 
+use Loki\Components\Layout\LayoutHandlerComposite;
 use Loki\Components\Util\IdConvertor;
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -13,11 +14,16 @@ class TargetRenderer
         private readonly EventManager $eventManager,
         private readonly LayoutInterface $layout,
         private readonly IdConvertor $idConvertor,
+        private readonly LayoutHandlerComposite $layoutHandlerComposite,
+        private readonly LayoutLoader $layoutLoader
     ) {
     }
 
     public function render(LayoutInterface $layout, array $targetNames): array
     {
+        $handles = $this->layoutHandlerComposite->getHandles($layout->getUpdate()->getHandles());
+        $layout = $this->layoutLoader->load($handles);
+
         return $this->renderBlocks($layout, $this->getTargetBlockNames($targetNames));
     }
 

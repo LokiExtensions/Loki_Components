@@ -86,7 +86,7 @@ if ($interval < 10) {
         async post(incomingRequests) {
             this.setLoading(true);
 
-            requests = incomingRequests.filter(request => request.update !== false);
+            requests = incomingRequests.filter(request => !request.component.skipAjax);
             if (requests.length === 0) {
                 this.afterPostSuccess(incomingRequests);
                 this.afterPostFinally(incomingRequests);

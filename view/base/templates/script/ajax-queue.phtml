@@ -83,8 +83,15 @@ if ($interval < 10) {
             this.requests = [];
             this.post(requests);
         },
-        async post(requests) {
+        async post(incomingRequests) {
             this.setLoading(true);
+
+            requests = incomingRequests.filter(request => request.update !== null);
+            if (requests.length === 0) {
+                this.afterPostSuccess(incomingRequests);
+                this.afterPostFinally(incomingRequests);
+                return;
+            }
 
             await fetch('<?= $escaper->escapeUrl($componentUtil->getPostUrl(
             )) ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
@@ -112,20 +119,26 @@ if ($interval < 10) {
                     }
 
                     this.updateTargetsAfterPost(requests, html);
-                    requests.forEach(request => {
-                        request.component.afterPostSuccess();
-                    });
+                    this.afterPostSuccess(incomingRequests);
                 })
                 .catch(error => {
                     Alpine.store('Message').addErrorMessage(error);
                 })
                 .finally(() => {
-                    requests.forEach(request => {
-                        request.component.afterPostFinally();
-                    });
-
-                    this.setLoading(false);
+                    this.afterPostFinally(incomingRequests);
                 });
+        },
+        afterPostSuccess(requests) {
+            requests.forEach(request => {
+                request.component.afterPostSuccess();
+            });
+        },
+        afterPostFinally(requests) {
+            requests.forEach(request => {
+                request.component.afterPostFinally();
+            });
+
+            this.setLoading(false);
         },
         getPostHeaders() {
             return {

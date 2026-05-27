@@ -150,6 +150,11 @@ class Component implements ComponentInterface
         return $this->block;
     }
 
+    public function setBlock(AbstractBlock $block): void
+    {
+        $this->block = $block;
+    }
+
     public function getGlobalMessageRegistry(): GlobalMessageRegistry
     {
         return $this->globalMessageRegistry;

@@ -45,7 +45,10 @@ class ComponentRegistry
             throw new NoComponentFoundException((string)__('Block has no name', $block->getJsId()));
         }
 
-        return $this->getComponentByName($blockName);
+        $component = $this->getComponentByName($blockName);
+        $component->setBlock($block);
+
+        return $component;
     }
 
     /**

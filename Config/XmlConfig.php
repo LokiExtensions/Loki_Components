@@ -8,17 +8,17 @@ use Loki\Components\Config\XmlConfig\Definition\ComponentDefinition;
 
 class XmlConfig extends DataConfig
 {
+    private array $componentDefinitions = [];
+
     /**
      * @return ComponentDefinition[]
      */
     public function getComponentDefinitions(): array
     {
-        static $componentDefinitions = null;
-        if (!empty($componentDefinitions)) {
-            return $componentDefinitions;
+        if (!empty($this->componentDefinitions)) {
+            return $this->componentDefinitions;
         }
 
-        $componentDefinitions = [];
         $componentsData = (array)$this->get('components');
         foreach ($componentsData as $componentData) {
             if (empty($componentData)) {
@@ -26,10 +26,10 @@ class XmlConfig extends DataConfig
             }
 
             $name = $componentData['name'];
-            $componentDefinitions[$name] = $this->createComponentDefinition($componentData);
+            $this->componentDefinitions[$name] = $this->createComponentDefinition($componentData);
         }
 
-        return $componentDefinitions;
+        return $this->componentDefinitions;
     }
 
     /**

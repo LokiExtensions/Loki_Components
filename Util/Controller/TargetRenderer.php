@@ -12,19 +12,18 @@ class TargetRenderer
 {
     public function __construct(
         private readonly EventManager $eventManager,
-        private readonly LayoutInterface $layout,
         private readonly IdConvertor $idConvertor,
         private readonly LayoutHandlerComposite $layoutHandlerComposite,
         private readonly LayoutLoader $layoutLoader
     ) {
     }
 
-    public function render(LayoutInterface $layout, array $targetNames): array
+    public function render(LayoutInterface $originalLayout, array $targetNames): array
     {
-        $handles = $this->layoutHandlerComposite->getHandles($layout->getUpdate()->getHandles());
-        $layout = $this->layoutLoader->load($handles);
+        $handles = $this->layoutHandlerComposite->getHandles($originalLayout->getUpdate()->getHandles());
+        $newLayout = $this->layoutLoader->load($handles);
 
-        return $this->renderBlocks($layout, $this->getTargetBlockNames($targetNames));
+        return $this->renderBlocks($newLayout, $this->getTargetBlockNames($newLayout, $targetNames));
     }
 
     private function renderBlocks(LayoutInterface $layout, array $blockNames): array
@@ -49,18 +48,18 @@ class TargetRenderer
         return $htmlParts;
     }
 
-    private function getTargetBlockNames(array $targets): array
+    private function getTargetBlockNames(LayoutInterface $layout, array $targets): array
     {
-        $blockNames = $this->convertTargetsToBlockNames($targets);
+        $blockNames = $this->convertTargetsToBlockNames($layout, $targets);
         $blockNames = array_unique($blockNames);
         $this->eventManager->dispatch('loki_components_blocks', ['blocks' => $blockNames]);
 
         return $blockNames;
     }
 
-    private function convertTargetsToBlockNames(array $targets): array
+    private function convertTargetsToBlockNames(LayoutInterface $layout, array $targets): array
     {
-        $allBlockNames = array_keys($this->layout->getAllBlocks());
+        $allBlockNames = array_keys($layout->getAllBlocks());
 
         $blockNames = [];
         foreach ($targets as $target) {

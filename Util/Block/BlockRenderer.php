@@ -11,7 +11,7 @@ class BlockRenderer extends AbstractRenderer
 {
     /**
      * @param string $blockName
-     * @param array $data
+     * @param array  $data
      *
      * @return AbstractBlock
      */
@@ -23,13 +23,21 @@ class BlockRenderer extends AbstractRenderer
         $this->ancestorBlock = $ancestorBlock;
         $block = $this->layout->getBlock($blockName);
         if (false === $block instanceof AbstractBlock) {
-            throw new RuntimeException((string)__('No block found with name "%1"', $blockName));
+            throw new RuntimeException(
+                (string)__('No block found with name "%1"', $blockName)
+            );
         }
 
         $this->populateBlock($block, $data, $ancestorBlock);
 
-        if ($block instanceof Template && false === strlen($block->getTemplate()) > 0) {
-            throw new RuntimeException((string)__('No template found with block "%1"', $blockName));
+        if ($block instanceof Template
+            && false === strlen(
+                $block->getTemplate()
+            ) > 0
+        ) {
+            throw new RuntimeException(
+                (string)__('No template found with block "%1"', $blockName)
+            );
         }
 
         return $block;
@@ -37,7 +45,8 @@ class BlockRenderer extends AbstractRenderer
 
     /**
      * @param string $blockName
-     * @param array $data
+     * @param array  $data
+     *
      * @return string
      */
     public function html(
@@ -49,7 +58,9 @@ class BlockRenderer extends AbstractRenderer
             return $this->get($ancestorBlock, $blockName, $data)->toHtml();
         } catch (InvalidArgumentException|RuntimeException $e) {
             if ($this->isDeveloperMode()) {
-                return '<!-- WARNING: Block with name "' . $blockName . '": ' . $e->getMessage() . ' -->';
+                $msg = $blockName . ': ' . $e->getMessage();
+                $msg .= implode(' ', $ancestorBlock->getLayout()->getUpdate()->getHandles());
+                return '<!-- WARNING: ' . $msg . ' -->';
             }
 
             return '';

@@ -14,10 +14,10 @@ class LayoutLoader
     ) {
     }
 
-    public function load(array $handles = [], bool $isView = false, bool $isolated = true): LayoutInterface
+    public function load(array $handles = []): LayoutInterface
     {
         $handles = $this->layoutHandlerComposite->getHandles($handles);
-        $resultPage = $this->resultPageFactory->create($isView, ['isIsolated' => $isolated]);
+        $resultPage = $this->resultPageFactory->create(true);
 
         if ($handles !== []) {
             foreach ($handles as $handle) {

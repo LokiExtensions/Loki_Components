@@ -187,4 +187,9 @@ class Component implements ComponentInterface
 
         return true;
     }
+
+    public function getLayout(): LayoutInterface
+    {
+        return $this->layout;
+    }
 }

@@ -70,8 +70,15 @@ class ComponentViewModel implements ComponentViewModelInterface
         return $value;
     }
 
-    public function getBlock(): AbstractBlock
+    public function getBlock(): ?AbstractBlock
     {
+        if (false === $this->block instanceof AbstractBlock) {
+            $block = $this->getComponent()->getLayout()->getBlock($this->getComponent()->getName());
+            if ($block instanceof AbstractBlock) {
+                $this->block = $block;
+            }
+        }
+
         return $this->block;
     }
 

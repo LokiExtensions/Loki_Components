@@ -20,7 +20,7 @@ interface ComponentViewModelInterface extends ArgumentInterface
 
     public function getElementId(): string;
 
-    public function getBlock(): AbstractBlock;
+    public function getBlock(): ?AbstractBlock;
 
     public function hasBlock(): bool;
 

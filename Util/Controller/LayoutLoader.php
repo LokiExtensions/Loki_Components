@@ -6,6 +6,7 @@ use Loki\Components\Layout\LayoutHandlerComposite;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\View\Layout\BuilderFactory;
 use Magento\Framework\View\Layout\GeneratorPool;
+use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\View\Page\Layout\Reader as PageLayoutReader;
@@ -14,6 +15,7 @@ class LayoutLoader
 {
     public function __construct(
         private readonly LayoutInterface $layout,
+        private readonly LayoutFactory $layoutFactory,
         private readonly LayoutHandlerComposite $layoutHandlerComposite,
         private readonly BuilderFactory $layoutBuilderFactory,
         private readonly GeneratorPool $generatorPool,
@@ -23,12 +25,16 @@ class LayoutLoader
     ) {
     }
 
-    public function load(array $handles = [], bool $initializeElements = true): LayoutInterface
+    public function load(array $handles = [], bool $isolated = false): LayoutInterface
     {
         $handles = $this->layoutHandlerComposite->getHandles($handles);
 
-        $layout = $this->layout;
-        $layout->setGeneratorPool($this->generatorPool);
+        if ($isolated) {
+            $layout = $this->layoutFactory->create();
+        } else {
+            $layout = $this->layout;
+            $layout->setGeneratorPool($this->generatorPool);
+        }
 
         $update = $layout->getUpdate();
         $update->addHandle('default');

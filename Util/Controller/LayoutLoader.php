@@ -4,6 +4,7 @@ namespace Loki\Components\Util\Controller;
 
 use Loki\Components\Layout\LayoutHandlerComposite;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\BuilderFactory;
 use Magento\Framework\View\Layout\GeneratorPool;
 use Magento\Framework\View\LayoutFactory;
@@ -29,12 +30,14 @@ class LayoutLoader
     {
         $handles = $this->layoutHandlerComposite->getHandles($handles);
 
+        /** @var Layout $layout */
         if ($isolated) {
             $layout = $this->layoutFactory->create();
         } else {
             $layout = $this->layout;
-            $layout->setGeneratorPool($this->generatorPool);
         }
+
+        $layout->setGeneratorPool($this->generatorPool);
 
         $update = $layout->getUpdate();
         $update->addHandle('default');

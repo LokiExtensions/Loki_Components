@@ -120,4 +120,10 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Loki\Components\Util\Controller\LayoutLoader">
+        <arguments>
+            <argument name="layout" xsi:type="object">Magento\Framework\View\Layout\Proxy</argument>
+        </arguments>
+    </type>
 </config>

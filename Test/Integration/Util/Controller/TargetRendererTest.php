@@ -3,7 +3,6 @@
 namespace Loki\Components\Test\Integration\Util\Controller;
 
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
 use Magento\TestFramework\Fixture\AppArea;
 use PHPUnit\Framework\TestCase;
@@ -12,18 +11,18 @@ use Loki\Components\Util\Controller\TargetRenderer;
 #[AppArea('frontend')]
 class TargetRendererTest extends TestCase
 {
-    public function testRender()
+    public function testRender(): void
     {
-        $resultPageFactory = ObjectManager::getInstance()->get(ResultPageFactory::class);
-        $resultPage = $resultPageFactory->create();
-        $resultPage->addHandle('default');
-        $resultPage->addHandle('loki_base');
+        $om = ObjectManager::getInstance();
+
+        $resultPage = $om->get(ResultPageFactory::class)->create();
         $resultPage->addHandle('loki_components');
 
         $layout = $resultPage->getLayout();
 
-        $targetRenderer = ObjectManager::getInstance()->get(TargetRenderer::class);
-        $htmlParts = $targetRenderer->render($layout, ['loki-messages']);
+        /** @var TargetRenderer $targetRenderer */
+        $targetRenderer = $om->get(TargetRenderer::class);
+        $htmlParts = $targetRenderer->render($layout, ['loki-messages'], true);
 
         $this->assertNotEmpty($htmlParts);
     }

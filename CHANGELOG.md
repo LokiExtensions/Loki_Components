@@ -6,10 +6,25 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.0] - 01 June 2026
+### Added 
+- Allow component update to load different XML layout handles
+- Offer a DI-type for other modules to change layout handles before using them
+- Trigger an event `loki-components.ajax.done` when done with queue
+
+### Fixed
+- Move layout proxy from frontend to global DI
+- Add `getLayout()` method to ComponentInterface
+- Make sure layout-singleton is lazy-loaded to prevent premature updates
+- Unfortunately, we can never 100% guarantee that block is loaded into ViewModel
+- Do not use `static` singleton
+- Only skip AJAX if flag `skipAjax` is set
+- Make no AJAX call when there are only component updates with value `false`
+
 ## [2.2.60] - 21 May 2026
 ### Fixed
 - Allow for better UI of help-toggling
-- Non-Loki_Components icons were not rendering
+- Non-`Loki_Components` icons were not rendering
 
 ## [2.2.59] - 15 May 2026
 ### Fixed
@@ -17,7 +32,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [2.2.58] - 08 May 2026
 ### Fixed
-- Extract messages into separate loki_messages handler for usage elsewhere
+- Extract messages into separate `loki_messages` handler for usage elsewhere
 
 ## [2.2.57] - 07 May 2026
 ### Fixed

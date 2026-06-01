@@ -25,7 +25,7 @@ class AjaxTest extends TestCase
         $this->assertEquals($expectedResult, $ajax->isAjax(), var_export($headerArray, true));
     }
 
-    public function getTestData(): array
+    public static function getTestData(): array
     {
         return [
             [['X-Alpine-Request' => 'true'], true],

@@ -39,7 +39,7 @@ class EmailValidatorTest extends TestCase
         $this->assertStringContainsString($expectedResult, $error, var_export($actualResult, true));
     }
 
-    public function getValues(): array
+    public static function getValues(): array
     {
         return [
             ['jane@example.com', true],

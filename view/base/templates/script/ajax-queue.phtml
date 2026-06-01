@@ -139,6 +139,7 @@ if ($interval < 10) {
             });
 
             this.setLoading(false);
+            document.dispatchEvent(new CustomEvent('loki-components.ajax.done'));
         },
         getPostHeaders() {
             return {

@@ -35,8 +35,6 @@ class LayoutHandlerComposite
             $handles = $layoutHandler->get($handles);
         }
 
-        $handles = array_unique($handles);
-
-        return $handles;
+        return array_unique($handles);
     }
 }

@@ -6,6 +6,7 @@ namespace Loki\Components\Component;
 use Magento\Framework\View\Element\AbstractBlock;
 use Loki\Components\Messages\GlobalMessageRegistry;
 use Loki\Components\Messages\LocalMessageRegistry;
+use Magento\Framework\View\LayoutInterface;
 
 interface ComponentInterface
 {
@@ -40,4 +41,5 @@ interface ComponentInterface
     public function isValidated(): bool;
 
     public function setIsValidated(bool $isValidated): void;
+    public function getLayout(): LayoutInterface;
 }

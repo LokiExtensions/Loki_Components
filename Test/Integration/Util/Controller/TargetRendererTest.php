@@ -2,11 +2,11 @@
 
 namespace Loki\Components\Test\Integration\Util\Controller;
 
+use Loki\Components\Util\Controller\LayoutLoader;
+use Loki\Components\Util\Controller\TargetRenderer;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\View\Result\PageFactory as ResultPageFactory;
 use Magento\TestFramework\Fixture\AppArea;
 use PHPUnit\Framework\TestCase;
-use Loki\Components\Util\Controller\TargetRenderer;
 
 #[AppArea('frontend')]
 class TargetRendererTest extends TestCase
@@ -14,11 +14,8 @@ class TargetRendererTest extends TestCase
     public function testRender(): void
     {
         $om = ObjectManager::getInstance();
-
-        $resultPage = $om->get(ResultPageFactory::class)->create();
-        $resultPage->addHandle('loki_components');
-
-        $layout = $resultPage->getLayout();
+        $layoutLoader = $om->get(LayoutLoader::class);
+        $layout = $layoutLoader->load(['loki_components'], true);
 
         /** @var TargetRenderer $targetRenderer */
         $targetRenderer = $om->get(TargetRenderer::class);

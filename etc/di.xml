@@ -126,4 +126,16 @@
             <argument name="layout" xsi:type="object">Magento\Framework\View\Layout\Proxy</argument>
         </arguments>
     </type>
+
+    <type name="Loki\Components\Layout\LayoutHandlerComposite">
+        <arguments>
+            <argument name="layout" xsi:type="object">Magento\Framework\View\LayoutInterface\Proxy</argument>
+        </arguments>
+    </type>
+
+    <type name="Loki\Components\Component\Component">
+        <arguments>
+            <argument name="layout" xsi:type="object">Magento\Framework\View\LayoutInterface\Proxy</argument>
+        </arguments>
+    </type>
 </config>

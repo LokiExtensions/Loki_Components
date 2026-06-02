@@ -159,7 +159,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         }
 
         $htmlResult = $this->htmlResultFactory->create();
-        $htmlResult->setContents($html);
+        $htmlResult->setContents('<html>'.PHP_EOL.'<body>'.PHP_EOL.$html.'</body>'.PHP_EOL.'</html>');
 
         return $htmlResult;
     }

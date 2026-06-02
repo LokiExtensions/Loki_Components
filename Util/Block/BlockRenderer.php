@@ -59,7 +59,6 @@ class BlockRenderer extends AbstractRenderer
         } catch (InvalidArgumentException|RuntimeException $e) {
             if ($this->isDeveloperMode()) {
                 $msg = $blockName . ': ' . $e->getMessage();
-                $msg .= implode(' ', $ancestorBlock->getLayout()->getUpdate()->getHandles());
                 return '<!-- WARNING: ' . $msg . ' -->';
             }
 

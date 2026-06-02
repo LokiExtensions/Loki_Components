@@ -66,7 +66,7 @@ class AddressFactory
         return $this->create(
             street:  (string)$quoteAddress->getStreetLine(1),
             houseNumber:  (string)$quoteAddress->getStreetLine(2),
-            houseNumberAddition:  (string)$quoteAddress->getStreetLine(3) ?? '',
+            houseNumberAddition:  (string)$quoteAddress->getStreetLine(3),
             postcode:  (string)$quoteAddress->getPostcode(),
             city: (string)$quoteAddress->getCity(),
             countryId:  (string)$quoteAddress->getCountryId(),

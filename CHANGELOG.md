@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.1] - 02 June 2026
+### Fixed
+- Optimize layout loader (isolated vs singleton)
+- Remove obsolete proxies
+
 ## [2.3.0] - 01 June 2026
 ### Added 
 - Allow component update to load different XML layout handles

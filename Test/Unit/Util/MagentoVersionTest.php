@@ -26,7 +26,7 @@ class MagentoVersionTest extends TestCase
         $this->assertSame($expected, $magentoVersion->isMagentoVersion($version, $operator));
     }
 
-    static public function providerTestIsMagentoVersion(): array
+    public static function providerTestIsMagentoVersion(): array
     {
         return [
             ['2.4.6', 'eq', false],
@@ -58,7 +58,7 @@ class MagentoVersionTest extends TestCase
         $this->assertSame($expected, $magentoVersion->isMageOSVersion($version, $operator));
     }
 
-    static public function providerTestIsMageOSVersion(): array
+    public static function providerTestIsMageOSVersion(): array
     {
         return [
             ['1.2.1-p2', 'lt', false],

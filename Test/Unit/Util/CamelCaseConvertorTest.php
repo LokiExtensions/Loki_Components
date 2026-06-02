@@ -17,7 +17,7 @@ class CamelCaseConvertorTest extends TestCase
         $this->assertEquals($expected, $camelCaseConvertor->toCamelCase($original));
     }
 
-    public function getTestData(): array
+    public static function getTestData(): array
     {
         return [
             ['foo.bar', 'FooBar'],

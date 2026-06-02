@@ -17,7 +17,7 @@ class IdConvertorTest extends TestCase
         $this->assertEquals($expected, $convertor->toElementId($original));
     }
 
-    public function getTestData(): array
+    public static function getTestData(): array
     {
         return [
             ['foo.bar', 'foo-bar'],

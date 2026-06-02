@@ -17,7 +17,7 @@ class PastDateValidatorTest extends TestCase
         $this->assertSame($expectedResult, $result, 'Tested value: ' . $value);
     }
 
-    public function getTestData(): array
+    public static function getTestData(): array
     {
         return [
             ['', true],

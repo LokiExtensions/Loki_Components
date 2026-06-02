@@ -16,6 +16,9 @@ interface ComponentInterface
 
     public function getViewModel(): ?ComponentViewModelInterface;
 
+    /**
+     * @deprecated Will be removed in v3
+     */
     public function hasViewModel(): bool;
 
     public function getRepository(): ?ComponentRepositoryInterface;

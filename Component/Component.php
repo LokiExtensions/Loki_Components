@@ -53,6 +53,9 @@ class Component implements ComponentInterface
         return preg_replace('/([^a-z0-9\-\ ]+)/', '-', implode(' ', $this->getTargets()));
     }
 
+    /**
+     * @deprecated Will be removed in v3
+     */
     public function hasViewModel(): bool
     {
         return $this->getViewModel() instanceof ComponentViewModelInterface;

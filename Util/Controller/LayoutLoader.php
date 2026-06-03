@@ -7,6 +7,7 @@ use Magento\Framework\View\Layout\BuilderFactory;
 use Magento\Framework\View\LayoutFactory;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Framework\View\Page\Config as PageConfig;
+use Magento\Framework\View\Page\ConfigFactory as PageConfigFactory;
 use Magento\Framework\View\Page\Layout\Reader as PageLayoutReader;
 
 class LayoutLoader
@@ -17,6 +18,7 @@ class LayoutLoader
         private readonly LayoutHandlerComposite $layoutHandlerComposite,
         private readonly BuilderFactory $layoutBuilderFactory,
         private readonly PageConfig $pageConfig,
+        private readonly PageConfigFactory $pageConfigFactory,
         private readonly PageLayoutReader $pageLayoutReader,
     ) {
     }
@@ -26,14 +28,25 @@ class LayoutLoader
         if ($isolated) {
             $layout = $this->layoutFactory->create();
             $update = $layout->getUpdate();
+            $update->addHandle('default');
 
             $update->addPageHandles($pageHandles);
             foreach ($handles as $handle) {
                 $update->addHandle($this->sanitizeHandle($handle));
             }
 
-            $layout->generateXml();
-            $layout->generateElements();
+            $pageConfig = $this->pageConfigFactory->create(); // important: fresh instance
+
+            $builder = $this->layoutBuilderFactory->create(
+                BuilderFactory::TYPE_PAGE,
+                [
+                    'layout' => $layout,
+                    'pageConfig' => $pageConfig,
+                    'pageLayoutReader' => $this->pageLayoutReader,
+                ]
+            );
+
+            $builder->build();
 
             return $layout;
         }

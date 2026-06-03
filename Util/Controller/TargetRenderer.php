@@ -7,6 +7,7 @@ use Loki\Components\Util\IdConvertor;
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface as PageLayoutConfigBuilder;
 
 class TargetRenderer
 {
@@ -14,16 +15,46 @@ class TargetRenderer
         private readonly EventManager $eventManager,
         private readonly IdConvertor $idConvertor,
         private readonly LayoutHandlerComposite $layoutHandlerComposite,
-        private readonly LayoutLoader $layoutLoader
+        private readonly LayoutLoader $layoutLoader,
+        private readonly PageLayoutConfigBuilder $pageLayoutConfigBuilder,
     ) {
     }
 
     public function render(LayoutInterface $originalLayout, array $targetNames, bool $isolated = false): array
     {
-        $handles = $this->layoutHandlerComposite->getHandles($originalLayout->getUpdate()->getHandles());
-        $newLayout = $this->layoutLoader->load($handles, [], $isolated);
+        $originalUpdate = $originalLayout->getUpdate();
+        $originalHandles = $originalUpdate->getHandles();
+        $pageHandles = $this->extractPageHandles($originalUpdate, $originalHandles);
+        $handles = $this->layoutHandlerComposite->getHandles(
+            array_values(array_diff($originalHandles, $pageHandles))
+        );
+        $newLayout = $this->layoutLoader->load($handles, $pageHandles, $isolated);
 
         return $this->renderBlocks($newLayout, $this->getTargetBlockNames($newLayout, $targetNames));
+    }
+
+    private function extractPageHandles($update, array $originalHandles): array
+    {
+        $pageHandles = [];
+        if (method_exists($update, 'getPageHandles')) {
+            $pageHandles = (array)$update->getPageHandles();
+        }
+        if (method_exists($update, 'getPageLayout')) {
+            $pageLayout = $update->getPageLayout();
+            if ($pageLayout) {
+                $pageHandles[] = $pageLayout;
+            }
+        }
+
+        // Detect page_layout names that were promoted into the handles list by LayoutLoader
+        $pageLayoutsConfig = $this->pageLayoutConfigBuilder->getPageLayoutsConfig();
+        foreach ($originalHandles as $handle) {
+            if ($pageLayoutsConfig->hasPageLayout($handle)) {
+                $pageHandles[] = $handle;
+            }
+        }
+
+        return array_values(array_unique(array_filter($pageHandles)));
     }
 
     private function renderBlocks(LayoutInterface $layout, array $blockNames): array

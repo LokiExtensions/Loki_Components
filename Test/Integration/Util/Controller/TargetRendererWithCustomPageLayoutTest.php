@@ -5,7 +5,9 @@ namespace Loki\Components\Test\Integration\Util\Controller;
 use Magento\Framework\Module\ModuleList;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
+use Magento\TestFramework\Fixture\Cache;
 use Magento\TestFramework\Fixture\ComponentsDir;
+use PHPUnit\Framework\Attributes\DataProvider;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsEnabled;
 use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsRegistered;
 use Magento\Framework\Module\Status as ModuleStatus;
@@ -21,14 +23,17 @@ class TargetRendererWithCustomPageLayoutTest extends AbstractTargetRendererTestC
     use AssertModuleIsEnabled;
 
     #[AppIsolation(true)]
-    public function testCustomPageLayout(): void
+    #[Cache('all', true)]
+    #[Cache('layout', false)]
+    #[DataProvider('getTestData')]
+    public function testCustomPageLayout(bool $isolated): void
     {
-        //$this->enableModule('LokiTest_CustomPageLayout');
+        $this->enableModule('LokiTest_CustomPageLayout');
 
         $handles = ['default'];
         $pageHandles = ['loki_test'];
         $blockName = 'loki-test-block';
-        $layout = $this->getLayoutLoader()->load($handles, $pageHandles, false);
+        $layout = $this->getLayoutLoader()->load($handles, $pageHandles, $isolated);
 
         $allBlockNames = array_keys($layout->getAllBlocks());
         $this->assertNotEmpty($allBlockNames);
@@ -36,8 +41,17 @@ class TargetRendererWithCustomPageLayoutTest extends AbstractTargetRendererTestC
         $debugMsg = 'Blocks: '.implode(', ', $allBlockNames);
         $this->assertContains($blockName, $allBlockNames, $debugMsg);
 
-        $htmlParts = $this->getTargetRenderer()->render($layout, [$blockName], false);
+        $htmlParts = $this->getTargetRenderer()->render($layout, [$blockName]);
         $this->assertNotEmpty($htmlParts);
+    }
+
+
+    public static function getTestData(): array
+    {
+        return [
+            [false],
+            [true],
+        ];
     }
 
     private function enableModule(string $moduleName = ''): void

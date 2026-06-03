@@ -21,7 +21,7 @@ class TargetRenderer
     public function render(LayoutInterface $originalLayout, array $targetNames, bool $isolated = false): array
     {
         $handles = $this->layoutHandlerComposite->getHandles($originalLayout->getUpdate()->getHandles());
-        $newLayout = $this->layoutLoader->load($handles, $isolated);
+        $newLayout = $this->layoutLoader->load($handles, [], $isolated);
 
         return $this->renderBlocks($newLayout, $this->getTargetBlockNames($newLayout, $targetNames));
     }

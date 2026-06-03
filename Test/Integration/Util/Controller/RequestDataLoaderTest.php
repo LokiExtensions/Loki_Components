@@ -1,8 +1,9 @@
 <?php declare(strict_types=1);
 
-namespace Loki\Components\Util\Controller;
+namespace Loki\Components\Test\Integration\Util\Controller;
 
 use Laminas\Http\Headers;
+use Loki\Components\Util\Controller\RequestDataLoader;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use PHPUnit\Framework\TestCase;

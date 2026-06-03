@@ -51,7 +51,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();
-        $layout = $this->layoutLoader->load($data['handles'], true);
+        $layout = $this->layoutLoader->load($data['handles'], [], true);
 
         $updates = $this->getComponentUpdates($data['updates'], $layout);
         $updates = $this->sortUpdates($updates);

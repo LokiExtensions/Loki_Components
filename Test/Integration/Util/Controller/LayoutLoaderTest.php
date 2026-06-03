@@ -1,7 +1,8 @@
 <?php declare(strict_types=1);
 
-namespace Loki\Components\Util\Controller;
+namespace Loki\Components\Test\Integration\Util\Controller;
 
+use Loki\Components\Util\Controller\LayoutLoader;
 use Magento\Framework\App\ObjectManager;
 use PHPUnit\Framework\TestCase;
 

@@ -21,12 +21,13 @@ class LayoutLoader
     ) {
     }
 
-    public function load(array $handles = [], bool $isolated = false): LayoutInterface
+    public function load(array $handles = [], array $pageHandles = [], bool $isolated = false): LayoutInterface
     {
         if ($isolated) {
             $layout = $this->layoutFactory->create();
             $update = $layout->getUpdate();
 
+            $update->addPageHandles($pageHandles);
             foreach ($handles as $handle) {
                 $update->addHandle($this->sanitizeHandle($handle));
             }
@@ -38,8 +39,9 @@ class LayoutLoader
         }
 
         $handles = $this->layoutHandlerComposite->getHandles($handles);
-
         $update = $this->layout->getUpdate();
+        $update->addPageHandles($pageHandles);
+
         foreach ($handles as $handle) {
             $update->addHandle($this->sanitizeHandle($handle));
         }

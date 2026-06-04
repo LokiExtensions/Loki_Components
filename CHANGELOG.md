@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.3.2] - 04 June 2026
+### Fixed
+- Fix loading custom page layouts in AJAX calls
+
 ## [2.3.1] - 02 June 2026
 ### Fixed
 - Optimize layout loader (isolated vs singleton)

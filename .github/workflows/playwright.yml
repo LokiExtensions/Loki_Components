@@ -101,15 +101,13 @@ jobs:
 
           echo "Configuring local sources"
           composer config repositories.local-source "{\"type\": \"path\", \"url\": \"$GITHUB_WORKSPACE\", \"options\": {\"symlink\": false}}"
-          composer require --prefer-source -- "${COMPOSER_NAME}:@dev" loki-checkout/magento2-core-cli:@dev loki-checkout/magento2-functional-tests:@dev yireo/magento2-enable-module-sequence
+          composer require --prefer-source -- "${COMPOSER_NAME}:@dev" loki-checkout/magento2-core-cli:@dev loki-checkout/magento2-functional-tests:@dev yireo/magento2-enable-module-sequence:@dev
 
           $GITHUB_WORKSPACE/.github/workflows/magento-install.sh
 
           bin/magento deploy:mode:set developer
           bin/magento module:enable Yireo_EnableModuleSequence
-          bin/magento module:sequence LokiCheckout_FunctionalTests
-          bin/magento module:sequence LokiCheckout_CoreCli
-          bin/magento module:sequence "${MAGENTO_MODULE}"
+          bin/magento module:sequence LokiCheckout_FunctionalTests LokiCheckout_CoreCli "${MAGENTO_MODULE}"
           bin/magento setup:upgrade
           bin/magento loki-checkout:modules:dump
 

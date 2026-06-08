@@ -11,8 +11,15 @@ class Security implements FilterInterface
         }
 
         $value = (string)$value;
-        $value = strip_tags($value);
-        $value = htmlspecialchars_decode($value);
-        return $value;
+
+        do {
+            $previous = $value;
+            $value = html_entity_decode($value, ENT_QUOTES | ENT_HTML5);
+            $value = strip_tags($value);
+        } while ($value !== $previous);
+
+        $value = preg_replace('/(?:javascript|vbscript|data)\s*:/i', '', $value);
+
+        return trim($value);
     }
 }

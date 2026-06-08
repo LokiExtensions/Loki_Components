@@ -10,6 +10,7 @@ class Validator
 {
     public function __construct(
         private readonly ValidatorRegistry $validatorRegistry,
+        private readonly int $recursionDepth = 10
     ) {
     }
 

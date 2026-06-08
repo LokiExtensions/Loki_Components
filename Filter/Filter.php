@@ -9,6 +9,7 @@ class Filter
     public function __construct(
         private readonly FilterRegistry $filterRegistry,
         private readonly FilterScopeFactory $filterScopeFactory,
+        private readonly int $recursionDepth = 10
     ) {
     }
 

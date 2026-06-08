@@ -111,7 +111,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface, CsrfAware
     {
         $componentUpdates = [];
         foreach ($updates as $updateIndex => $update) {
-            if (!isset($update['blockName'])) {
+            if (!isset($update['blockName']) || !is_string($update['blockName'])) {
                 continue;
             }
 

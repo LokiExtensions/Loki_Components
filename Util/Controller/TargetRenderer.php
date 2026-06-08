@@ -17,17 +17,20 @@ class TargetRenderer
         private readonly LayoutHandlerComposite $layoutHandlerComposite,
         private readonly LayoutLoader $layoutLoader,
         private readonly PageLayoutConfigBuilder $pageLayoutConfigBuilder,
+        private readonly int $maximumTargets = 100
     ) {
     }
 
     public function render(LayoutInterface $originalLayout, array $targetNames, bool $isolated = false): array
     {
+        $targetNames = array_slice($targetNames, 0, $this->maximumTargets);
         $originalUpdate = $originalLayout->getUpdate();
         $originalHandles = $originalUpdate->getHandles();
         $pageHandles = $this->extractPageHandles($originalUpdate, $originalHandles);
         $handles = $this->layoutHandlerComposite->getHandles(
             array_values(array_diff($originalHandles, $pageHandles))
         );
+
         $newLayout = $this->layoutLoader->load($handles, $pageHandles, $isolated);
 
         return $this->renderBlocks($newLayout, $this->getTargetBlockNames($newLayout, $targetNames));

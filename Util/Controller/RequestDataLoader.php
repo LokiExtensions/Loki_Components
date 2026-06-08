@@ -26,9 +26,7 @@ class RequestDataLoader
             throw new RuntimeException('Not a valid request');
         }
 
-        $this->sanityCheck($data);
-
-        return $data;
+        return $this->sanitize($data);
     }
 
     public function mergeRequestParams(): void
@@ -54,7 +52,7 @@ class RequestDataLoader
         $this->request->setParams($params);
     }
 
-    private function sanityCheck(array $requestData = []): void
+    private function sanitize(array $requestData = []): array
     {
         if (false === $this->ajax->isAjax()) {
             throw new RuntimeException('Not an Alpine request');
@@ -66,5 +64,30 @@ class RequestDataLoader
                 throw new RuntimeException('No '.$requiredField.' in request');
             }
         }
+
+        if (isset($requestData['targets'])) {
+            $requestData['targets'] = $this->sanitizeTargets($requestData['targets']);
+        }
+
+        if (isset($requestData['handles'])) {
+            $requestData['handles'] = $this->sanitizeHandlers($requestData['handles']);
+        }
+
+
+        return $requestData;
+    }
+
+    private function sanitizeTargets(array $targets): array
+    {
+        return array_map(function ($target) {
+            return preg_replace('/([^a-zA-Z0-9\-_.]+)/', '', (string)$target);
+        }, $targets);
+    }
+
+    private function sanitizeHandlers(array $handlers): array
+    {
+        return array_map(function ($handler) {
+            return preg_replace('/([^a-zA-Z0-9\-_]+)/', '', (string)$handler);
+        }, $handlers);
     }
 }

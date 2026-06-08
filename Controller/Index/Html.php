@@ -10,11 +10,15 @@ use Loki\Components\Util\Controller\ComponentUpdate;
 use Loki\Components\Util\Controller\ComponentUpdateFactory;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\CsrfAwareActionInterface;
+use Magento\Framework\App\Request\InvalidRequestException;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
 use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
 use Loki\Components\Config\Config;
@@ -29,7 +33,7 @@ use Loki\Components\Util\Controller\TargetRenderer;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 
-class Html implements HttpPostActionInterface, HttpGetActionInterface
+class Html implements HttpPostActionInterface, HttpGetActionInterface, CsrfAwareActionInterface
 {
     public function __construct(
         private readonly LayoutLoader $layoutLoader,
@@ -44,6 +48,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         private readonly LoggerInterface $logger,
         private readonly ComponentRegistry $componentRegistry,
         private readonly ComponentUpdateFactory $componentUpdateFactory,
+        private Validator $formKeyValidator
     ) {
     }
 
@@ -106,6 +111,14 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
     {
         $componentUpdates = [];
         foreach ($updates as $updateIndex => $update) {
+            if (!isset($update['blockName'])) {
+                continue;
+            }
+
+            if (!isset($update['update'])) {
+                continue;
+            }
+
             $block = $this->getBlock($layout, $update['blockName']);
             $componentUpdate = $this->componentUpdateFactory->create([
                 'block' => $block,
@@ -182,7 +195,6 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
 
     private function allowRendering(array $data): bool
     {
-        // @todo: Double-check that this is still working
         foreach ($data['updates'] as $update) {
             if (!isset($update['render'])) {
                 continue;
@@ -218,5 +230,15 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface
         }
 
         $this->messageManager->addErrorMessage(__($exception->getMessage()));
+    }
+
+    public function createCsrfValidationException(RequestInterface $request
+    ): ?InvalidRequestException {
+        return null;
+    }
+
+    public function validateForCsrf(RequestInterface $request): ?bool
+    {
+        return $this->formKeyValidator->validate($request);
     }
 }

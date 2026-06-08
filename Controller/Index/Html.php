@@ -8,7 +8,6 @@ use Exception;
 use Loki\Components\Component\ComponentRegistry;
 use Loki\Components\Util\Controller\ComponentUpdate;
 use Loki\Components\Util\Controller\ComponentUpdateFactory;
-use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -33,7 +32,7 @@ use Loki\Components\Util\Controller\TargetRenderer;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 
-class Html implements HttpPostActionInterface, HttpGetActionInterface, CsrfAwareActionInterface
+class Html implements HttpPostActionInterface, CsrfAwareActionInterface
 {
     public function __construct(
         private readonly LayoutLoader $layoutLoader,

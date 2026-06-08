@@ -7,7 +7,7 @@ class PositiveNumber implements FilterInterface
     public function filter(mixed $value, FilterScope $scope): mixed
     {
         if ($value > 0) {
-            return $value;
+            return (int)$value;
         }
 
         return 0;

@@ -56,7 +56,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface, CsrfAware
     {
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();
-        $layout = $this->layoutLoader->load($data['handles'], [], true);
+        $layout = $this->layoutLoader->load($data['handles'], $data['pageHandles'], true);
 
         $updates = $this->getComponentUpdates($data['updates'], $layout);
         $updates = $this->sortUpdates($updates);
@@ -72,6 +72,7 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface, CsrfAware
                 );
             } catch (NoBlockFoundException $exception) {
                 $this->logger->critical($exception);
+                $this->addExceptionMessage($exception);
 
             } catch (RedirectException $redirectException) {
                 return $this->getJsonRedirect($redirectException);

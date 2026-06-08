@@ -42,6 +42,11 @@ class ComponentUtil implements ArgumentInterface
         return $block->getLayout()->getUpdate()->getHandles();
     }
 
+    public function getPageHandles(AbstractBlock $block): array
+    {
+        return [$block->getLayout()->getUpdate()->getPageLayout()];
+    }
+
     public function getRequestData(): array
     {
         /** @var Http $request */

@@ -165,6 +165,9 @@ if ($interval < 10) {
                 handles: <?= /* @noEscape */ json_encode(
                     $componentUtil->getHandles($block)
                 ) ?>,
+                pageHandles: <?= /* @noEscape */ json_encode(
+                    $componentUtil->getPageHandles($block)
+                ) ?>,
                 request: <?= /* @noEscape */ json_encode(
                     $componentUtil->getRequestData()
                 ) ?>

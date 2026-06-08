@@ -116,15 +116,11 @@ class Html implements HttpPostActionInterface, HttpGetActionInterface, CsrfAware
                 continue;
             }
 
-            if (!isset($update['update'])) {
-                continue;
-            }
-
             $block = $this->getBlock($layout, $update['blockName']);
             $componentUpdate = $this->componentUpdateFactory->create([
                 'block' => $block,
                 'component' => $this->componentRegistry->getComponentFromBlock($block),
-                'componentData' => $update['update'],
+                'componentData' => $update['update'] ?? null,
             ]);
 
             $componentUpdates[$updateIndex] = $componentUpdate;

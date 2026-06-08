@@ -100,13 +100,18 @@ if ($interval < 10) {
                 headers: this.getPostHeaders(),
                 body: JSON.stringify(this.buildBody(requests))
             })
-                .then(response => {
+                .then(async response => {
+                    const body = await response.text();
                     if (response.ok) {
-                        return response.text()
+                        return body;
                     }
 
                     LokiComponentsLogger.error('Fetch error', response);
-                    throw new Error(response.statusText);
+
+                    const error = new Error(response.statusText);
+                    error.status = response.status;
+                    error.body = body;
+                    throw error;
                 })
                 .then(html => {
                     try {
@@ -122,7 +127,12 @@ if ($interval < 10) {
                     this.afterPostSuccess(incomingRequests);
                 })
                 .catch(error => {
-                    Alpine.store('Message').addErrorMessage(error);
+                    let errorMessage = error.name;
+                    if (error.body) {
+                        errorMessage = error.body.split(/\r?\n/)[0];
+                    }
+
+                    Alpine.store('Message').addErrorMessage(errorMessage);
                 })
                 .finally(() => {
                     this.afterPostFinally(incomingRequests);

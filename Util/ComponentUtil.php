@@ -44,7 +44,9 @@ class ComponentUtil implements ArgumentInterface
 
     public function getPageHandles(AbstractBlock $block): array
     {
-        return [$block->getLayout()->getUpdate()->getPageLayout()];
+        /** @var \Magento\Framework\View\Layout\Processor $update */
+        $update = $block->getLayout()->getUpdate();
+        return [$update->getPageLayout()];
     }
 
     public function getRequestData(): array

@@ -2,6 +2,7 @@
 
 namespace Loki\Components\Validator;
 
+use Loki\Components\Exception\RecursionException;
 use Magento\Framework\Phrase;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Messages\LocalMessage;
@@ -17,11 +18,16 @@ class Validator
     public function validate(
         ComponentInterface $component,
         mixed $data = null,
-        string $scope = ''
+        string $scope = '',
+        int $depth = 0
     ): bool {
+        if ($depth >= $this->recursionDepth) {
+            throw new RecursionException('Too many array levels');
+        }
+
         if (is_array($data)) {
             foreach ($data as $value) {
-                if (false === $this->validate($component, $value)) {
+                if (false === $this->validate($component, $value, '', $depth + 1)) {
                     return false;
                 }
             }

@@ -3,6 +3,7 @@
 namespace Loki\Components\Filter;
 
 use Loki\Components\Component\ComponentInterface;
+use Loki\Components\Exception\RecursionException;
 
 class Filter
 {
@@ -16,8 +17,13 @@ class Filter
     public function filter(
         ComponentInterface $component,
         mixed $data = null,
-        mixed $propertyName = null
+        mixed $propertyName = null,
+        int $depth = 0
     ): mixed {
+        if ($depth >= $this->recursionDepth) {
+            throw new RecursionException('Too many array levels');
+        }
+
         $filters = $this->filterRegistry->getApplicableFilters(
             $component->getFilters()
         );
@@ -32,14 +38,22 @@ class Filter
 
         if (is_array($data)) {
             foreach ($data as $propertyName => $value) {
-                $data[$propertyName] = $this->filter($component, $value, $propertyName);
+                $data[$propertyName] = $this->filter(
+                    $component,
+                    $value,
+                    $propertyName,
+                    $depth + 1
+                );
             }
 
             return $data;
         }
 
         foreach ($filters as $filter) {
-            $data = $filter->filter($data, $filterScope);
+            $data = $filter->filter(
+                $data,
+                $filterScope
+            );
         }
 
         return $data;

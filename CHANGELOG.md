@@ -5,8 +5,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.4.0] - 09 June 2026
 ### Security
+- Implement tight security filtering by default
+- Implement recursionDepth limit (10) in filters and validators
+- Render a maximum number of targets of 100 by default (DI-configurable)
 - Sign AJAX queue `handles`, `pageHandles` and `request` properties to prevent client-side tampering
+- Double-check that component/block name in AJAX call is a string
+- Restrict targets and handles to be valid strings
+
+### Fixed
+- Add pageHandles to AJAX calls
+- Allow for empty component update to be passing validation
+- Additional Playwright tests
+- Throw a exception when form key is not valid
+- Do not allow GET requests anymore
+- Make sure PositiveNumber filter always returns number
 
 ## [2.3.2] - 04 June 2026
 ### Fixed

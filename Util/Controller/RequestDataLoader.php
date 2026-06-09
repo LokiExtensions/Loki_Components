@@ -8,12 +8,14 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\DataObject;
 use RuntimeException;
 use Loki\Components\Util\Ajax;
+use Loki\Components\Util\Security\AjaxSignature;
 
 class RequestDataLoader
 {
     public function __construct(
         private readonly RequestInterface $request,
-        private readonly Ajax $ajax
+        private readonly Ajax $ajax,
+        private readonly AjaxSignature $ajaxSignature
     ) {
     }
 
@@ -26,7 +28,23 @@ class RequestDataLoader
             throw new RuntimeException('Not a valid request');
         }
 
+        $this->validateSignature($data);
+
         return $this->sanitize($data);
+    }
+
+    private function validateSignature(array $data): void
+    {
+        $isValid = $this->ajaxSignature->verify(
+            (array)($data['handles'] ?? []),
+            (array)($data['pageHandles'] ?? []),
+            (array)($data['request'] ?? []),
+            (string)($data['signature'] ?? '')
+        );
+
+        if (false === $isValid) {
+            throw new RuntimeException('Payload was tampered with');
+        }
     }
 
     public function mergeRequestParams(): void

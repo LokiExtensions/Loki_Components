@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Security
+- Sign AJAX queue `handles`, `pageHandles` and `request` properties to prevent client-side tampering
 
 ## [2.3.2] - 04 June 2026
 ### Fixed

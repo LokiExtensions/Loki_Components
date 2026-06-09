@@ -8,6 +8,7 @@ use Magento\Framework\Data\Form\FormKey as FormKeyModel;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
+use Loki\Components\Util\Security\AjaxSignature;
 
 class ComponentUtil implements ArgumentInterface
 {
@@ -15,7 +16,8 @@ class ComponentUtil implements ArgumentInterface
         private readonly UrlFactory $urlFactory,
         private readonly RequestInterface $request,
         private readonly FormKeyModel $formKey,
-        private readonly IdConvertor $idConvertor
+        private readonly IdConvertor $idConvertor,
+        private readonly AjaxSignature $ajaxSignature
     ) {
     }
 
@@ -63,6 +65,15 @@ class ComponentUtil implements ArgumentInterface
             'action_name' => $request->getActionName(),
             'request_uri' => $request->getRequestUri(),
         ];
+    }
+
+    public function getSignature(AbstractBlock $block): string
+    {
+        return $this->ajaxSignature->sign(
+            $this->getHandles($block),
+            $this->getPageHandles($block),
+            $this->getRequestData()
+        );
     }
 
     public function getPostUrl(): string

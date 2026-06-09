@@ -170,6 +170,9 @@ if ($interval < 10) {
                 ) ?>,
                 request: <?= /* @noEscape */ json_encode(
                     $componentUtil->getRequestData()
+                ) ?>,
+                signature: <?= /* @noEscape */ json_encode(
+                    $componentUtil->getSignature($block)
                 ) ?>
             };
         },

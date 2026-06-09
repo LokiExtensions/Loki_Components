@@ -8,6 +8,7 @@ use Exception;
 use Loki\Components\Component\ComponentRegistry;
 use Loki\Components\Util\Controller\ComponentUpdate;
 use Loki\Components\Util\Controller\ComponentUpdateFactory;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -32,7 +33,7 @@ use Loki\Components\Util\Controller\TargetRenderer;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 
-class Html implements HttpPostActionInterface, CsrfAwareActionInterface
+class Html implements HttpPostActionInterface, HttpGetActionInterface, CsrfAwareActionInterface
 {
     public function __construct(
         private readonly LayoutLoader $layoutLoader,
@@ -48,7 +49,6 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         private readonly ComponentRegistry $componentRegistry,
         private readonly ComponentUpdateFactory $componentUpdateFactory,
         private readonly Validator $formKeyValidator,
-        private readonly ResponseInterface $response,
     ) {
     }
 
@@ -229,9 +229,20 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         $this->messageManager->addErrorMessage(__($exception->getMessage()));
     }
 
-    public function createCsrfValidationException(RequestInterface $request
+    public function createCsrfValidationException(
+        RequestInterface $request
     ): ?InvalidRequestException {
-        return new InvalidRequestException($this->response, [__('The request is not valid.')]);
+        $result = $this->jsonResultFactory->create();
+        $result->setHttpResponseCode(400);
+        $result->setData([
+            'success' => false,
+            'message' => __('Invalid Form Key. Please refresh the page.'),
+        ]);
+
+        return new InvalidRequestException(
+            $result,
+            [__('The request is not valid.')]
+        );
     }
 
     public function validateForCsrf(RequestInterface $request): ?bool

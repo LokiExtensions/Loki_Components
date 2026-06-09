@@ -1,6 +1,6 @@
 {
     "name": "loki/magento2-components",
-    "version": "2.3.3",
+    "version": "2.4.0",
     "description": "Core module for defining Alpine.js components with advanced AJAX features",
     "keywords": [
         "loki-components"

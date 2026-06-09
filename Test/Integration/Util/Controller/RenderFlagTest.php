@@ -5,6 +5,7 @@ namespace Loki\Components\Test\Integration\Util\Controller;
 use Laminas\Http\Header\GenericHeader;
 use Laminas\Http\Headers;
 use Loki\Components\Controller\Index\Html;
+use Loki\Components\Util\Security\AjaxSignature;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
@@ -28,6 +29,7 @@ class RenderFlagTest extends TestCase
         $this->prepareRequest([
             'targets' => [self::TARGET_BLOCK],
             'handles' => [self::HANDLE],
+            'pageHandles' => [],
             'updates' => [$update],
             'request' => [],
         ]);
@@ -77,6 +79,14 @@ class RenderFlagTest extends TestCase
     {
         $headers = new Headers();
         $headers->addHeader(GenericHeader::fromString('X-Alpine-Request: 1'));
+
+        $payload['signature'] = ObjectManager::getInstance()
+            ->get(AjaxSignature::class)
+            ->sign(
+                (array)($payload['handles'] ?? []),
+                (array)($payload['pageHandles'] ?? []),
+                (array)($payload['request'] ?? []),
+            );
 
         $request = ObjectManager::getInstance()->get(HttpRequest::class);
         $request->setHeaders($headers);

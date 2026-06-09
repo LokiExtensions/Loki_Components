@@ -2,39 +2,36 @@
 
 namespace Loki\Components\Test\Integration\Util\Controller;
 
-use Loki\Components\Util\Controller\LayoutLoader;
-use Loki\Components\Util\Controller\TargetRenderer;
+use Loki\Components\Test\Integration\LokiComponentsTestCase;
+use Loki\Components\Util\Security\AjaxSignature;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Customer\Test\Fixture\CustomerWithAddresses;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\DataFixture;
 use Magento\TestFramework\Fixture\DataFixtureStorageManager;
 use Magento\TestFramework\Fixture\DbIsolation;
-use PHPUnit\Framework\TestCase;
-use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsEnabled;
-use Yireo\IntegrationTestHelper\Test\Integration\Traits\AssertModuleIsRegistered;
+use RuntimeException;
 
-/**
- * Security regression guard for layout-handle injection through the AJAX component update.
- *
- * The frontend endpoint loki_components/index/html forwards request-supplied layout handles
- * straight into the layout (see Controller\Index\Html, RequestDataLoader and LayoutLoader),
- * without any allow-list. This test asserts that injecting the "customer_account" handle does
- * not leak a logged-in customer's sensitive details (email, name, address) into the rendered
- * AJAX response.
- */
 #[AppArea('frontend')]
-class CustomerAccountHandleLeakTest extends TestCase
+class CustomerAccountHandleLeakTest extends LokiComponentsTestCase
 {
-    use AssertModuleIsRegistered;
-    use AssertModuleIsEnabled;
-
     private const SENSITIVE_EMAIL = 'leak-test@example.com';
     private const SENSITIVE_FIRSTNAME = 'LeakFirstname';
     private const SENSITIVE_LASTNAME = 'LeakLastname';
+
+    private const CUSTOMER_ACCOUNT_HANDLES = [
+        'customer_account',
+        'customer_account_index',
+    ];
+
+    private const CUSTOMER_ACCOUNT_TARGETS = [
+        'customer_account_dashboard_info',
+        'customer_account_dashboard_address',
+        'customer_account_navigation',
+    ];
 
     #[DbIsolation(true)]
     #[AppIsolation(true)]
@@ -47,50 +44,121 @@ class CustomerAccountHandleLeakTest extends TestCase
         ],
         'customer'
     )]
-    public function testCustomerAccountHandleDoesNotLeakCustomerDetails(): void
+    public function testTamperedCustomerAccountHandleIsRejected(): void
     {
-        $this->assertModuleIsRegistered('Loki_Components');
-        $this->assertModuleIsEnabled('Loki_Components');
-
         $customer = DataFixtureStorageManager::getStorage()->get('customer');
         $customerId = (int)$customer->getId();
         $this->assertGreaterThan(0, $customerId, 'Customer fixture was not created');
 
         $this->getCustomerSession()->loginById($customerId);
 
-        $html = $this->renderHandle(
-            ['customer_account', 'customer_account_index'],
-            [
-                'customer_account_dashboard_info',
-                'customer_account_dashboard_address',
-                'customer_account_navigation',
-            ]
+        $body = $this->buildSignedBody([], [], []);
+        $body['handles'] = self::CUSTOMER_ACCOUNT_HANDLES;
+        $body['targets'] = self::CUSTOMER_ACCOUNT_TARGETS;
+
+        $exceptionMessage = '';
+        try {
+            $this->dispatchHtmlRequest($body);
+        } catch (RuntimeException $exception) {
+            $exceptionMessage = $exception->getMessage();
+        }
+
+        $responseBody = $this->getResponseBody();
+
+        $this->assertTrue(
+            $exceptionMessage === 'Payload was tampered with'
+                || str_contains($responseBody, 'Payload was tampered with'),
+            'Tampered request was not rejected by the signature check'
         );
 
-        $this->assertStringContainsString(
+        $this->assertStringNotContainsString(
             'block-dashboard-addresses',
-            $html,
-            'The "customer_account" dashboard address block did not render, so the no-leak assertions would be meaningless'
+            $responseBody,
+            'The "customer_account" dashboard address block rendered for a tampered request'
         );
 
         foreach ($this->getSensitiveValues($customerId) as $label => $value) {
             $this->assertStringNotContainsString(
                 $value,
-                $html,
-                'Sensitive customer detail leaked via the "customer_account" layout handle: '.$label
+                $responseBody,
+                'Sensitive customer detail leaked via a tampered "customer_account" request: '.$label
             );
         }
     }
 
-    /**
-     * Collect the customer details that must never leak into an AJAX response.
-     *
-     * Both the dashboard "info" block (email and name from the logged-in customer) and the
-     * dashboard "address" block (default billing/shipping address from storage) expose
-     * personal data once the matching layout handles are applied.
-     *
-     * @return array<string, string>
-     */
+    #[DbIsolation(true)]
+    #[AppIsolation(true)]
+    #[DataFixture(
+        CustomerWithAddresses::class,
+        [
+            'email' => self::SENSITIVE_EMAIL,
+            'firstname' => self::SENSITIVE_FIRSTNAME,
+            'lastname' => self::SENSITIVE_LASTNAME,
+        ],
+        'customer'
+    )]
+    public function testSignedCustomerAccountHandleLeaksWithoutSignatureProtection(): void
+    {
+        $customer = DataFixtureStorageManager::getStorage()->get('customer');
+        $customerId = (int)$customer->getId();
+        $this->assertGreaterThan(0, $customerId, 'Customer fixture was not created');
+
+        $this->getCustomerSession()->loginById($customerId);
+
+        $body = $this->buildSignedBody(
+            self::CUSTOMER_ACCOUNT_HANDLES,
+            [],
+            self::CUSTOMER_ACCOUNT_TARGETS
+        );
+
+        $this->dispatchHtmlRequest($body);
+
+        $responseBody = $this->getResponseBody();
+
+        $this->assertStringContainsString(
+            'block-dashboard-addresses',
+            $responseBody,
+            'The "customer_account" dashboard address block did not render, so this positive control is meaningless'
+        );
+
+        $this->assertStringContainsString(
+            self::SENSITIVE_EMAIL,
+            $responseBody,
+            'Positive control failed: a validly signed "customer_account" request is expected to render '
+            .'customer details, proving the signature check in testTamperedCustomerAccountHandleIsRejected '
+            .'is the only thing preventing an attacker from reaching this output'
+        );
+    }
+
+    private function dispatchHtmlRequest(array $body): void
+    {
+        $this->setAsAjaxRequest();
+
+        /** @var HttpRequest $request */
+        $request = $this->getRequest();
+        $request->setMethod('POST');
+        $request->setContent((string)json_encode($body));
+
+        $this->dispatch('loki_components/index/html');
+    }
+
+    private function buildSignedBody(array $handles, array $pageHandles, array $targets): array
+    {
+        $request = [];
+
+        $body = [
+            'updates' => [],
+            'targets' => $targets,
+            'handles' => $handles,
+            'pageHandles' => $pageHandles,
+            'request' => $request,
+        ];
+
+        $body['signature'] = $this->getAjaxSignature()->sign($handles, $pageHandles, $request);
+
+        return $body;
+    }
+
     private function getSensitiveValues(int $customerId): array
     {
         $values = [
@@ -120,31 +188,18 @@ class CustomerAccountHandleLeakTest extends TestCase
         return array_filter($values, static fn (string $value): bool => $value !== '');
     }
 
-    private function renderHandle(array $handles, array $targets): string
+    private function getAjaxSignature(): AjaxSignature
     {
-        $layout = $this->getLayoutLoader()->load($handles, [], true);
-        $htmlParts = $this->getTargetRenderer()->render($layout, $targets, true);
-
-        return implode("\n", $htmlParts);
-    }
-
-    private function getLayoutLoader(): LayoutLoader
-    {
-        return ObjectManager::getInstance()->get(LayoutLoader::class);
-    }
-
-    private function getTargetRenderer(): TargetRenderer
-    {
-        return ObjectManager::getInstance()->get(TargetRenderer::class);
+        return $this->getObjectManager()->get(AjaxSignature::class);
     }
 
     private function getCustomerSession(): CustomerSession
     {
-        return ObjectManager::getInstance()->get(CustomerSession::class);
+        return $this->getObjectManager()->get(CustomerSession::class);
     }
 
     private function getCustomerRepository(): CustomerRepositoryInterface
     {
-        return ObjectManager::getInstance()->get(CustomerRepositoryInterface::class);
+        return $this->getObjectManager()->get(CustomerRepositoryInterface::class);
     }
 }

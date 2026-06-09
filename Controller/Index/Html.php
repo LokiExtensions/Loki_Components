@@ -47,7 +47,8 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         private readonly LoggerInterface $logger,
         private readonly ComponentRegistry $componentRegistry,
         private readonly ComponentUpdateFactory $componentUpdateFactory,
-        private Validator $formKeyValidator
+        private readonly Validator $formKeyValidator,
+        private readonly ResponseInterface $response,
     ) {
     }
 
@@ -230,7 +231,7 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
 
     public function createCsrfValidationException(RequestInterface $request
     ): ?InvalidRequestException {
-        return null;
+        return new InvalidRequestException($this->response, [__('The request is not valid.')]);
     }
 
     public function validateForCsrf(RequestInterface $request): ?bool

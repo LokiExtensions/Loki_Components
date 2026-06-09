@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('basic test', async ({ page }) => {
+test('wrong get request test', async ({ page }) => {
   const response = await page.goto('/loki_components/index/html');
-  await expect(response.status()).toBe(500);
+  await expect(response.status()).toBe(400);
 });

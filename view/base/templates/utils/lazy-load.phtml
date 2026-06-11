@@ -1,0 +1,17 @@
+<?php declare(strict_types=1);
+
+use Loki\Components\Util\Block\BlockRenderer;
+use Loki\CssUtils\Util\CssClass;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Escaper $escaper */
+/** @var Template $block */
+/** @var CssClass $css */
+/** @var BlockRenderer $blockRenderer */
+
+?>
+<div aria-busy="true" aria-live="polite" class="<?= $css('relative', 'lazy-load') ?>">
+    <?= /* @noEscape */ $blockRenderer->html( $block, 'loki-field-components.utils.loader-overlay') ?>
+    <?= $block->getChildHtml('lazy-load-content') ?>
+</div>

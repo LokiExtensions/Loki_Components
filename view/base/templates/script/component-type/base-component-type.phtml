@@ -51,7 +51,8 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
         },
         initLazyLoading() {
             if (this.lazyLoad) {
-                this.post({});
+                this.showLoader = true;
+                this.post(null);
             }
         },
         async post(value) {

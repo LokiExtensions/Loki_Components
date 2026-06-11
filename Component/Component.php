@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Loki\Components\Component;
 
+use Loki\Components\Util\Ajax;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
@@ -28,6 +29,7 @@ class Component implements ComponentInterface
         LocalMessageRegistryFactory $localMessageRegistryFactory,
         protected Validator $validator,
         protected Filter $filter,
+        protected Ajax $ajax,
         protected string $name,
         protected array $targets = [],
         protected array $validators = [],
@@ -51,6 +53,11 @@ class Component implements ComponentInterface
     public function getTargetString(): string
     {
         return preg_replace('/([^a-z0-9\-\ ]+)/', '-', implode(' ', $this->getTargets()));
+    }
+
+    public function isAjax(): bool
+    {
+        return $this->ajax->isAjax();
     }
 
     /**

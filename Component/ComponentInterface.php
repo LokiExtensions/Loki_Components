@@ -42,6 +42,7 @@ interface ComponentInterface
     public function dispatchLocalMessages(): bool;
 
     public function isValidated(): bool;
+    public function isAjax(): bool;
 
     public function setIsValidated(bool $isValidated): void;
     public function getLayout(): LayoutInterface;

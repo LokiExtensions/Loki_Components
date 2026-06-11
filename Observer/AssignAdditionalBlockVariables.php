@@ -78,6 +78,15 @@ class AssignAdditionalBlockVariables implements ObserverInterface
             return $block;
         }
 
+        if ($viewModel->isLazyLoad()) {
+            $lazyLoadTemplate = 'Loki_Components::utils/lazy-load.phtml';
+            if ($block->getLazyLoadTemplate()) {
+                $lazyLoadTemplate = $block->getLazyLoadTemplate();
+            }
+
+            $block->setTemplate($lazyLoadTemplate); // @phpstan-ignore bitExpertMagento.setTemplateDisallowedForBlock
+        }
+
         $block->assign('viewModel', $viewModel);
         $block->assign('componentUtil', $this->componentUtil);
         return $block;

@@ -170,6 +170,10 @@ class ComponentViewModel implements ComponentViewModelInterface
      */
     public function isLazyLoad(): bool
     {
+        if ($this->getComponent()->isAjax()) {
+            return false;
+        }
+
         if ($this->hasBlock()) {
             $lazyLoad = $this->getBlock()->getLazyLoad();
             if (is_bool($lazyLoad)) {

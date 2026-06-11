@@ -13,7 +13,7 @@ use Magento\Framework\View\Element\Template;
 /** @var BlockRenderer $blockRenderer */
 
 ?>
-<div aria-busy="true" aria-live="polite" class="<?= $css('relative', 'lazy-load') ?>">
-    <?= /* @noEscape */ $blockRenderer->html( $block, 'loki-field-components.utils.loader-overlay') ?>
-    <?= $block->getChildHtml('lazy-load-content') ?>
+<div aria-busy="true" aria-live="polite" class="<?= /* @noEscape */ $css('relative', 'lazy-load') ?>">
+    <?= /* @noEscape */ $blockRenderer->html($block, 'loki-field-components.utils.loader-overlay') ?>
+    <?= /* @noEscape */ $block->getChildHtml('lazy-load-content') ?>
 </div>

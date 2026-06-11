@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.4.1] - 11 June 2026
+### Fixed
+- Allow for lazy-loading by simply setting `lazy_load` in the block arguments
+
 ## [2.4.0] - 09 June 2026
 ### Security
 - Implement tight security filtering by default

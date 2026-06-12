@@ -14,6 +14,8 @@ use Loki\Components\Util\ComponentUtil;
 /** @var ComponentUtil $componentUtil */
 $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
+
+// @deprecated: Replace `LokiComponentFormKey` with `Alpine.store('LokiComponents').formKey`
 ?>
 <script>
     const LokiComponentFormKey = '<?= $escaper->escapeJs($componentUtil->getFormKey()) ?>';

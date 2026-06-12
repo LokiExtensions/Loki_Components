@@ -25,7 +25,8 @@ if ($interval < 500) {
 <script>
     (() => {
         setInterval(() => {
-            fetch('<?= $escaper->escapeUrl($componentUtil->getPollingUrl()) ?>?form_key=' + LokiComponentFormKey + '&isAjax=true', {
+            const formKey = Alpine.store('LokiComponents').formKey;
+            fetch('<?= $escaper->escapeUrl($componentUtil->getPollingUrl()) ?>?form_key=' + formKey + '&isAjax=true', {
                 method: 'GET',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',

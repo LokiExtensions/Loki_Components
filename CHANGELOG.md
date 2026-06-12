@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.0] - 12 June 2026
+### Added
+- Replace LokiComponentFormKey with Alpine.store form key
+
+### Fixed
+- Autorefresh form key via AJAX calls
+- When a CSRF exception occurs, display it as a regular error message
+
 ## [2.4.1] - 11 June 2026
 ### Fixed
 - Allow for lazy-loading by simply setting `lazy_load` in the block arguments

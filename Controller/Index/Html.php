@@ -231,12 +231,10 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
     public function createCsrfValidationException(
         RequestInterface $request
     ): ?InvalidRequestException {
-        $result = $this->jsonResultFactory->create();
+
+        $result = $this->htmlResultFactory->create();
         $result->setHttpResponseCode(400);
-        $result->setData([
-            'success' => false,
-            'message' => __('Invalid Form Key. Please refresh the page.'),
-        ]);
+        $result->setContents('Invalid Form Key. Please refresh the page');
 
         return new InvalidRequestException(
             $result,

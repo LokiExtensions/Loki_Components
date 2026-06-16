@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.1] - 16 June 2026
+### Fixed
+- Change Alpine.store('LokiComponents').formKey yet again to MageCookies
+
 ## [2.5.0] - 12 June 2026
 ### Added
 - Replace LokiComponentFormKey with Alpine.store form key

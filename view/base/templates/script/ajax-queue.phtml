@@ -93,7 +93,7 @@ if ($interval < 10) {
                 return;
             }
 
-            const formKey = Alpine.store('LokiComponents').formKey;
+            const formKey = MageCookies.get('form_key');
             await fetch('<?= $escaper->escapeUrl($componentUtil->getPostUrl(
             )) ?>?form_key=' + formKey + '&isAjax=true', {
                 method: 'POST',
@@ -104,7 +104,7 @@ if ($interval < 10) {
                 .then(async response => {
                     const formKey = response.headers.get('x-magento-form-key');
                     if (formKey) {
-                        Alpine.store('LokiComponents').formKey = formKey;
+                        MageCookies.set('form_key', formKey);
                     }
 
                     const body = await response.text();

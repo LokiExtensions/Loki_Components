@@ -1,23 +1,16 @@
 <?php
 declare(strict_types=1);
 
-use Loki\Components\Factory\ViewModelFactory;
-use Loki\Components\Util\ComponentUtil;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\Template;
 
 /** @version 2.5.0 */
 /** @var Template $block */
 /** @var Escaper $escaper */
-/** @var ViewModelFactory $viewModelFactory */
-/** @var ComponentUtil $componentUtil */
-
-$componentUtil = $viewModelFactory->create(ComponentUtil::class);
 ?>
 <script>
     document.addEventListener('alpine:init', () => {
         Alpine.store('LokiComponents', {
-            formKey: '<?= $escaper->escapeJs($componentUtil->getFormKey()) ?>',
             components: {},
             getComponentIds() {
                 return Object.keys(this.components);

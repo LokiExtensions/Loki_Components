@@ -93,7 +93,11 @@ if ($interval < 10) {
                 return;
             }
 
-            const formKey = MageCookies.get('form_key');
+            let formKey = MageCookies.get('form_key');
+            if (!formKey) {
+                formKey = LOKI_FORM_KEY;
+            }
+
             await fetch('<?= $escaper->escapeUrl($componentUtil->getPostUrl(
             )) ?>?form_key=' + formKey + '&isAjax=true', {
                 method: 'POST',

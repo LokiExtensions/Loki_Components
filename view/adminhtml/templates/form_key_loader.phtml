@@ -1,0 +1,19 @@
+<?php
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+
+$url = $block->getUrl('loki_components/index/formkey');
+?>
+<script>
+    fetch('<?= $url ?>')
+        .then(response => response.json())
+        .then(data => {
+            window.LOKI_FORM_KEY = data.form_key;
+        })
+    ;
+</script>

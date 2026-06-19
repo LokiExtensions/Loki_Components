@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.5.2] - 19 June 2026
+### Fixed
+- Autorefresh `form_key` in admin-pages
+- Rewrite admin controller to interface and apply custom CSRF
+- Fix for missing form key in admin
+
 ## [2.5.1] - 16 June 2026
 ### Fixed
 - Change Alpine.store('LokiComponents').formKey yet again to MageCookies

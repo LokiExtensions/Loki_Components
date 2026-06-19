@@ -12,7 +12,7 @@ use Magento\Framework\View\Element\Template;
 $url = $block->getUrl('loki_components/index/formkey');
 ?>
 <script>
-    fetch('<?= $url ?>')
+    fetch('<?= $escaper->escapeUrl($url) ?>')
         .then(response => response.json())
         .then(data => {
             window.LOKI_FORM_KEY = data.form_key;

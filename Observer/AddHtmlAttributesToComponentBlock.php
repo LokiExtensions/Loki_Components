@@ -75,7 +75,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
     {
         $json = $this->getJsData($component);
         return <<<EOF
-<script x-ref="initialData" type="text/x-loki-init">$json</script>
+<data hidden x-ref="initialData">$json</data>
 EOF;
     }
 

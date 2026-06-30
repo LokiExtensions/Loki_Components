@@ -1,6 +1,15 @@
 <script>
     const LokiHtmlReplacer = {
         replace(root, newRoot) {
+            if (root.tagName !== newRoot.tagName) {
+                root.replaceWith(newRoot);
+                if (window.Alpine) {
+                    Alpine.initTree(newRoot);
+                }
+
+                return;
+            }
+
             if (root.hasAttribute('x-ignore')) {
                 return;
             }

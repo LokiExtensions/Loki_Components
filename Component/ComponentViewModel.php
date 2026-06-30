@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Loki\Components\Component;
 
 use Loki\Components\Util\Block\GetElementId;
+use Loki\Components\Util\JsPropertyResolver;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Loki\Components\Filter\Filter;
@@ -228,9 +229,11 @@ class ComponentViewModel implements ComponentViewModelInterface
     public function getJsData(): array
     {
         $jsDataFromBlock = (array)$this->getBlock()->getJsData();
+        $jsProperties = $this->getComponent()->getJsPropertyResolver()->getJsProperties($this);
 
         return [
             ...(array)$jsDataFromBlock,
+            ...$jsProperties,
             'lazyLoad' => $this->isLazyLoad(),
             'lazyUpdate' => $this->isLazyUpdate(),
             'lazyUpdateTimeout' => $this->getLazyUpdateTimeout(),

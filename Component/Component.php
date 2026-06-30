@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Loki\Components\Component;
 
 use Loki\Components\Util\Ajax;
+use Loki\Components\Util\JsPropertyResolver;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
@@ -26,7 +27,8 @@ class Component implements ComponentInterface
         protected LayoutInterface $layout,
         protected ComponentContextInterface $context,
         protected GlobalMessageRegistry $globalMessageRegistry,
-        LocalMessageRegistryFactory $localMessageRegistryFactory,
+        protected LocalMessageRegistryFactory $localMessageRegistryFactory,
+        protected JsPropertyResolver $jsPropertyResolver,
         protected Validator $validator,
         protected Filter $filter,
         protected Ajax $ajax,
@@ -37,7 +39,6 @@ class Component implements ComponentInterface
         protected ?string $repositoryClass = null,
         protected ?string $viewModelClass = null,
     ) {
-        $this->localMessageRegistry = $localMessageRegistryFactory->create();
     }
 
     public function getName(): string
@@ -172,6 +173,10 @@ class Component implements ComponentInterface
 
     public function getLocalMessageRegistry(): LocalMessageRegistry
     {
+        if (false === $this->localMessageRegistry instanceof LocalMessageRegistry) {
+            $this->localMessageRegistry = $this->localMessageRegistryFactory->create();
+        }
+
         return $this->localMessageRegistry;
     }
 
@@ -201,5 +206,10 @@ class Component implements ComponentInterface
     public function getLayout(): LayoutInterface
     {
         return $this->layout;
+    }
+
+    public function getJsPropertyResolver(): JsPropertyResolver
+    {
+        return $this->jsPropertyResolver;
     }
 }

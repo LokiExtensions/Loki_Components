@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Loki\Components\Component;
 
+use Loki\Components\Attribute\JsProperty;
 use Loki\Components\Util\Block\GetElementId;
-use Loki\Components\Util\JsPropertyResolver;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Loki\Components\Filter\Filter;
@@ -55,6 +55,7 @@ class ComponentViewModel implements ComponentViewModelInterface
         return ObjectManager::getInstance()->get(GetElementId::class)->execute($this->block);
     }
 
+    #[JsProperty(name: 'value')]
     public function getValue(): mixed
     {
         if (false === $this->getComponent()->hasRepository()) {

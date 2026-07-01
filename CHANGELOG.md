@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.0] - 01 July 2026
+### Fixed
+- Workaround for when HTML elements change tagName via AJAX
+- Rename `script ref="initialData"` to `data` for browser compliance
+- Add new PHP Attribute `#[JsProperty]` for usage in ComponentViewModels
+
 ## [2.5.2] - 19 June 2026
 ### Fixed
 - Autorefresh `form_key` in admin-pages

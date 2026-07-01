@@ -5,7 +5,7 @@ namespace Loki\Components\Attribute;
 use Attribute;
 
 #[Attribute(Attribute::TARGET_METHOD)]
-final class JsProperty
+class JsProperty
 {
     public function __construct(
         public readonly string $name,

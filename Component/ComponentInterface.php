@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Loki\Components\Component;
 
+use Loki\Components\Util\JsPropertyResolver;
 use Magento\Framework\View\Element\AbstractBlock;
 use Loki\Components\Messages\GlobalMessageRegistry;
 use Loki\Components\Messages\LocalMessageRegistry;
@@ -46,4 +47,5 @@ interface ComponentInterface
 
     public function setIsValidated(bool $isValidated): void;
     public function getLayout(): LayoutInterface;
+    public function getJsPropertyResolver(): JsPropertyResolver;
 }

@@ -3,9 +3,12 @@ declare(strict_types=1);
 
 namespace Loki\Components\Component;
 
+use Magento\Customer\Model\Session as CustomerSession;
+use Magento\Framework\UrlFactory;
+
 /**
- * @method \Magento\Customer\Model\Session getCustomerSession()
- * @method \Magento\Framework\UrlFactory getUrlFactory()
+ * @method CustomerSession getCustomerSession()
+ * @method UrlFactory getUrlFactory()
  */
 class ComponentContext extends AbstractComponentContext
 {

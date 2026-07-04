@@ -7,18 +7,18 @@ namespace Loki\Components\Controller\Adminhtml\Index;
 use Exception;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Component\ComponentRegistry;
-use Magento\Backend\App\Action;
-use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
@@ -35,8 +35,6 @@ use Psr\Log\LoggerInterface;
 
 class Html implements HttpPostActionInterface, CsrfAwareActionInterface
 {
-    const ADMIN_RESOURCE = 'Loki_Components::index';
-
     public function __construct(
         private readonly LayoutLoader $layoutLoader,
         private readonly RequestDataLoader $requestDataLoader,
@@ -50,13 +48,20 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         private readonly ComponentRegistry $componentRegistry,
         private readonly MessageManager $messageManager,
         private readonly Validator $formKeyValidator,
-
+        private readonly RequestInterface $request,
+        private readonly AuthorizationInterface $authorization,
     ) {
-        //parent::__construct($context);
     }
 
     public function execute(): ResultInterface|ResponseInterface
     {
+        $aclResource = $this->request->getParam('acl_resource');
+        if (!empty($aclResource) && !$this->authorization->isAllowed($aclResource)) {
+            throw new AuthorizationException(
+                __('Access denied.')
+            );
+        }
+
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();
         $layout = $this->layoutLoader->load($data['handles']);

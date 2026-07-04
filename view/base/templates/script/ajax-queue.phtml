@@ -169,18 +169,14 @@ if ($interval < 10) {
             };
         },
         buildBody(requests) {
+            const componentData = JSON.parse('<?= /* @noEscape */ json_encode(
+                $componentUtil->getComponentUpdateData($block)
+            ) ?>');
+
             return {
+                ...componentData,
                 updates: this.getUpdates(requests),
                 targets: this.getTargets(requests),
-                handles: <?= /* @noEscape */ json_encode(
-                    $componentUtil->getHandles($block)
-                ) ?>,
-                pageHandles: <?= /* @noEscape */ json_encode(
-                    $componentUtil->getPageHandles($block)
-                ) ?>,
-                request: <?= /* @noEscape */ json_encode(
-                    $componentUtil->getRequestData()
-                ) ?>,
                 signature: <?= /* @noEscape */ json_encode(
                     $componentUtil->getSignature($block)
                 ) ?>

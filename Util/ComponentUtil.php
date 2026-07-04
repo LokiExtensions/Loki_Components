@@ -4,6 +4,7 @@ namespace Loki\Components\Util;
 
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\State;
 use Magento\Framework\Data\Form\FormKey as FormKeyModel;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -17,7 +18,8 @@ class ComponentUtil implements ArgumentInterface
         private readonly RequestInterface $request,
         private readonly FormKeyModel $formKey,
         private readonly IdConvertor $idConvertor,
-        private readonly AjaxSignature $ajaxSignature
+        private readonly AjaxSignature $ajaxSignature,
+        private readonly State $appState
     ) {
     }
 
@@ -67,12 +69,19 @@ class ComponentUtil implements ArgumentInterface
         ];
     }
 
+    public function getComponentUpdateData(AbstractBlock $block): array
+    {
+        return [
+            'handles' => $this->getHandles($block),
+            'pageHandles' => $this->getPageHandles($block),
+            'request' => $this->getRequestData(),
+        ];
+    }
+
     public function getSignature(AbstractBlock $block): string
     {
         return $this->ajaxSignature->sign(
-            $this->getHandles($block),
-            $this->getPageHandles($block),
-            $this->getRequestData()
+            $this->getComponentUpdateData($block)
         );
     }
 

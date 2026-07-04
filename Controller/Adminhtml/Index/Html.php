@@ -48,20 +48,12 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         private readonly ComponentRegistry $componentRegistry,
         private readonly MessageManager $messageManager,
         private readonly Validator $formKeyValidator,
-        private readonly RequestInterface $request,
         private readonly AuthorizationInterface $authorization,
     ) {
     }
 
     public function execute(): ResultInterface|ResponseInterface
     {
-        $aclResource = $this->request->getParam('acl_resource');
-        if (!empty($aclResource) && !$this->authorization->isAllowed($aclResource)) {
-            throw new AuthorizationException(
-                __('Access denied.')
-            );
-        }
-
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();
         $layout = $this->layoutLoader->load($data['handles']);
@@ -70,6 +62,14 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         $updates = $this->sortUpdates($updates);
 
         foreach ($updates as $update) {
+            if (isset($update['aclResource'])) {
+                if (!empty($aclResource) && !$this->authorization->isAllowed($update['aclResource'])) {
+                    throw new AuthorizationException(
+                        __('Access denied.')
+                    );
+                }
+            }
+
             try {
                 $this->repositoryDispatcher->dispatch(
                     $update['component'],

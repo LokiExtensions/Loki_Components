@@ -11,24 +11,24 @@ class AjaxSignature
     ) {
     }
 
-    public function sign(array $handles, array $pageHandles, array $request): string
+    public function sign(array $data): string
     {
         return hash_hmac(
             'sha256',
-            $this->buildPayload($handles, $pageHandles, $request),
+            $this->buildPayload($data),
             $this->getCryptKey()
         );
     }
 
-    public function verify(array $handles, array $pageHandles, array $request, string $signature): bool
+    public function verify(array $data, string $signature): bool
     {
-        $expectedSignature = $this->sign($handles, $pageHandles, $request);
+        $expectedSignature = $this->sign($data);
         return hash_equals($expectedSignature, $signature);
     }
 
-    private function buildPayload(array $handles, array $pageHandles, array $request): string
+    private function buildPayload(array $data): string
     {
-        return (string)json_encode([$handles, $pageHandles, $request], JSON_UNESCAPED_SLASHES);
+        return (string)json_encode($data, JSON_UNESCAPED_SLASHES);
     }
 
     private function getCryptKey(): string

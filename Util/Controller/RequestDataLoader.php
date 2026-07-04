@@ -35,12 +35,13 @@ class RequestDataLoader
 
     private function validateSignature(array $data): void
     {
-        $isValid = $this->ajaxSignature->verify(
-            (array)($data['handles'] ?? []),
-            (array)($data['pageHandles'] ?? []),
-            (array)($data['request'] ?? []),
-            (string)($data['signature'] ?? '')
-        );
+        $input = array_intersect_key($data, array_flip([
+            'handles',
+            'pageHandles',
+            'request'
+        ]));
+
+        $isValid = $this->ajaxSignature->verify($input, (string)($data['signature'] ?? ''));
 
         if (false === $isValid) {
             throw new RuntimeException('Payload was tampered with');

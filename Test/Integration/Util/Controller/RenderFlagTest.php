@@ -80,13 +80,15 @@ class RenderFlagTest extends TestCase
         $headers = new Headers();
         $headers->addHeader(GenericHeader::fromString('X-Alpine-Request: 1'));
 
+        $signData = [
+            'handles' => $payload['handles'] ?? [],
+            'pageHandles' => $payload['pageHandles'] ?? [],
+            'request' => $payload['request'] ?? [],
+        ];
+
         $payload['signature'] = ObjectManager::getInstance()
             ->get(AjaxSignature::class)
-            ->sign(
-                (array)($payload['handles'] ?? []),
-                (array)($payload['pageHandles'] ?? []),
-                (array)($payload['request'] ?? []),
-            );
+            ->sign($signData);
 
         $request = ObjectManager::getInstance()->get(HttpRequest::class);
         $request->setHeaders($headers);

@@ -32,20 +32,15 @@ class RequestDataLoaderTest extends TestCase
 
     public function testLoadWithValidData()
     {
-        $requestData = [
-            'targets' => [],
-            'handles' => [],
-            'updates' => [],
-            'request' => [],
-            'pageHandles' => [],
+        $requestData = $this->getEmptyRequestData();
+
+        $signData = [
+            'handles' => $requestData['handles'] ?? [],
+            'pageHandles' => $requestData['pageHandles'] ?? [],
+            'request' => $requestData['request'] ?? [],
         ];
 
-        $requestData['signature'] = $this->getAjaxSignature()->sign(
-            $requestData['handles'],
-            $requestData['pageHandles'],
-            $requestData['request']
-        );
-
+        $requestData['signature'] = $this->getAjaxSignature()->sign($signData);
         $requestDataLoader = $this->getRequestDataLoader($requestData, $this->getValidHeaders());
         $data = $requestDataLoader->load();
         $this->assertNotEmpty($data);
@@ -53,19 +48,15 @@ class RequestDataLoaderTest extends TestCase
 
     public function testLoadWithTamperedPayload()
     {
-        $requestData = [
-            'targets' => [],
-            'handles' => [],
-            'updates' => [],
-            'request' => [],
-            'pageHandles' => [],
+        $requestData = $this->getEmptyRequestData();
+
+        $signData = [
+            'handles' => $requestData['handles'] ?? [],
+            'pageHandles' => $requestData['pageHandles'] ?? [],
+            'request' => $requestData['request'] ?? [],
         ];
 
-        $requestData['signature'] = $this->getAjaxSignature()->sign(
-            $requestData['handles'],
-            $requestData['pageHandles'],
-            $requestData['request']
-        );
+        $requestData['signature'] = $this->getAjaxSignature()->sign($signData);
 
         $requestData['handles'] = ['tampered_handle'];
 
@@ -77,13 +68,7 @@ class RequestDataLoaderTest extends TestCase
 
     public function testLoadWithMissingSignature()
     {
-        $requestData = [
-            'targets' => [],
-            'handles' => [],
-            'updates' => [],
-            'request' => [],
-            'pageHandles' => [],
-        ];
+        $requestData = $this->getEmptyRequestData();
 
         $requestDataLoader = $this->getRequestDataLoader($requestData, $this->getValidHeaders());
         $this->expectException(RuntimeException::class);
@@ -113,5 +98,16 @@ class RequestDataLoaderTest extends TestCase
     private function getValidHeaders(): array
     {
         return ['X-Alpine-Request' => 'true'];
+    }
+
+    private function getEmptyRequestData(): array
+    {
+        return [
+            'targets' => [],
+            'handles' => [],
+            'updates' => [],
+            'request' => [],
+            'pageHandles' => [],
+        ];
     }
 }

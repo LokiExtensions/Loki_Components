@@ -154,7 +154,13 @@ class CustomerAccountHandleLeakTest extends LokiComponentsTestCase
             'request' => $request,
         ];
 
-        $body['signature'] = $this->getAjaxSignature()->sign($handles, $pageHandles, $request);
+        $signData = [
+            'handles' => $handles,
+            'pageHandles' => $pageHandles,
+            'request' => $request,
+        ];
+
+        $body['signature'] = $this->getAjaxSignature()->sign($signData);
 
         return $body;
     }

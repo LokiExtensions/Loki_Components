@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.6.1] - 14 July 2026
+### Fixed
+- Verify signed data in right ordering to prevent false positive tests
+- Allow admin component to define `acl_resource` for added security
+- Make ACL optional in admin controller and try to inherit from posted value
+
 ## [2.6.0] - 01 July 2026
 ### Fixed
 - Workaround for when HTML elements change tagName via AJAX

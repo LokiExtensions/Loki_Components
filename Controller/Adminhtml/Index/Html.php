@@ -63,7 +63,8 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
 
         foreach ($updates as $update) {
             if (isset($update['aclResource'])) {
-                if (!empty($aclResource) && !$this->authorization->isAllowed($update['aclResource'])) {
+                $aclResource = $update['aclResource'];
+                if (!empty($aclResource) && !$this->authorization->isAllowed($aclResource)) {
                     throw new AuthorizationException(
                         __('Access denied.')
                     );

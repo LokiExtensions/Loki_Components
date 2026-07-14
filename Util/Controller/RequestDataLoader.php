@@ -35,11 +35,11 @@ class RequestDataLoader
 
     private function validateSignature(array $data): void
     {
-        $input = array_intersect_key($data, array_flip([
-            'handles',
-            'pageHandles',
-            'request'
-        ]));
+        $input = [
+            'handles' => $data['handles'] ?? [],
+            'pageHandles' => $data['pageHandles'] ?? [],
+            'request' => $data['request'] ?? [],
+        ];
 
         $isValid = $this->ajaxSignature->verify($input, (string)($data['signature'] ?? ''));
 

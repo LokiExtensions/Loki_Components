@@ -4,6 +4,7 @@ namespace Loki\Components\Util;
 
 use Loki\Components\Attribute\JsProperty;
 use Loki\Components\Component\ComponentViewModelInterface;
+use ReflectionAttribute;
 use ReflectionClass;
 
 class JsPropertyResolver

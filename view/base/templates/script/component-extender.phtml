@@ -13,17 +13,17 @@ use Magento\Framework\View\Element\Template;
 <script>
     const LokiComponentExtender = {
         extensions: {},
-        add(extensionId, extenderFunction) {
-            this.extensions[extensionId] = extenderFunction;
+        add(extensionId, extenderFunction, append = false) {
+            this.extensions[extensionId] = {extenderFunction, append};
         },
-        addMixin(extensionId, matchComponentName, mixin) {
-            this.extensions[extensionId] = (componentName) => {
-                if (matchComponentName === componentName) {
-                    return mixin;
+        addMixin(extensionId, matchComponentName, mixin, append = false) {
+            this.add(extensionId, (componentName, componentData) => {
+                if (matchComponentName !== componentName) {
+                    return {};
                 }
 
-                return {};
-            };
+                return typeof mixin === 'function' ? mixin(componentData) : mixin;
+            }, append);
         }
     };
 </script>
@@ -36,8 +36,12 @@ use Magento\Framework\View\Element\Template;
 
         Alpine.data = (componentName, componentFactory) => {
             let mixinData = {};
-            Object.values(LokiComponentExtender.extensions).forEach(extenderFunction => {
-                const currentMixinData = extenderFunction(componentName);
+            Object.values(LokiComponentExtender.extensions).forEach(extension => {
+                if (extension.append) {
+                    return;
+                }
+
+                const currentMixinData = extension.extenderFunction(componentName);
                 if (typeof currentMixinData !== 'object') {
                     return;
                 }
@@ -45,19 +49,44 @@ use Magento\Framework\View\Element\Template;
                 mixinData = Object.assign(mixinData, currentMixinData);
             });
 
-            let componentData;
-            if (Object.values(mixinData).length > 0) {
-                const wrapped = (...args) => {
-                    const base = componentFactory(...args);
-                    return Object.assign({}, base, mixinData);
-                };
+            const hasMixinData = Object.values(mixinData).length > 0;
+            const hasAppendData = Object.values(LokiComponentExtender.extensions)
+                .some(extension => extension.append);
 
-                componentData = originalAlpineData(componentName, wrapped);
-            } else {
-                componentData = originalAlpineData(componentName, componentFactory);
+            if (!hasMixinData && !hasAppendData) {
+                return originalAlpineData(componentName, componentFactory);
             }
 
-            return componentData;
+            const wrapped = (...args) => {
+                const base = componentFactory(...args);
+                const componentData = hasMixinData ? Object.assign({}, base, mixinData) : base;
+
+                let appendData = {};
+                Object.values(LokiComponentExtender.extensions).forEach(extension => {
+                    if (!extension.append) {
+                        return;
+                    }
+
+                    const currentAppendData = extension.extenderFunction(
+                        componentName,
+                        Object.assign({}, componentData, appendData)
+                    );
+
+                    if (typeof currentAppendData !== 'object') {
+                        return;
+                    }
+
+                    appendData = Object.assign(appendData, currentAppendData);
+                });
+
+                if (Object.values(appendData).length < 1) {
+                    return componentData;
+                }
+
+                return Object.assign({}, componentData, appendData);
+            };
+
+            return originalAlpineData(componentName, wrapped);
         };
     });
 </script>

@@ -35,26 +35,29 @@ use Magento\Framework\View\Element\Template;
         const originalAlpineData = Alpine.data;
 
         Alpine.data = (componentName, componentFactory) => {
-            let componentMixin = {};
+            let mixinData = {};
             Object.values(LokiComponentExtender.extensions).forEach(extenderFunction => {
-                const mixin = extenderFunction(componentName);
-                if (typeof mixin !== 'object') {
+                const currentMixinData = extenderFunction(componentName);
+                if (typeof currentMixinData !== 'object') {
                     return;
                 }
 
-                componentMixin = Object.assign(componentMixin, mixin);
+                mixinData = Object.assign(mixinData, currentMixinData);
             });
 
-            if (Object.values(componentMixin).length > 0) {
+            let componentData;
+            if (Object.values(mixinData).length > 0) {
                 const wrapped = (...args) => {
                     const base = componentFactory(...args);
-                    return Object.assign({}, base, componentMixin);
+                    return Object.assign({}, base, mixinData);
                 };
 
-                return originalAlpineData(componentName, wrapped);
+                componentData = originalAlpineData(componentName, wrapped);
+            } else {
+                componentData = originalAlpineData(componentName, componentFactory);
             }
 
-            return originalAlpineData(componentName, componentFactory);
+            return componentData;
         };
     });
 </script>

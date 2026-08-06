@@ -51,7 +51,11 @@
         <referenceBlock name="loki.script.store">
             <block
                 name="loki-components.script.components-store"
-                template="Loki_Components::script/components-store.phtml"/>
+                template="Loki_Components::script/components-store.phtml">
+                <arguments>
+                    <argument name="sort_order" xsi:type="number">1</argument>
+                </arguments>
+            </block>
         </referenceBlock>
 
         <referenceBlock name="loki.script.component-partial">

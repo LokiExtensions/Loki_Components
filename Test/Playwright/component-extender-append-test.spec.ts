@@ -1,15 +1,14 @@
-import {setupCheckout} from '@loki/setup-checkout';
-import {test, expect} from '@loki/test';
-import coreConfig from '@loki/config';
+import {test, expect} from '@playwright/test';
 
 declare const Alpine: any;
 declare const LokiComponentExtender: any;
 
 const APPENDED_VALUE = 'appended-by-playwright';
+const TEST_PAGE = '/loki_components/index/test';
 
 test.describe('Loki Components extender appends data', function () {
-    test('appends data after the original component data is generated', async function ({page, context}) {
-        await setupCheckout(page, context, coreConfig);
+    test('appends data after the original component data is generated', async function ({page}) {
+        await page.goto(TEST_PAGE);
 
         const componentData = await page.evaluate(async (appendedValue) => {
             LokiComponentExtender.addMixin('PlaywrightMixin', 'PlaywrightExtenderTest', {
@@ -69,7 +68,7 @@ test.describe('Loki Components extender appends data', function () {
         expect(componentData.greeting, 'An appending mixin calls the original method').toBe('base(from-base) + append');
     });
 
-    test('appends data to the components rendered in the checkout', async function ({page, context}) {
+    test('appends data to the components rendered on the test page', async function ({page}) {
         await page.addInitScript((appendedValue) => {
             document.addEventListener('alpine:init', () => {
                 LokiComponentExtender.add(
@@ -84,7 +83,7 @@ test.describe('Loki Components extender appends data', function () {
             });
         }, APPENDED_VALUE);
 
-        await setupCheckout(page, context, coreConfig);
+        await page.goto(TEST_PAGE);
 
         const components = await page.evaluate(() => {
             return Alpine.store('LokiComponents').getComponentArray().map((component: any) => ({
@@ -95,7 +94,7 @@ test.describe('Loki Components extender appends data', function () {
             }));
         });
 
-        expect(components.length, 'Registered components in the checkout').toBeGreaterThan(0);
+        expect(components.length, 'Registered components on the test page').toBeGreaterThan(0);
 
         components.forEach((component: any) => {
             expect(component.appendedValue, 'Appended value of component ' + component.id).toBe(APPENDED_VALUE);

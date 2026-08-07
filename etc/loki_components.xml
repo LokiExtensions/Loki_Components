@@ -3,4 +3,6 @@
     <group name="default"/>
 
     <component name="loki-components.modal" />
+    <component name="loki-components.test.dummy1" />
+    <component name="loki-components.test.dummy2" />
 </components>

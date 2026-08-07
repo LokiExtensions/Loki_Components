@@ -7,6 +7,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ## [Unreleased]
 ### Added
 - Extra argument `append` for `LokiComponentExtender.add()` and `LokiComponentExtender.addMixin()` to append data after the original componentData is generated
+- Test page `/loki_components/index/test` (developer mode only) rendering dummy Loki Components for Playwright tests
 
 ## [2.6.1] - 14 July 2026
 ### Fixed

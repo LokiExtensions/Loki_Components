@@ -1,0 +1,11 @@
+<?php
+
+declare(strict_types=1);
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+?>
+<div class="loki-components-test-dummy"><?= $escaper->escapeHtml($block->getNameInLayout()) ?></div>

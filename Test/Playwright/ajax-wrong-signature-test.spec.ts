@@ -1,23 +1,24 @@
 import { test, expect } from '@playwright/test';
 
 const HTML_ENDPOINT = '/loki_components/index/html';
+const TEST_PAGE = '/loki_components/index/test';
 
 async function getFormKey(page): Promise<string> {
-  await page.goto('/');
+  await page.goto(TEST_PAGE);
+
+  const cookies = await page.context().cookies();
+  const formKeyCookie = cookies.find((cookie) => cookie.name === 'form_key');
+  if (formKeyCookie) {
+    return formKeyCookie.value;
+  }
 
   const fromGlobal = await page.evaluate(() => {
     // @ts-ignore - injected by Loki Components
     return typeof LokiComponentFormKey !== 'undefined' ? LokiComponentFormKey : null;
   });
-  if (fromGlobal) {
-    return fromGlobal;
-  }
+  expect(fromGlobal, 'A form key is required to build a valid AJAX request').toBeTruthy();
 
-  const cookies = await page.context().cookies();
-  const formKeyCookie = cookies.find((cookie) => cookie.name === 'form_key');
-  expect(formKeyCookie, 'A form_key cookie is required to build a valid AJAX request').toBeTruthy();
-
-  return formKeyCookie!.value;
+  return fromGlobal!;
 }
 
 function buildRequest(page, formKey: string, body: object) {

@@ -20,7 +20,7 @@ test.describe('Loki Components extender appends data', function () {
             LokiComponentExtender.addMixin(
                 'PlaywrightAppendMixin',
                 'PlaywrightExtenderTest',
-                (componentData) => ({
+                (componentData: any) => ({
                     appendedValue: appendedValue,
                     sharedValue: 'from-append',
                     seenBaseValue: componentData.baseValue,
@@ -74,7 +74,7 @@ test.describe('Loki Components extender appends data', function () {
             document.addEventListener('alpine:init', () => {
                 LokiComponentExtender.add(
                     'PlaywrightAppendExtension',
-                    (componentName, componentData) => ({
+                    (componentName: any, componentData: any) => ({
                         playwrightAppendedValue: appendedValue,
                         playwrightAppendedFor: componentName,
                         playwrightSawComponentData: typeof componentData.init === 'function'
@@ -87,7 +87,7 @@ test.describe('Loki Components extender appends data', function () {
         await setupCheckout(page, context, coreConfig);
 
         const components = await page.evaluate(() => {
-            return Alpine.store('LokiComponents').getComponentArray().map((component) => ({
+            return Alpine.store('LokiComponents').getComponentArray().map((component: any) => ({
                 id: component.id,
                 appendedValue: component.playwrightAppendedValue,
                 appendedFor: component.playwrightAppendedFor,
@@ -97,7 +97,7 @@ test.describe('Loki Components extender appends data', function () {
 
         expect(components.length, 'Registered components in the checkout').toBeGreaterThan(0);
 
-        components.forEach((component) => {
+        components.forEach((component: any) => {
             expect(component.appendedValue, 'Appended value of component ' + component.id).toBe(APPENDED_VALUE);
             expect(component.appendedFor, 'Component name of component ' + component.id).toBeTruthy();
             expect(component.sawComponentData, 'Component data seen by component ' + component.id).toBe(true);

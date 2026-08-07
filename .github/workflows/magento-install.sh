@@ -66,11 +66,6 @@ php -dmemory_limit=-1 bin/magento setup:install \
 bin/magento deploy:mode:set developer
 bin/magento cache:disable full_page
 
-# php -S cannot materialize static files via pub/static.php, so deploy them up
-# front and disable URL signing (the version prefix only resolves via .htaccess)
-bin/magento config:set dev/static/sign 0
-bin/magento setup:static-content:deploy -f --area frontend en_US
-
 cd /tmp/magento/pub/
 nohup php -S 0.0.0.0:8888 >/tmp/php-server.log 2>&1 &
 

@@ -134,6 +134,12 @@ jobs:
           bin/magento module:enable Yireo_EnableModuleSequence
           bin/magento module:sequence LokiCheckout_FunctionalTests LokiCheckout_SampleData LokiCheckout_CoreCli "${MAGENTO_MODULE}"
           bin/magento setup:upgrade
+
+          # php -S cannot materialize static files via pub/static.php, so deploy them here
+          # (setup:upgrade wipes pub/static in developer mode, so this must run after it).
+          # URL signing is disabled because the version prefix only resolves via .htaccess.
+          bin/magento config:set dev/static/sign 0
+          bin/magento setup:static-content:deploy -f --area frontend en_US
           bin/magento loki-checkout:sample-data:add-product
           bin/magento loki-checkout:modules:dump
 

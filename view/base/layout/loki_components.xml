@@ -43,6 +43,7 @@
                 template="Loki_Components::script/alpine.phtml"
                 after="-">
                 <arguments>
+                    <argument name="csp" xsi:type="boolean">false</argument>
                     <argument name="module_config" xsi:type="object">Loki\Base\ViewModel\ModuleConfig</argument>
                 </arguments>
             </block>

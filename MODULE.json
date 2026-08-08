@@ -24,7 +24,9 @@
         "Yireo_CspUtilities"
     ],
     "components": [
-        "loki-components.modal"
+        "loki-components.modal",
+        "loki-components.test.dummy1",
+        "loki-components.test.dummy2"
     ],
     "config": [
         {

@@ -5,6 +5,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.7.0] - 08 August 2026
+### Security
+- Upgrade Alpine to 3.15.12
+- Allow switching between Alpine CSP and non-CSP version
+
+### Added
+- Extra argument `append` for `LokiComponentExtender.add()` and `LokiComponentExtender.addMixin()` to append data after the original componentData is generated
+
+### Fixed
+- Rewrite Playwright tests to remove checkout dependency and use a test controller
+- Add proper sorting of Alpine store definitions
+- Add import of Reflection class in test
+
+### Security
+- Rewrite `x-html` to `x-text` because of CSP
 ### Added
 - Extra argument `append` for `LokiComponentExtender.add()` and `LokiComponentExtender.addMixin()` to append data after the original componentData is generated
 - Test page `/loki_components/index/test` (developer mode only) rendering dummy Loki Components for Playwright tests

@@ -18,12 +18,21 @@ use Magento\Framework\View\Element\Template;
         setTabInactive(tab) {
             tab.classList.remove(this.activeTabClass);
             tab.classList.add(this.inactiveTabClass);
-            tab.setAttribute('aria-selected', 'false');
+            if (tab.getAttribute('role') === 'tab') {
+                tab.setAttribute('aria-selected', 'false');
+            }
         },
         setTabActive(tab) {
             tab.classList.remove(this.inactiveTabClass);
             tab.classList.add(this.activeTabClass);
-            tab.setAttribute('aria-selected', 'true');
+            if (tab.getAttribute('role') === 'tab') {
+                tab.setAttribute('aria-selected', 'true');
+            }
+
+            const radio = tab.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.checked = true;
+            }
         },
         toggleTab(tabId) {
             this.$root.querySelectorAll('[data-tab-id]').forEach(tab => {
@@ -50,11 +59,11 @@ use Magento\Framework\View\Element\Template;
             this.activeTabId = tabId;
         },
         toggleTabs(event) {
-            if (!event || !event.target) {
+            if (!event || !event.currentTarget) {
                 return;
             }
 
-            const tabId = event.target.getAttribute('data-tab-id');
+            const tabId = event.currentTarget.getAttribute('data-tab-id');
             if (!tabId) {
                 console.error('No tab ID found');
                 return;

@@ -163,7 +163,7 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
     {
         $html = '';
         foreach ($htmlParts as $htmlPart) {
-            $htmlPart = preg_replace("/([\r\n]+)/", "\n", $htmlPart);
+            $htmlPart = preg_replace("/\r\n|\r/", "\n", $htmlPart);
             $html .= $htmlPart."\n\n";
         }
 

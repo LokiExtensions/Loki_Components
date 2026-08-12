@@ -6,6 +6,13 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.1] - 12 August 2026
+### Fixed
+- Remove duplicate Loki tab in store config
+- Rewrite tab-buttons to radio fields for a11y
+- Do not remove duplicate lines #6
+- Refactor setTemplate setter info construction data
+
 ## [2.7.0] - 08 August 2026
 ### Security
 - Upgrade Alpine to 3.15.12

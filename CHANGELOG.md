@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.7.2] - 28 August 2026
+### Fixed
+- Require `Loki_Base` 1.3
+
 ## [2.7.1] - 12 August 2026
 ### Fixed
 - Remove duplicate Loki tab in store config

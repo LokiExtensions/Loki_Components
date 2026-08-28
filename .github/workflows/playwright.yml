@@ -6,6 +6,7 @@ jobs:
     runs-on: ubuntu-latest
     container:
       image: mcr.microsoft.com/playwright:v1.62.0-noble
+      options: --user root
       volumes:
         - /var/run/docker.sock:/tmp/docker.sock
         - /tmp/ci-magento:/tmp/magento

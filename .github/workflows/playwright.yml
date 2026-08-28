@@ -8,13 +8,13 @@ jobs:
       image: mcr.microsoft.com/playwright:v1.62.0-noble
       options: --user root
       volumes:
-        - /var/run/docker.sock:/tmp/docker.sock
+        #- /var/run/docker.sock:/tmp/docker.sock
         - /tmp/ci-magento:/tmp/magento
 
     env:
       GIT_DEPTH: 1
       GIT_STRATEGY: fetch
-      DOCKER_HOST: unix:///tmp/docker.sock
+      DOCKER_HOST: unix:///var/run/docker.sock
       MAGENTO_BASE_URL: "http://php:8888/"
       MAGENTO_BACKEND_FRONTNAME: "admin"
       MAGENTO_ADMIN_FIRSTNAME: "CI"

@@ -56,7 +56,7 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
     {
         $data = $this->requestDataLoader->load();
         $this->requestDataLoader->mergeRequestParams();
-        $layout = $this->layoutLoader->load($data['handles']);
+        $layout = $this->layoutLoader->load($data['handles'], $data['pageHandles'], true);
 
         $updates = $this->enrichUpdates($data['updates'], $layout);
         $updates = $this->sortUpdates($updates);

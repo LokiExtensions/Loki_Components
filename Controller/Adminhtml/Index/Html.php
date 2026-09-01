@@ -7,6 +7,7 @@ namespace Loki\Components\Controller\Adminhtml\Index;
 use Exception;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Component\ComponentRegistry;
+use Loki\Components\ViewModel\Messages;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -49,6 +50,7 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         private readonly MessageManager $messageManager,
         private readonly Validator $formKeyValidator,
         private readonly AuthorizationInterface $authorization,
+        private readonly Messages $messages
     ) {
     }
 
@@ -87,6 +89,8 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
                 $this->addGlobalException($exception);
             }
         }
+
+        $this->messages->syncMessages();
 
         if ($this->allowRendering($data)) {
             try {

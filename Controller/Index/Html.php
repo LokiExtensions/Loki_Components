@@ -8,6 +8,7 @@ use Exception;
 use Loki\Components\Component\ComponentRegistry;
 use Loki\Components\Util\Controller\ComponentUpdate;
 use Loki\Components\Util\Controller\ComponentUpdateFactory;
+use Loki\Components\ViewModel\Messages;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -48,6 +49,7 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         private readonly ComponentRegistry $componentRegistry,
         private readonly ComponentUpdateFactory $componentUpdateFactory,
         private readonly Validator $formKeyValidator,
+        private readonly Messages $messages
     ) {
     }
 
@@ -69,6 +71,7 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
                     $update->getComponent(),
                     $update->getComponentData(),
                 );
+
             } catch (NoBlockFoundException $exception) {
                 $this->logger->critical($exception);
                 $this->addExceptionMessage($exception);
@@ -81,6 +84,8 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
                 $this->addExceptionMessage($exception);
             }
         }
+
+        $this->messages->syncMessages();
 
         try {
             $this->repositoryDispatcher->postDispatch($layout, $updates);

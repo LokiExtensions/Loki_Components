@@ -11,11 +11,25 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 class Messages implements ArgumentInterface
 {
+    private array $messages = [];
+
     public function __construct(
         private readonly MessageManager $messageManager,
         private readonly InterpretationStrategyInterface $interpretationStrategy,
         private readonly Ajax $ajax
     ) {
+    }
+
+    public function syncMessages(): void
+    {
+        $messageCollection = $this->messageManager->getMessages(true);
+        foreach ($messageCollection->getItems() as $message) {
+            /** @var MessageInterface $message */
+            $this->messages[] = [
+                'type' => $message->getType(),
+                'text' => $this->interpretationStrategy->interpret($message),
+            ];
+        }
     }
 
     public function getMessagesAsJson(): string
@@ -24,16 +38,8 @@ class Messages implements ArgumentInterface
             return json_encode([]);
         }
 
-        $messages = [];
-        $messageCollection = $this->messageManager->getMessages(true);
-        foreach ($messageCollection->getItems() as $message) {
-            /** @var MessageInterface $message */
-            $messages[] = [
-                'type' => $message->getType(),
-                'text' => $this->interpretationStrategy->interpret($message),
-            ];
-        }
+        $this->syncMessages();
 
-        return json_encode($messages);
+        return json_encode($this->messages);
     }
 }

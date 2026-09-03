@@ -24,21 +24,24 @@ class AbstractComponentContext implements ComponentContextInterface
             }
         }
 
+        $exceptionMessages = [];
         foreach ($this->parentContexts as $parentContext) {
             try {
                 return $parentContext->{$methodName}(...$arguments);
             } catch (Throwable $e) {
+                $exceptionMessages[] = $e->getMessage();
             }
         }
 
         throw new LocalizedException(
             new Phrase(
-                'Invalid method %1::%2. No object "%3": %4',
+                'Invalid method %1::%2. No object "%3": %4. Exceptions: %5',
                 [
                     get_class($this),
                     $methodName,
                     $objectName,
                     implode(', ', array_keys($this->dependencies)),
+                    implode(', ', $exceptionMessages),
                 ]
             )
         );

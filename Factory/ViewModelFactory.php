@@ -2,6 +2,7 @@
 
 namespace Loki\Components\Factory;
 
+use Loki\Components\Component\ComponentViewModelInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use RuntimeException;
@@ -35,6 +36,10 @@ class ViewModelFactory
 
         if (false === $viewModel instanceof ArgumentInterface) {
             throw new RuntimeException('Class "' . $viewModelClass . '" is not a ViewModel');
+        }
+
+        if ($viewModel instanceof ComponentViewModelInterface) {
+            throw new RuntimeException('Class "' . $viewModelClass . '" can not be a ComponentViewModel');
         }
     }
 }

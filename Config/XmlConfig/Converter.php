@@ -4,21 +4,10 @@ namespace Loki\Components\Config\XmlConfig;
 
 use DOMDocument;
 use DOMElement;
-use DOMNode;
 use Magento\Framework\Config\ConverterInterface;
-use RuntimeException;
-use Loki\Components\Component\Component;
-use Loki\Components\Component\ComponentViewModel;
-use Loki\Components\Config\XmlConfig\Definition\ComponentDefinition;
-use Loki\Components\Util\DefaultTargets;
 
 class Converter implements ConverterInterface
 {
-    public function __construct(
-        private readonly DefaultTargets $defaultTargets,
-    ) {
-    }
-
     /**
      * @param DOMDocument $source
      * @return array
@@ -26,6 +15,7 @@ class Converter implements ConverterInterface
     public function convert($source)
     {
         return [
+            'groups' => $this->getGroupDefinitions($source),
             'components' => $this->getComponentDefinitions($source),
         ];
     }
@@ -36,7 +26,6 @@ class Converter implements ConverterInterface
      */
     private function getComponentDefinitions(DOMDocument $source): array
     {
-        $groupDefinitions = $this->getGroupDefinitions($source);
         $componentDefinitions = [];
         $componentElements = $source->getElementsByTagName('component');
 
@@ -47,23 +36,14 @@ class Converter implements ConverterInterface
                 $groupName = 'default';
             }
 
-            if (false === array_key_exists($groupName, $groupDefinitions)) {
-                throw new RuntimeException('Component "' . $name . '" refers to unknown group "' . $groupName . '"');
-            }
-
-            $group = $groupDefinitions[$groupName];
-            $componentClass = (string)$componentElement->getAttribute('class');
-            $context = (string)$componentElement->getAttribute('context');
-            $viewModel = (string)$componentElement->getAttribute('viewModel');
-            $repository = (string)$componentElement->getAttribute('repository');
-
             $componentDefinitions[$name] = [
                 'name' => $name,
-                'class' => $componentClass === '' || $componentClass === '0' ? $group['class'] : $componentClass,
-                'context' => $context === '' || $context === '0' ? $group['context'] : $context,
-                'viewModel' => $viewModel === '' || $viewModel === '0' ? $group['viewModel'] : $viewModel,
-                'repository' => $repository === '' || $repository === '0' ? $group['repository'] : $repository,
-                'targets' => $this->getTargets($componentElement, $name, $group['targets']),
+                'group' => $groupName,
+                'class' => (string)$componentElement->getAttribute('class'),
+                'context' => (string)$componentElement->getAttribute('context'),
+                'viewModel' => (string)$componentElement->getAttribute('viewModel'),
+                'repository' => (string)$componentElement->getAttribute('repository'),
+                'targets' => $this->getTargets($componentElement),
                 'validators' => $this->getValidators($componentElement),
                 'filters' => $this->getFilters($componentElement),
             ];
@@ -72,26 +52,22 @@ class Converter implements ConverterInterface
         return $componentDefinitions;
     }
 
-    private function getGroupDefinitions(DOMDocument $element): array
+    /**
+     * @param DOMDocument $source
+     * @return array[]
+     */
+    private function getGroupDefinitions(DOMDocument $source): array
     {
         $groupDefinitions = [];
-        $groupElements = $element->getElementsByTagName('group');
+        $groupElements = $source->getElementsByTagName('group');
         foreach ($groupElements as $groupElement) {
             $groupName = (string)$groupElement->getAttribute('name');
-            $groupClass = (string)$groupElement->getAttribute('class');
-            if ($groupClass === '' || $groupClass === '0') {
-                $groupClass = Component::class;
-            }
-
-            $viewModelClass = (string)$groupElement->getAttribute('viewModel');
-            if ($viewModelClass === '' || $viewModelClass === '0') {
-                $viewModelClass = ComponentViewModel::class;
-            }
 
             $groupDefinitions[$groupName] = [
-                'class' => $groupClass,
+                'name' => $groupName,
+                'class' => (string)$groupElement->getAttribute('class'),
                 'context' => (string)$groupElement->getAttribute('context'),
-                'viewModel' => $viewModelClass,
+                'viewModel' => (string)$groupElement->getAttribute('viewModel'),
                 'repository' => (string)$groupElement->getAttribute('repository'),
                 'targets' => $this->getTargets($groupElement),
             ];
@@ -100,30 +76,19 @@ class Converter implements ConverterInterface
         return $groupDefinitions;
     }
 
-    private function getTargets(DOMElement $element, string $blockName = '', array $targets = []): array
+    private function getTargets(DOMElement $element): array
     {
-        $disabledTargets = [];
-        if ($blockName !== '' && $blockName !== '0') {
-            $targets[] = $blockName;
-        }
-
+        $targets = [];
         $targetElements = $element->getElementsByTagName('target');
         foreach ($targetElements as $targetElement) {
             $targetName = (string)$targetElement->getAttribute('name');
-            if ($targetName === 'self') {
-                $targetName = $blockName;
-            }
-
-            if ((bool)$targetElement->getAttribute('disabled')) {
-                $disabledTargets[] = $targetName;
-            } else {
-                $targets[] = $targetName;
-            }
+            $targets[$targetName] = [
+                'name' => $targetName,
+                'disabled' => (bool)$targetElement->getAttribute('disabled'),
+            ];
         }
 
-        $targets = array_merge($targets, $this->defaultTargets->getTargets());
-        $targets = array_diff($targets, $disabledTargets);
-        return array_values(array_unique($targets));
+        return $targets;
     }
 
     private function getValidators(DOMElement $element): array
@@ -131,12 +96,11 @@ class Converter implements ConverterInterface
         $validators = [];
         $validatorElements = $element->getElementsByTagName('validator');
         foreach ($validatorElements as $validatorElement) {
-            $disabled = (bool)$validatorElement->getAttribute('disabled');
-            if ($disabled) {
-                continue;
-            }
-
-            $validators[] = (string)$validatorElement->getAttribute('name');
+            $validatorName = (string)$validatorElement->getAttribute('name');
+            $validators[$validatorName] = [
+                'name' => $validatorName,
+                'disabled' => (bool)$validatorElement->getAttribute('disabled'),
+            ];
         }
 
         return $validators;
@@ -147,12 +111,11 @@ class Converter implements ConverterInterface
         $filters = [];
         $filterElements = $element->getElementsByTagName('filter');
         foreach ($filterElements as $filterElement) {
-            $disabled = (bool)$filterElement->getAttribute('disabled');
-            if ($disabled) {
-                continue;
-            }
-
-            $filters[] = (string)$filterElement->getAttribute('name');
+            $filterName = (string)$filterElement->getAttribute('name');
+            $filters[$filterName] = [
+                'name' => $filterName,
+                'disabled' => (bool)$filterElement->getAttribute('disabled'),
+            ];
         }
 
         return $filters;

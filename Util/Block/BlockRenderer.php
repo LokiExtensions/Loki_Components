@@ -5,6 +5,7 @@ namespace Loki\Components\Util\Block;
 use InvalidArgumentException;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
+use Loki\Base\ViewModel\Block\AbstractRenderer;
 use RuntimeException;
 
 class BlockRenderer extends AbstractRenderer

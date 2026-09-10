@@ -40,10 +40,14 @@ if ($interval < 10) {
                 update,
             });
 
-            if (component.lazyUpdate && component.lazyUpdateTimeout > 0) {
-                setTimeout(async () => {
+            if (component.lazyUpdate) {
+                if (component.lazyUpdateTimeout > 0) {
+                    setTimeout(async () => {
+                        component.lazyUpdate = false;
+                    }, component.lazyUpdateTimeout);
+                } else {
                     component.lazyUpdate = false;
-                }, component.lazyUpdateTimeout);
+                }
             }
         },
         run() {

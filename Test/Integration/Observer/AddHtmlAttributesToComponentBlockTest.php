@@ -64,7 +64,7 @@ class AddHtmlAttributesToComponentBlockTest extends TestCase
 
         /** @var Template $block */
         $block = $layout->createBlock(Template::class, self::BLOCK_NAME);
-        $block->setTemplate('Loki_Components::test/dummy.phtml');
+        $block->setTemplate('Loki_Components::test/dummy.phtml'); // @phpstan-ignore bitExpertMagento.setTemplateDisallowedForBlock
         $block->setJsData($jsData);
 
         return $block->toHtml();

@@ -5,4 +5,5 @@
     <component name="loki-components.modal" />
     <component name="loki-components.test.dummy1" />
     <component name="loki-components.test.dummy2" />
+    <component name="loki-components.test.dummy-html" />
 </components>

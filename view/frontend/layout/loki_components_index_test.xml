@@ -6,6 +6,13 @@
         <referenceContainer name="content">
             <block name="loki-components.test.dummy1" template="Loki_Components::test/dummy.phtml" cacheable="false"/>
             <block name="loki-components.test.dummy2" template="Loki_Components::test/dummy.phtml" cacheable="false"/>
+            <block name="loki-components.test.dummy-html" template="Loki_Components::test/dummy.phtml" cacheable="false">
+                <arguments>
+                    <argument name="js_data" xsi:type="array">
+                        <item name="html" xsi:type="string"><![CDATA[<div class="loki-components-test-injected">Store pickup</div></data><b class="loki-components-test-injected">Amsterdam</b>]]></item>
+                    </argument>
+                </arguments>
+            </block>
         </referenceContainer>
     </body>
 </page>

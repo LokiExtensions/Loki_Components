@@ -24,7 +24,7 @@ class JsPropertyPluginListStub implements PluginListInterface
     public function getNext($type, $method, $code = '__self')
     {
         if ($code !== '__self' || false === method_exists($this->plugin, 'after' . ucfirst($method))) {
-            return null;
+            return [];
         }
 
         return [DefinitionInterface::LISTENER_AFTER => [self::PLUGIN_CODE]];

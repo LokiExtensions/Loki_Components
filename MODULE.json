@@ -25,6 +25,7 @@
     ],
     "components": [
         "loki-components.modal",
+        "loki-components.test.dummy-html",
         "loki-components.test.dummy1",
         "loki-components.test.dummy2"
     ],
@@ -41,9 +42,9 @@
         }
     ],
     "tests": {
-        "unit": 18,
-        "integration": 24,
-        "functional": 7
+        "unit": 32,
+        "integration": 27,
+        "functional": 8
     },
     "phpcs_severity": "9",
     "phpstan_level": "3",

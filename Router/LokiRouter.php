@@ -19,7 +19,7 @@ class LokiRouter implements RouterInterface
     public function match(RequestInterface $request): ActionInterface|null
     {
         /** @var HttpRequest $request */
-        $identifier = trim($request->getPathInfo(), '/', " \f\n\r\t\v\x00");
+        $identifier = trim($request->getPathInfo(), '/');
         if (false === str_starts_with($identifier, 'loki_components/index/html')) {
             return null;
         }

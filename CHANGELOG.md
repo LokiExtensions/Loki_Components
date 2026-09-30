@@ -6,7 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Changed
-- BC break: `#[JsProperty]` is only allowed on public methods; an `InvalidJsPropertyException` is thrown for protected or private methods (requires the matching `LokiCheckout_Core` and `LokiCheckout_ShippingMaps` updates)
+- BC break: `#[JsProperty]` is only allowed on public methods
+- `InvalidJsPropertyException` is thrown for protected or private methods
+- Allow for JsPropery attribute to be used in derived classes like with interceptors
 
 ## [2.7.2] - 28 August 2026
 ### Fixed

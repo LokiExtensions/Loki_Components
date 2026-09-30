@@ -4,6 +4,7 @@ namespace Loki\Components\Util;
 
 use Loki\Components\Attribute\JsProperty;
 use Loki\Components\Component\ComponentViewModelInterface;
+use Loki\Components\Exception\InvalidJsPropertyException;
 use ReflectionClass;
 use ReflectionMethod;
 
@@ -27,8 +28,11 @@ class JsPropertyResolver
             return $this->jsPropertyMethods[$className];
         }
 
+        $class = new ReflectionClass($className);
+        $this->assertNoNonPublicJsProperties($class);
+
         $jsPropertyMethods = [];
-        foreach ((new ReflectionClass($className))->getMethods() as $method) {
+        foreach ($class->getMethods(ReflectionMethod::IS_PUBLIC) as $method) {
             foreach ($this->getJsPropertyNames($method) as $jsPropertyName) {
                 $jsPropertyMethods[$jsPropertyName] = $method;
             }
@@ -37,6 +41,29 @@ class JsPropertyResolver
         $this->jsPropertyMethods[$className] = $jsPropertyMethods;
 
         return $jsPropertyMethods;
+    }
+
+    private function assertNoNonPublicJsProperties(ReflectionClass $class): void
+    {
+        while (false !== $class) {
+            $methods = $class->getMethods(ReflectionMethod::IS_PROTECTED | ReflectionMethod::IS_PRIVATE);
+            foreach ($methods as $method) {
+                if ($method->getDeclaringClass()->getName() !== $class->getName()) {
+                    continue;
+                }
+
+                foreach ($method->getAttributes(JsProperty::class) as $attribute) {
+                    throw new InvalidJsPropertyException(sprintf(
+                        '#[JsProperty(name: "%s")] is only allowed on public methods: %s::%s()',
+                        $attribute->newInstance()->name,
+                        $class->getName(),
+                        $method->getName()
+                    ));
+                }
+            }
+
+            $class = $class->getParentClass();
+        }
     }
 
     private function getJsPropertyNames(ReflectionMethod $method): array
@@ -56,7 +83,7 @@ class JsPropertyResolver
             }
 
             $classMethod = $parentClass->getMethod($methodName);
-            if ($classMethod->isPrivate()) {
+            if (false === $classMethod->isPublic()) {
                 break;
             }
         }

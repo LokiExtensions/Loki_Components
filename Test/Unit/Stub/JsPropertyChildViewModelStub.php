@@ -22,11 +22,6 @@ class JsPropertyChildViewModelStub extends JsPropertyParentViewModelStub
         return 'child-trait';
     }
 
-    public function getSecret(): string
-    {
-        return 'child-secret';
-    }
-
     #[JsProperty(name: 'extra')]
     public function getExtra(): string
     {

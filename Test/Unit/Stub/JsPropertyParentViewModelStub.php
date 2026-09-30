@@ -25,10 +25,4 @@ class JsPropertyParentViewModelStub extends ComponentViewModel
     {
         return 'parent-label';
     }
-
-    #[JsProperty(name: 'secret')]
-    private function getSecret(): string
-    {
-        return 'parent-secret';
-    }
 }

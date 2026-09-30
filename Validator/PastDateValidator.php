@@ -8,7 +8,7 @@ class PastDateValidator implements ValidatorInterface
 {
     public function validate(mixed $value, ?ComponentInterface $component = null): bool|array
     {
-        $date = trim((string)$value);
+        $date = trim((string)$value, " \f\n\r\t\v\x00");
         if ($date === '' || $date === '0') {
             return true;
         }

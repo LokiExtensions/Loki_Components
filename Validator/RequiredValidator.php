@@ -29,7 +29,7 @@ class RequiredValidator implements ValidatorInterface
         if ($this->isEmpty->execute($component, $value)) {
             $errorMessage = (string)__('Value is required');
             if ($component instanceof ComponentInterface) {
-                $requiredErrorMessage = trim((string)$component->getBlock()->getRequiredErrorMessage());
+                $requiredErrorMessage = trim((string)$component->getBlock()->getRequiredErrorMessage(), " \f\n\r\t\v\x00");
                 if (!empty($requiredErrorMessage)) {
                     $errorMessage = $requiredErrorMessage;
                 }

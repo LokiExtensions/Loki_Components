@@ -5,8 +5,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.8.0] - 30 September 2026
+
+### Added
+- Allow for `loki_components.xml` file to be in both `etc/` and `etc/$AREA/`
+
+### Removed
+- Remove PHP 8.1 support, add PHP 8.5 support
+- Do not allow PHP Attribute `JsProperty` in non-public method
+
+### Fixed
+- Add second argument to `trim()` for forward compat with PHP 8.6
+- Allow for `JsProperty` attribute to be used in derived classes like with interceptors
+- Enable `JSON_HEX_TAG` flag in component data serialization
+- If lazyUpdate is true but lazyUpdateTimeout is 0, reset lazyUpdate
+- Rename deprecated AbstractRenderer usage to current one
+- AbstractComponentContext now throws final exception that includes inner exception messages
+- Do not allow ViewModelFactory to be used for ComponentViewModels (because those should be instantiated by inner logic)
+- Make sure to backup messages before message manager might reset them
+- Make sure to pass pageHandles to admin layout loader as well
+- Fix styling of messages in admin
+
 ### Changed
-- BC break: `#[JsProperty]` is only allowed on public methods
 - `InvalidJsPropertyException` is thrown for protected or private methods
 - Allow for JsPropery attribute to be used in derived classes like with interceptors
 

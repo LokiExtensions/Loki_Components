@@ -38,7 +38,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
         }
 
         $transport = $observer->getEvent()->getTransport();
-        $html = trim((string)$transport->getHtml());
+        $html = trim((string)$transport->getHtml(), " \f\n\r\t\v\x00");
         if (empty($html)) {
             return;
         }
@@ -108,7 +108,7 @@ EOF;
         $allAttributes = $match[2] .' '. implode(' ', $htmlAttributes);
         $allAttributes = preg_replace('/@([a-z.\-]+)=/', ' x-on:\1=', $allAttributes);
 
-        return trim($allAttributes);
+        return trim($allAttributes, " \f\n\r\t\v\x00");
     }
 
     private function getJsData(ComponentInterface $component): string

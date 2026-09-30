@@ -6,6 +6,6 @@ class Trim implements FilterInterface
 {
     public function filter(mixed $value, FilterScope $scope): mixed
     {
-        return trim((string)$value);
+        return trim((string)$value, " \f\n\r\t\v\x00");
     }
 }

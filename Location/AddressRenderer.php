@@ -19,7 +19,7 @@ class AddressRenderer
         $newTextParts = [];
         $textParts = explode(',', $text);
         foreach ($textParts as $textPart) {
-            $textPart = trim($textPart);
+            $textPart = trim($textPart, " \f\n\r\t\v\x00");
             if (!empty($textPart)) {
                 $newTextParts[] = $textPart;
             }

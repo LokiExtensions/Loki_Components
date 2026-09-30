@@ -29,7 +29,7 @@ class AddDomIdToBlock implements ObserverInterface
         }
 
         $transport = $observer->getEvent()->getTransport();
-        $html = trim((string)$transport->getHtml());
+        $html = trim((string)$transport->getHtml(), " \f\n\r\t\v\x00");
         if (empty($html)) {
             return;
         }

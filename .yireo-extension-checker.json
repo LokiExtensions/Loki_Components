@@ -1,6 +1,7 @@
 {
   "ignore": [
     "Loki_Base",
-    "loki/magento2-base"
+    "loki/magento2-base",
+    "loki/magento2-functional-tests"
   ]
 }

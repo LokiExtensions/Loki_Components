@@ -5,6 +5,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.8.1] - 02 October 2026
+### Fixed
+- Initialize form_key cookie before form-key-provider.js can generate another key
 ### Fixed
 - Initialize the `form_key` cookie with the rendered form key on the frontend, so that the Luma `form-key-provider.js` (loaded asynchronously) can no longer generate a different key while a Loki AJAX request is underway, which rejected the request with "The request is not valid."
 

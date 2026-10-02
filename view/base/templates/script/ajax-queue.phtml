@@ -18,12 +18,26 @@ use Loki\Components\Util\ComponentUtil;
 $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 
+$initFormKeyCookie = $block->getArea() === 'frontend';
 $interval = (int)$block->getInterval();
 if ($interval < 10) {
     $interval = 40;
 }
 ?>
 <script>
+<?php if ($initFormKeyCookie): ?>
+    (() => {
+        const hasFormKeyCookie = document.cookie.split(';').some(cookie => cookie.trim().startsWith('form_key='));
+        if (hasFormKeyCookie) {
+            return;
+        }
+
+        const formKey = '<?= $escaper->escapeJs($componentUtil->getFormKey()) ?>';
+        const secure = window.location.protocol === 'https:' ? '; secure' : '';
+        document.cookie = 'form_key=' + encodeURIComponent(formKey) + '; max-age=86400; path=/; samesite=lax' + secure;
+    })();
+<?php endif; ?>
+
     const LokiAjaxQueue = {
         requests: [],
         interval: <?= (int)$interval ?>,

@@ -257,8 +257,8 @@ if ($interval < 10) {
                 }
 
                 Alpine.mutateDom(() => {
-                    LokiHtmlReplacer.replace(targetElement, newTargetElement);
                     Alpine.destroyTree(targetElement);
+                    LokiHtmlReplacer.replace(targetElement, newTargetElement);
                     Alpine.initTree(targetElement);
                 });
             });

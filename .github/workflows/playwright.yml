@@ -5,7 +5,7 @@ jobs:
   playwright:
     runs-on: ubuntu-latest
     container:
-      image: mcr.microsoft.com/playwright:v1.62.0-noble
+      image: mcr.microsoft.com/playwright:v1.63.0-noble
       options: --user root
       volumes:
         - /var/run/docker.sock:/var/run/docker.sock

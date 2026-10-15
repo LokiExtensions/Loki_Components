@@ -34,22 +34,17 @@ class AddDomIdToBlock implements ObserverInterface
             return;
         }
 
-        if (!preg_match('#^<([a-z]{2,})([^>]{0,})$#mi', $html, $match)) {
+        if (!preg_match('#^<([a-z]{2,})(?=[\s/>])([^>]*)>#i', $html, $match)) {
             return;
         }
 
-        if (empty($match[1])) {
-            return;
-        }
-
-        if (str_contains($match[2], 'id="')) {
+        if (preg_match('#(^|\s)id\s*=#i', $match[2])) {
             return;
         }
 
         $elementId = $this->getElementId->execute($block);
-        $originalString = '<'.$match[1].$match[2];
-        $newString = '<'.$match[1].' id="'.$elementId.'"'.$match[2];
-        $html = preg_replace('#^'.$originalString.'#', $newString, $html);
+        $newTag = '<'.$match[1].' id="'.$elementId.'"'.$match[2].'>';
+        $html = $newTag.substr($html, strlen($match[0]));
 
         $transport->setHtml($html);
     }

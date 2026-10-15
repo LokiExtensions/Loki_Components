@@ -19,10 +19,36 @@ class AddDomIdToBlockTest extends TestCase
 
     private const BLOCK_NAME = 'loki.test.block';
 
-    public function testAddsIdToFirstElement(): void
+    #[DataProvider('getHtmlWithAddedId')]
+    public function testAddsIdToFirstElement(string $html, string $expectedHtml): void
     {
-        $html = $this->execute(self::BLOCK_NAME, "\n  <div\n    class=\"foo\">bar</div>\n");
-        $this->assertSame("<div id=\"loki-test-block\"\n    class=\"foo\">bar</div>", $html);
+        $this->assertSame($expectedHtml, $this->execute(self::BLOCK_NAME, $html));
+    }
+
+    public static function getHtmlWithAddedId(): array
+    {
+        return [
+            'element without attributes' => [
+                '<section>bar</section>',
+                '<section id="loki-test-block">bar</section>',
+            ],
+            'element with attributes' => [
+                '<div class="foo"><span id="inner">bar</span></div>',
+                '<div id="loki-test-block" class="foo"><span id="inner">bar</span></div>',
+            ],
+            'attributes on multiple lines' => [
+                "\n  <div\n    class=\"foo\">bar</div>\n",
+                "<div id=\"loki-test-block\"\n    class=\"foo\">bar</div>",
+            ],
+            'attribute ending with id' => [
+                '<div data-id="foo">bar</div>',
+                '<div id="loki-test-block" data-id="foo">bar</div>',
+            ],
+            'html with regex characters' => [
+                '<div x-bind:class="{ \'active\': open }" data-pattern="(a|b)+$">bar</div>',
+                '<div id="loki-test-block" x-bind:class="{ \'active\': open }" data-pattern="(a|b)+$">bar</div>',
+            ],
+        ];
     }
 
     #[DataProvider('getUntouchedHtml')]
@@ -34,10 +60,13 @@ class AddDomIdToBlockTest extends TestCase
     public static function getUntouchedHtml(): array
     {
         return [
-            'block not configured' => ['other.block', "<div\n class=\"foo\">bar</div>"],
+            'block not configured' => ['other.block', '<div class="foo">bar</div>'],
             'empty html' => [self::BLOCK_NAME, ''],
+            'existing id' => [self::BLOCK_NAME, '<div class="foo" id="custom">bar</div>'],
+            'existing id on another line' => [self::BLOCK_NAME, "<div\n class=\"foo\"\n id=\"custom\">bar</div>"],
             'no element' => [self::BLOCK_NAME, 'plain text'],
-            'single character element' => [self::BLOCK_NAME, "<p\n class=\"foo\">bar</p>"],
+            'comment' => [self::BLOCK_NAME, '<!-- comment --><div>bar</div>'],
+            'single character element' => [self::BLOCK_NAME, '<p class="foo">bar</p>'],
         ];
     }
 
@@ -49,7 +78,7 @@ class AddDomIdToBlockTest extends TestCase
             ->getMock();
         $block->method('getNameInLayout')->willReturn(self::BLOCK_NAME);
 
-        $html = "<div\n class=\"foo\">bar</div>";
+        $html = '<div class="foo">bar</div>';
         $transport = new DataObject(['html' => $html]);
         $this->getObserver()->execute($this->getEventObserver($block, $transport));
         $this->assertSame($html, $transport->getHtml());

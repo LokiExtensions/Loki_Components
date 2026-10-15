@@ -123,6 +123,43 @@ class HtmlTest extends TestCase
     }
 
     #[AppIsolation(true)]
+    public function testSkipsUpdatesForUnknownBlocks(): void
+    {
+        $messageManager = $this->createMock(MessageManager::class);
+        $messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with($this->callback(fn ($message) => str_contains((string)$message, 'loki-components.test.unknown')));
+
+        $this->prepareRequest([self::DUMMY2], [
+            ['blockName' => 'loki-components.test.unknown', 'update' => 'foo'],
+            ['blockName' => self::DUMMY2, 'update' => 'bar'],
+        ]);
+
+        $controller = ObjectManager::getInstance()->create(Html::class, ['messageManager' => $messageManager]);
+        $response = $this->renderResult($controller->execute());
+
+        $this->assertSame('bar', $this->getStorage()->getValue(self::DUMMY2));
+        $this->assertStringContainsString(self::DUMMY2, (string)$response->getBody());
+    }
+
+    #[AppIsolation(true)]
+    public function testSkipsUpdatesForBlocksThatAreNoComponent(): void
+    {
+        $messageManager = $this->createMock(MessageManager::class);
+        $messageManager->expects($this->once())->method('addErrorMessage');
+
+        $this->prepareRequest([], [
+            ['blockName' => 'loki-components.utils.local-messages', 'update' => 'foo'],
+            ['blockName' => self::DUMMY2, 'update' => 'bar'],
+        ]);
+
+        $controller = ObjectManager::getInstance()->create(Html::class, ['messageManager' => $messageManager]);
+        $controller->execute();
+
+        $this->assertSame('bar', $this->getStorage()->getValue(self::DUMMY2));
+    }
+
+    #[AppIsolation(true)]
     public function testRenderFlagZeroSkipsRendering(): void
     {
         $this->prepareRequest([self::DUMMY1], [

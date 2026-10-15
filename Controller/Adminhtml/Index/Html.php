@@ -28,6 +28,7 @@ use Loki\Components\Config\Config;
 use Loki\Components\Controller\HtmlResult;
 use Loki\Components\Controller\HtmlResultFactory;
 use Loki\Components\Exception\NoBlockFoundException;
+use Loki\Components\Exception\NoComponentFoundException;
 use Loki\Components\Exception\RedirectException;
 use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
@@ -80,11 +81,8 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
             try {
                 $this->repositoryDispatcher->dispatch(
                     $update['component'],
-                    $update['update']
+                    $update['update'] ?? null
                 );
-            } catch (NoBlockFoundException $exception) {
-                $this->logger->critical($exception);
-
             } catch (RedirectException $redirectException) {
                 return $this->getJsonRedirect($redirectException);
 
@@ -115,13 +113,24 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
 
     private function enrichUpdates(array $updates, LayoutInterface $layout): array
     {
-        foreach ($updates as $updateIndex => $update) {
-            $update['block'] = $this->getBlock($layout, $update['blockName']);
-            $update['component'] = $this->componentRegistry->getComponentFromBlock($update['block']);
-            $updates[$updateIndex] = $update;
+        $enrichedUpdates = [];
+        foreach ($updates as $update) {
+            if (!isset($update['blockName']) || !is_string($update['blockName'])) {
+                continue;
+            }
+
+            try {
+                $update['block'] = $this->getBlock($layout, $update['blockName']);
+                $update['component'] = $this->componentRegistry->getComponentFromBlock($update['block']);
+            } catch (NoBlockFoundException|NoComponentFoundException $exception) {
+                $this->logger->critical($exception);
+                continue;
+            }
+
+            $enrichedUpdates[] = $update;
         }
 
-        return $updates;
+        return $enrichedUpdates;
     }
 
     private function sortUpdates(array $updates): array

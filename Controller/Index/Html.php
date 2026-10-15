@@ -25,6 +25,7 @@ use Loki\Components\Config\Config;
 use Loki\Components\Controller\HtmlResult;
 use Loki\Components\Controller\HtmlResultFactory;
 use Loki\Components\Exception\NoBlockFoundException;
+use Loki\Components\Exception\NoComponentFoundException;
 use Loki\Components\Exception\RedirectException;
 use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
@@ -72,10 +73,6 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
                     $update->getComponentData(),
                 );
 
-            } catch (NoBlockFoundException $exception) {
-                $this->logger->critical($exception);
-                $this->addExceptionMessage($exception);
-
             } catch (RedirectException $redirectException) {
                 return $this->getJsonRedirect($redirectException);
 
@@ -120,10 +117,18 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
                 continue;
             }
 
-            $block = $this->getBlock($layout, $update['blockName']);
+            try {
+                $block = $this->getBlock($layout, $update['blockName']);
+                $component = $this->componentRegistry->getComponentFromBlock($block);
+            } catch (NoBlockFoundException|NoComponentFoundException $exception) {
+                $this->logger->critical($exception);
+                $this->addExceptionMessage($exception);
+                continue;
+            }
+
             $componentUpdate = $this->componentUpdateFactory->create([
                 'block' => $block,
-                'component' => $this->componentRegistry->getComponentFromBlock($block),
+                'component' => $component,
                 'componentData' => $update['update'] ?? null,
             ]);
 

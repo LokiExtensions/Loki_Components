@@ -70,6 +70,19 @@ class HtmlTest extends TestCase
         $this->assertStringNotContainsString('<html>', $body, 'Admin output is not wrapped in an HTML document');
     }
 
+    #[AppIsolation(true)]
+    public function testSkipsInvalidUpdates(): void
+    {
+        $this->prepareRequest([
+            ['update' => 'no block name'],
+            ['blockName' => 'loki-components.test.unknown', 'update' => 'unknown block'],
+            ['blockName' => self::BLOCK_NAME, 'update' => 'foo'],
+        ]);
+
+        $this->getController(true)->execute();
+        $this->assertSame('foo', $this->getStorage()->getValue(self::BLOCK_NAME));
+    }
+
     private function getController(bool $isAllowed): Html
     {
         $authorization = $this->createMock(AuthorizationInterface::class);

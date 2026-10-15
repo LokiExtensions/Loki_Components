@@ -2,6 +2,7 @@
 
 namespace Loki\Components\Test\Integration\Controller\Adminhtml\Index;
 
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
@@ -14,7 +15,7 @@ class FormKeyTest extends AbstractBackendController
     {
         $this->dispatch($this->uri);
 
-        $data = json_decode((string)$this->getResponse()->getBody(), true);
+        $data = json_decode((string)$this->getHttpResponse()->getBody(), true);
         $this->assertIsArray($data);
         $this->assertSame($this->_objectManager->get(FormKey::class)->getFormKey(), $data['form_key'] ?? null);
     }
@@ -24,7 +25,15 @@ class FormKeyTest extends AbstractBackendController
         $this->_auth->logout();
         $this->dispatch($this->uri);
 
-        $data = json_decode((string)$this->getResponse()->getBody(), true);
+        $data = json_decode((string)$this->getHttpResponse()->getBody(), true);
         $this->assertArrayNotHasKey('form_key', (array)$data, 'Anonymous visitors get an admin form key');
+    }
+
+    private function getHttpResponse(): HttpResponse
+    {
+        $response = $this->getResponse();
+        $this->assertInstanceOf(HttpResponse::class, $response);
+
+        return $response;
     }
 }

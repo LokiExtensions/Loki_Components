@@ -90,7 +90,10 @@ class ImageRendererTest extends TestCase
 
     private function getBlock(array $data = []): Template
     {
-        return ObjectManager::getInstance()->get(LayoutInterface::class)->createBlock(Template::class, '', ['data' => $data]);
+        $block = ObjectManager::getInstance()->get(LayoutInterface::class)->createBlock(Template::class, '', ['data' => $data]);
+        $this->assertInstanceOf(Template::class, $block);
+
+        return $block;
     }
 
     private function getImageRenderer(): ImageRenderer

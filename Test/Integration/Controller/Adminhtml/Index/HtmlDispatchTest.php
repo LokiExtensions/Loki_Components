@@ -6,6 +6,7 @@ use Laminas\Http\Header\GenericHeader;
 use Laminas\Http\Headers;
 use Loki\Components\Util\Security\AjaxSignature;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 class HtmlDispatchTest extends AbstractBackendController
@@ -27,7 +28,7 @@ class HtmlDispatchTest extends AbstractBackendController
     {
         $this->dispatch($this->uri);
 
-        $this->assertStringContainsString(self::TARGET_MARKER, (string)$this->getResponse()->getBody());
+        $this->assertStringContainsString(self::TARGET_MARKER, (string)$this->getHttpResponse()->getBody());
     }
 
     public function testDoesNotRenderTargetsWithoutAdminLogin(): void
@@ -35,7 +36,7 @@ class HtmlDispatchTest extends AbstractBackendController
         $this->_auth->logout();
         $this->dispatch($this->uri);
 
-        $this->assertStringNotContainsString(self::TARGET_MARKER, (string)$this->getResponse()->getBody());
+        $this->assertStringNotContainsString(self::TARGET_MARKER, (string)$this->getHttpResponse()->getBody());
     }
 
     private function prepareRequest(): void
@@ -62,5 +63,13 @@ class HtmlDispatchTest extends AbstractBackendController
         $request->setHeaders($headers);
         $request->setMethod($this->httpMethod);
         $request->setContent((string)json_encode($payload));
+    }
+
+    private function getHttpResponse(): HttpResponse
+    {
+        $response = $this->getResponse();
+        $this->assertInstanceOf(HttpResponse::class, $response);
+
+        return $response;
     }
 }

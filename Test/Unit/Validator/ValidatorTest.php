@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class ValidatorTest extends TestCase
 {
     private ?LocalMessageRegistry $localMessageRegistry = null;
-    private ?GlobalMessageRegistry $globalMessageRegistry = null;
+    private (GlobalMessageRegistry&MockObject)|null $globalMessageRegistry = null;
 
     protected function setUp(): void
     {

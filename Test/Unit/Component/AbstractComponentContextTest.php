@@ -25,7 +25,7 @@ class AbstractComponentContextTest extends TestCase
             new AbstractComponentContext([], ['bar' => $dependency]),
         ]);
 
-        $this->assertSame($dependency, $context->getBar());
+        $this->assertSame($dependency, $context->__call('getBar', []));
     }
 
     public function testOwnDependencyOverrulesParentContext(): void
@@ -36,7 +36,7 @@ class AbstractComponentContextTest extends TestCase
             ['foo' => $dependency]
         );
 
-        $this->assertSame($dependency, $context->getFoo());
+        $this->assertSame($dependency, $context->__call('getFoo', []));
     }
 
     public function testThrowsExceptionForUnknownDependency(): void
@@ -45,7 +45,7 @@ class AbstractComponentContextTest extends TestCase
 
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessageMatches('/getUnknown. No object "unknown": foo/');
-        $context->getUnknown();
+        $context->__call('getUnknown', []);
     }
 
     public function testExceptionContainsErrorsOfParentContexts(): void
@@ -54,6 +54,6 @@ class AbstractComponentContextTest extends TestCase
 
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessageMatches('/Exceptions: Invalid method .*getUnknown/');
-        $context->getUnknown();
+        $context->__call('getUnknown', []);
     }
 }

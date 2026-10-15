@@ -27,8 +27,8 @@ class ComponentTest extends TestCase
 
     private const NAME = 'loki-components.test.example';
 
-    private ?ObjectManagerInterface $objectManager = null;
-    private ?LayoutInterface $layout = null;
+    private (ObjectManagerInterface&MockObject)|null $objectManager = null;
+    private (LayoutInterface&MockObject)|null $layout = null;
     private ?Validator $validator = null;
     private ?Filter $filter = null;
 

@@ -5,6 +5,7 @@ namespace Loki\Components\Test\Integration\Controller\Index;
 use Loki\Components\Test\Integration\LokiComponentsTestCase;
 use Loki\Components\Util\Security\AjaxSignature;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 
@@ -19,7 +20,7 @@ class HtmlDispatchTest extends LokiComponentsTestCase
     {
         $this->dispatchHtmlRequest($this->buildSignedBody());
 
-        $this->assertSame(200, $this->getResponse()->getHttpResponseCode() ?? 200);
+        $this->assertSame(200, $this->getHttpResponse()->getHttpResponseCode() ?? 200);
         $this->assertStringStartsWith('<html>', $this->getResponseBody());
         $this->assertStringOccursOnPage('>'.self::TARGET.'</div>');
         $this->assertElementIdExistsOnPage('loki-components-test-dummy1');
@@ -28,10 +29,10 @@ class HtmlDispatchTest extends LokiComponentsTestCase
     #[AppIsolation(true)]
     public function testRequestWithInvalidFormKeyIsRejected(): void
     {
-        $this->getRequest()->setPostValue('form_key', 'invalid-form-key');
+        $this->getHttpRequest()->setPostValue('form_key', 'invalid-form-key');
         $this->dispatchHtmlRequest($this->buildSignedBody());
 
-        $this->assertSame(400, $this->getResponse()->getHttpResponseCode());
+        $this->assertSame(400, $this->getHttpResponse()->getHttpResponseCode());
         $this->assertStringOccursOnPage('Invalid Form Key. Please refresh the page');
         $this->assertStringNotOccursOnPage(self::TARGET);
     }
@@ -40,23 +41,38 @@ class HtmlDispatchTest extends LokiComponentsTestCase
     public function testGetRequestIsNotAllowed(): void
     {
         $this->setAsAjaxRequest();
-        $this->getRequest()->setMethod('GET');
+        $this->getHttpRequest()->setMethod('GET');
         $this->dispatch('loki_components/index/html');
 
         $this->assertStringNotOccursOnPage(self::TARGET);
-        $this->assertNotSame(200, $this->getResponse()->getHttpResponseCode() ?? 200);
+        $this->assertNotSame(200, $this->getHttpResponse()->getHttpResponseCode() ?? 200);
     }
 
     private function dispatchHtmlRequest(array $body): void
     {
         $this->setAsAjaxRequest();
 
-        /** @var HttpRequest $request */
-        $request = $this->getRequest();
+        $request = $this->getHttpRequest();
         $request->setMethod('POST');
         $request->setContent((string)json_encode($body));
 
         $this->dispatch('loki_components/index/html');
+    }
+
+    private function getHttpRequest(): HttpRequest
+    {
+        $request = $this->getRequest();
+        $this->assertInstanceOf(HttpRequest::class, $request);
+
+        return $request;
+    }
+
+    private function getHttpResponse(): HttpResponse
+    {
+        $response = $this->getResponse();
+        $this->assertInstanceOf(HttpResponse::class, $response);
+
+        return $response;
     }
 
     private function buildSignedBody(): array

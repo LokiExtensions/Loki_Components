@@ -9,6 +9,7 @@ use Loki\Components\Component\ComponentViewModelInterface;
 use Loki\Components\Messages\GlobalMessageRegistry;
 use Loki\Components\Messages\LocalMessageRegistry;
 use PHPUnit\Framework\TestCase;
+use ReflectionMethod;
 
 class ComponentRepositoryTest extends TestCase
 {
@@ -39,9 +40,14 @@ class ComponentRepositoryTest extends TestCase
         $this->assertSame($component, $repository->getComponent());
         $this->assertSame('foo.bar', $repository->getComponentName());
         $this->assertSame($viewModel, $repository->getViewModel());
-        $this->assertSame($context, $repository->getContextPublic());
+        $this->assertSame($context, $this->getContext($repository));
         $this->assertSame($globalMessageRegistry, $repository->getGlobalMessageRegistry());
         $this->assertSame($localMessageRegistry, $repository->getLocalMessageRegistry());
+    }
+
+    private function getContext(ComponentRepository $repository): ComponentContextInterface
+    {
+        return (new ReflectionMethod($repository, 'getContext'))->invoke($repository);
     }
 
     private function getRepository(): ComponentRepository
@@ -54,11 +60,6 @@ class ComponentRepositoryTest extends TestCase
 
             public function saveValue(mixed $value): void
             {
-            }
-
-            public function getContextPublic(): ComponentContextInterface
-            {
-                return $this->getContext();
             }
         };
     }

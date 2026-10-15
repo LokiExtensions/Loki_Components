@@ -40,7 +40,7 @@ class LocalMessageRegistry
      */
     public function getMessages(): array
     {
-        return array_unique($this->messages, SORT_REGULAR);
+        return array_values(array_unique($this->messages, SORT_REGULAR));
     }
 
     /**

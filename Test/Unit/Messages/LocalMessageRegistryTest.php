@@ -43,6 +43,22 @@ class LocalMessageRegistryTest extends TestCase
         $this->assertCount(2, $registry->getMessages());
     }
 
+    public function testGetMessagesReturnsListAfterRemovingDuplicates(): void
+    {
+        $registry = new LocalMessageRegistry();
+        $registry->addError('Error');
+        $registry->addError('Error');
+        $registry->addWarning('Warning');
+
+        $messages = $registry->getMessages();
+        $this->assertTrue(array_is_list($messages));
+        $this->assertSame(
+            '[{"text":"Error","type":"error"},{"text":"Warning","type":"warning"}]',
+            json_encode($messages),
+            'Messages are sent to the browser as an array, not as an object'
+        );
+    }
+
     public function testClearMessages(): void
     {
         $registry = new LocalMessageRegistry();

@@ -22,4 +22,11 @@ class ConfigTest extends TestCase
         $config = ObjectManager::getInstance()->get(Config::class);
         $this->assertFalse($config->isDebug());
     }
+
+    #[ConfigFixture('loki_components/general/polling_interval', 2500, 'store', 'default')]
+    public function testGetPollingInterval()
+    {
+        $config = ObjectManager::getInstance()->get(Config::class);
+        $this->assertSame(2500, $config->getPollingInterval());
+    }
 }

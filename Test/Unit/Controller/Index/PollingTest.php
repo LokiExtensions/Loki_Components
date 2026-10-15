@@ -38,6 +38,11 @@ class PollingTest extends TestCase
         $this->assertSame([], $this->executeController([]));
     }
 
+    public function testPollingHandlerListingHasNoRequiredHandlers(): void
+    {
+        $this->assertSame([], (new PollingHandlerListing())->getHandlers());
+    }
+
     private function executeController(array $handlers): array
     {
         $data = null;

@@ -6,7 +6,7 @@ namespace Loki\Components\Polling;
 class PollingHandlerListing
 {
     public function __construct(
-        private readonly array $handlers,
+        private readonly array $handlers = [],
     ) {
     }
 

@@ -28,9 +28,7 @@ for (const theme of THEMES) {
             expect(pollingRequests).toEqual([]);
         });
 
-        // polling.phtml reads $block->getPollingInterval() instead of $config->getPollingInterval(), so the
-        // configuration value never reaches the browser and polling never starts
-        test.fixme('polls the polling endpoint with the configured interval', async ({page}) => {
+        test('polls the polling endpoint with the configured interval', async ({page}) => {
             await configure(page, {theme, config: {[POLLING_INTERVAL_PATH]: 500}});
 
             const responsePromise = page.waitForResponse(response => response.url().includes(POLLING_ENDPOINT));

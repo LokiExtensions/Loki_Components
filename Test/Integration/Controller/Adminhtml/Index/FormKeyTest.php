@@ -8,7 +8,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 class FormKeyTest extends AbstractBackendController
 {
     protected $uri = 'backend/loki_components/index/formKey';
-    protected $resource = 'Loki_Components::form';
+    protected $resource = 'Magento_Backend::admin';
 
     public function testReturnsFormKeyAsJson(): void
     {
@@ -19,13 +19,12 @@ class FormKeyTest extends AbstractBackendController
         $this->assertSame($this->_objectManager->get(FormKey::class)->getFormKey(), $data['form_key'] ?? null);
     }
 
-    public function testAclHasAccess(): void
+    public function testDoesNotReturnFormKeyWithoutAdminLogin(): void
     {
-        $this->markTestSkipped('The controller does not extend the backend Action class, so no ACL check is applied');
-    }
+        $this->_auth->logout();
+        $this->dispatch($this->uri);
 
-    public function testAclNoAccess(): void
-    {
-        $this->markTestSkipped('The controller does not extend the backend Action class, so no ACL check is applied');
+        $data = json_decode((string)$this->getResponse()->getBody(), true);
+        $this->assertArrayNotHasKey('form_key', (array)$data, 'Anonymous visitors get an admin form key');
     }
 }

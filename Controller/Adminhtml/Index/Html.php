@@ -8,6 +8,8 @@ use Exception;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Component\ComponentRegistry;
 use Loki\Components\ViewModel\Messages;
+use Magento\Backend\App\Action;
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\CsrfAwareActionInterface;
 use Magento\Framework\App\Request\InvalidRequestException;
@@ -20,7 +22,6 @@ use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\AuthorizationException;
-use Magento\Framework\Message\ManagerInterface as MessageManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
 use Loki\Components\Config\Config;
@@ -34,9 +35,12 @@ use Loki\Components\Util\Controller\RequestDataLoader;
 use Loki\Components\Util\Controller\TargetRenderer;
 use Psr\Log\LoggerInterface;
 
-class Html implements HttpPostActionInterface, CsrfAwareActionInterface
+class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
+    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
+
     public function __construct(
+        Context $context,
         private readonly LayoutLoader $layoutLoader,
         private readonly RequestDataLoader $requestDataLoader,
         private readonly RepositoryDispatcher $repositoryDispatcher,
@@ -47,11 +51,11 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         private readonly AppState $appState,
         private readonly LoggerInterface $logger,
         private readonly ComponentRegistry $componentRegistry,
-        private readonly MessageManager $messageManager,
         private readonly Validator $formKeyValidator,
         private readonly AuthorizationInterface $authorization,
         private readonly Messages $messages
     ) {
+        parent::__construct($context);
     }
 
     public function execute(): ResultInterface|ResponseInterface

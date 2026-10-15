@@ -26,12 +26,31 @@ class AddressParserCompositeTest extends TestCase
         $final = $this->createMock(Address::class);
 
         $first = $this->createMock(AddressParserInterface::class);
+        $first->method('isEnabled')->willReturn(true);
         $first->expects($this->once())->method('parse')->with($original)->willReturn($intermediate);
 
         $second = $this->createMock(AddressParserInterface::class);
+        $second->method('isEnabled')->willReturn(true);
         $second->expects($this->once())->method('parse')->with($intermediate)->willReturn($final);
 
         $composite = new AddressParserComposite([$first, new stdClass(), $second]);
+        $this->assertSame($final, $composite->parse($original));
+    }
+
+    public function testSkipsDisabledParsers(): void
+    {
+        $original = $this->createMock(Address::class);
+        $final = $this->createMock(Address::class);
+
+        $disabled = $this->createMock(AddressParserInterface::class);
+        $disabled->method('isEnabled')->willReturn(false);
+        $disabled->expects($this->never())->method('parse');
+
+        $enabled = $this->createMock(AddressParserInterface::class);
+        $enabled->method('isEnabled')->willReturn(true);
+        $enabled->expects($this->once())->method('parse')->with($original)->willReturn($final);
+
+        $composite = new AddressParserComposite([$disabled, $enabled]);
         $this->assertSame($final, $composite->parse($original));
     }
 }

@@ -27,6 +27,10 @@ class AddressParserComposite implements AddressParserInterface
                 continue;
             }
 
+            if (false === $addressParser->isEnabled()) {
+                continue;
+            }
+
             $address = $addressParser->parse($address);
         }
 

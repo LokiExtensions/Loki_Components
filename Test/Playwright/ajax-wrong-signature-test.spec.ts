@@ -1,10 +1,11 @@
 import { test, expect } from '@playwright/test';
+import { openTestPage } from '@loki/open-test-page';
+import { TEST_PAGE_HANDLES } from './helpers/configure';
 
 const HTML_ENDPOINT = '/loki_components/index/html';
-const TEST_PAGE = '/loki_components/index/test';
 
 async function getFormKey(page): Promise<string> {
-  await page.goto(TEST_PAGE);
+  await openTestPage(page, TEST_PAGE_HANDLES);
 
   const cookies = await page.context().cookies();
   const formKeyCookie = cookies.find((cookie) => cookie.name === 'form_key');

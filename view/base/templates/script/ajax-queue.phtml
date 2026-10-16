@@ -45,6 +45,7 @@ if ($interval < 10) {
         activeElementId: false,
         add(component, update) {
             if (component.skipQueue) {
+                component.beforePost();
                 this.post([{component, update}]);
                 return;
             }
@@ -84,7 +85,7 @@ if ($interval < 10) {
             document.dispatchEvent(new CustomEvent('loki-components.ajax.loading', {detail: loading}));
         },
         async postQueue() {
-            if (!this.requests.length > 0) {
+            if (this.requests.length === 0) {
                 return;
             }
 
@@ -104,7 +105,7 @@ if ($interval < 10) {
         async post(incomingRequests) {
             this.setLoading(true);
 
-            requests = incomingRequests.filter(request => !request.component.skipAjax);
+            const requests = incomingRequests.filter(request => !request.component.skipAjax);
             if (requests.length === 0) {
                 this.afterPostSuccess(incomingRequests);
                 this.afterPostFinally(incomingRequests);
@@ -117,7 +118,7 @@ if ($interval < 10) {
             }
 
             await fetch('<?= $escaper->escapeUrl($componentUtil->getPostUrl(
-            )) ?>?form_key=' + formKey + '&isAjax=true', {
+            )) ?>?form_key=' + encodeURIComponent(formKey) + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
                 headers: this.getPostHeaders(),

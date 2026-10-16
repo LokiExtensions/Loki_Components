@@ -32,6 +32,15 @@ class SecurityTest extends TestCase
             'anchor with javascript href' => ['<a href="javascript:alert(1)">x</a>', 'x'],
             'benign markup with entity' => ['<b>bold</b> &amp; text', 'bold & text'],
             'plain text' => ['plain text', 'plain text'],
+            'scheme with leading whitespace' => [' javascript:alert(1)', 'alert(1)'],
+            'data scheme' => ['data:text/html;base64,PHNjcmlwdD4=', 'text/html;base64,PHNjcmlwdD4='],
+            'word ending with data followed by colon' => ['Metadata: 123', 'Metadata: 123'],
+            'word data followed by colon' => ['Check data: none', 'Check data: none'],
+            'less than sign with space' => ['a < b', 'a < b'],
+            'unclosed tag' => ['x<img src=x onerror=alert(1)', 'x'],
+            'null byte cannot smuggle tags' => ["\0<script>", ''],
+            'placeholder cannot smuggle tags' => ["\u{E000}script>alert(1)", 'script>alert(1)'],
+            'less than sign followed by number' => ['5 <10 items', '5 <10 items'],
         ];
     }
 }

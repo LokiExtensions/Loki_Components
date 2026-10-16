@@ -113,6 +113,27 @@ class ComponentTest extends TestCase
         $this->assertTrue($component->hasViewModel());
     }
 
+    public function testSetBlockUpdatesExistingViewModel(): void
+    {
+        $firstBlock = $this->getBlockMock(self::NAME);
+        $secondBlock = $this->getBlockMock(self::NAME);
+
+        $viewModel = $this->getViewModelMock();
+        $setBlocks = [];
+        $viewModel->method('setBlock')->willReturnCallback(function ($block) use (&$setBlocks) {
+            $setBlocks[] = $block;
+        });
+        $this->expectViewModelCreation($viewModel);
+
+        $component = $this->getComponent();
+        $component->setBlock($firstBlock);
+        $component->getViewModel();
+        $component->setBlock($secondBlock);
+
+        $this->assertSame($secondBlock, $component->getBlock());
+        $this->assertSame($secondBlock, end($setBlocks));
+    }
+
     public function testGetViewModelWithoutBlockDoesNotSetBlock(): void
     {
         $viewModel = $this->getViewModelMock();

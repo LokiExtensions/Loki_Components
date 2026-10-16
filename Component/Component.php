@@ -164,6 +164,7 @@ class Component implements ComponentInterface
     public function setBlock(AbstractBlock $block): void
     {
         $this->block = $block;
+        $this->viewModel?->setBlock($block);
     }
 
     public function getGlobalMessageRegistry(): GlobalMessageRegistry

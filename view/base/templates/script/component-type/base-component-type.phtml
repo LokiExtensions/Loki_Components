@@ -62,7 +62,7 @@ $componentUtil = $viewModelFactory->create(ComponentUtil::class);
                 value = null;
             }
 
-            if (!value) {
+            if (value === null || value === undefined) {
                 value = this.value;
             }
 

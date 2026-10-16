@@ -25,7 +25,7 @@ class Validator
             throw new RecursionException('Too many array levels');
         }
 
-        if (is_array($data)) {
+        if (is_array($data) && $data !== []) {
             foreach ($data as $value) {
                 if (false === $this->validate($component, $value, '', $depth + 1)) {
                     return false;
@@ -37,6 +37,11 @@ class Validator
 
         $validators = $this->validatorRegistry->getApplicableValidators($component->getValidators());
         $component->setIsValidated(true);
+
+        // An empty array only needs to be checked for being required, other validators expect scalar values
+        if ($data === []) {
+            $validators = array_intersect_key($validators, ['required' => true]);
+        }
 
         foreach ($validators as $validator) {
             $result = $validator->validate($data, $component);

@@ -112,6 +112,27 @@ class ValidatorTest extends TestCase
         $this->assertFalse($validator->validate($this->getComponent(['custom']), ['foo', 'bar']));
     }
 
+    public function testValidatesEmptyArrayAsValue(): void
+    {
+        $required = new class implements ValidatorInterface {
+            public array $values = [];
+
+            public function validate(mixed $value, ?ComponentInterface $component = null): bool|array
+            {
+                $this->values[] = $value;
+                return empty($value) ? ['Value is required'] : true;
+            }
+        };
+
+        $component = $this->getComponent(['required']);
+        $component->expects($this->once())->method('setIsValidated')->with(true);
+
+        $validator = $this->getValidator(['required' => $required]);
+        $this->assertFalse($validator->validate($component, []));
+        $this->assertSame([[]], $required->values);
+        $this->assertCount(1, $this->localMessageRegistry->getMessages());
+    }
+
     public function testThrowsRecursionExceptionWhenTooDeep(): void
     {
         $validator = new Validator(new ValidatorRegistry([]), 2);

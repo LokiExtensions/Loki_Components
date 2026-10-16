@@ -14,18 +14,24 @@ class LengthValidator implements ValidatorInterface
             return true;
         }
 
-        $viewModel = $component->getViewModel();
+        $viewModel = $component?->getViewModel();
         if (false === $viewModel instanceof ComponentViewModelInterface) {
             return true;
         }
 
-        $minlength = $this->getMin($viewModel->getBlock());
-        if ($minlength > 0 && strlen($value) < $minlength) {
+        $block = $viewModel->getBlock();
+        if (false === $block instanceof AbstractBlock) {
+            return true;
+        }
+
+        $length = mb_strlen($value);
+        $minlength = $this->getMin($block);
+        if ($minlength > 0 && $length < $minlength) {
             return [__('Value should have more than %1 characters', $minlength)];
         }
 
-        $maxlength = $this->getMax($viewModel->getBlock());
-        if ($maxlength > 0 && strlen($value) > $maxlength) {
+        $maxlength = $this->getMax($block);
+        if ($maxlength > 0 && $length > $maxlength) {
             return [__('Value should have no more than %1 characters', $maxlength)];
         }
 

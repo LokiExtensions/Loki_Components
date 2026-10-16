@@ -21,7 +21,7 @@ use Magento\Framework\View\Element\Template;
                 return;
             }
 
-            for ([key, value] of Object.entries(jsonData)) {
+            for (const [key, value] of Object.entries(jsonData)) {
                 this[key] = value;
             }
         },

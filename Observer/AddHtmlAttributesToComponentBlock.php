@@ -17,6 +17,8 @@ use Loki\Components\Util\Component\JsDataProvider;
 
 class AddHtmlAttributesToComponentBlock implements ObserverInterface
 {
+    private const FIRST_TAG_PATTERN = '/^<([a-zA-Z][a-zA-Z0-9-]*)(?=[\s\/>])((?:"[^"]*"|\'[^\']*\'|[^\'">])*)>/';
+
     public function __construct(
         private readonly ComponentRegistry $componentRegistry,
         private readonly JsDataProvider $jsDataProvider,
@@ -43,11 +45,7 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
             return;
         }
 
-        if (!preg_match('/^<([a-z]{2,})/', $html, $match)) {
-            return;
-        }
-
-        if (empty($match[1])) {
+        if (!preg_match(self::FIRST_TAG_PATTERN, $html, $match)) {
             return;
         }
 
@@ -57,16 +55,18 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
             return;
         }
 
-        $htmlAttributes = $this->getHtmlAttributes($component, $html);
-        if (false === strlen($htmlAttributes) > 0) {
-            return;
+        $tagName = $match[1];
+        $existingAttributes = $match[2];
+        $selfClosing = '';
+        if (str_ends_with(rtrim($existingAttributes), '/')) {
+            $existingAttributes = substr(rtrim($existingAttributes), 0, -1);
+            $selfClosing = ' /';
         }
 
-        $html = preg_replace('/^<([a-z]{2,})([^>]{0,})>/', '<\1 ' . $htmlAttributes . '>', $html);
+        $htmlAttributes = $this->getHtmlAttributes($component, $existingAttributes);
+        $newTag = '<' . $tagName . ' ' . $htmlAttributes . $selfClosing . '>';
 
-        $initialDataElement = $this->getInitialDataElement($component);
-        $html = preg_replace('/^<([^>]+)>/', '<\1>[X-LOKI-INIT-BLOCK]', $html);
-        $html = str_replace('[X-LOKI-INIT-BLOCK]', $initialDataElement, $html);
+        $html = $newTag . $this->getInitialDataElement($component) . substr($html, strlen($match[0]));
 
         $transport->setHtml($html);
     }
@@ -79,13 +79,9 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
 EOF;
     }
 
-    private function getHtmlAttributes(ComponentInterface $component, string $currentHtml): string
+    private function getHtmlAttributes(ComponentInterface $component, string $existingAttributes): string
     {
         $block = $component->getBlock();
-
-        if (!preg_match('/^<([a-z]{2,})([^>]{0,})/i', $currentHtml, $match)) {
-            return $currentHtml;
-        }
 
         $attributes = (array)$block->getData('html_attributes');
         $attributes['id'] = $this->getElementId->execute($block);
@@ -95,20 +91,53 @@ EOF;
             $attributes['x-title'] = $this->jsDataProvider->getComponentId($component);
         }
 
+        $existingAttributeNames = $this->getAttributeNames($existingAttributes);
+
         $htmlAttributes = [];
-        $firstTagHtml = $match[0];
         foreach ($attributes as $attributeName => $attributeValue) {
-            if (str_contains($firstTagHtml, ' ' . $attributeName . '="')) {
+            $attributeName = $this->convertAlpineShorthand((string)$attributeName);
+            if (in_array(strtolower($attributeName), $existingAttributeNames, true)) {
                 continue;
             }
 
-            $htmlAttributes[] = $attributeName . '="' . $attributeValue . '"';
+            $htmlAttributes[] = $attributeName . '="' . $this->escapeAttributeValue($attributeValue) . '"';
         }
 
-        $allAttributes = $match[2] .' '. implode(' ', $htmlAttributes);
-        $allAttributes = preg_replace('/@([a-z.\-]+)=/', ' x-on:\1=', $allAttributes);
+        $allAttributes = $this->convertAlpineShorthands($existingAttributes) . ' ' . implode(' ', $htmlAttributes);
 
         return trim($allAttributes, " \f\n\r\t\v\x00");
+    }
+
+    private function getAttributeNames(string $attributes): array
+    {
+        $attributes = $this->convertAlpineShorthands($attributes);
+        $attributes = (string)preg_replace('/"[^"]*"|\'[^\']*\'/', '""', $attributes);
+        preg_match_all('/(?:^|\s)([^\s=\/>"\']+)/', $attributes, $matches);
+
+        return array_map('strtolower', $matches[1]);
+    }
+
+    private function convertAlpineShorthands(string $attributes): string
+    {
+        return (string)preg_replace_callback(
+            '/("[^"]*"|\'[^\']*\')|(?<=^|\s)@([^\s=\/>"\']+)/',
+            fn (array $match) => $match[1] !== '' ? $match[1] : 'x-on:' . $match[2],
+            $attributes
+        );
+    }
+
+    private function convertAlpineShorthand(string $attributeName): string
+    {
+        if (str_starts_with($attributeName, '@')) {
+            return 'x-on:' . substr($attributeName, 1);
+        }
+
+        return $attributeName;
+    }
+
+    private function escapeAttributeValue(mixed $value): string
+    {
+        return htmlspecialchars((string)$value, ENT_COMPAT | ENT_HTML5, 'UTF-8', false);
     }
 
     private function getJsData(ComponentInterface $component): string

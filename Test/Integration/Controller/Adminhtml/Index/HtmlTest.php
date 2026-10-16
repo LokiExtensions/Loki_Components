@@ -8,7 +8,9 @@ use Loki\Components\Controller\Adminhtml\Index\Html;
 use Loki\Components\Test\Integration\Dummy\DummyRepository;
 use Loki\Components\Test\Integration\Dummy\DummyRepositoryStorage;
 use Loki\Components\Test\Integration\Traits\RegisterTestComponents;
+use Loki\Components\Util\Controller\RepositoryDispatcher;
 use Loki\Components\Util\Security\AjaxSignature;
+use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
@@ -91,6 +93,57 @@ class HtmlTest extends TestCase
 
         $this->getController(true)->execute();
         $this->assertSame($update, $this->getStorage()->getValue(self::BLOCK_NAME));
+    }
+
+    #[AppIsolation(true)]
+    public function testDoesNotRenderWhenRenderingIsDisabled(): void
+    {
+        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => 'foo', 'render' => 0]]);
+
+        $result = $this->getController(true)->execute();
+        $this->assertSame('foo', $this->getStorage()->getValue(self::BLOCK_NAME));
+
+        $response = ObjectManager::getInstance()->create(HttpResponse::class);
+        $result->renderResult($response);
+        $this->assertStringNotContainsString(self::BLOCK_MARKER, (string)$response->getBody());
+    }
+
+    #[AppIsolation(true)]
+    public function testDoesNotRenderWhenRenderingIsDisabledInUpdateValue(): void
+    {
+        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => ['foo' => 'bar', 'render' => 0]]]);
+
+        $result = $this->getController(true)->execute();
+
+        $response = ObjectManager::getInstance()->create(HttpResponse::class);
+        $result->renderResult($response);
+        $this->assertStringNotContainsString(self::BLOCK_MARKER, (string)$response->getBody());
+    }
+
+    #[AppIsolation(true)]
+    public function testDispatchesPostDispatchEvent(): void
+    {
+        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => 'foo']]);
+
+        $eventManager = $this->createMock(EventManager::class);
+        $dispatchedEvents = [];
+        $eventManager->method('dispatch')->willReturnCallback(function (string $eventName) use (&$dispatchedEvents) {
+            $dispatchedEvents[] = $eventName;
+        });
+
+        $repositoryDispatcher = ObjectManager::getInstance()->create(RepositoryDispatcher::class, [
+            'eventManager' => $eventManager,
+        ]);
+
+        $authorization = $this->createMock(AuthorizationInterface::class);
+        $authorization->method('isAllowed')->willReturn(true);
+
+        ObjectManager::getInstance()->create(Html::class, [
+            'authorization' => $authorization,
+            'repositoryDispatcher' => $repositoryDispatcher,
+        ])->execute();
+
+        $this->assertContains('loki_components_repository_post_dispatch', $dispatchedEvents);
     }
 
     #[AppIsolation(true)]

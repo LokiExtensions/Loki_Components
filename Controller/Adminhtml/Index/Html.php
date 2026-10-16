@@ -7,6 +7,8 @@ namespace Loki\Components\Controller\Adminhtml\Index;
 use Exception;
 use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Component\ComponentRegistry;
+use Loki\Components\Util\Controller\ComponentUpdate;
+use Loki\Components\Util\Controller\ComponentUpdateFactory;
 use Loki\Components\ViewModel\Messages;
 use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
@@ -32,6 +34,7 @@ use Loki\Components\Exception\NoComponentFoundException;
 use Loki\Components\Exception\RedirectException;
 use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
+use Loki\Components\Util\Controller\RenderFlag;
 use Loki\Components\Util\Controller\RequestDataLoader;
 use Loki\Components\Util\Controller\TargetRenderer;
 use Psr\Log\LoggerInterface;
@@ -54,7 +57,9 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
         private readonly ComponentRegistry $componentRegistry,
         private readonly Validator $formKeyValidator,
         private readonly AuthorizationInterface $authorization,
-        private readonly Messages $messages
+        private readonly Messages $messages,
+        private readonly ComponentUpdateFactory $componentUpdateFactory,
+        private readonly RenderFlag $renderFlag
     ) {
         parent::__construct($context);
     }
@@ -92,6 +97,12 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
         }
 
         $this->messages->syncMessages();
+
+        try {
+            $this->repositoryDispatcher->postDispatch($layout, $this->getComponentUpdates($updates));
+        } catch (RedirectException $redirectException) {
+            return $this->getJsonRedirect($redirectException);
+        }
 
         if ($this->allowRendering($data)) {
             try {
@@ -166,7 +177,7 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
     {
         $html = '';
         foreach ($htmlParts as $htmlPart) {
-            $htmlPart = preg_replace("/([\r\n]+)/", "\n", $htmlPart);
+            $htmlPart = preg_replace("/\r\n|\r/", "\n", $htmlPart);
             $html .= $htmlPart . "\n\n";
         }
 
@@ -194,8 +205,24 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
 
     private function allowRendering(array $data): bool
     {
-        return !isset($data['componentData']['render'])
-            || $data['componentData']['render'] === 1;
+        return $this->renderFlag->allowRendering((array)$data['updates']);
+    }
+
+    /**
+     * @return ComponentUpdate[]
+     */
+    private function getComponentUpdates(array $updates): array
+    {
+        $componentUpdates = [];
+        foreach ($updates as $update) {
+            $componentUpdates[] = $this->componentUpdateFactory->create([
+                'block' => $update['block'],
+                'component' => $update['component'],
+                'componentData' => $update['update'] ?? null,
+            ]);
+        }
+
+        return $componentUpdates;
     }
 
     /**

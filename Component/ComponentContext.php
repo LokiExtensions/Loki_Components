@@ -15,6 +15,6 @@ class ComponentContext extends AbstractComponentContext
     public function __construct(
         protected array $dependencies = []
     ) {
-        parent::__construct($dependencies);
+        parent::__construct([], $dependencies);
     }
 }

@@ -34,7 +34,7 @@ class AddDomIdToBlock implements ObserverInterface
             return;
         }
 
-        if (!preg_match('#^<([a-z]{2,})(?=[\s/>])([^>]*)>#i', $html, $match)) {
+        if (!preg_match('#^<([a-z][a-z0-9-]*)(?=[\s/>])((?:"[^"]*"|\'[^\']*\'|[^\'">])*)>#i', $html, $match)) {
             return;
         }
 

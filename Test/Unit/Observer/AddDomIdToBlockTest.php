@@ -44,6 +44,14 @@ class AddDomIdToBlockTest extends TestCase
                 '<div data-id="foo">bar</div>',
                 '<div id="loki-test-block" data-id="foo">bar</div>',
             ],
+            'single letter element' => [
+                '<p class="foo">bar</p>',
+                '<p id="loki-test-block" class="foo">bar</p>',
+            ],
+            'heading element' => [
+                '<h2>bar</h2>',
+                '<h2 id="loki-test-block">bar</h2>',
+            ],
             'html with regex characters' => [
                 '<div x-bind:class="{ \'active\': open }" data-pattern="(a|b)+$">bar</div>',
                 '<div id="loki-test-block" x-bind:class="{ \'active\': open }" data-pattern="(a|b)+$">bar</div>',
@@ -66,7 +74,6 @@ class AddDomIdToBlockTest extends TestCase
             'existing id on another line' => [self::BLOCK_NAME, "<div\n class=\"foo\"\n id=\"custom\">bar</div>"],
             'no element' => [self::BLOCK_NAME, 'plain text'],
             'comment' => [self::BLOCK_NAME, '<!-- comment --><div>bar</div>'],
-            'single character element' => [self::BLOCK_NAME, '<p class="foo">bar</p>'],
         ];
     }
 

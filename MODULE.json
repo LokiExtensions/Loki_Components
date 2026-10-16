@@ -42,9 +42,9 @@
         }
     ],
     "tests": {
-        "unit": 148,
-        "integration": 99,
-        "functional": 19
+        "unit": 161,
+        "integration": 112,
+        "functional": 25
     },
     "phpcs_severity": "9",
     "phpstan_level": "3",

@@ -5,6 +5,28 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+### Fixed
+- `ComponentContext` passed its dependencies as parent contexts, so `getCustomerSession()` and `getUrlFactory()` returned `null`
+- Component attributes broke the root element when its attributes contained `>` (like `() => foo`), `$1` or `\1`, or when the root element was a single-letter or heading tag (like `<p>`, `<a>` or `<h2>`)
+- Escape values of `html_attributes` that are added to the root element of a component
+- `AddDomIdToBlock` skipped single-letter and heading root elements
+- Admin ACL check ignored the `aclResource` sent within the update value (as done by `Loki_AdminComponents`) and now also checks the block argument `acl_resource`
+- Admin controller ignored the `render` flag and did not dispatch `loki_components_repository_post_dispatch`
+- Admin controller collapsed blank lines in the rendered HTML
+- Honor `render: 0` within the update value (as sent by `LokiCheckout_Mollie`)
+- Security filter removed `data:` from regular text (like `Metadata: 123`) and text following a `<` before a number
+- Required validation was skipped for empty arrays
+- Length validator counted bytes instead of characters and crashed without component or block
+- Required validator crashed when the component has no block
+- Date validator accepted impossible dates like `2024-13-45`
+- `disabled="false"` in `loki_components.xml` disabled a target, validator or filter
+- `Address` was not JSON serializable, `Location` attributes lacked the `price`, `AddressFactory::createFromQuoteAddress()` dropped the region
+- Uppercase characters were stripped from layout handles and empty page handles caused a `TypeError`
+- AJAX requests could update the targets of another request, because of a global `requests` variable
+- Components with `skipQueue` were not prepared with `beforePost()`
+- `post()` replaced falsy values like `''`, `0` and `false` with the current value
+- Polling messages were not shown when polling handlers returned keyed data
+- Initial component data leaked the global variables `key` and `value`
 
 ## [2.8.2] - 13 October 2026
 ### Fixed

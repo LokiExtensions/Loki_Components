@@ -29,6 +29,7 @@ use Loki\Components\Exception\NoComponentFoundException;
 use Loki\Components\Exception\RedirectException;
 use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
+use Loki\Components\Util\Controller\RenderFlag;
 use Loki\Components\Util\Controller\RequestDataLoader;
 use Loki\Components\Util\Controller\TargetRenderer;
 use Psr\Log\LoggerInterface;
@@ -50,7 +51,8 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         private readonly ComponentRegistry $componentRegistry,
         private readonly ComponentUpdateFactory $componentUpdateFactory,
         private readonly Validator $formKeyValidator,
-        private readonly Messages $messages
+        private readonly Messages $messages,
+        private readonly RenderFlag $renderFlag
     ) {
     }
 
@@ -201,19 +203,7 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
 
     private function allowRendering(array $data): bool
     {
-        foreach ($data['updates'] as $update) {
-            if (!isset($update['render'])) {
-                continue;
-            }
-
-            if (1 === $update['render']) {
-                continue;
-            }
-
-            return false;
-        }
-
-        return true;
+        return $this->renderFlag->allowRendering((array)$data['updates']);
     }
 
     private function addExceptionMessage(Exception $exception): void

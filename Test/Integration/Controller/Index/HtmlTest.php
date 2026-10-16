@@ -172,6 +172,18 @@ class HtmlTest extends TestCase
     }
 
     #[AppIsolation(true)]
+    public function testRenderFlagZeroInUpdateValueSkipsRendering(): void
+    {
+        $this->prepareRequest([self::DUMMY1], [
+            ['blockName' => self::DUMMY1, 'update' => ['mandate_id' => 'foo', 'render' => 0]],
+        ]);
+        $response = $this->executeController();
+
+        $this->assertTrue($this->getStorage()->hasValue(self::DUMMY1));
+        $this->assertStringNotContainsString(self::DUMMY1, (string)$response->getBody());
+    }
+
+    #[AppIsolation(true)]
     public function testRedirectExceptionReturnsJsonRedirect(): void
     {
         $redirectException = new RedirectException('Please login first');

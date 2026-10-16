@@ -65,6 +65,19 @@ class AddressFactoryTest extends TestCase
         $this->assertSame('Laywright', $address->getLastname());
     }
 
+    public function testCreateFromQuoteAddressMapsRegion(): void
+    {
+        /** @var QuoteAddress $quoteAddress */
+        $quoteAddress = ObjectManager::getInstance()->create(QuoteAddress::class);
+        $quoteAddress->setStreet(['Main Street', '12']);
+        $quoteAddress->setCountryId('NL');
+        $quoteAddress->setRegion('Noord-Holland');
+
+        $address = $this->getAddressFactory()->createFromQuoteAddress($quoteAddress);
+
+        $this->assertSame('Noord-Holland', $address->getRegion());
+    }
+
     public function testCreateRunsAddressParsers(): void
     {
         $parser = new class implements AddressParserInterface {

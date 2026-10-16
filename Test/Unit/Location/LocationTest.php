@@ -64,6 +64,26 @@ class LocationTest extends TestCase
         $this->assertSame($attributes, $location->jsonSerialize());
     }
 
+    public function testGetAttributesContainsPrice(): void
+    {
+        $location = new Location($this->getAddress('Loki Store'), null, 'store-1', '', [], '', null, 395);
+
+        $attributes = $location->getAttributes();
+        $this->assertArrayHasKey('price', $attributes);
+        $this->assertSame(395, $attributes['price']);
+    }
+
+    public function testAddressIsJsonSerializable(): void
+    {
+        $address = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getAttributes'])
+            ->getMock();
+        $address->method('getAttributes')->willReturn(['city' => 'Amsterdam']);
+
+        $this->assertSame('{"city":"Amsterdam"}', json_encode($address));
+    }
+
     private function getAddress(string $company, array $attributes = []): Address
     {
         $address = $this->createMock(Address::class);

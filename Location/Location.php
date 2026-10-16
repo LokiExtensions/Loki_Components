@@ -71,6 +71,7 @@ class Location extends DataObject implements JsonSerializable
             'value' => $this->getValue(),
             'distance' => $this->getDistance(),
             'pickupFrom' => $this->getPickupFrom(),
+            'price' => $this->getPrice(),
             'businessHours' => $this->getBusinessHours(),
             'data' => $this->getData(),
         ];

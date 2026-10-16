@@ -2,9 +2,10 @@
 
 namespace Loki\Components\Location;
 
+use JsonSerializable;
 use Magento\Framework\DataObject;
 
-class Address extends DataObject
+class Address extends DataObject implements JsonSerializable
 {
     public function __construct(
         private readonly AddressRenderer $addressRenderer,

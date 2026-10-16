@@ -69,6 +69,7 @@ class AddressFactory
             houseNumberAddition:  (string)$quoteAddress->getStreetLine(3),
             postcode:  (string)$quoteAddress->getPostcode(),
             city: (string)$quoteAddress->getCity(),
+            region: is_scalar($quoteAddress->getRegion()) ? (string)$quoteAddress->getRegion() : '',
             countryId:  (string)$quoteAddress->getCountryId(),
             telephone:  (string)$quoteAddress->getTelephone(),
             fax:  (string)$quoteAddress->getFax(),

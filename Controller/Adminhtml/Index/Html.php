@@ -69,9 +69,8 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
         $updates = $this->sortUpdates($updates);
 
         foreach ($updates as $update) {
-            if (isset($update['aclResource'])) {
-                $aclResource = $update['aclResource'];
-                if (!empty($aclResource) && !$this->authorization->isAllowed($aclResource)) {
+            foreach ($this->getAclResources($update) as $aclResource) {
+                if (!$this->authorization->isAllowed($aclResource)) {
                     throw new AuthorizationException(
                         __('Access denied.')
                     );
@@ -197,6 +196,22 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
     {
         return !isset($data['componentData']['render'])
             || $data['componentData']['render'] === 1;
+    }
+
+    /**
+     * @return string[]
+     */
+    private function getAclResources(array $update): array
+    {
+        $aclResources = [
+            $update['block']->getAclResource(),
+            $update['aclResource'] ?? null,
+            is_array($update['update'] ?? null) ? ($update['update']['aclResource'] ?? null) : null,
+        ];
+
+        $aclResources = array_filter($aclResources, fn ($aclResource) => is_string($aclResource) && $aclResource !== '');
+
+        return array_values(array_unique($aclResources));
     }
 
     private function addGlobalException(Exception $exception): void

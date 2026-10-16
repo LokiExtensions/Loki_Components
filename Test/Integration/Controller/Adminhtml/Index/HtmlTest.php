@@ -71,6 +71,29 @@ class HtmlTest extends TestCase
     }
 
     #[AppIsolation(true)]
+    public function testDeniesUpdateWhenAclResourceInUpdateValueIsNotAllowed(): void
+    {
+        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => ['foo' => 'bar', 'aclResource' => self::ACL_RESOURCE]]]);
+
+        $this->expectException(AuthorizationException::class);
+        try {
+            $this->getController(false)->execute();
+        } finally {
+            $this->assertFalse($this->getStorage()->hasValue(self::BLOCK_NAME));
+        }
+    }
+
+    #[AppIsolation(true)]
+    public function testSavesUpdateWhenAclResourceInUpdateValueIsAllowed(): void
+    {
+        $update = ['foo' => 'bar', 'aclResource' => self::ACL_RESOURCE];
+        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => $update]]);
+
+        $this->getController(true)->execute();
+        $this->assertSame($update, $this->getStorage()->getValue(self::BLOCK_NAME));
+    }
+
+    #[AppIsolation(true)]
     public function testSkipsInvalidUpdates(): void
     {
         $this->prepareRequest([

@@ -28,4 +28,18 @@ class RequiredValidatorTest extends TestCase
         $this->assertIsArray($validator->validate('', $component));
         $this->assertIsArray($validator->validate(null, $component));
     }
+
+    public function testWithoutBlock(): void
+    {
+        $component = $this->createMock(ComponentInterface::class);
+        $component->method('getBlock')->willReturn(null);
+
+        $ajax = $this->createMock(Ajax::class);
+        $ajax->method('isAjax')->willReturn(true);
+
+        $validator = new RequiredValidator(new IsEmpty(), $ajax, new SkipValidation);
+        $this->assertSame(['Value is required'], $validator->validate('', $component));
+        $this->assertSame(['Value is required'], $validator->validate('', null));
+        $this->assertTrue($validator->validate('foo', null));
+    }
 }

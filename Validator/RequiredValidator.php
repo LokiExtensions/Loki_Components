@@ -6,6 +6,7 @@ use Loki\Components\Component\ComponentInterface;
 use Loki\Components\Util\Ajax;
 use Loki\Components\Util\IsEmpty;
 use Loki\Components\Util\SkipValidation;
+use Magento\Framework\View\Element\AbstractBlock;
 
 class RequiredValidator implements ValidatorInterface
 {
@@ -28,8 +29,9 @@ class RequiredValidator implements ValidatorInterface
 
         if ($this->isEmpty->execute($component, $value)) {
             $errorMessage = (string)__('Value is required');
-            if ($component instanceof ComponentInterface) {
-                $requiredErrorMessage = trim((string)$component->getBlock()->getRequiredErrorMessage(), " \f\n\r\t\v\x00");
+            $block = $component?->getBlock();
+            if ($block instanceof AbstractBlock) {
+                $requiredErrorMessage = trim((string)$block->getRequiredErrorMessage(), " \f\n\r\t\v\x00");
                 if (!empty($requiredErrorMessage)) {
                     $errorMessage = $requiredErrorMessage;
                 }

@@ -7,7 +7,7 @@ use Loki\Components\Component\ComponentInterface;
 
 class IsEmpty
 {
-    public function execute(ComponentInterface $component, mixed $value): bool
+    public function execute(?ComponentInterface $component, mixed $value): bool
     {
         if ($this->shouldBeNumber($component) && is_numeric($value)) {
             return false;
@@ -24,16 +24,16 @@ class IsEmpty
         return empty($value);
     }
 
-    private function shouldBePositiveNumber(ComponentInterface $component): bool
+    private function shouldBePositiveNumber(?ComponentInterface $component): bool
     {
-        $filters = $component->getFilters();
+        $filters = (array)$component?->getFilters();
 
         return in_array('positive_number', $filters, true);
     }
 
-    private function shouldBeNumber(ComponentInterface $component): bool
+    private function shouldBeNumber(?ComponentInterface $component): bool
     {
-        $filters = $component->getFilters();
+        $filters = (array)$component?->getFilters();
 
         return in_array('number', $filters, true);
     }

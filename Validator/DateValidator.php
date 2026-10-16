@@ -13,7 +13,8 @@ class DateValidator implements ValidatorInterface
             return true;
         }
 
-        if (preg_match('/^\d{4}-\d{2}-\d{2}$/', $date)) {
+        if (preg_match('/^(\d{4})-(\d{2})-(\d{2})$/', $date, $match)
+            && checkdate((int)$match[2], (int)$match[3], (int)$match[1])) {
             return true;
         }
 

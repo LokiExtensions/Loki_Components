@@ -28,6 +28,8 @@ class LayoutLoader
 
     public function load(array $handles = [], array $pageHandles = [], bool $isolated = false): LayoutInterface
     {
+        $pageHandles = $this->filterPageHandles($pageHandles);
+
         if ($isolated) {
             $handles = $this->layoutHandlerComposite->getHandles($handles);
             $layout = $this->layoutFactory->create();
@@ -115,8 +117,17 @@ class LayoutLoader
         }
     }
 
+    private function filterPageHandles(array $pageHandles): array
+    {
+        $pageHandles = array_filter($pageHandles, function ($pageHandle) {
+            return is_string($pageHandle) && $this->sanitizeHandle($pageHandle) !== '';
+        });
+
+        return array_values($pageHandles);
+    }
+
     private function sanitizeHandle(string $handle): string
     {
-        return preg_replace('/([^a-z0-9\-_]+)/', '', $handle);
+        return preg_replace('/([^a-zA-Z0-9\-_]+)/', '', $handle);
     }
 }

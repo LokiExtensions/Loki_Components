@@ -8,6 +8,8 @@ use Loki\Components\Util\Security\AjaxSignature;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 use PHPUnit\Framework\TestCase;
@@ -52,6 +54,15 @@ class ComponentUtilTest extends TestCase
             ['params', 'route_name', 'module_name', 'controller_module', 'controller_name', 'action_name', 'request_uri'],
             array_keys($data['request'])
         );
+    }
+
+    #[AppIsolation(true)]
+    public function testPageHandlesAreEmptyWithoutPageLayout(): void
+    {
+        $layout = ObjectManager::getInstance()->create(LayoutInterface::class);
+        $block = $layout->createBlock(Template::class, 'loki-components.test.no-page-layout');
+
+        $this->assertSame([], $this->getComponentUtil()->getPageHandles($block));
     }
 
     #[AppIsolation(true)]

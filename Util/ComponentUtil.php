@@ -50,7 +50,12 @@ class ComponentUtil implements ArgumentInterface
     {
         /** @var \Magento\Framework\View\Model\Layout\Merge $update */
         $update = $block->getLayout()->getUpdate();
-        return [$update->getPageLayout()];
+        $pageLayout = $update->getPageLayout();
+        if (false === is_string($pageLayout) || $pageLayout === '') {
+            return [];
+        }
+
+        return [$pageLayout];
     }
 
     public function getRequestData(): array

@@ -18,4 +18,20 @@ class LayoutLoaderTest extends TestCase
         $this->assertContains('foobar', $handles);
         $this->assertContains('foo__bar', $handles);
     }
+
+    public function testLoadKeepsUppercaseCharactersInHandles()
+    {
+        $layoutLoader = ObjectManager::getInstance()->get(LayoutLoader::class);
+        $layout = $layoutLoader->load(['catalog_product_view_sku_ABC-123'], [], true);
+
+        $this->assertContains('catalog_product_view_sku_ABC-123', $layout->getUpdate()->getHandles());
+    }
+
+    public function testLoadIgnoresEmptyPageHandles()
+    {
+        $layoutLoader = ObjectManager::getInstance()->get(LayoutLoader::class);
+        $layout = $layoutLoader->load(['foobar'], [null, '', false], true);
+
+        $this->assertContains('foobar', $layout->getUpdate()->getHandles());
+    }
 }

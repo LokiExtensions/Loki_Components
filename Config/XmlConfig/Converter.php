@@ -84,7 +84,7 @@ class Converter implements ConverterInterface
             $targetName = (string)$targetElement->getAttribute('name');
             $targets[$targetName] = [
                 'name' => $targetName,
-                'disabled' => (bool)$targetElement->getAttribute('disabled'),
+                'disabled' => $this->isDisabled($targetElement),
             ];
         }
 
@@ -99,7 +99,7 @@ class Converter implements ConverterInterface
             $validatorName = (string)$validatorElement->getAttribute('name');
             $validators[$validatorName] = [
                 'name' => $validatorName,
-                'disabled' => (bool)$validatorElement->getAttribute('disabled'),
+                'disabled' => $this->isDisabled($validatorElement),
             ];
         }
 
@@ -114,10 +114,17 @@ class Converter implements ConverterInterface
             $filterName = (string)$filterElement->getAttribute('name');
             $filters[$filterName] = [
                 'name' => $filterName,
-                'disabled' => (bool)$filterElement->getAttribute('disabled'),
+                'disabled' => $this->isDisabled($filterElement),
             ];
         }
 
         return $filters;
+    }
+
+    private function isDisabled(DOMElement $element): bool
+    {
+        $disabled = strtolower(trim((string)$element->getAttribute('disabled')));
+
+        return !in_array($disabled, ['', '0', 'false', 'no', 'off'], true);
     }
 }

@@ -57,6 +57,35 @@ XML;
         $this->assertTrue($result['components']['loki.one']['validators']['required']['disabled']);
     }
 
+    public function testConvertTreatsFalseAsNotDisabled(): void
+    {
+        $xml = <<<XML
+<?xml version="1.0" encoding="UTF-8" ?>
+<components>
+    <group name="default">
+        <target name="loki.group.target" disabled="false"/>
+    </group>
+    <component name="loki.one">
+        <target name="loki.target.a" disabled="false"/>
+        <target name="loki.target.b" disabled="0"/>
+        <target name="loki.target.c" disabled="1"/>
+        <validator name="required" disabled="false"/>
+        <filter name="trim" disabled="false"/>
+    </component>
+</components>
+XML;
+
+        $result = (new Converter())->convert($this->loadDom($xml));
+        $componentOne = $result['components']['loki.one'];
+
+        $this->assertFalse($result['groups']['default']['targets']['loki.group.target']['disabled']);
+        $this->assertFalse($componentOne['targets']['loki.target.a']['disabled']);
+        $this->assertFalse($componentOne['targets']['loki.target.b']['disabled']);
+        $this->assertTrue($componentOne['targets']['loki.target.c']['disabled']);
+        $this->assertFalse($componentOne['validators']['required']['disabled']);
+        $this->assertFalse($componentOne['filters']['trim']['disabled']);
+    }
+
     private function loadDom(string $xml): DOMDocument
     {
         $dom = new DOMDocument();

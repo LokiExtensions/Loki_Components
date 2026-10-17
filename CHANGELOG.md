@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Fixed
+- AJAX requests did not reuse the request URI of the original page, so `getCurrentUrl()` pointed to `loki_components/index/html`
 - `ComponentContext` passed its dependencies as parent contexts, so `getCustomerSession()` and `getUrlFactory()` returned `null`
 - Component attributes broke the root element when its attributes contained `>` (like `() => foo`), `$1` or `\1`, or when the root element was a single-letter or heading tag (like `<p>`, `<a>` or `<h2>`)
 - Escape values of `html_attributes` that are added to the root element of a component
@@ -27,6 +28,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - `post()` replaced falsy values like `''`, `0` and `false` with the current value
 - Polling messages were not shown when polling handlers returned keyed data
 - Initial component data leaked the global variables `key` and `value`
+- Number validators rejected empty values of fields that are not required
 
 ## [2.8.2] - 13 October 2026
 ### Fixed

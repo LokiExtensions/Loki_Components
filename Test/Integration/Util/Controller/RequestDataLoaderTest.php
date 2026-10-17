@@ -76,9 +76,60 @@ class RequestDataLoaderTest extends TestCase
         $requestDataLoader->load();
     }
 
-    private function getRequestDataLoader(array $data = [], array $headerArray = []): RequestDataLoader
+    public function testMergeRequestParamsUsesOriginalRequestUri()
     {
-        $httpRequest = ObjectManager::getInstance()->create(HttpRequest::class);
+        $httpRequest = $this->getHttpRequest();
+        $requestDataLoader = $this->getRequestDataLoader(
+            $this->getSignedRequestData(['request_uri' => '/foo/bar?baz=1']),
+            $this->getValidHeaders(),
+            $httpRequest
+        );
+
+        $requestDataLoader->mergeRequestParams();
+
+        $this->assertSame('/foo/bar?baz=1', $httpRequest->getRequestUri());
+        $this->assertSame('/foo/bar?baz=1', $httpRequest->getParam('currentUri'));
+    }
+
+    public function testMergeRequestParamsKeepsRequestUriWhenOriginalIsEmpty()
+    {
+        $httpRequest = $this->getHttpRequest();
+        $httpRequest->setRequestUri('/loki_components/index/html');
+        $requestDataLoader = $this->getRequestDataLoader(
+            $this->getSignedRequestData(['request_uri' => '', 'route_name' => 'cms']),
+            $this->getValidHeaders(),
+            $httpRequest
+        );
+
+        $requestDataLoader->mergeRequestParams();
+
+        $this->assertSame('/loki_components/index/html', $httpRequest->getRequestUri());
+    }
+
+    private function getSignedRequestData(array $request): array
+    {
+        $requestData = $this->getEmptyRequestData();
+        $requestData['request'] = $request;
+        $requestData['signature'] = $this->getAjaxSignature()->sign([
+            'handles' => $requestData['handles'],
+            'pageHandles' => $requestData['pageHandles'],
+            'request' => $requestData['request'],
+        ]);
+
+        return $requestData;
+    }
+
+    private function getHttpRequest(): HttpRequest
+    {
+        return ObjectManager::getInstance()->create(HttpRequest::class);
+    }
+
+    private function getRequestDataLoader(
+        array $data = [],
+        array $headerArray = [],
+        ?HttpRequest $httpRequest = null
+    ): RequestDataLoader {
+        $httpRequest = $httpRequest ?? $this->getHttpRequest();
 
         $headers = new Headers();
         $headers->addHeaders($headerArray);

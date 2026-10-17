@@ -59,8 +59,11 @@ class RequestDataLoader
 
         /** @var HttpRequest $request */
         $request = $this->request;
-        $request->setParam('currentUri', (string)$requestData->getRequestUri());
-        $request->setRequestUri((string)$request->getRequestUri());
+        $requestUri = (string)$requestData->getRequestUri();
+        $request->setParam('currentUri', $requestUri);
+        if ($requestUri !== '') {
+            $request->setRequestUri($requestUri);
+        }
         $request->setRouteName((string)$requestData->getRouteName());
         $request->setModuleName((string)$requestData->getModuleName());
         $request->setControllerName((string)$requestData->getControllerName());

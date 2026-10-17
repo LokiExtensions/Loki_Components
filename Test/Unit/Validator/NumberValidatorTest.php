@@ -13,6 +13,14 @@ class NumberValidatorTest extends TestCase
         $this->assertTrue($validator->validate(0));
         $this->assertTrue($validator->validate('0'));
         $this->assertIsArray($validator->validate('a0'));
-        $this->assertIsArray($validator->validate(null));
+        $this->assertIsArray($validator->validate(' a '));
+    }
+
+    public function testWithEmptyValues(): void
+    {
+        $validator = new NumberValidator();
+        $this->assertTrue($validator->validate(null));
+        $this->assertTrue($validator->validate(''));
+        $this->assertTrue($validator->validate('  '));
     }
 }

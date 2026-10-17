@@ -16,6 +16,14 @@ class PositiveNumberValidatorTest extends TestCase
         $this->assertIsArray($validator->validate(-1));
         $this->assertTrue($validator->validate('0'));
         $this->assertIsArray($validator->validate('a0'));
-        $this->assertIsArray($validator->validate(null));
+        $this->assertIsArray($validator->validate(' a '));
+    }
+
+    public function testWithEmptyValues(): void
+    {
+        $validator = new PositiveNumberValidator();
+        $this->assertTrue($validator->validate(null));
+        $this->assertTrue($validator->validate(''));
+        $this->assertTrue($validator->validate('  '));
     }
 }

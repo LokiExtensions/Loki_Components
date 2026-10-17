@@ -8,6 +8,10 @@ class PositiveNumberValidator implements ValidatorInterface
 {
     public function validate(mixed $value, ?ComponentInterface $component = null): bool|array
     {
+        if ($value === null || (is_string($value) && trim($value) === '')) {
+            return true;
+        }
+
         if (false === is_numeric($value)) {
             return [(string)__('Value must contain numbers only')];
         }

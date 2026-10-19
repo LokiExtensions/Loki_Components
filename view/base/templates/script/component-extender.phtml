@@ -5,7 +5,7 @@ declare(strict_types=1);
 use Loki\Components\Util\Block\ChildRenderer;
 use Magento\Framework\View\Element\Template;
 
-/** @version 2.9.0 */
+/** @version 2.10.0 */
 /** @var Template $block */
 /** @var ChildRenderer $childRenderer */
 
@@ -13,11 +13,15 @@ use Magento\Framework\View\Element\Template;
 <script>
     const LokiComponentExtender = {
         extensions: {},
-        extend(componentNames, extensionId, mixin, append = true) {
+        extend(componentNames, extensionId, mixin, options = true) {
             const callback = typeof mixin === 'function' ? mixin : () => mixin;
+            const {append = true, when = null} = typeof options === 'object' && options !== null
+                ? options
+                : {append: options};
+
             [].concat(componentNames).forEach(componentName => {
                 this.extensions[componentName] = this.extensions[componentName] || {};
-                this.extensions[componentName][extensionId] = {callback, append};
+                this.extensions[componentName][extensionId] = {callback, append, when};
             });
         },
         add(extensionId, extenderFunction, append = false) {
@@ -45,6 +49,36 @@ use Magento\Framework\View\Element\Template;
         merge(target, source) {
             return Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
         },
+        mergeReactive(target, source) {
+            Object.entries(Object.getOwnPropertyDescriptors(source)).forEach(([key, descriptor]) => {
+                if ('value' in descriptor) {
+                    target[key] = descriptor.value;
+                    return;
+                }
+
+                Object.defineProperty(target, key, descriptor);
+            });
+        },
+        sort(extensions) {
+            return [
+                ...extensions.filter(extension => !extension.append),
+                ...extensions.filter(extension => extension.append),
+            ];
+        },
+        applyExtensions(extensions, componentName, componentData, factoryArgs, parent, merge) {
+            this.sort(extensions).forEach(extension => {
+                if (extension.when && !extension.when(componentData)) {
+                    return;
+                }
+
+                const mixinData = extension.callback(componentName, componentData, factoryArgs, parent);
+                if (typeof mixinData !== 'object' || mixinData === null) {
+                    return;
+                }
+
+                merge(componentData, mixinData);
+            });
+        },
         apply(componentName, component, factoryArgs) {
             const extensions = this.getExtensions(componentName);
             if (extensions.length === 0 || typeof component !== 'object' || component === null) {
@@ -53,19 +87,42 @@ use Magento\Framework\View\Element\Template;
 
             const parent = this.merge({}, component);
             const componentData = this.merge({}, component);
-            const sortedExtensions = [
-                ...extensions.filter(extension => !extension.append),
-                ...extensions.filter(extension => extension.append),
-            ];
+            const conditionalExtensions = extensions.filter(extension => extension.when);
 
-            sortedExtensions.forEach(extension => {
-                const mixinData = extension.callback(componentName, componentData, factoryArgs, parent);
-                if (typeof mixinData !== 'object' || mixinData === null) {
-                    return;
+            this.applyExtensions(
+                extensions.filter(extension => !extension.when),
+                componentName,
+                componentData,
+                factoryArgs,
+                parent,
+                (target, source) => this.merge(target, source)
+            );
+
+            if (conditionalExtensions.length === 0) {
+                return componentData;
+            }
+
+            const extender = this;
+            const originalInit = componentData.init;
+            const conditionalInit = function (...initArgs) {
+                if (typeof this.loadData === 'function') {
+                    this.loadData();
                 }
 
-                this.merge(componentData, mixinData);
-            });
+                extender.applyExtensions(
+                    conditionalExtensions,
+                    componentName,
+                    this,
+                    factoryArgs,
+                    parent,
+                    (target, source) => extender.mergeReactive(target, source)
+                );
+
+                const init = this.init !== conditionalInit ? this.init : originalInit;
+
+                return typeof init === 'function' ? init.apply(this, initArgs) : undefined;
+            };
+            componentData.init = conditionalInit;
 
             return componentData;
         }

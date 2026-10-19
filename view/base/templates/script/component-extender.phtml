@@ -49,34 +49,24 @@ use Magento\Framework\View\Element\Template;
         merge(target, source) {
             return Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
         },
-        mergeReactive(target, source) {
-            Object.entries(Object.getOwnPropertyDescriptors(source)).forEach(([key, descriptor]) => {
-                if ('value' in descriptor) {
-                    target[key] = descriptor.value;
-                    return;
-                }
-
-                Object.defineProperty(target, key, descriptor);
-            });
-        },
         sort(extensions) {
             return [
                 ...extensions.filter(extension => !extension.append),
                 ...extensions.filter(extension => extension.append),
             ];
         },
-        applyExtensions(extensions, componentName, componentData, factoryArgs, parent, merge) {
+        applyExtensions(extensions, componentName, component, componentData, factoryArgs, parent) {
             this.sort(extensions).forEach(extension => {
-                if (extension.when && !extension.when(componentData)) {
+                if (extension.when && !extension.when(component)) {
                     return;
                 }
 
-                const mixinData = extension.callback(componentName, componentData, factoryArgs, parent);
+                const mixinData = extension.callback(componentName, component, factoryArgs, parent);
                 if (typeof mixinData !== 'object' || mixinData === null) {
                     return;
                 }
 
-                merge(componentData, mixinData);
+                this.merge(componentData, mixinData);
             });
         },
         apply(componentName, component, factoryArgs) {
@@ -93,9 +83,9 @@ use Magento\Framework\View\Element\Template;
                 extensions.filter(extension => !extension.when),
                 componentName,
                 componentData,
+                componentData,
                 factoryArgs,
-                parent,
-                (target, source) => this.merge(target, source)
+                parent
             );
 
             if (conditionalExtensions.length === 0) {
@@ -113,12 +103,12 @@ use Magento\Framework\View\Element\Template;
                     conditionalExtensions,
                     componentName,
                     this,
+                    componentData,
                     factoryArgs,
-                    parent,
-                    (target, source) => extender.mergeReactive(target, source)
+                    parent
                 );
 
-                const init = this.init !== conditionalInit ? this.init : originalInit;
+                const init = componentData.init !== conditionalInit ? componentData.init : originalInit;
 
                 return typeof init === 'function' ? init.apply(this, initArgs) : undefined;
             };

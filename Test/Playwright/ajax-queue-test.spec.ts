@@ -11,7 +11,23 @@ const POLLING_INTERVAL_PATH = 'loki_components/general/polling_interval';
 const SOURCE_ID = 'LokiComponentsTestDummy1';
 const TARGET_ELEMENT = 'loki-components-test-dummy2';
 
+const TARGET_INPUT = 'loki-components-test-dummy2-input';
+
 const isHtmlEndpointPost = (url: string, method: string) => url.includes(HTML_ENDPOINT) && method === 'POST';
+
+const getTargetHtml = (value: string) => '<html><body>'
+    + `<div id="${TARGET_ELEMENT}" data-rendered="server"><input id="${TARGET_INPUT}" type="text" value="${value}"></div>`
+    + '</body></html>';
+
+async function injectTargetInput(page: Page, value: string) {
+    await page.evaluate(({targetElement, targetInput, value}) => {
+        const input = document.createElement('input');
+        input.id = targetInput;
+        input.type = 'text';
+        input.value = value;
+        document.getElementById(targetElement)!.appendChild(input);
+    }, {targetElement: TARGET_ELEMENT, targetInput: TARGET_INPUT, value});
+}
 
 async function postValue(page: Page, currentValue: any, value: any, skipQueue = false) {
     await page.evaluate(({sourceId, targetElement, currentValue, value, skipQueue}) => {
@@ -96,6 +112,53 @@ for (const theme of THEMES) {
             await expect.poll(() => requestCount, {timeout: 10000}).toBe(2);
             await expect.poll(() => inFlight, {timeout: 10000}).toBe(0);
             expect(maxInFlight).toBe(1);
+        });
+
+        test('keeps the value that is typed into a target while the request is underway', async ({page}) => {
+            await injectTargetInput(page, 'old');
+
+            let releaseResponse: () => void = () => {};
+            const responseReleased = new Promise<void>(resolve => releaseResponse = resolve);
+            await page.route('**' + HTML_ENDPOINT + '**', async route => {
+                await responseReleased;
+                await route.fulfill({status: 200, contentType: 'text/html', body: getTargetHtml('server')});
+            });
+
+            const input = page.locator('#' + TARGET_INPUT);
+            await input.focus();
+            const requestPromise = page.waitForRequest(request => isHtmlEndpointPost(request.url(), request.method()));
+            await postValue(page, 'current-value', 'update');
+            await requestPromise;
+
+            await input.press('End');
+            await input.pressSequentially('-typed');
+
+            const responsePromise = page.waitForResponse(response => isHtmlEndpointPost(response.url(), response.request().method()));
+            releaseResponse();
+            await responsePromise;
+
+            await expect(page.locator('#' + TARGET_ELEMENT)).toHaveAttribute('data-rendered', 'server');
+            await expect(input).toHaveValue('old-typed');
+            await expect(input).toBeFocused();
+            expect(await input.evaluate((element: HTMLInputElement) => element.selectionStart)).toBe('old-typed'.length);
+        });
+
+        test('applies the server value to a target that was not typed into', async ({page}) => {
+            await injectTargetInput(page, 'old');
+            await page.route('**' + HTML_ENDPOINT + '**', route => route.fulfill({
+                status: 200,
+                contentType: 'text/html',
+                body: getTargetHtml('server'),
+            }));
+
+            const input = page.locator('#' + TARGET_INPUT);
+            await input.focus();
+            const responsePromise = page.waitForResponse(response => isHtmlEndpointPost(response.url(), response.request().method()));
+            await postValue(page, 'current-value', 'update');
+            await responsePromise;
+
+            await expect(page.locator('#' + TARGET_ELEMENT)).toHaveAttribute('data-rendered', 'server');
+            await expect(input).toHaveValue('server');
         });
 
         test('does not leak variables into the global scope', async ({page}) => {

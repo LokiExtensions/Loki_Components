@@ -44,6 +44,7 @@ if ($interval < 10) {
         loading: false,
         posting: false,
         activeElementId: false,
+        inputTimestamps: {},
         add(component, update) {
             if (component.skipQueue) {
                 component.beforePost();
@@ -76,6 +77,12 @@ if ($interval < 10) {
                     this.activeElementId = false;
                 }
             });
+
+            document.addEventListener('input', (e) => {
+                if (e.target && e.target.id) {
+                    this.inputTimestamps[e.target.id] = performance.now();
+                }
+            }, true);
 
             setInterval(async () => {
                 await this.postQueue();
@@ -112,6 +119,7 @@ if ($interval < 10) {
         },
         async post(incomingRequests) {
             this.setLoading(true);
+            const postedAt = performance.now();
 
             const requests = incomingRequests.filter(request => !request.component.skipAjax);
             if (requests.length === 0) {
@@ -160,7 +168,7 @@ if ($interval < 10) {
                     } catch (e) {
                     }
 
-                    this.updateTargetsAfterPost(requests, html);
+                    this.updateTargetsAfterPost(requests, html, postedAt);
                     this.afterPostSuccess(incomingRequests);
                 })
                 .catch(error => {
@@ -240,7 +248,8 @@ if ($interval < 10) {
 
             return [...new Set(targets)];
         },
-        updateTargetsAfterPost(requests, html) {
+        updateTargetsAfterPost(requests, html, postedAt = null) {
+            const typedValue = this.getValueTypedDuringPost(postedAt);
             const parser = new DOMParser();
             const ajaxDocument = parser.parseFromString(html, "text/html");
 
@@ -272,6 +281,10 @@ if ($interval < 10) {
                 });
             });
 
+            if (typedValue && this.restoreTypedValue(typedValue)) {
+                return;
+            }
+
             if (this.activeElementId) {
                 const activeElement = document.getElementById(this.activeElementId);
                 if (activeElement) {
@@ -282,6 +295,61 @@ if ($interval < 10) {
                     }
                 }
             }
+        },
+        getValueTypedDuringPost(postedAt) {
+            if (postedAt === null) {
+                return null;
+            }
+
+            const element = document.activeElement;
+            if (!element || !element.id || !['input', 'textarea'].includes(element.tagName.toLowerCase())) {
+                return null;
+            }
+
+            const lastInput = this.inputTimestamps[element.id];
+            if (!lastInput || lastInput < postedAt) {
+                return null;
+            }
+
+            let selectionStart = null;
+            let selectionEnd = null;
+            try {
+                selectionStart = element.selectionStart;
+                selectionEnd = element.selectionEnd;
+            } catch (e) {
+            }
+
+            return {id: element.id, value: element.value, selectionStart, selectionEnd};
+        },
+        restoreTypedValue(typedValue) {
+            const element = document.getElementById(typedValue.id);
+            if (!element) {
+                return false;
+            }
+
+            if (element.value !== typedValue.value) {
+                element.value = typedValue.value;
+                element.dispatchEvent(new Event('input', {bubbles: true}));
+
+                // The restored value was not typed into this (new) element, so the browser will not fire a change
+                let changed = false;
+                element.addEventListener('change', () => changed = true, {once: true});
+                element.addEventListener('blur', () => {
+                    if (!changed) {
+                        element.dispatchEvent(new Event('change', {bubbles: true}));
+                    }
+                }, {once: true});
+            }
+
+            element.focus();
+            try {
+                if (typedValue.selectionStart !== null) {
+                    element.setSelectionRange(typedValue.selectionStart, typedValue.selectionEnd);
+                }
+            } catch (e) {
+            }
+
+            return true;
         }
     };
 

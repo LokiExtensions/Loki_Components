@@ -76,6 +76,28 @@ for (const theme of THEMES) {
             }, SOURCE_ID)).toBe(false);
         });
 
+        test('sends only one request at a time', async ({page}) => {
+            let inFlight = 0;
+            let maxInFlight = 0;
+            let requestCount = 0;
+            await page.route('**' + HTML_ENDPOINT + '**', async route => {
+                inFlight++;
+                requestCount++;
+                maxInFlight = Math.max(maxInFlight, inFlight);
+                await new Promise(resolve => setTimeout(resolve, 500));
+                await route.continue();
+                inFlight--;
+            });
+
+            await postValue(page, 'current-value', 'first');
+            await expect.poll(() => requestCount).toBe(1);
+            await postValue(page, 'current-value', 'second');
+
+            await expect.poll(() => requestCount, {timeout: 10000}).toBe(2);
+            await expect.poll(() => inFlight, {timeout: 10000}).toBe(0);
+            expect(maxInFlight).toBe(1);
+        });
+
         test('does not leak variables into the global scope', async ({page}) => {
             const responsePromise = page.waitForResponse(response => isHtmlEndpointPost(response.url(), response.request().method()));
             await postValue(page, 'current-value', 'leak-test');

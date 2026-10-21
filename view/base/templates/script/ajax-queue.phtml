@@ -42,6 +42,7 @@ if ($interval < 10) {
         requests: [],
         interval: <?= (int)$interval ?>,
         loading: false,
+        posting: false,
         activeElementId: false,
         add(component, update) {
             if (component.skipQueue) {
@@ -85,7 +86,7 @@ if ($interval < 10) {
             document.dispatchEvent(new CustomEvent('loki-components.ajax.loading', {detail: loading}));
         },
         async postQueue() {
-            if (this.requests.length === 0) {
+            if (this.requests.length === 0 || this.posting) {
                 return;
             }
 
@@ -100,7 +101,14 @@ if ($interval < 10) {
             });
 
             this.requests = [];
-            this.post(requests);
+
+            // Only one request at a time, so responses are applied in order on top of a consistent server state
+            this.posting = true;
+            try {
+                await this.post(requests);
+            } finally {
+                this.posting = false;
+            }
         },
         async post(incomingRequests) {
             this.setLoading(true);

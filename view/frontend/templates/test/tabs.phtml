@@ -1,0 +1,25 @@
+<?php
+
+declare(strict_types=1);
+
+/** @version 2.8.2 */
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+?>
+<div id="loki-components-test-tabs" class="loki-components-test-tabs" x-data="LokiComponentsTestTabs">
+    <div role="tablist">
+        <button type="button" role="tab" data-tab-id="one" @click="toggleTabs">
+            <?= $escaper->escapeHtml(__('Tab one')) ?>
+        </button>
+        <label data-tab-id="two" @click="toggleTabs">
+            <input type="radio" name="loki-components-test-tab" value="two"/>
+            <?= $escaper->escapeHtml(__('Tab two')) ?>
+        </label>
+    </div>
+    <div data-tab-content="one" class="hidden"><?= $escaper->escapeHtml(__('Content one')) ?></div>
+    <div data-tab-content="two" class="hidden"><?= $escaper->escapeHtml(__('Content two')) ?></div>
+</div>

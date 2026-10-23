@@ -1,0 +1,23 @@
+<?php
+
+declare(strict_types=1);
+
+/** @version 2.8.2 */
+
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+
+/** @var Template $block */
+/** @var Escaper $escaper */
+?>
+<div id="loki-components-test-modal" class="loki-components-test-modal" x-data="LokiModal">
+    <button type="button" class="loki-components-test-modal-open" @click="toggleModal">
+        <?= $escaper->escapeHtml(__('Open modal')) ?>
+    </button>
+    <dialog x-ref="modal" class="loki-components-test-modal-dialog">
+        <button type="button" class="loki-components-test-modal-close" @click="toggleModal">
+            <?= $escaper->escapeHtml(__('Close')) ?>
+        </button>
+        <p><?= $escaper->escapeHtml(__('Modal content')) ?></p>
+    </dialog>
+</div>

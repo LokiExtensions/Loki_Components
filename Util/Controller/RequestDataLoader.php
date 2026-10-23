@@ -23,14 +23,31 @@ class RequestDataLoader
     {
         /** @var Http $request */
         $request = $this->request;
-        $data = json_decode($request->getContent(), true);
+        $data = json_decode((string)$request->getContent(), true);
         if (empty($data)) {
+            $data = $this->loadMultipartPayload($request);
+        }
+
+        if (empty($data) || false === is_array($data)) {
             throw new RuntimeException('Not a valid request');
         }
 
         $this->validateSignature($data);
 
         return $this->sanitize($data);
+    }
+
+    /**
+     * Multipart requests (like file uploads) send the regular JSON body as POST field `payload`
+     */
+    private function loadMultipartPayload(Http $request): mixed
+    {
+        $payload = $request->getPostValue('payload');
+        if (false === is_string($payload) || $payload === '') {
+            return null;
+        }
+
+        return json_decode($payload, true);
     }
 
     private function validateSignature(array $data): void

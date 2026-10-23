@@ -76,6 +76,44 @@ class RequestDataLoaderTest extends TestCase
         $requestDataLoader->load();
     }
 
+    public function testLoadWithMultipartPayload()
+    {
+        $httpRequest = $this->getHttpRequest();
+        $requestDataLoader = $this->getRequestDataLoader([], $this->getValidHeaders(), $httpRequest);
+        $httpRequest->setContent('');
+        $httpRequest->setPostValue('payload', json_encode($this->getSignedRequestData([])));
+
+        $data = $requestDataLoader->load();
+        $this->assertSame([], $data['updates']);
+    }
+
+    public function testLoadWithTamperedMultipartPayload()
+    {
+        $requestData = $this->getSignedRequestData([]);
+        $requestData['handles'] = ['tampered_handle'];
+
+        $httpRequest = $this->getHttpRequest();
+        $requestDataLoader = $this->getRequestDataLoader([], $this->getValidHeaders(), $httpRequest);
+        $httpRequest->setContent('');
+        $httpRequest->setPostValue('payload', json_encode($requestData));
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Payload was tampered with');
+        $requestDataLoader->load();
+    }
+
+    public function testLoadWithInvalidMultipartPayload()
+    {
+        $httpRequest = $this->getHttpRequest();
+        $requestDataLoader = $this->getRequestDataLoader([], $this->getValidHeaders(), $httpRequest);
+        $httpRequest->setContent('');
+        $httpRequest->setPostValue('payload', '"just a string"');
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Not a valid request');
+        $requestDataLoader->load();
+    }
+
     public function testMergeRequestParamsUsesOriginalRequestUri()
     {
         $httpRequest = $this->getHttpRequest();

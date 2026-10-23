@@ -133,12 +133,18 @@ if ($interval < 10) {
                 formKey = LOKI_FORM_KEY;
             }
 
+            const body = this.buildRequestBody(requests);
+            const headers = this.getPostHeaders();
+            if (body instanceof FormData) {
+                delete headers['Content-Type'];
+            }
+
             await fetch('<?= $escaper->escapeUrl($componentUtil->getPostUrl(
             )) ?>?form_key=' + encodeURIComponent(formKey) + '&isAjax=true', {
                 method: 'POST',
                 mode: 'same-origin',
-                headers: this.getPostHeaders(),
-                body: JSON.stringify(this.buildBody(requests))
+                headers: headers,
+                body: body
             })
                 .then(async response => {
                     const formKey = response.headers.get('x-magento-form-key');
@@ -202,6 +208,28 @@ if ($interval < 10) {
                 'X-Requested-With': 'XMLHttpRequest',
                 'Content-Type': 'application/json'
             };
+        },
+        buildRequestBody(requests) {
+            const body = this.buildBody(requests);
+            const file = requests.map(request => request.update).find(update => update instanceof File);
+            if (!file) {
+                return JSON.stringify(body);
+            }
+
+            // Files are sent as multipart form data, with the regular JSON body as field "payload"
+            body.updates = body.updates.map(update => {
+                if (update.update instanceof File) {
+                    return {...update, update: update.update.name};
+                }
+
+                return update;
+            });
+
+            const formData = new FormData();
+            formData.append('payload', JSON.stringify(body));
+            formData.append('componentValue', file);
+
+            return formData;
         },
         buildBody(requests) {
             const componentData = JSON.parse('<?= /* @noEscape */ json_encode(

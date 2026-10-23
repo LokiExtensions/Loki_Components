@@ -3,6 +3,10 @@
       xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_configuration.xsd" layout="1column">
     <update handle="loki_components"/>
     <body>
+        <referenceBlock name="loki.script.component">
+            <block name="loki-components.test.script.tabs" template="Loki_Components::test/script/tabs.phtml"/>
+        </referenceBlock>
+
         <referenceContainer name="content">
             <block name="loki-components.test.dummy1" template="Loki_Components::test/dummy.phtml" cacheable="false"/>
             <block name="loki-components.test.dummy2" template="Loki_Components::test/dummy.phtml" cacheable="false"/>
@@ -13,6 +17,13 @@
                     </argument>
                 </arguments>
             </block>
+            <block name="loki-components.test.toggle" template="Loki_Components::test/toggle.phtml" cacheable="false">
+                <arguments>
+                    <argument name="js_component_name" xsi:type="string">LokiComponentToggle</argument>
+                </arguments>
+            </block>
+            <block name="loki-components.test.modal" template="Loki_Components::test/modal.phtml" cacheable="false"/>
+            <block name="loki-components.test.tabs" template="Loki_Components::test/tabs.phtml" cacheable="false"/>
         </referenceContainer>
     </body>
 </page>

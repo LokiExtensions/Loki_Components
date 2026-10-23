@@ -27,7 +27,8 @@
         "loki-components.modal",
         "loki-components.test.dummy-html",
         "loki-components.test.dummy1",
-        "loki-components.test.dummy2"
+        "loki-components.test.dummy2",
+        "loki-components.test.toggle"
     ],
     "config": [
         {
@@ -42,9 +43,9 @@
         }
     ],
     "tests": {
-        "unit": 163,
-        "integration": 114,
-        "functional": 25
+        "unit": 182,
+        "integration": 135,
+        "functional": 49
     },
     "phpcs_severity": "9",
     "phpstan_level": "3",

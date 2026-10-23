@@ -78,10 +78,7 @@ class RequestDataLoaderTest extends TestCase
 
     public function testLoadWithMultipartPayload()
     {
-        $httpRequest = $this->getHttpRequest();
-        $requestDataLoader = $this->getRequestDataLoader([], $this->getValidHeaders(), $httpRequest);
-        $httpRequest->setContent('');
-        $httpRequest->setPostValue('payload', json_encode($this->getSignedRequestData([])));
+        $requestDataLoader = $this->getMultipartRequestDataLoader(['payload' => json_encode($this->getSignedRequestData([]))]);
 
         $data = $requestDataLoader->load();
         $this->assertSame([], $data['updates']);
@@ -91,11 +88,7 @@ class RequestDataLoaderTest extends TestCase
     {
         $requestData = $this->getSignedRequestData([]);
         $requestData['handles'] = ['tampered_handle'];
-
-        $httpRequest = $this->getHttpRequest();
-        $requestDataLoader = $this->getRequestDataLoader([], $this->getValidHeaders(), $httpRequest);
-        $httpRequest->setContent('');
-        $httpRequest->setPostValue('payload', json_encode($requestData));
+        $requestDataLoader = $this->getMultipartRequestDataLoader(['payload' => json_encode($requestData)]);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Payload was tampered with');
@@ -104,14 +97,46 @@ class RequestDataLoaderTest extends TestCase
 
     public function testLoadWithInvalidMultipartPayload()
     {
-        $httpRequest = $this->getHttpRequest();
-        $requestDataLoader = $this->getRequestDataLoader([], $this->getValidHeaders(), $httpRequest);
-        $httpRequest->setContent('');
-        $httpRequest->setPostValue('payload', '"just a string"');
+        $requestDataLoader = $this->getMultipartRequestDataLoader(['payload' => '"just a string"']);
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessage('Not a valid request');
         $requestDataLoader->load();
+    }
+
+    public function testLoadWithEmptyMultipartRequest()
+    {
+        $requestDataLoader = $this->getMultipartRequestDataLoader([]);
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('The request exceeds the maximum upload size of the server');
+        $requestDataLoader->load();
+    }
+
+    public function testPayloadIsIgnoredWithoutMultipartContentType()
+    {
+        $httpRequest = $this->getHttpRequest();
+        $requestDataLoader = $this->getRequestDataLoader([], $this->getValidHeaders(), $httpRequest);
+        $httpRequest->setContent('');
+        $httpRequest->setPostValue('payload', json_encode($this->getSignedRequestData([])));
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Not a valid request');
+        $requestDataLoader->load();
+    }
+
+    private function getMultipartRequestDataLoader(array $postValues): RequestDataLoader
+    {
+        $httpRequest = $this->getHttpRequest();
+        $headers = $this->getValidHeaders();
+        $headers['Content-Type'] = 'multipart/form-data; boundary=----loki';
+        $requestDataLoader = $this->getRequestDataLoader([], $headers, $httpRequest);
+        $httpRequest->setContent('');
+        foreach ($postValues as $name => $value) {
+            $httpRequest->setPostValue($name, $value);
+        }
+
+        return $requestDataLoader;
     }
 
     public function testMergeRequestParamsUsesOriginalRequestUri()

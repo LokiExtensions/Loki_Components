@@ -48,7 +48,7 @@ if ($interval < 10) {
         add(component, update) {
             if (component.skipQueue) {
                 component.beforePost();
-                this.post([{component, update}]);
+                this.postExclusive([{component, update}]);
                 return;
             }
 
@@ -110,6 +110,18 @@ if ($interval < 10) {
             this.requests = [];
 
             // Only one request at a time, so responses are applied in order on top of a consistent server state
+            this.posting = true;
+            try {
+                await this.post(requests);
+            } finally {
+                this.posting = false;
+            }
+        },
+        async postExclusive(requests) {
+            while (this.posting) {
+                await new Promise(resolve => setTimeout(resolve, this.interval));
+            }
+
             this.posting = true;
             try {
                 await this.post(requests);
@@ -211,10 +223,16 @@ if ($interval < 10) {
         },
         buildRequestBody(requests) {
             const body = this.buildBody(requests);
-            const file = requests.map(request => request.update).find(update => update instanceof File);
-            if (!file) {
+            const files = requests.map(request => request.update).filter(update => update instanceof File);
+            if (files.length === 0) {
                 return JSON.stringify(body);
             }
+
+            if (files.length > 1) {
+                LokiComponentsLogger.error('Only one file can be uploaded per request, ignoring the others');
+            }
+
+            const file = files[0];
 
             // Files are sent as multipart form data, with the regular JSON body as field "payload"
             body.updates = body.updates.map(update => {

@@ -23,10 +23,9 @@ class RequestDataLoader
     {
         /** @var Http $request */
         $request = $this->request;
-        $data = json_decode((string)$request->getContent(), true);
-        if (empty($data)) {
-            $data = $this->loadMultipartPayload($request);
-        }
+        $data = $this->isMultipart($request)
+            ? $this->loadMultipartPayload($request)
+            : json_decode((string)$request->getContent(), true);
 
         if (empty($data) || false === is_array($data)) {
             throw new RuntimeException('Not a valid request');
@@ -37,11 +36,22 @@ class RequestDataLoader
         return $this->sanitize($data);
     }
 
+    private function isMultipart(Http $request): bool
+    {
+        $contentType = strtolower((string)$request->getHeader('Content-Type'));
+
+        return str_starts_with($contentType, 'multipart/form-data');
+    }
+
     /**
      * Multipart requests (like file uploads) send the regular JSON body as POST field `payload`
      */
     private function loadMultipartPayload(Http $request): mixed
     {
+        if (empty($request->getPostValue()) && empty($request->getFiles()->toArray())) {
+            throw new RuntimeException('The request exceeds the maximum upload size of the server');
+        }
+
         $payload = $request->getPostValue('payload');
         if (false === is_string($payload) || $payload === '') {
             return null;

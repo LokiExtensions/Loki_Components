@@ -5,6 +5,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
 ## [Unreleased]
+
+## [2.8.3] - 24 October 2026
 ### Fixed
 - AJAX requests did not reuse the request URI of the original page, so `getCurrentUrl()` pointed to `loki_components/index/html`
 - `ComponentContext` passed its dependencies as parent contexts, so `getCustomerSession()` and `getUrlFactory()` returned `null`

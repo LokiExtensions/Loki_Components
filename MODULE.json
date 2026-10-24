@@ -48,7 +48,7 @@
         "functional": 47
     },
     "phpcs_severity": "9",
-    "phpstan_level": "1",
+    "phpstan_level": "3",
     "module_name": "Loki_Components",
     "composer_name": "loki/magento2-components",
     "php_versions": [

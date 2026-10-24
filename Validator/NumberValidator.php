@@ -8,7 +8,7 @@ class NumberValidator implements ValidatorInterface
 {
     public function validate(mixed $value, ?ComponentInterface $component = null): bool|array
     {
-        if ($value === null || (is_string($value) && trim($value) === '')) {
+        if ($value === null || (is_string($value) && trim($value, " \f\n\r\t\v\x00") === '')) {
             return true;
         }
 

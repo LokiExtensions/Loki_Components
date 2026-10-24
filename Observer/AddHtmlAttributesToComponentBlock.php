@@ -58,8 +58,8 @@ class AddHtmlAttributesToComponentBlock implements ObserverInterface
         $tagName = $match[1];
         $existingAttributes = $match[2];
         $selfClosing = '';
-        if (str_ends_with(rtrim($existingAttributes), '/')) {
-            $existingAttributes = substr(rtrim($existingAttributes), 0, -1);
+        if (str_ends_with(rtrim($existingAttributes, " \f\n\r\t\v\x00"), '/')) {
+            $existingAttributes = substr(rtrim($existingAttributes, " \f\n\r\t\v\x00"), 0, -1);
             $selfClosing = ' /';
         }
 

@@ -123,7 +123,7 @@ class Converter implements ConverterInterface
 
     private function isDisabled(DOMElement $element): bool
     {
-        $disabled = strtolower(trim((string)$element->getAttribute('disabled')));
+        $disabled = strtolower(trim((string)$element->getAttribute('disabled'), " \f\n\r\t\v\x00"));
 
         return !in_array($disabled, ['', '0', 'false', 'no', 'off'], true);
     }

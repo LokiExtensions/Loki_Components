@@ -28,7 +28,10 @@ use Magento\Framework\View\Element\Template;
             this.extend('*', extensionId, extenderFunction, append);
         },
         addMixin(extensionId, componentName, mixin, append = false) {
-            this.extend(componentName, extensionId, mixin, append);
+            const callback = typeof mixin === 'function'
+                ? (name, componentData) => mixin(this.merge({}, componentData))
+                : mixin;
+            this.extend(componentName, extensionId, callback, append);
         },
         remove(componentName, extensionId = null) {
             if (extensionId === null) {

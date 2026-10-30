@@ -6,6 +6,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.9.0] - 29 October 2026
+### Fixed
+- Pass component data snapshot to function mixins in `addMixin()`
+- Merge conditional mixins into the component's own data
+
+### Added
+- Add when condition based on loaded component data
+- Extend Alpine components by name
+
 ## [2.8.3] - 24 October 2026
 ### Fixed
 - AJAX requests did not reuse the request URI of the original page, so `getCurrentUrl()` pointed to `loki_components/index/html`

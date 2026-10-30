@@ -26,7 +26,7 @@ class BlockRendererTest extends TestCase
         $this->assertSame('loki-components.test.renderer-child', $block->getNameInLayout());
         $this->assertSame('bar', $block->getData('foo'));
         $this->assertSame($ancestorBlock, $block->getAncestorBlock());
-        $this->assertSame('loki-components-test-ancestor-renderer-child', $block->getUniqId());
+        $this->assertSame('loki-components-test-renderer-child', $block->getUniqId());
     }
 
     public function testGetThrowsExceptionForUnknownBlock(): void

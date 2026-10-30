@@ -35,8 +35,5 @@
         "psr-4": {
             "Loki\\Components\\": ""
         }
-    },
-    "extra": {
-        "label": "Loki Components"
     }
 }

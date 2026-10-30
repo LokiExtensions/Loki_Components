@@ -6,7 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-## [2.9.0] - 29 October 2026
+## [2.9.0] - 30 October 2026
 ### Fixed
 - Pass component data snapshot to function mixins in `addMixin()`
 - Merge conditional mixins into the component's own data

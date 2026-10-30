@@ -36,7 +36,7 @@ class AddDomIdToBlockTest extends TestCase
     {
         $html = $this->createBlock(self::BLOCK_NAME)->toHtml();
 
-        $this->assertStringStartsWith('<div id="loki-test-dom-id" class="loki-components-test-dummy">', trim($html));
+        $this->assertStringStartsWith('<div id="loki-test-dom-id" class="loki-components-test-dummy">', trim($html, " \f\n\r\t\v\x00"));
     }
 
     public function testAddsDomIdBasedOnUniqId(): void
@@ -44,14 +44,14 @@ class AddDomIdToBlockTest extends TestCase
         $block = $this->createBlock(self::BLOCK_NAME);
         $block->setUniqId('custom-uniq');
 
-        $this->assertStringStartsWith('<div id="custom-uniq" ', trim($block->toHtml()));
+        $this->assertStringStartsWith('<div id="custom-uniq" ', trim($block->toHtml(), " \f\n\r\t\v\x00"));
     }
 
     public function testLeavesOtherBlocksAlone(): void
     {
         $html = $this->createBlock('loki-test.other')->toHtml();
 
-        $this->assertStringStartsWith('<div class="loki-components-test-dummy">', trim($html));
+        $this->assertStringStartsWith('<div class="loki-components-test-dummy">', trim($html, " \f\n\r\t\v\x00"));
         $this->assertStringNotContainsString(' id="', $html);
     }
 

@@ -13,6 +13,7 @@ use Loki\Components\Filter\FilterScopeFactory;
 use Loki\Components\Filter\Lowercase;
 use Loki\Components\Filter\Trim;
 use Loki\Components\Filter\Uppercase;
+use Magento\Framework\View\Element\AbstractBlock;
 use PHPUnit\Framework\TestCase;
 
 class FilterTest extends TestCase
@@ -65,6 +66,19 @@ class FilterTest extends TestCase
 
         $this->assertSame(['street' => 'MAIN', 'nested' => ['city' => 'AMSTERDAM']], $result);
         $this->assertSame(['street', 'city'], $spy->properties);
+    }
+
+    public function testSkipsUnfilteredPropertiesOfBlock(): void
+    {
+        $block = $this->createMock(AbstractBlock::class);
+        $block->method('getData')->with('unfiltered_properties')->willReturn(['password']);
+
+        $component = $this->createMock(ComponentInterface::class);
+        $component->method('getFilters')->willReturn(['trim', 'uppercase']);
+        $component->method('getBlock')->willReturn($block);
+
+        $result = $this->getFilter()->filter($component, ['email' => ' foo ', 'password' => ' p<b>ss ']);
+        $this->assertSame(['email' => 'FOO', 'password' => ' p<b>ss '], $result);
     }
 
     public function testPassesComponentToFilterScope(): void

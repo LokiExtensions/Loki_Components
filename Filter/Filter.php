@@ -37,7 +37,12 @@ class Filter
         }
 
         if (is_array($data)) {
+            $unfilteredProperties = (array)$component->getBlock()?->getData('unfiltered_properties');
             foreach ($data as $propertyName => $value) {
+                if (in_array($propertyName, $unfilteredProperties, true)) {
+                    continue;
+                }
+
                 $data[$propertyName] = $this->filter(
                     $component,
                     $value,

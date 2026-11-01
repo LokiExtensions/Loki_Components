@@ -6,6 +6,14 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.0] - 01 November 2026
+### Fixed
+- hide internal exception messages from customers
+- Fix date in CHANGELOG
+
+### Added
+- skip filters for array properties listed in block argument unfiltered_properties
+
 ## [2.9.0] - 30 October 2026
 ### Fixed
 - Pass component data snapshot to function mixins in `addMixin()`

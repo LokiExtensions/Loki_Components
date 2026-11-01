@@ -23,6 +23,10 @@ use Magento\TestFramework\Fixture\AppIsolation;
 use Magento\TestFramework\Fixture\Config as ConfigFixture;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
+use Exception;
+use InvalidArgumentException;
+use Magento\Framework\Exception\LocalizedException;
+use PHPUnit\Framework\Attributes\DataProvider;
 
 #[AppArea('frontend')]
 class HtmlTest extends TestCase
@@ -128,7 +132,9 @@ class HtmlTest extends TestCase
         $messageManager = $this->createMock(MessageManager::class);
         $messageManager->expects($this->once())
             ->method('addErrorMessage')
-            ->with($this->callback(fn ($message) => str_contains((string)$message, 'loki-components.test.unknown')));
+            ->with($this->callback(
+                fn ($message) => (string)$message === 'Something went wrong while processing your request. Please try again.'
+            ));
 
         $this->prepareRequest([self::DUMMY2], [
             ['blockName' => 'loki-components.test.unknown', 'update' => 'foo'],
@@ -209,14 +215,16 @@ class HtmlTest extends TestCase
 
     #[AppIsolation(true)]
     #[ConfigFixture('loki_components/general/debug', 0, 'store', 'default')]
-    public function testExceptionIsAddedAsErrorMessage(): void
+    public function testExceptionIsAddedAsGenericErrorMessage(): void
     {
-        $this->getStorage()->throwOnSave(self::DUMMY1, new RuntimeException('Something broke'));
+        $this->getStorage()->throwOnSave(self::DUMMY1, new RuntimeException('SQLSTATE[42S02]: Table "secret" not found'));
 
         $messageManager = $this->createMock(MessageManager::class);
         $messageManager->expects($this->once())
             ->method('addErrorMessage')
-            ->with($this->callback(fn ($message) => (string)$message === 'Something broke'));
+            ->with($this->callback(
+                fn ($message) => (string)$message === 'Something went wrong while processing your request. Please try again.'
+            ));
         $messageManager->expects($this->never())->method('addComplexErrorMessage');
 
         $this->prepareRequest([self::DUMMY1], [
@@ -229,6 +237,38 @@ class HtmlTest extends TestCase
 
         $this->assertSame('bar', $this->getStorage()->getValue(self::DUMMY2), 'Other updates continue after an exception');
         $this->assertStringContainsString(self::DUMMY1, (string)$response->getBody());
+    }
+
+    /**
+     * @dataProvider getExceptionsWithCustomerMessage
+     */
+    #[AppIsolation(true)]
+    #[ConfigFixture('loki_components/general/debug', 0, 'store', 'default')]
+    #[DataProvider('getExceptionsWithCustomerMessage')]
+    public function testExceptionMessageIsShownForCustomerExceptions(Exception $exception): void
+    {
+        $this->getStorage()->throwOnSave(self::DUMMY1, $exception);
+
+        $messageManager = $this->createMock(MessageManager::class);
+        $messageManager->expects($this->once())
+            ->method('addErrorMessage')
+            ->with($this->callback(fn ($message) => (string)$message === 'Invalid value'));
+
+        $this->prepareRequest([], [['blockName' => self::DUMMY1, 'update' => 'foo']]);
+
+        $controller = ObjectManager::getInstance()->create(Html::class, ['messageManager' => $messageManager]);
+        $controller->execute();
+    }
+
+    /**
+     * @return array<string, array<int, Exception>>
+     */
+    public static function getExceptionsWithCustomerMessage(): array
+    {
+        return [
+            'localized' => [new LocalizedException(__('Invalid value'))],
+            'invalid argument' => [new InvalidArgumentException('Invalid value')],
+        ];
     }
 
     #[AppIsolation(true)]

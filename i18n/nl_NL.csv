@@ -4,3 +4,4 @@
 "Value should have no more than %1 characters","Waarde mag maximaal %1 karakters bevatten"
 "Value must contain numbers only","Waarde mag alleen getallen bevatten"
 "Value must be zero or higher","Waarde moet groter dan nul zijn"
+"Something went wrong while processing your request. Please try again.","Er is iets misgegaan bij het verwerken van je verzoek. Probeer het opnieuw."

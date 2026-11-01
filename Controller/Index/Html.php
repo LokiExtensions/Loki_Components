@@ -5,6 +5,8 @@ declare(strict_types=1);
 namespace Loki\Components\Controller\Index;
 
 use Exception;
+use InvalidArgumentException;
+use Magento\Framework\Exception\LocalizedException;
 use Loki\Components\Component\ComponentRegistry;
 use Loki\Components\Util\Controller\ComponentUpdate;
 use Loki\Components\Util\Controller\ComponentUpdateFactory;
@@ -225,7 +227,15 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
             return;
         }
 
-        $this->messageManager->addErrorMessage(__($exception->getMessage()));
+        if ($exception instanceof LocalizedException || $exception instanceof InvalidArgumentException) {
+            $this->messageManager->addErrorMessage(__($exception->getMessage()));
+
+            return;
+        }
+
+        $this->messageManager->addErrorMessage(
+            __('Something went wrong while processing your request. Please try again.')
+        );
     }
 
     public function createCsrfValidationException(

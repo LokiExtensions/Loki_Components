@@ -5,6 +5,7 @@ namespace Loki\Components\Util\Block;
 use Exception;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\State as AppState;
+use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\View\Asset\File as AssetFile;
@@ -26,6 +27,7 @@ class ImageRenderer implements ArgumentInterface
         private readonly AssetRepository $assetRepository,
         private readonly DirectoryList $directoryList,
         private readonly AppState $appState,
+        private readonly Escaper $escaper,
         private readonly string $iconSet = 'default',
         private readonly string $iconPrefix = 'Loki_Components::icon',
         private readonly int $iconSize = 20,
@@ -163,13 +165,31 @@ class ImageRenderer implements ArgumentInterface
     ): string {
         $htmlAttributes = [];
         foreach ($attributes as $attributeName => $attributeValue) {
-            $htmlAttributes[] = $attributeName . '="' . $attributeValue . '"';
+            if (false === $this->isValidAttributeName((string)$attributeName)) {
+                continue;
+            }
+
+            if ($attributeValue === true) {
+                $htmlAttributes[] = $attributeName;
+                continue;
+            }
+
+            if ($attributeValue === false || $attributeValue === null || !is_scalar($attributeValue)) {
+                continue;
+            }
+
+            $htmlAttributes[] = $attributeName . '="' . $this->escaper->escapeHtmlAttr((string)$attributeValue) . '"';
         }
 
         $htmlAttributes[] = 'loading="lazy"';
         $htmlAttributes = implode(' ', $htmlAttributes);
 
-        return '<img src="' . $imageUrl . '" ' . $htmlAttributes . ' />';
+        return '<img src="' . $this->escaper->escapeUrl($imageUrl) . '" ' . $htmlAttributes . ' />';
+    }
+
+    private function isValidAttributeName(string $attributeName): bool
+    {
+        return (bool)preg_match('/^[a-zA-Z_:@][a-zA-Z0-9_:@.\-]*$/', $attributeName);
     }
 
     private function parseSvgAttributes(
@@ -209,7 +229,7 @@ class ImageRenderer implements ArgumentInterface
     private function getOutputError(string $error): string
     {
         if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
-            return '<!-- ' . $error . ' -->';
+            return '<!-- ' . str_replace(['--', '>'], ['- -', '&gt;'], $error) . ' -->';
         }
 
         return '';

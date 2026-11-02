@@ -49,6 +49,64 @@ class ImageRendererTest extends TestCase
         );
     }
 
+    public function testGetByUrlEscapesAttributeValues(): void
+    {
+        $html = $this->getImageRenderer()->getByUrl('https://example.com/logo.png', ['alt' => 'A "quoted" <b> & co']);
+
+        $this->assertStringContainsString('&quot;quoted&quot;', $html);
+        $this->assertStringContainsString('&lt;b&gt;', $html);
+        $this->assertStringContainsString('&amp;', $html);
+        $this->assertStringNotContainsString('"quoted"', $html);
+        $this->assertStringNotContainsString('<b>', $html);
+    }
+
+    public function testGetByUrlEscapesSrc(): void
+    {
+        $html = $this->getImageRenderer()->getByUrl('https://example.com/logo.png" onerror="alert(1)');
+
+        $this->assertStringNotContainsString('" onerror="', $html);
+        $this->assertStringContainsString('&quot;', $html);
+    }
+
+    public function testGetByUrlNeutralisesJavascriptSrc(): void
+    {
+        $html = $this->getImageRenderer()->getByUrl('javascript:alert(1)');
+
+        $this->assertStringNotContainsString('javascript:', $html);
+    }
+
+    public function testGetByUrlDropsInvalidAttributeNames(): void
+    {
+        $html = $this->getImageRenderer()->getByUrl('https://example.com/logo.png', [
+            'onx" y' => 'foo',
+            '@click' => 'open',
+            ':class' => 'cssClass',
+        ]);
+
+        $this->assertStringNotContainsString('onx', $html);
+        $this->assertStringContainsString('@click="open"', $html);
+        $this->assertStringContainsString(':class="cssClass"', $html);
+    }
+
+    public function testGetByUrlSkipsNonScalarAndHandlesBooleanAttributes(): void
+    {
+        $html = $this->getImageRenderer()->getByUrl('https://example.com/logo.png', [
+            'data-list' => ['a', 'b'],
+            'hidden' => true,
+            'disabled' => false,
+            'title' => null,
+        ]);
+
+        $this->assertSame('<img src="https://example.com/logo.png" hidden loading="lazy" />', $html);
+    }
+
+    public function testIconEscapesAttributeValues(): void
+    {
+        $svg = $this->getImageRenderer()->icon($this->getBlock(), 'xmark', ['class' => 'a"b<c']);
+
+        $this->assertStringContainsString('class="a&quot;b&lt;c"', $svg);
+    }
+
     public function testGetWithUnknownImageReturnsImageTag(): void
     {
         $this->assertStringStartsWith('<img src="/media/foo.png"', $this->getImageRenderer()->get('/media/foo.png'));
@@ -86,6 +144,13 @@ class ImageRendererTest extends TestCase
         }
 
         $this->assertSame('', $output);
+    }
+
+    public function testErrorCommentCannotBeClosedEarly(): void
+    {
+        $output = $this->getImageRenderer()->getIconOutput('/does/not/--><script>x</script>.svg');
+
+        $this->assertStringNotContainsString('--><script>', $output);
     }
 
     private function getBlock(array $data = []): Template

@@ -7,10 +7,12 @@ use Loki\Components\Util\Controller\RequestDataLoader;
 use Loki\Components\Util\Security\AjaxSignature;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\TestFramework\Fixture\AppArea;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Loki\Components\Util\Ajax;
 
+#[AppArea('frontend')]
 class RequestDataLoaderTest extends TestCase
 {
     public function testLoadWithoutValidAjaxHeader()

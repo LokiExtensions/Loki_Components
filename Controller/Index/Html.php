@@ -35,6 +35,7 @@ use Loki\Components\Util\Controller\RenderFlag;
 use Loki\Components\Util\Controller\RequestDataLoader;
 use Loki\Components\Util\Controller\TargetRenderer;
 use Psr\Log\LoggerInterface;
+use RuntimeException;
 use Magento\Framework\Message\ManagerInterface as MessageManager;
 
 class Html implements HttpPostActionInterface, CsrfAwareActionInterface
@@ -60,8 +61,13 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
 
     public function execute(): ResultInterface|ResponseInterface
     {
-        $data = $this->requestDataLoader->load();
-        $this->requestDataLoader->mergeRequestParams();
+        try {
+            $data = $this->requestDataLoader->load();
+            $this->requestDataLoader->mergeRequestParams();
+        } catch (RuntimeException $exception) {
+            return $this->getInvalidRequestResult($exception->getMessage());
+        }
+
         $layout = $this->layoutLoader->load($data['handles'], $data['pageHandles'], true);
 
         $updates = $this->getComponentUpdates($data['updates'], $layout);
@@ -185,6 +191,15 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         $htmlResult->setContents('<html>'.PHP_EOL.'<body>'.PHP_EOL.$html.'</body>'.PHP_EOL.'</html>');
 
         return $htmlResult;
+    }
+
+    private function getInvalidRequestResult(string $message): HtmlResult
+    {
+        $result = $this->htmlResultFactory->create();
+        $result->setHttpResponseCode(400);
+        $result->setContents($message);
+
+        return $result;
     }
 
     private function getJsonRedirect(RedirectException $redirectException): JsonResult

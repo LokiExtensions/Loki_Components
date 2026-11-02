@@ -309,9 +309,22 @@ class HtmlTest extends TestCase
         $payload['handles'][] = 'customer_account';
         $request->setContent((string)json_encode($payload));
 
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessage('Payload was tampered with');
-        ObjectManager::getInstance()->create(Html::class)->execute();
+        $response = $this->executeController();
+
+        $this->assertSame(400, $response->getHttpResponseCode());
+        $this->assertStringContainsString('Payload was tampered with', (string)$response->getBody());
+    }
+
+    #[AppIsolation(true)]
+    public function testRejectsInvalidPayload(): void
+    {
+        $request = ObjectManager::getInstance()->get(HttpRequest::class);
+        $request->setContent('not-json');
+
+        $response = $this->executeController();
+
+        $this->assertSame(400, $response->getHttpResponseCode());
+        $this->assertStringContainsString('Not a valid request', (string)$response->getBody());
     }
 
     private function prepareRequest(array $targets, array $updates): void

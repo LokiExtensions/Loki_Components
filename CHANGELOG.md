@@ -6,6 +6,11 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.1] - 03 November 2026
+### Fixed
+- Return 400 with reason for invalid or tampered AJAX payloads
+- Escape attribute names, values and src in img output
+
 ## [2.10.0] - 01 November 2026
 ### Fixed
 - hide internal exception messages from customers
@@ -907,4 +912,3 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [0.0.1] - 18 January 2025
 - Initial release
-

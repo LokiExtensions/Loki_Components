@@ -267,6 +267,9 @@ class AddHtmlAttributesToComponentBlockTest extends TestCase
             'bold' => ['<b>Store</b> pickup'],
             'table' => ['<table><tr><td>Store</td></tr></table>'],
             'competing x-ref' => ['<div x-ref="initialData">{}</div>'],
+            'url with legacy entity name' => ['https://www.paypal.com/sdk/js?merchant-id=ABC&currency=EUR&components=buttons'],
+            'encoded entity' => ['Tom &amp; Jerry'],
+            'entity without semicolon' => ['&copy 2026 &lt;3'],
         ];
     }
 

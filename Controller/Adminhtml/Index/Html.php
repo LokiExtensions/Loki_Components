@@ -22,7 +22,6 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
@@ -55,7 +54,6 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
         private readonly AppState $appState,
         private readonly LoggerInterface $logger,
         private readonly ComponentRegistry $componentRegistry,
-        private readonly Validator $formKeyValidator,
         private readonly AuthorizationInterface $authorization,
         private readonly Messages $messages,
         private readonly ComponentUpdateFactory $componentUpdateFactory,
@@ -259,19 +257,11 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
     public function createCsrfValidationException(
         RequestInterface $request
     ): ?InvalidRequestException {
-
-        $result = $this->htmlResultFactory->create();
-        $result->setHttpResponseCode(400);
-        $result->setContents('Invalid Form Key. Please refresh the page');
-
-        return new InvalidRequestException(
-            $result,
-            [__('The request is not valid.')]
-        );
+        return new InvalidRequestException($this->getResponse());
     }
 
     public function validateForCsrf(RequestInterface $request): ?bool
     {
-        return $this->formKeyValidator->validate($request);
+        return $this->_processUrlKeys();
     }
 }

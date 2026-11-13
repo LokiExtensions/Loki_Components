@@ -4,12 +4,16 @@ namespace Loki\Components\Test\Integration\Controller\Adminhtml\Index;
 
 use Laminas\Http\Header\GenericHeader;
 use Laminas\Http\Headers;
+use Laminas\Stdlib\Parameters;
 use Loki\Components\Controller\Adminhtml\Index\Html;
 use Loki\Components\Test\Integration\Dummy\DummyRepository;
 use Loki\Components\Test\Integration\Dummy\DummyRepositoryStorage;
 use Loki\Components\Test\Integration\Traits\RegisterTestComponents;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
 use Loki\Components\Util\Security\AjaxSignature;
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Auth;
+use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -157,6 +161,61 @@ class HtmlTest extends TestCase
 
         $this->getController(true)->execute();
         $this->assertSame('foo', $this->getStorage()->getValue(self::BLOCK_NAME));
+    }
+
+    #[AppIsolation(true)]
+    public function testRefusesInvalidFormKeyWithJsonError(): void
+    {
+        $this->prepareCsrfRequest('INVALIDADMINKEY');
+        $controller = $this->getCsrfController(true);
+
+        $this->assertFalse($controller->validateForCsrf($this->getRequest()));
+
+        $response = $controller->createCsrfValidationException($this->getRequest())->getReplaceResult();
+        $this->assertInstanceOf(HttpResponse::class, $response);
+        $this->assertSame(200, $response->getHttpResponseCode());
+
+        $data = json_decode((string)$response->getBody(), true);
+        $this->assertTrue($data['error'] ?? false);
+        $this->assertStringContainsString('Invalid Form Key', (string)($data['message'] ?? ''));
+    }
+
+    #[AppIsolation(true)]
+    public function testAcceptsValidFormKey(): void
+    {
+        $this->prepareCsrfRequest(ObjectManager::getInstance()->get(FormKey::class)->getFormKey());
+
+        $this->assertTrue($this->getCsrfController(true)->validateForCsrf($this->getRequest()));
+    }
+
+    #[AppIsolation(true)]
+    public function testLeavesExpiredAdminSessionToTheAuthentication(): void
+    {
+        $this->prepareCsrfRequest('INVALIDADMINKEY');
+
+        $this->assertTrue($this->getCsrfController(false)->validateForCsrf($this->getRequest()));
+    }
+
+    private function getCsrfController(bool $isLoggedIn): Html
+    {
+        $auth = $this->createMock(Auth::class);
+        $auth->method('isLoggedIn')->willReturn($isLoggedIn);
+        $context = ObjectManager::getInstance()->create(Context::class, ['auth' => $auth]);
+
+        return ObjectManager::getInstance()->create(Html::class, ['context' => $context]);
+    }
+
+    private function prepareCsrfRequest(string $formKey): void
+    {
+        $request = $this->getRequest();
+        $request->setMethod(HttpRequest::METHOD_POST);
+        $request->setQuery(new Parameters(['form_key' => $formKey, 'isAjax' => 'true']));
+        $request->setParam('form_key', $formKey);
+    }
+
+    private function getRequest(): HttpRequest
+    {
+        return ObjectManager::getInstance()->get(HttpRequest::class);
     }
 
     private function getController(bool $isAllowed): Html

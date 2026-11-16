@@ -313,6 +313,7 @@ if ($interval < 10) {
         },
         updateTargetsAfterPost(requests, html, postedAt = null) {
             const typedValue = this.getValueTypedDuringPost(postedAt);
+            const blurredValues = this.getBlurredValuesTypedDuringPost(requests, postedAt);
             const parser = new DOMParser();
             const ajaxDocument = parser.parseFromString(html, "text/html");
 
@@ -343,6 +344,8 @@ if ($interval < 10) {
                     Alpine.initTree(targetElement);
                 });
             });
+
+            this.restoreBlurredValues(blurredValues);
 
             if (typedValue && this.restoreTypedValue(typedValue)) {
                 return;
@@ -383,6 +386,45 @@ if ($interval < 10) {
             }
 
             return {id: element.id, value: element.value, selectionStart, selectionEnd};
+        },
+        getBlurredValuesTypedDuringPost(requests, postedAt) {
+            if (postedAt === null) {
+                return [];
+            }
+
+            const blurredValues = [];
+            this.getTargets(requests).forEach(target => {
+                const targetElement = document.getElementById(target);
+                if (!targetElement) {
+                    return;
+                }
+
+                targetElement.querySelectorAll('input[id], textarea[id]').forEach(element => {
+                    if (element === document.activeElement || ['checkbox', 'radio', 'file', 'hidden'].includes(element.type)) {
+                        return;
+                    }
+
+                    const lastInput = this.inputTimestamps[element.id];
+                    if (lastInput && lastInput >= postedAt) {
+                        blurredValues.push({id: element.id, value: element.value});
+                    }
+                });
+            });
+
+            return blurredValues;
+        },
+        restoreBlurredValues(blurredValues) {
+            // The change of a blurred field was handled by the replaced component, so replay it on the new one
+            blurredValues.forEach(blurredValue => {
+                const element = document.getElementById(blurredValue.id);
+                if (!element || element.value === blurredValue.value) {
+                    return;
+                }
+
+                element.value = blurredValue.value;
+                element.dispatchEvent(new Event('input', {bubbles: true}));
+                element.dispatchEvent(new Event('change', {bubbles: true}));
+            });
         },
         restoreTypedValue(typedValue) {
             const element = document.getElementById(typedValue.id);

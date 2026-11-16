@@ -143,6 +143,32 @@ for (const theme of THEMES) {
             expect(await input.evaluate((element: HTMLInputElement) => element.selectionStart)).toBe('old-typed'.length);
         });
 
+        test('keeps the value that is typed into a target and blurred while the request is underway', async ({page}) => {
+            await injectTargetInput(page, 'old');
+
+            let releaseResponse: () => void = () => {};
+            const responseReleased = new Promise<void>(resolve => releaseResponse = resolve);
+            await page.route('**' + HTML_ENDPOINT + '**', async route => {
+                await responseReleased;
+                await route.fulfill({status: 200, contentType: 'text/html', body: getTargetHtml('server')});
+            });
+
+            const input = page.locator('#' + TARGET_INPUT);
+            const requestPromise = page.waitForRequest(request => isHtmlEndpointPost(request.url(), request.method()));
+            await postValue(page, 'current-value', 'update');
+            await requestPromise;
+
+            await input.fill('typed');
+            await input.blur();
+
+            const responsePromise = page.waitForResponse(response => isHtmlEndpointPost(response.url(), response.request().method()));
+            releaseResponse();
+            await responsePromise;
+
+            await expect(page.locator('#' + TARGET_ELEMENT)).toHaveAttribute('data-rendered', 'server');
+            await expect(input).toHaveValue('typed');
+        });
+
         test('applies the server value to a target that was not typed into', async ({page}) => {
             await injectTargetInput(page, 'old');
             await page.route('**' + HTML_ENDPOINT + '**', route => route.fulfill({

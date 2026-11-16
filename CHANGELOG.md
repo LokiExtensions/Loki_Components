@@ -6,6 +6,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.2] - 16 November 2026
+### Fixed
+- Validate the admin form key like Magento in production mode
+- Prefer the admin form key over the storefront `form_key` cookie in the Admin Panel
+- Add `JSON_HEX_AMP` to JSON decoding of component data
+
 ## [2.10.1] - 03 November 2026
 ### Fixed
 - Return 400 with reason for invalid or tampered AJAX payloads
@@ -17,7 +23,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Fix date in CHANGELOG
 
 ### Added
-- skip filters for array properties listed in block argument unfiltered_properties
+- skip filters for array properties listed in block argument `unfiltered_properties`
 
 ## [2.9.0] - 30 October 2026
 ### Fixed

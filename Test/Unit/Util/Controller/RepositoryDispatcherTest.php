@@ -9,6 +9,8 @@ use Loki\Components\Util\Controller\RepositoryDispatcher;
 use Loki\Components\Validator\Validator;
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\View\LayoutInterface;
+use InvalidArgumentException;
+use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
 
 class RepositoryDispatcherTest extends TestCase
@@ -64,6 +66,56 @@ class RepositoryDispatcherTest extends TestCase
 
         $dispatcher = new RepositoryDispatcher($this->createMock(EventManager::class), $filter, $validator);
         $dispatcher->dispatch($component, 'invalid');
+    }
+
+    #[DataProvider('oversizeValueProvider')]
+    public function testRejectsOversizeValueBeforeFiltering(mixed $value): void
+    {
+        $repository = $this->createMock(ComponentRepositoryInterface::class);
+        $repository->expects($this->never())->method('saveValue');
+
+        $component = $this->createMock(ComponentInterface::class);
+        $component->method('getRepository')->willReturn($repository);
+
+        $filter = $this->createMock(Filter::class);
+        $filter->expects($this->never())->method('filter');
+
+        $dispatcher = new RepositoryDispatcher(
+            $this->createMock(EventManager::class),
+            $filter,
+            $this->createMock(Validator::class),
+            100
+        );
+
+        $this->expectException(InvalidArgumentException::class);
+        $dispatcher->dispatch($component, $value);
+    }
+
+    public static function oversizeValueProvider(): array
+    {
+        return [
+            'string' => [str_repeat('a', 101)],
+            'nested array' => [['foo' => ['bar' => str_repeat('a', 60), 'baz' => str_repeat('a', 60)]]],
+        ];
+    }
+
+    public function testAcceptsValueAtMaximumLength(): void
+    {
+        $value = str_repeat('a', 100);
+        $repository = $this->createMock(ComponentRepositoryInterface::class);
+        $repository->expects($this->once())->method('saveValue')->with($value);
+
+        $component = $this->createMock(ComponentInterface::class);
+        $component->method('getRepository')->willReturn($repository);
+
+        $filter = $this->createMock(Filter::class);
+        $filter->method('filter')->willReturnArgument(1);
+
+        $validator = $this->createMock(Validator::class);
+        $validator->method('validate')->willReturn(true);
+
+        $dispatcher = new RepositoryDispatcher($this->createMock(EventManager::class), $filter, $validator, 100);
+        $dispatcher->dispatch($component, $value);
     }
 
     public function testPostDispatchDispatchesEvent(): void

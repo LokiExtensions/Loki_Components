@@ -17,6 +17,17 @@ class SecurityTest extends TestCase
         $this->assertSame($expected, $filter->filter($input, $filterScope));
     }
 
+    public function testDeeplyNestedEntitiesAreFilteredFast(): void
+    {
+        $input = '&'.str_repeat('amp;', 50000).'lt;script>alert(1)';
+
+        $start = microtime(true);
+        $result = (new Security())->filter($input, new FilterScope());
+
+        $this->assertLessThan(1, microtime(true) - $start);
+        $this->assertStringNotContainsString('<', $result);
+    }
+
     public static function filterDataProvider(): array
     {
         return [
@@ -41,6 +52,12 @@ class SecurityTest extends TestCase
             'null byte cannot smuggle tags' => ["\0<script>", ''],
             'placeholder cannot smuggle tags' => ["\u{E000}script>alert(1)", 'script>alert(1)'],
             'less than sign followed by number' => ['5 <10 items', '5 <10 items'],
+            'data scheme with comma' => ['data:,hello', ',hello'],
+            'data scheme with image' => ['data:image/png;base64,iVBORw0', 'image/png;base64,iVBORw0'],
+            'uppercase data scheme with whitespace' => [' DATA:text/html,x', 'text/html,x'],
+            'plain text starting with data colon' => ['Data: please call me', 'Data: please call me'],
+            'plain text starting with lowercase data colon' => ['data: none', 'data: none'],
+            'deeply encoded script tag' => ['&amp;amp;amp;amp;amp;amp;lt;script&amp;amp;amp;amp;amp;amp;gt;', 'amp;lt;scriptamp;gt;'],
         ];
     }
 }

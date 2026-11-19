@@ -7,6 +7,7 @@ use Magento\Framework\Event\Manager as EventManager;
 use Loki\Components\Component\ComponentRepositoryInterface;
 use Loki\Components\Filter\Filter;
 use Loki\Components\Validator\Validator;
+use InvalidArgumentException;
 use Magento\Framework\View\LayoutInterface;
 
 class RepositoryDispatcher
@@ -15,6 +16,7 @@ class RepositoryDispatcher
         private readonly EventManager $eventManager,
         private readonly Filter $filter,
         private readonly Validator $validator,
+        private readonly int $maxValueLength = 65536,
     ) {
     }
 
@@ -27,12 +29,37 @@ class RepositoryDispatcher
             return;
         }
 
+        if ($this->getValueLength($componentData) > $this->maxValueLength) {
+            throw new InvalidArgumentException((string)__('The submitted value is too long'));
+        }
+
         $componentData = $this->filter->filter($component, $componentData);
         if (false === $this->validator->validate($component, $componentData)) {
             return;
         }
 
         $repository->saveValue($componentData);
+    }
+
+    private function getValueLength(mixed $value): int
+    {
+        if (is_string($value)) {
+            return strlen($value);
+        }
+
+        if (false === is_array($value)) {
+            return 0;
+        }
+
+        $length = 0;
+        foreach ($value as $key => $subValue) {
+            $length += strlen((string)$key) + $this->getValueLength($subValue);
+            if ($length > $this->maxValueLength) {
+                break;
+            }
+        }
+
+        return $length;
     }
 
     public function postDispatch(LayoutInterface $layout, array $updates): void

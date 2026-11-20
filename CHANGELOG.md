@@ -6,6 +6,28 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [2.10.3] - 20 November 2026
+### Fixed
+- Use the HTTP request for setParam() and assert the block type in a test
+- Stop polling after a 400 or 403 response
+- Do not accept a trailing newline in property names
+- Keep the server-side currentUri param and limit updates per request to 100
+- Scrub invalid UTF-8 from signed request data and fail closed on encoding errors
+- Resolve allowed targets to declared block names only
+- Skip prototype keys when loading the initial data of a component
+- Only match the exact `loki_components/index/html` path
+- Drop invalid property names and limit unfiltered properties to the first level
+- Define the `Loki_Components::configuration` resource of the config section
+- Require POST with a valid form key for the polling endpoint
+- Send the frontend form key as header instead of URL parameter
+- Hex-escape the messages JSON that is embedded in a script element
+- Only render targets declared by the updated components
+- Require the `Loki_Components::index` ACL resource for admin component updates
+- Let signed request params win and bind AJAX signature to area and store
+- Prevent reflected XSS via request parameters in ajax-queue script
+- Cap security filter passes, reject oversize values and keep "data:" in plain text
+- Keep values typed during a request after focus has left the field
+
 ## [2.10.2] - 16 November 2026
 ### Fixed
 - Validate the admin form key like Magento in production mode

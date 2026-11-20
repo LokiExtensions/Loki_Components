@@ -32,13 +32,21 @@ class Filter
         $filterScope->setComponent($component);
         $filterScope->setProperty($propertyName);
 
-        if (empty($data) || is_bool($data) || is_int($data)) {
+        if (empty($data) || is_bool($data) || is_int($data) || is_float($data)) {
             return $data;
         }
 
         if (is_array($data)) {
-            $unfilteredProperties = (array)$component->getBlock()?->getData('unfiltered_properties');
+            $unfilteredProperties = $depth === 0
+                ? (array)$component->getBlock()?->getData('unfiltered_properties')
+                : [];
+
             foreach ($data as $propertyName => $value) {
+                if (false === $this->isValidPropertyName($propertyName)) {
+                    unset($data[$propertyName]);
+                    continue;
+                }
+
                 if (in_array($propertyName, $unfilteredProperties, true)) {
                     continue;
                 }
@@ -62,5 +70,14 @@ class Filter
         }
 
         return $data;
+    }
+
+    private function isValidPropertyName(int|string $propertyName): bool
+    {
+        if (is_int($propertyName)) {
+            return true;
+        }
+
+        return (bool)preg_match('/^[A-Za-z0-9_.:\-]{1,255}$/', $propertyName);
     }
 }

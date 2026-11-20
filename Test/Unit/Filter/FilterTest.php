@@ -81,6 +81,46 @@ class FilterTest extends TestCase
         $this->assertSame(['email' => 'FOO', 'password' => ' p<b>ss '], $result);
     }
 
+    public function testOnlySkipsUnfilteredPropertiesOnTheFirstLevel(): void
+    {
+        $block = $this->createMock(AbstractBlock::class);
+        $block->method('getData')->with('unfiltered_properties')->willReturn(['password']);
+
+        $component = $this->createMock(ComponentInterface::class);
+        $component->method('getFilters')->willReturn(['uppercase']);
+        $component->method('getBlock')->willReturn($block);
+
+        $result = $this->getFilter()->filter($component, ['nested' => ['password' => 'secret']]);
+        $this->assertSame(['nested' => ['password' => 'SECRET']], $result);
+    }
+
+    public function testKeepsFloatValues(): void
+    {
+        $this->assertSame(4.2, $this->getFilter()->filter($this->getComponent(['uppercase']), 4.2));
+        $this->assertSame(['price' => 4.2], $this->getFilter()->filter($this->getComponent(['uppercase']), ['price' => 4.2]));
+    }
+
+    public function testDropsInvalidPropertyNames(): void
+    {
+        $result = $this->getFilter()->filter($this->getComponent(['uppercase']), [
+            'street' => 'main',
+            0 => 'zero',
+            'custom_attributes.color:value-1' => 'red',
+            '<img src=x onerror=alert(1)>' => 'foo',
+            'foo bar' => 'foo',
+            '' => 'empty',
+            str_repeat('a', 256) => 'too long',
+            'nested' => ['ok' => 'yes', 'not"ok' => 'no'],
+        ]);
+
+        $this->assertSame([
+            'street' => 'MAIN',
+            0 => 'ZERO',
+            'custom_attributes.color:value-1' => 'RED',
+            'nested' => ['ok' => 'YES'],
+        ], $result);
+    }
+
     public function testPassesComponentToFilterScope(): void
     {
         $spy = new class implements FilterInterface {

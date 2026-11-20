@@ -6,6 +6,7 @@ use Loki\Components\Test\Integration\LokiComponentsTestCase;
 use Loki\Components\Util\Security\AjaxSignature;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\Framework\Data\Form\FormKey;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 
@@ -38,6 +39,26 @@ class HtmlDispatchTest extends LokiComponentsTestCase
     }
 
     #[AppIsolation(true)]
+    public function testFormKeyInHeaderIsAccepted(): void
+    {
+        $formKey = $this->getObjectManager()->get(FormKey::class)->getFormKey();
+        $this->getHttpRequest()->setPostValue('form_key', 'invalid-form-key');
+        $this->dispatchHtmlRequest($this->buildSignedBody(), $formKey);
+
+        $this->assertSame(200, $this->getHttpResponse()->getHttpResponseCode() ?? 200);
+        $this->assertStringOccursOnPage('>'.self::TARGET.'</div>');
+    }
+
+    #[AppIsolation(true)]
+    public function testInvalidFormKeyInHeaderIsRejected(): void
+    {
+        $this->dispatchHtmlRequest($this->buildSignedBody(), 'invalid-form-key');
+
+        $this->assertSame(400, $this->getHttpResponse()->getHttpResponseCode());
+        $this->assertStringNotOccursOnPage(self::TARGET);
+    }
+
+    #[AppIsolation(true)]
     public function testGetRequestIsNotAllowed(): void
     {
         $this->setAsAjaxRequest();
@@ -48,9 +69,12 @@ class HtmlDispatchTest extends LokiComponentsTestCase
         $this->assertNotSame(200, $this->getHttpResponse()->getHttpResponseCode() ?? 200);
     }
 
-    private function dispatchHtmlRequest(array $body): void
+    private function dispatchHtmlRequest(array $body, ?string $formKeyHeader = null): void
     {
         $this->setAsAjaxRequest();
+        if ($formKeyHeader !== null) {
+            $this->getHttpRequest()->getHeaders()->addHeaderLine('X-Magento-Form-Key', $formKeyHeader);
+        }
 
         $request = $this->getHttpRequest();
         $request->setMethod('POST');

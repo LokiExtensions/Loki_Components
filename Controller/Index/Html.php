@@ -20,7 +20,6 @@ use Magento\Framework\App\State as AppState;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
 use Loki\Components\Config\Config;
@@ -30,6 +29,7 @@ use Loki\Components\Exception\NoBlockFoundException;
 use Loki\Components\Exception\NoComponentFoundException;
 use Loki\Components\Exception\RedirectException;
 use Loki\Components\Util\Controller\AllowedTargets;
+use Loki\Components\Util\Controller\FormKeyHeader;
 use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
 use Loki\Components\Util\Controller\RenderFlag;
@@ -54,7 +54,7 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         private readonly LoggerInterface $logger,
         private readonly ComponentRegistry $componentRegistry,
         private readonly ComponentUpdateFactory $componentUpdateFactory,
-        private readonly Validator $formKeyValidator,
+        private readonly FormKeyHeader $formKeyHeader,
         private readonly Messages $messages,
         private readonly RenderFlag $renderFlag,
         private readonly AllowedTargets $allowedTargets
@@ -272,6 +272,6 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
 
     public function validateForCsrf(RequestInterface $request): ?bool
     {
-        return $this->formKeyValidator->validate($request);
+        return $this->formKeyHeader->validate($request);
     }
 }

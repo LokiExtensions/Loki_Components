@@ -40,7 +40,8 @@ for (const theme of THEMES) {
             await postUpdate(page, 'playwright-value');
 
             const request = await requestPromise;
-            expect(request.url()).toContain('form_key=');
+            expect(request.url()).not.toContain('form_key=');
+            expect(request.headers()['x-magento-form-key']).toBeTruthy();
             expect(request.headers()['x-alpine-request']).toBe('true');
 
             const body = request.postDataJSON();

@@ -18,7 +18,7 @@ use Loki\Components\Util\ComponentUtil;
 $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 
-$jsonFlags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_THROW_ON_ERROR;
+$jsonFlags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR;
 $initFormKeyCookie = $block->getArea() === 'frontend';
 $interval = (int)$block->getInterval();
 if ($interval < 10) {
@@ -144,13 +144,12 @@ if ($interval < 10) {
             const formKey = this.getFormKey();
 
             const body = this.buildRequestBody(requests);
-            const headers = this.getPostHeaders();
+            const headers = this.getPostHeaders(formKey);
             if (body instanceof FormData) {
                 delete headers['Content-Type'];
             }
 
-            await fetch('<?= $escaper->escapeUrl($componentUtil->getPostUrl(
-            )) ?>?form_key=' + encodeURIComponent(formKey) + '&isAjax=true', {
+            await fetch(this.getPostUrl(formKey), {
                 method: 'POST',
                 mode: 'same-origin',
                 headers: headers,
@@ -233,10 +232,19 @@ if ($interval < 10) {
             window.FORM_KEY = formKey;
 <?php endif; ?>
         },
-        getPostHeaders() {
+        getPostUrl(formKey) {
+            const url = <?= /* @noEscape */ json_encode($componentUtil->getPostUrl(), $jsonFlags) ?> + '?isAjax=true';
+<?php if ($initFormKeyCookie): ?>
+            return url;
+<?php else: ?>
+            return url + '&form_key=' + encodeURIComponent(formKey);
+<?php endif; ?>
+        },
+        getPostHeaders(formKey) {
             return {
                 'X-Alpine-Request': true,
                 'X-Requested-With': 'XMLHttpRequest',
+                'X-Magento-Form-Key': formKey,
                 'Content-Type': 'application/json'
             };
         },

@@ -39,6 +39,16 @@ class AjaxQueueTemplateTest extends TestCase
         ];
     }
 
+    #[AppIsolation(true)]
+    public function testFormKeyIsSentAsHeaderInsteadOfUrlParameter(): void
+    {
+        $html = $this->renderAjaxQueueBlock();
+
+        $this->assertStringNotContainsString('&form_key=', $html);
+        $this->assertStringNotContainsString('?form_key=', $html);
+        $this->assertStringContainsString("'X-Magento-Form-Key': formKey", $html);
+    }
+
     private function renderAjaxQueueBlock(): string
     {
         $layout = ObjectManager::getInstance()->get(LayoutLoader::class)->load(['loki_components']);

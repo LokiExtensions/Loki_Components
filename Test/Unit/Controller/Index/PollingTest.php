@@ -6,6 +6,7 @@ use Loki\Components\Controller\Index\Polling;
 use Loki\Components\Polling\AbstractPollingHandler;
 use Loki\Components\Polling\PollingHandlerInterface;
 use Loki\Components\Polling\PollingHandlerListing;
+use Loki\Components\Util\Controller\FormKeyHeader;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use PHPUnit\Framework\TestCase;
@@ -55,7 +56,11 @@ class PollingTest extends TestCase
         $jsonFactory = $this->createMock(JsonFactory::class);
         $jsonFactory->method('create')->willReturn($json);
 
-        $controller = new Polling($jsonFactory, new PollingHandlerListing($handlers));
+        $controller = new Polling(
+            $jsonFactory,
+            new PollingHandlerListing($handlers),
+            $this->createMock(FormKeyHeader::class)
+        );
         $this->assertSame($json, $controller->execute());
 
         return $data;

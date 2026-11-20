@@ -11,7 +11,6 @@ use Loki\Components\Factory\ViewModelFactory;
 /** @var Template $block */
 /** @var ViewModelFactory $viewModelFactory */
 /** @var Config $config */
-/** @var Config $componentUtil */
 /** @var ComponentUtil $componentUtil */
 /** @var Escaper $escaper */
 
@@ -25,17 +24,22 @@ if ($interval < 1) {
 if ($interval < 500) {
     return;
 }
+
+$jsonFlags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR;
 ?>
 <script>
     (() => {
         setInterval(() => {
-            const formKey = MageCookies.get('form_key');
-            fetch('<?= $escaper->escapeUrl($componentUtil->getPollingUrl()) ?>?form_key=' + encodeURIComponent(formKey) + '&isAjax=true', {
-                method: 'GET',
+            const formKey = (window.MageCookies && MageCookies.get('form_key')) || window.LOKI_FORM_KEY || '';
+            fetch(<?= /* @noEscape */ json_encode($componentUtil->getPollingUrl(), $jsonFlags) ?> + '?isAjax=true', {
+                method: 'POST',
+                mode: 'same-origin',
                 headers: {
                     'X-Requested-With': 'XMLHttpRequest',
+                    'X-Magento-Form-Key': formKey,
                     'Content-Type': 'application/json'
                 },
+                body: '{}',
             })
                 .then(response => {
                     if (response.ok) {
@@ -78,6 +82,6 @@ if ($interval < 500) {
                 .catch(error => {
                     Alpine.store('Message').addErrorMessage(error);
                 });
-        }, <?= $escaper->escapeHtml($interval) ?>);
+        }, <?= (int)$interval ?>);
     })();
 </script>

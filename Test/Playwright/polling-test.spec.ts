@@ -35,9 +35,11 @@ for (const theme of THEMES) {
             await openTestPage(page, TEST_PAGE_HANDLES);
 
             const response = await responsePromise;
-            expect(response.request().method()).toBe('GET');
-            expect(response.url()).toContain('form_key=');
+            expect(response.request().method()).toBe('POST');
+            expect(response.url()).not.toContain('form_key=');
+            expect(response.request().headers()['x-magento-form-key']).toBeTruthy();
             expect(response.status()).toBe(200);
+            expect(response.headers()['cache-control']).toContain('no-store');
             expect(await response.json()).toEqual([]);
         });
     });

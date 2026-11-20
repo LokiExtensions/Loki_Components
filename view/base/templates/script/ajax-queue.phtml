@@ -18,6 +18,7 @@ use Loki\Components\Util\ComponentUtil;
 $config = $viewModelFactory->create(Config::class);
 $componentUtil = $viewModelFactory->create(ComponentUtil::class);
 
+$jsonFlags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_THROW_ON_ERROR;
 $initFormKeyCookie = $block->getArea() === 'frontend';
 $interval = (int)$block->getInterval();
 if ($interval < 10) {
@@ -261,16 +262,18 @@ if ($interval < 10) {
             return formData;
         },
         buildBody(requests) {
-            const componentData = JSON.parse('<?= /* @noEscape */ json_encode(
-                $componentUtil->getComponentUpdateData($block)
-            ) ?>');
+            const componentData = <?= /* @noEscape */ json_encode(
+                $componentUtil->getComponentUpdateData($block),
+                $jsonFlags
+            ) ?>;
 
             return {
                 ...componentData,
                 updates: this.getUpdates(requests),
                 targets: this.getTargets(requests),
                 signature: <?= /* @noEscape */ json_encode(
-                    $componentUtil->getSignature($block)
+                    $componentUtil->getSignature($block),
+                    $jsonFlags
                 ) ?>
             };
         },

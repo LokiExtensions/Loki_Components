@@ -29,7 +29,7 @@ $jsonFlags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_
 ?>
 <script>
     (() => {
-        setInterval(() => {
+        const pollingInterval = setInterval(() => {
             const formKey = (window.MageCookies && MageCookies.get('form_key')) || window.LOKI_FORM_KEY || '';
             fetch(<?= /* @noEscape */ json_encode($componentUtil->getPollingUrl(), $jsonFlags) ?> + '?isAjax=true', {
                 method: 'POST',
@@ -44,6 +44,10 @@ $jsonFlags = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_
                 .then(response => {
                     if (response.ok) {
                         return response.text()
+                    }
+
+                    if ([400, 403].includes(response.status)) {
+                        clearInterval(pollingInterval);
                     }
 
                     LokiComponentsLogger.error('Fetch error', response);

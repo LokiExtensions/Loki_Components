@@ -21,7 +21,12 @@ use Magento\Framework\View\Element\Template;
                 return;
             }
 
+            const forbiddenKeys = ['__proto__', 'constructor', 'prototype'];
             for (const [key, value] of Object.entries(jsonData)) {
+                if (forbiddenKeys.includes(key)) {
+                    continue;
+                }
+
                 this[key] = value;
             }
         },

@@ -34,5 +34,32 @@ for (const theme of THEMES) {
             }, ELEMENT_ID);
             expect(html, 'HTML value in the component data').toBe(HTML_PAYLOAD);
         });
+
+        test('does not copy prototype keys of the initial data onto the component', async function ({page}) {
+            await openTestPage(page, TEST_PAGE_HANDLES);
+
+            await expect.poll(async () => {
+                return page.evaluate((elementId) => {
+                    const element = document.getElementById(elementId);
+                    return element ? Alpine.$data(element).blockId : null;
+                }, ELEMENT_ID);
+            }, {message: 'blockId of the component'}).toBe(BLOCK_NAME);
+
+            const result = await page.evaluate((elementId) => {
+                const element = document.getElementById(elementId);
+                const initialData = JSON.parse(element.querySelector('[x-ref="initialData"]').innerText);
+                const data = Alpine.$data(element);
+
+                return {
+                    hasProtoKey: Object.keys(initialData).includes('__proto__'),
+                    polluted: data.lokiPolluted,
+                    constructorType: typeof data.constructor,
+                };
+            }, ELEMENT_ID);
+
+            expect(result.hasProtoKey, 'The initial data contains a "__proto__" key').toBe(true);
+            expect(result.polluted, 'Prototype of the component was replaced').toBeUndefined();
+            expect(result.constructorType, 'Constructor of the component was replaced').toBe('function');
+        });
     });
 }

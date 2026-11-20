@@ -14,6 +14,10 @@
                 <arguments>
                     <argument name="js_data" xsi:type="array">
                         <item name="html" xsi:type="string"><![CDATA[<div class="loki-components-test-injected">Store pickup</div></data><b class="loki-components-test-injected">Amsterdam</b>]]></item>
+                        <item name="__proto__" xsi:type="array">
+                            <item name="lokiPolluted" xsi:type="boolean">true</item>
+                        </item>
+                        <item name="constructor" xsi:type="string">polluted</item>
                     </argument>
                 </arguments>
             </block>

@@ -171,6 +171,22 @@ class RequestDataLoaderTest extends TestCase
         $this->assertSame('/loki_components/index/html', $httpRequest->getRequestUri());
     }
 
+    public function testMergeRequestParamsPrefersSignedParams()
+    {
+        $httpRequest = $this->getHttpRequest();
+        $httpRequest->setParams(['id' => '666', 'extra' => 'live']);
+        $requestDataLoader = $this->getRequestDataLoader(
+            $this->getSignedRequestData(['params' => ['id' => '42']]),
+            $this->getValidHeaders(),
+            $httpRequest
+        );
+
+        $requestDataLoader->mergeRequestParams();
+
+        $this->assertSame('42', $httpRequest->getParam('id'));
+        $this->assertSame('live', $httpRequest->getParam('extra'));
+    }
+
     private function getSignedRequestData(array $request): array
     {
         $requestData = $this->getEmptyRequestData();

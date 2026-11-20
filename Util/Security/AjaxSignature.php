@@ -3,11 +3,18 @@
 namespace Loki\Components\Util\Security;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Store\Model\StoreManagerInterface;
 
 class AjaxSignature
 {
+    private const KEY_PURPOSE = 'loki_components_ajax_signature';
+
     public function __construct(
-        private readonly DeploymentConfig $deploymentConfig
+        private readonly DeploymentConfig $deploymentConfig,
+        private readonly AppState $appState,
+        private readonly StoreManagerInterface $storeManager,
     ) {
     }
 
@@ -16,7 +23,7 @@ class AjaxSignature
         return hash_hmac(
             'sha256',
             $this->buildPayload($data),
-            $this->getCryptKey()
+            $this->getSigningKey()
         );
     }
 
@@ -28,11 +35,36 @@ class AjaxSignature
 
     private function buildPayload(array $data): string
     {
+        $data['scope'] = [
+            'area' => $this->getAreaCode(),
+            'store' => $this->getStoreCode(),
+        ];
+
         return (string)json_encode($data, JSON_UNESCAPED_SLASHES);
     }
 
-    private function getCryptKey(): string
+    private function getSigningKey(): string
     {
-        return (string)$this->deploymentConfig->get('crypt/key');
+        $cryptKey = (string)$this->deploymentConfig->get('crypt/key');
+
+        return hash_hmac('sha256', self::KEY_PURPOSE, $cryptKey);
+    }
+
+    private function getAreaCode(): string
+    {
+        try {
+            return (string)$this->appState->getAreaCode();
+        } catch (LocalizedException) {
+            return '';
+        }
+    }
+
+    private function getStoreCode(): string
+    {
+        try {
+            return (string)$this->storeManager->getStore()->getCode();
+        } catch (LocalizedException) {
+            return '';
+        }
     }
 }

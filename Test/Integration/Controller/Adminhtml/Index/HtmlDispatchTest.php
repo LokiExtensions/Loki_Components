@@ -7,8 +7,10 @@ use Laminas\Http\Headers;
 use Loki\Components\Util\Security\AjaxSignature;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
+use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
+#[AppArea('adminhtml')]
 class HtmlDispatchTest extends AbstractBackendController
 {
     private const TARGET = 'loki-components.utils.local-messages';

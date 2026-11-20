@@ -97,7 +97,7 @@ class RequestDataLoader
         $request->setControllerModule((string)$requestData->getControllerModule());
         $request->setActionName((string)$requestData->getActionName());
 
-        $params = array_merge((array)$requestData->getParams(), $this->request->getParams());
+        $params = array_merge($this->request->getParams(), (array)$requestData->getParams());
         $this->request->setParams($params);
     }
 

@@ -49,6 +49,17 @@ class AjaxQueueTemplateTest extends TestCase
         $this->assertStringContainsString("'X-Magento-Form-Key': formKey", $html);
     }
 
+    #[AppIsolation(true)]
+    public function testInvalidUtf8InRequestParamsDoesNotBreakTheScript(): void
+    {
+        ObjectManager::getInstance()->get(RequestInterface::class)->setParams(['zz' => "foo\xFFbar", "k\xFE" => 'v']);
+
+        $html = $this->renderAjaxQueueBlock();
+
+        $this->assertMatchesRegularExpression('/const componentData = \{.*"zz":"foo\?bar".*\};/', $html);
+        $this->assertMatchesRegularExpression('/signature: "[a-f0-9]{64}"/', $html);
+    }
+
     private function renderAjaxQueueBlock(): string
     {
         $layout = ObjectManager::getInstance()->get(LayoutLoader::class)->load(['loki_components']);

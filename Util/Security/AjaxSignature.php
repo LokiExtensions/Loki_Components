@@ -40,7 +40,7 @@ class AjaxSignature
             'store' => $this->getStoreCode(),
         ];
 
-        return (string)json_encode($data, JSON_UNESCAPED_SLASHES);
+        return json_encode($data, JSON_UNESCAPED_SLASHES | JSON_THROW_ON_ERROR);
     }
 
     private function getSigningKey(): string

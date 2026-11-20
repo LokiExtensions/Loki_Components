@@ -63,7 +63,7 @@ class ComponentUtil implements ArgumentInterface
         /** @var Http $request */
         $request = $this->request;
 
-        return [
+        return $this->scrub([
             'params' => $request->getParams(),
             'route_name' => $request->getRouteName(),
             'module_name' => $request->getModuleName(),
@@ -71,7 +71,28 @@ class ComponentUtil implements ArgumentInterface
             'controller_name' => $request->getControllerName(),
             'action_name' => $request->getActionName(),
             'request_uri' => $request->getRequestUri(),
-        ];
+        ]);
+    }
+
+    /**
+     * Replace invalid UTF-8 (like "?foo=%FF") because it can not be JSON encoded
+     */
+    private function scrub(mixed $value): mixed
+    {
+        if (is_string($value)) {
+            return mb_scrub($value, 'UTF-8');
+        }
+
+        if (false === is_array($value)) {
+            return $value;
+        }
+
+        $scrubbed = [];
+        foreach ($value as $key => $subValue) {
+            $scrubbed[is_string($key) ? mb_scrub($key, 'UTF-8') : $key] = $this->scrub($subValue);
+        }
+
+        return $scrubbed;
     }
 
     public function getComponentUpdateData(AbstractBlock $block): array

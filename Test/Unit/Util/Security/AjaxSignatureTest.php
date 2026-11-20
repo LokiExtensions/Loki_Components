@@ -76,6 +76,12 @@ class AjaxSignatureTest extends TestCase
         );
     }
 
+    public function testSignFailsOnInvalidUtf8(): void
+    {
+        $this->expectException(\JsonException::class);
+        $this->getAjaxSignature('secret')->sign(['request' => ['params' => ['x' => "\xFF"]]]);
+    }
+
     public function testVerify(): void
     {
         $ajaxSignature = $this->getAjaxSignature('secret');

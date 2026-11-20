@@ -17,7 +17,7 @@ class HtmlDispatchTest extends AbstractBackendController
     private const TARGET_MARKER = 'loki-components-messages';
 
     protected $uri = 'backend/loki_components/index/html';
-    protected $resource = 'Magento_Backend::admin';
+    protected $resource = 'Loki_Components::index';
     protected $httpMethod = 'POST';
 
     protected function setUp(): void

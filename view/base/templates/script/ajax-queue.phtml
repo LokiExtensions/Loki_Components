@@ -191,6 +191,13 @@ if ($interval < 10) {
                     let errorMessage = error.name;
                     if (error.body) {
                         errorMessage = error.body.split(/\r?\n/)[0];
+                        try {
+                            const data = JSON.parse(error.body);
+                            if (data && typeof data.message === 'string') {
+                                errorMessage = data.message;
+                            }
+                        } catch (e) {
+                        }
                     }
 
                     Alpine.store('Message').addErrorMessage(errorMessage);

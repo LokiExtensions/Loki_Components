@@ -19,7 +19,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\AuthorizationInterface;
-use Magento\Framework\Exception\AuthorizationException;
+use Loki\Components\Util\Controller\LayoutLoader;
+use Magento\Framework\Controller\Result\Json;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +33,7 @@ class HtmlTest extends TestCase
     private const BLOCK_NAME = 'loki-components.utils.local-messages';
     private const BLOCK_MARKER = 'loki-components-messages';
     private const ACL_RESOURCE = 'Loki_Components::index';
+    private const BLOCK_ACL_RESOURCE = 'Magento_Sales::sales';
 
     protected function setUp(): void
     {
@@ -48,22 +50,18 @@ class HtmlTest extends TestCase
     }
 
     #[AppIsolation(true)]
-    public function testDeniesUpdateWhenAclResourceIsNotAllowed(): void
+    public function testDeniesUpdateWhenModuleAclResourceIsNotAllowed(): void
     {
-        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => 'foo', 'aclResource' => self::ACL_RESOURCE]]);
+        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => 'foo']]);
 
-        $this->expectException(AuthorizationException::class);
-        try {
-            $this->getController(false)->execute();
-        } finally {
-            $this->assertFalse($this->getStorage()->hasValue(self::BLOCK_NAME));
-        }
+        $this->assertAccessDenied($this->getController(false)->execute());
+        $this->assertFalse($this->getStorage()->hasValue(self::BLOCK_NAME));
     }
 
     #[AppIsolation(true)]
-    public function testSavesUpdateWhenAclResourceIsAllowed(): void
+    public function testSavesUpdateWhenModuleAclResourceIsAllowed(): void
     {
-        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => 'foo', 'aclResource' => self::ACL_RESOURCE]]);
+        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => 'foo']]);
 
         $result = $this->getController(true)->execute();
         $this->assertSame('foo', $this->getStorage()->getValue(self::BLOCK_NAME));
@@ -77,26 +75,58 @@ class HtmlTest extends TestCase
     }
 
     #[AppIsolation(true)]
-    public function testDeniesUpdateWhenAclResourceInUpdateValueIsNotAllowed(): void
+    public function testDeniesUpdateWhenBlockAclResourceIsNotAllowed(): void
     {
-        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => ['foo' => 'bar', 'aclResource' => self::ACL_RESOURCE]]]);
+        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => 'foo']]);
 
-        $this->expectException(AuthorizationException::class);
-        try {
-            $this->getController(false)->execute();
-        } finally {
-            $this->assertFalse($this->getStorage()->hasValue(self::BLOCK_NAME));
-        }
+        $result = $this->getController(false, self::BLOCK_ACL_RESOURCE, self::BLOCK_ACL_RESOURCE)->execute();
+
+        $this->assertAccessDenied($result);
+        $this->assertFalse($this->getStorage()->hasValue(self::BLOCK_NAME));
     }
 
     #[AppIsolation(true)]
-    public function testSavesUpdateWhenAclResourceInUpdateValueIsAllowed(): void
+    public function testSavesUpdateWhenBlockAclResourceIsAllowed(): void
     {
-        $update = ['foo' => 'bar', 'aclResource' => self::ACL_RESOURCE];
-        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => $update]]);
+        $this->prepareRequest([['blockName' => self::BLOCK_NAME, 'update' => 'foo']]);
 
-        $this->getController(true)->execute();
-        $this->assertSame($update, $this->getStorage()->getValue(self::BLOCK_NAME));
+        $this->getController(true, self::BLOCK_ACL_RESOURCE, self::BLOCK_ACL_RESOURCE)->execute();
+        $this->assertSame('foo', $this->getStorage()->getValue(self::BLOCK_NAME));
+    }
+
+    #[AppIsolation(true)]
+    public function testIgnoresAclResourcesSentByTheClient(): void
+    {
+        $update = ['foo' => 'bar', 'aclResource' => 'Magento_Backend::admin'];
+        $this->prepareRequest([[
+            'blockName' => self::BLOCK_NAME,
+            'update' => $update,
+            'aclResource' => 'Magento_Backend::admin',
+        ]]);
+
+        $this->assertAccessDenied($this->getController(false)->execute());
+        $this->assertFalse($this->getStorage()->hasValue(self::BLOCK_NAME));
+    }
+
+    #[AppIsolation(true)]
+    public function testDeniesAllUpdatesWhenOneUpdateIsNotAllowed(): void
+    {
+        $this->prepareRequest([
+            ['blockName' => self::BLOCK_NAME, 'update' => 'foo'],
+            ['blockName' => self::BLOCK_NAME, 'update' => 'bar'],
+        ]);
+
+        $authorization = $this->createMock(AuthorizationInterface::class);
+        $authorization->method('isAllowed')->willReturnOnConsecutiveCalls(true, false);
+        $controller = ObjectManager::getInstance()->create(Html::class, ['authorization' => $authorization]);
+
+        $this->assertAccessDenied($controller->execute());
+        $this->assertFalse($this->getStorage()->hasValue(self::BLOCK_NAME));
+    }
+
+    public function testAdminResourceIsModuleAclResource(): void
+    {
+        $this->assertSame(self::ACL_RESOURCE, Html::ADMIN_RESOURCE);
     }
 
     #[AppIsolation(true)]
@@ -218,12 +248,50 @@ class HtmlTest extends TestCase
         return ObjectManager::getInstance()->get(HttpRequest::class);
     }
 
-    private function getController(bool $isAllowed): Html
-    {
+    private function getController(
+        bool $isAllowed,
+        string $expectedAclResource = self::ACL_RESOURCE,
+        ?string $blockAclResource = null
+    ): Html {
         $authorization = $this->createMock(AuthorizationInterface::class);
-        $authorization->method('isAllowed')->with(self::ACL_RESOURCE)->willReturn($isAllowed);
+        $authorization->method('isAllowed')->with($expectedAclResource)->willReturn($isAllowed);
 
-        return ObjectManager::getInstance()->create(Html::class, ['authorization' => $authorization]);
+        $arguments = ['authorization' => $authorization];
+        if ($blockAclResource !== null) {
+            $arguments['layoutLoader'] = $this->getLayoutLoaderWithBlockAclResource($blockAclResource);
+        }
+
+        return ObjectManager::getInstance()->create(Html::class, $arguments);
+    }
+
+    private function getLayoutLoaderWithBlockAclResource(string $aclResource): LayoutLoader
+    {
+        $layoutLoader = ObjectManager::getInstance()->get(LayoutLoader::class);
+        $layoutLoaderMock = $this->createMock(LayoutLoader::class);
+        $layoutLoaderMock->method('load')->willReturnCallback(
+            function (...$arguments) use ($layoutLoader, $aclResource) {
+                $layout = $layoutLoader->load(...$arguments);
+                $layout->getBlock(self::BLOCK_NAME)->setData('acl_resource', $aclResource);
+
+                return $layout;
+            }
+        );
+
+        return $layoutLoaderMock;
+    }
+
+    private function assertAccessDenied(mixed $result): void
+    {
+        $this->assertInstanceOf(Json::class, $result);
+
+        $response = ObjectManager::getInstance()->create(HttpResponse::class);
+        $result->renderResult($response);
+
+        $this->assertSame(403, $response->getHttpResponseCode());
+        $data = json_decode((string)$response->getBody(), true);
+        $this->assertTrue($data['error'] ?? false);
+        $this->assertSame('Access denied.', $data['message'] ?? null);
+        $this->assertStringNotContainsString(self::BLOCK_MARKER, (string)$response->getBody());
     }
 
     private function prepareRequest(array $updates): void

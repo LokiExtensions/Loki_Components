@@ -22,7 +22,6 @@ use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Controller\Result\Json as JsonResult;
 use Magento\Framework\Controller\Result\JsonFactory as JsonResultFactory;
 use Magento\Framework\Controller\ResultInterface;
-use Magento\Framework\Exception\AuthorizationException;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
 use Loki\Components\Config\Config;
@@ -40,7 +39,7 @@ use Psr\Log\LoggerInterface;
 
 class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInterface
 {
-    public const ADMIN_RESOURCE = 'Magento_Backend::admin';
+    public const ADMIN_RESOURCE = 'Loki_Components::index';
 
     public function __construct(
         Context $context,
@@ -72,14 +71,12 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
         $updates = $this->sortUpdates($updates);
 
         foreach ($updates as $update) {
-            foreach ($this->getAclResources($update) as $aclResource) {
-                if (!$this->authorization->isAllowed($aclResource)) {
-                    throw new AuthorizationException(
-                        __('Access denied.')
-                    );
-                }
+            if (false === $this->authorization->isAllowed($this->getAclResource($update))) {
+                return $this->getAccessDeniedResult();
             }
+        }
 
+        foreach ($updates as $update) {
             try {
                 $this->repositoryDispatcher->dispatch(
                     $update['component'],
@@ -223,20 +220,26 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
         return $componentUpdates;
     }
 
-    /**
-     * @return string[]
-     */
-    private function getAclResources(array $update): array
+    private function getAclResource(array $update): string
     {
-        $aclResources = [
-            $update['block']->getAclResource(),
-            $update['aclResource'] ?? null,
-            is_array($update['update'] ?? null) ? ($update['update']['aclResource'] ?? null) : null,
-        ];
+        $aclResource = $update['block']->getData('acl_resource');
+        if (is_string($aclResource) && $aclResource !== '') {
+            return $aclResource;
+        }
 
-        $aclResources = array_filter($aclResources, fn ($aclResource) => is_string($aclResource) && $aclResource !== '');
+        return self::ADMIN_RESOURCE;
+    }
 
-        return array_values(array_unique($aclResources));
+    private function getAccessDeniedResult(): JsonResult
+    {
+        $json = $this->jsonResultFactory->create();
+        $json->setHttpResponseCode(403);
+        $json->setData([
+            'error' => true,
+            'message' => (string)__('Access denied.'),
+        ]);
+
+        return $json;
     }
 
     private function addGlobalException(Exception $exception): void

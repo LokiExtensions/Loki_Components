@@ -14,19 +14,24 @@ class AllowedTargets
     }
 
     /**
-     * Only keep targets that are declared by the components of the updates, so a request can not render random blocks
+     * Convert the requested targets (block names or element IDs) into the block names that are declared by the
+     * components of the updates, so a request can not render random blocks
      *
      * @param ComponentUpdate[] $updates
+     * @return string[]
      */
     public function filter(array $targets, array $updates): array
     {
         $allowedTargets = $this->getAllowedTargets($updates);
 
-        $filteredTargets = array_filter($targets, function ($target) use ($allowedTargets) {
-            return is_string($target) && isset($allowedTargets[$target]);
-        });
+        $blockNames = [];
+        foreach ($targets as $target) {
+            if (is_string($target) && isset($allowedTargets[$target])) {
+                $blockNames[] = $allowedTargets[$target];
+            }
+        }
 
-        return array_values($filteredTargets);
+        return array_values(array_unique($blockNames));
     }
 
     /**
@@ -45,7 +50,7 @@ class AllowedTargets
                 $targetNames,
                 $component->getTargets(),
                 (array)$block->getTargets(),
-                (array)$component->getViewModel()->getTargets()
+                (array)$component->getViewModel()?->getTargets()
             );
         }
 
@@ -55,8 +60,8 @@ class AllowedTargets
                 continue;
             }
 
-            $allowedTargets[$targetName] = true;
-            $allowedTargets[$this->idConvertor->toElementId($targetName)] = true;
+            $allowedTargets[$this->idConvertor->toElementId($targetName)] ??= $targetName;
+            $allowedTargets[$targetName] = $targetName;
         }
 
         return $allowedTargets;

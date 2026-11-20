@@ -13,7 +13,7 @@ use PHPUnit\Framework\TestCase;
 
 class AllowedTargetsTest extends TestCase
 {
-    public function testKeepsTargetsOfTheUpdatedComponents(): void
+    public function testConvertsDeclaredTargetsIntoBlockNames(): void
     {
         $targets = [
             'loki.checkout.shipping',
@@ -21,10 +21,17 @@ class AllowedTargetsTest extends TestCase
             'loki-checkout-block-target',
             'loki-checkout-view-model-target',
             'loki-checkout-self',
-            'loki.script.message-transfer',
+            'loki-script-message-transfer',
         ];
 
-        $this->assertSame($targets, $this->getAllowedTargets()->filter($targets, [$this->getComponentUpdate()]));
+        $this->assertSame([
+            'loki.checkout.shipping',
+            'loki.checkout.billing',
+            'loki.checkout.block-target',
+            'loki.checkout.view-model-target',
+            'loki.checkout.self',
+            'loki.script.message-transfer',
+        ], $this->getAllowedTargets()->filter($targets, [$this->getComponentUpdate()]));
     }
 
     public function testDropsUndeclaredTargets(): void
@@ -37,10 +44,26 @@ class AllowedTargetsTest extends TestCase
         );
     }
 
+    public function testElementIdOnlyResolvesToTheDeclaredBlockName(): void
+    {
+        $this->assertSame(
+            ['loki.checkout.shipping'],
+            $this->getAllowedTargets()->filter(['loki-checkout-shipping', 'loki_checkout_shipping'], [$this->getComponentUpdate()])
+        );
+    }
+
+    public function testRemovesDuplicates(): void
+    {
+        $this->assertSame(
+            ['loki.checkout.shipping'],
+            $this->getAllowedTargets()->filter(['loki.checkout.shipping', 'loki-checkout-shipping'], [$this->getComponentUpdate()])
+        );
+    }
+
     public function testOnlyAllowsDefaultTargetsWithoutUpdates(): void
     {
         $this->assertSame(
-            ['loki-script-message-transfer'],
+            ['loki.script.message-transfer'],
             $this->getAllowedTargets()->filter(['loki.checkout.shipping', 'loki-script-message-transfer'], [])
         );
     }

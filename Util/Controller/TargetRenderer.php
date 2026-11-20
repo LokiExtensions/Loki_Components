@@ -3,7 +3,6 @@
 namespace Loki\Components\Util\Controller;
 
 use Loki\Components\Layout\LayoutHandlerComposite;
-use Loki\Components\Util\IdConvertor;
 use Magento\Framework\Event\Manager as EventManager;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\LayoutInterface;
@@ -13,7 +12,6 @@ class TargetRenderer
 {
     public function __construct(
         private readonly EventManager $eventManager,
-        private readonly IdConvertor $idConvertor,
         private readonly LayoutHandlerComposite $layoutHandlerComposite,
         private readonly LayoutLoader $layoutLoader,
         private readonly PageLayoutConfigBuilder $pageLayoutConfigBuilder,
@@ -84,31 +82,9 @@ class TargetRenderer
 
     private function getTargetBlockNames(LayoutInterface $layout, array $targets): array
     {
-        $blockNames = $this->convertTargetsToBlockNames($layout, $targets);
-        $blockNames = array_unique($blockNames);
-        $this->eventManager->dispatch('loki_components_blocks', ['blocks' => $blockNames]);
-
-        return $blockNames;
-    }
-
-    private function convertTargetsToBlockNames(LayoutInterface $layout, array $targets): array
-    {
         $allBlockNames = array_keys($layout->getAllBlocks());
-
-        $blockNames = [];
-        foreach ($targets as $target) {
-            if (in_array($target, $allBlockNames, true)) {
-                $blockNames[] = $target;
-                continue;
-            }
-
-            foreach ($allBlockNames as $blockName) {
-                $elementId = $this->idConvertor->toElementId($blockName);
-                if ($elementId === $target) {
-                    $blockNames[] = $blockName;
-                }
-            }
-        }
+        $blockNames = array_values(array_unique(array_intersect($targets, $allBlockNames)));
+        $this->eventManager->dispatch('loki_components_blocks', ['blocks' => $blockNames]);
 
         return $blockNames;
     }

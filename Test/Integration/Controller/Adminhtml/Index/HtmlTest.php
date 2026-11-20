@@ -21,6 +21,7 @@ use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\AuthorizationInterface;
 use Loki\Components\Util\Controller\LayoutLoader;
 use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\View\Element\AbstractBlock;
 use Magento\TestFramework\Fixture\AppArea;
 use Magento\TestFramework\Fixture\AppIsolation;
 use PHPUnit\Framework\TestCase;
@@ -271,7 +272,9 @@ class HtmlTest extends TestCase
         $layoutLoaderMock->method('load')->willReturnCallback(
             function (...$arguments) use ($layoutLoader, $aclResource) {
                 $layout = $layoutLoader->load(...$arguments);
-                $layout->getBlock(self::BLOCK_NAME)->setData('acl_resource', $aclResource);
+                $block = $layout->getBlock(self::BLOCK_NAME);
+                $this->assertInstanceOf(AbstractBlock::class, $block);
+                $block->setData('acl_resource', $aclResource);
 
                 return $layout;
             }

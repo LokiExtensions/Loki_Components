@@ -99,7 +99,7 @@ class RequestDataLoader
 
         $params = array_merge($this->request->getParams(), (array)$requestData->getParams());
         $this->request->setParams($params);
-        $this->request->setParam('currentUri', $requestUri);
+        $request->setParam('currentUri', $requestUri);
     }
 
     private function sanitize(array $requestData = []): array

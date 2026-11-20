@@ -108,6 +108,7 @@ class FilterTest extends TestCase
             'custom_attributes.color:value-1' => 'red',
             '<img src=x onerror=alert(1)>' => 'foo',
             'foo bar' => 'foo',
+            "name\n" => 'newline',
             '' => 'empty',
             str_repeat('a', 256) => 'too long',
             'nested' => ['ok' => 'yes', 'not"ok' => 'no'],

@@ -78,6 +78,6 @@ class Filter
             return true;
         }
 
-        return (bool)preg_match('/^[A-Za-z0-9_.:\-]{1,255}$/', $propertyName);
+        return (bool)preg_match('/^[A-Za-z0-9_.:\-]{1,255}\z/', $propertyName);
     }
 }

@@ -48,6 +48,29 @@ class MessagesTest extends TestCase
         );
     }
 
+    public function testMessagesCanNotCloseTheScriptElement(): void
+    {
+        $message = $this->createMock(MessageInterface::class);
+        $message->method('getType')->willReturn(MessageInterface::TYPE_ERROR);
+
+        $collection = $this->createMock(Collection::class);
+        $collection->method('getItems')->willReturn([$message]);
+
+        $messageManager = $this->createMock(MessageManager::class);
+        $messageManager->method('getMessages')->willReturn($collection);
+
+        $text = '</script><script>alert(\'x\')</script>&amp;"';
+        $interpretationStrategy = $this->createMock(InterpretationStrategyInterface::class);
+        $interpretationStrategy->method('interpret')->willReturn($text);
+
+        $json = (new Messages($messageManager, $interpretationStrategy, $this->getAjax(true)))->getMessagesAsJson();
+
+        $this->assertStringNotContainsString('<', $json);
+        $this->assertStringNotContainsString('&', $json);
+        $this->assertStringNotContainsString('\'', $json);
+        $this->assertSame([['type' => 'error', 'text' => $text]], json_decode($json, true));
+    }
+
     public function testSyncedMessagesAreKeptUntilRendered(): void
     {
         $message = $this->createMock(MessageInterface::class);

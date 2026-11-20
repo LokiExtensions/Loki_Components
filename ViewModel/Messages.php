@@ -11,6 +11,8 @@ use Magento\Framework\View\Element\Message\InterpretationStrategyInterface;
 
 class Messages implements ArgumentInterface
 {
+    private const JSON_FLAGS = JSON_HEX_TAG | JSON_HEX_AMP | JSON_HEX_APOS | JSON_HEX_QUOT;
+
     private array $messages = [];
 
     public function __construct(
@@ -35,11 +37,11 @@ class Messages implements ArgumentInterface
     public function getMessagesAsJson(): string
     {
         if (false === $this->ajax->isAjax()) {
-            return json_encode([]);
+            return (string)json_encode([], self::JSON_FLAGS);
         }
 
         $this->syncMessages();
 
-        return json_encode($this->messages);
+        return (string)json_encode($this->messages, self::JSON_FLAGS);
     }
 }

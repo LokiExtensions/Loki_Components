@@ -17,6 +17,7 @@ class RepositoryDispatcher
         private readonly Filter $filter,
         private readonly Validator $validator,
         private readonly int $maxValueLength = 65536,
+        private readonly int $maxElements = 1000,
     ) {
     }
 
@@ -30,6 +31,10 @@ class RepositoryDispatcher
         }
 
         if ($this->getValueLength($componentData) > $this->maxValueLength) {
+            throw new InvalidArgumentException((string)__('The submitted value is too long'));
+        }
+
+        if (is_array($componentData) && count($componentData, COUNT_RECURSIVE) > $this->maxElements) {
             throw new InvalidArgumentException((string)__('The submitted value is too long'));
         }
 
@@ -48,12 +53,12 @@ class RepositoryDispatcher
         }
 
         if (false === is_array($value)) {
-            return 0;
+            return is_scalar($value) ? strlen((string)$value) : 1;
         }
 
-        $length = 0;
+        $length = 1;
         foreach ($value as $key => $subValue) {
-            $length += strlen((string)$key) + $this->getValueLength($subValue);
+            $length += 1 + strlen((string)$key) + $this->getValueLength($subValue);
             if ($length > $this->maxValueLength) {
                 break;
             }

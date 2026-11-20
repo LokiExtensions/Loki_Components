@@ -96,7 +96,32 @@ class RepositoryDispatcherTest extends TestCase
         return [
             'string' => [str_repeat('a', 101)],
             'nested array' => [['foo' => ['bar' => str_repeat('a', 60), 'baz' => str_repeat('a', 60)]]],
+            'many nulls' => [array_fill(0, 60, null)],
+            'many integers' => [array_fill(0, 60, 0)],
+            'many booleans' => [array_fill(0, 60, true)],
+            'many empty arrays' => [array_fill(0, 60, [])],
+            'long integers' => [array_fill(0, 10, PHP_INT_MAX)],
         ];
+    }
+
+    public function testRejectsValueWithTooManyElements(): void
+    {
+        $repository = $this->createMock(ComponentRepositoryInterface::class);
+        $repository->expects($this->never())->method('saveValue');
+
+        $component = $this->createMock(ComponentInterface::class);
+        $component->method('getRepository')->willReturn($repository);
+
+        $dispatcher = new RepositoryDispatcher(
+            $this->createMock(EventManager::class),
+            $this->createMock(Filter::class),
+            $this->createMock(Validator::class),
+            65536,
+            10
+        );
+
+        $this->expectException(InvalidArgumentException::class);
+        $dispatcher->dispatch($component, ['a' => [1, 2, 3, 4, 5], 'b' => [1, 2, 3, 4]]);
     }
 
     public function testAcceptsValueAtMaximumLength(): void

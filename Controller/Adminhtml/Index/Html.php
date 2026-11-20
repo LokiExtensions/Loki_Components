@@ -30,6 +30,7 @@ use Loki\Components\Controller\HtmlResultFactory;
 use Loki\Components\Exception\NoBlockFoundException;
 use Loki\Components\Exception\NoComponentFoundException;
 use Loki\Components\Exception\RedirectException;
+use Loki\Components\Util\Controller\AllowedTargets;
 use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
 use Loki\Components\Util\Controller\RenderFlag;
@@ -56,7 +57,8 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
         private readonly AuthorizationInterface $authorization,
         private readonly Messages $messages,
         private readonly ComponentUpdateFactory $componentUpdateFactory,
-        private readonly RenderFlag $renderFlag
+        private readonly RenderFlag $renderFlag,
+        private readonly AllowedTargets $allowedTargets
     ) {
         parent::__construct($context);
     }
@@ -93,8 +95,10 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
 
         $this->messages->syncMessages();
 
+        $componentUpdates = $this->getComponentUpdates($updates);
+
         try {
-            $this->repositoryDispatcher->postDispatch($layout, $this->getComponentUpdates($updates));
+            $this->repositoryDispatcher->postDispatch($layout, $componentUpdates);
         } catch (RedirectException $redirectException) {
             return $this->getJsonRedirect($redirectException);
         }
@@ -103,7 +107,7 @@ class Html extends Action implements HttpPostActionInterface, CsrfAwareActionInt
             try {
                 $htmlParts = $this->targetRenderer->render(
                     $layout,
-                    $data['targets']
+                    $this->allowedTargets->filter($data['targets'], $componentUpdates)
                 );
             } catch (RedirectException $redirectException) {
                 return $this->getJsonRedirect($redirectException);

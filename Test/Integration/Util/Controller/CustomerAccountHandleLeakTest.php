@@ -97,7 +97,7 @@ class CustomerAccountHandleLeakTest extends LokiComponentsTestCase
         ],
         'customer'
     )]
-    public function testSignedCustomerAccountHandleLeaksWithoutSignatureProtection(): void
+    public function testSignedCustomerAccountHandleDoesNotRenderUndeclaredTargets(): void
     {
         $customer = DataFixtureStorageManager::getStorage()->get('customer');
         $customerId = (int)$customer->getId();
@@ -115,19 +115,19 @@ class CustomerAccountHandleLeakTest extends LokiComponentsTestCase
 
         $responseBody = $this->getResponseBody();
 
-        $this->assertStringContainsString(
+        $this->assertStringNotContainsString(
             'block-dashboard-addresses',
             $responseBody,
-            'The "customer_account" dashboard address block did not render, so this positive control is meaningless'
+            'A block that is not declared as target of an updated component was rendered'
         );
 
-        $this->assertStringContainsString(
-            self::SENSITIVE_EMAIL,
-            $responseBody,
-            'Positive control failed: a validly signed "customer_account" request is expected to render '
-            .'customer details, proving the signature check in testTamperedCustomerAccountHandleIsRejected '
-            .'is the only thing preventing an attacker from reaching this output'
-        );
+        foreach ($this->getSensitiveValues($customerId) as $label => $value) {
+            $this->assertStringNotContainsString(
+                $value,
+                $responseBody,
+                'Sensitive customer detail leaked via undeclared targets: '.$label
+            );
+        }
     }
 
     private function dispatchHtmlRequest(array $body): void

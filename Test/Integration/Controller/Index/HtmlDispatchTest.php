@@ -78,7 +78,7 @@ class HtmlDispatchTest extends LokiComponentsTestCase
     private function buildSignedBody(): array
     {
         $body = [
-            'updates' => [],
+            'updates' => [['blockName' => self::TARGET, 'update' => 'foo']],
             'targets' => [self::TARGET],
             'handles' => [self::HANDLE],
             'pageHandles' => ['1column'],

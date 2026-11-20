@@ -61,7 +61,10 @@ class HtmlTest extends TestCase
     #[AppIsolation(true)]
     public function testRendersTargetsWrappedInHtmlDocument(): void
     {
-        $this->prepareRequest([self::DUMMY1, 'loki-components-test-dummy2'], []);
+        $this->prepareRequest(
+            [self::DUMMY1, 'loki-components-test-dummy2'],
+            [['blockName' => self::DUMMY1, 'update' => 'foo'], ['blockName' => self::DUMMY2, 'update' => 'bar']]
+        );
         $response = $this->executeController();
 
         $body = (string)$response->getBody();
@@ -73,6 +76,30 @@ class HtmlTest extends TestCase
         $formKey = ObjectManager::getInstance()->get(FormKey::class)->getFormKey();
         $this->assertSame($formKey, $response->getHeader('X-Magento-Form-Key')->getFieldValue());
         $this->assertSame('text/html', $response->getHeader('Content-Type')->getFieldValue());
+    }
+
+    #[AppIsolation(true)]
+    public function testDoesNotRenderTargetsThatAreNotDeclaredByTheUpdatedComponents(): void
+    {
+        $this->prepareRequest(
+            [self::DUMMY1, 'loki-components-test-dummy2', 'loki-components.utils.local-messages'],
+            [['blockName' => self::DUMMY1, 'update' => 'foo']]
+        );
+
+        $body = (string)$this->executeController()->getBody();
+        $this->assertStringContainsString('>'.self::DUMMY1.'</div>', $body);
+        $this->assertStringNotContainsString('>'.self::DUMMY2.'</div>', $body);
+        $this->assertStringNotContainsString('loki-components-messages', $body);
+    }
+
+    #[AppIsolation(true)]
+    public function testDoesNotRenderTargetsWithoutUpdates(): void
+    {
+        $this->prepareRequest([self::DUMMY1, 'loki-components-test-dummy2'], []);
+
+        $body = (string)$this->executeController()->getBody();
+        $this->assertStringNotContainsString('>'.self::DUMMY1.'</div>', $body);
+        $this->assertStringNotContainsString('>'.self::DUMMY2.'</div>', $body);
     }
 
     #[AppIsolation(true)]

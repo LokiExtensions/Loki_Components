@@ -3,7 +3,9 @@
     <group name="default"/>
 
     <component name="loki-components.modal" />
-    <component name="loki-components.test.dummy1" />
+    <component name="loki-components.test.dummy1">
+        <target name="loki-components.test.dummy2"/>
+    </component>
     <component name="loki-components.test.dummy2" />
     <component name="loki-components.test.dummy-html" />
     <component name="loki-components.test.toggle" />

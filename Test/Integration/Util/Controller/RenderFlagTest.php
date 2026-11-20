@@ -5,6 +5,7 @@ namespace Loki\Components\Test\Integration\Util\Controller;
 use Laminas\Http\Header\GenericHeader;
 use Laminas\Http\Headers;
 use Loki\Components\Controller\Index\Html;
+use Loki\Components\Test\Integration\Traits\RegisterTestComponents;
 use Loki\Components\Util\Security\AjaxSignature;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Request\Http as HttpRequest;
@@ -18,9 +19,21 @@ use PHPUnit\Framework\TestCase;
 #[AppArea('frontend')]
 class RenderFlagTest extends TestCase
 {
+    use RegisterTestComponents;
+
     private const TARGET_BLOCK = 'loki-components.utils.local-messages';
     private const TARGET_MARKER = 'loki-components-messages';
     private const HANDLE = 'loki_messages';
+
+    protected function setUp(): void
+    {
+        $this->registerTestComponents([$this->createTestComponentDefinition(self::TARGET_BLOCK)]);
+    }
+
+    protected function tearDown(): void
+    {
+        $this->unregisterTestComponents();
+    }
 
     #[DataProvider('renderFlagDataProvider')]
     #[AppIsolation(true)]
@@ -30,7 +43,7 @@ class RenderFlagTest extends TestCase
             'targets' => [self::TARGET_BLOCK],
             'handles' => [self::HANDLE],
             'pageHandles' => [],
-            'updates' => [$update],
+            'updates' => [['blockName' => self::TARGET_BLOCK, ...$update]],
             'request' => [],
         ]);
 

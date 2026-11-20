@@ -29,6 +29,7 @@ use Loki\Components\Controller\HtmlResultFactory;
 use Loki\Components\Exception\NoBlockFoundException;
 use Loki\Components\Exception\NoComponentFoundException;
 use Loki\Components\Exception\RedirectException;
+use Loki\Components\Util\Controller\AllowedTargets;
 use Loki\Components\Util\Controller\LayoutLoader;
 use Loki\Components\Util\Controller\RepositoryDispatcher;
 use Loki\Components\Util\Controller\RenderFlag;
@@ -55,7 +56,8 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         private readonly ComponentUpdateFactory $componentUpdateFactory,
         private readonly Validator $formKeyValidator,
         private readonly Messages $messages,
-        private readonly RenderFlag $renderFlag
+        private readonly RenderFlag $renderFlag,
+        private readonly AllowedTargets $allowedTargets
     ) {
     }
 
@@ -103,7 +105,8 @@ class Html implements HttpPostActionInterface, CsrfAwareActionInterface
         $htmlParts = [];
         if ($this->allowRendering($data)) {
             try {
-                $htmlParts = $this->targetRenderer->render($layout, $data['targets']);
+                $targets = $this->allowedTargets->filter($data['targets'], $updates);
+                $htmlParts = $this->targetRenderer->render($layout, $targets);
 
             } catch (RedirectException $redirectException) {
                 return $this->getJsonRedirect($redirectException);

@@ -4,6 +4,7 @@ namespace Loki\Components\Test\Integration\Controller\Adminhtml\Index;
 
 use Laminas\Http\Header\GenericHeader;
 use Laminas\Http\Headers;
+use Loki\Components\Test\Integration\Traits\RegisterTestComponents;
 use Loki\Components\Util\Security\AjaxSignature;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\App\Response\Http as HttpResponse;
@@ -13,6 +14,8 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 #[AppArea('adminhtml')]
 class HtmlDispatchTest extends AbstractBackendController
 {
+    use RegisterTestComponents;
+
     private const TARGET = 'loki-components.utils.local-messages';
     private const TARGET_MARKER = 'loki-components-messages';
 
@@ -23,7 +26,14 @@ class HtmlDispatchTest extends AbstractBackendController
     protected function setUp(): void
     {
         parent::setUp();
+        $this->registerTestComponents([$this->createTestComponentDefinition(self::TARGET)]);
         $this->prepareRequest();
+    }
+
+    protected function tearDown(): void
+    {
+        $this->unregisterTestComponents();
+        parent::tearDown();
     }
 
     public function testRendersTargetsForAdminUser(): void
@@ -47,7 +57,7 @@ class HtmlDispatchTest extends AbstractBackendController
             'targets' => [self::TARGET],
             'handles' => ['loki_messages'],
             'pageHandles' => [],
-            'updates' => [],
+            'updates' => [['blockName' => self::TARGET, 'update' => 'foo']],
             'request' => [],
         ];
 

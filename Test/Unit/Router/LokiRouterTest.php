@@ -47,6 +47,8 @@ class LokiRouterTest extends TestCase
         return [
             ['/'],
             ['/loki_components/index/polling'],
+            ['/loki_components/index/htmlXYZ'],
+            ['/loki_components/index/html-foo'],
             ['/checkout/loki_components/index/html'],
             ['/cms/page/view'],
         ];

@@ -11,6 +11,8 @@ use Magento\Framework\App\RouterInterface;
 
 class LokiRouter implements RouterInterface
 {
+    private const PATH = 'loki_components/index/html';
+
     public function __construct(
         private readonly ActionFactory $actionFactory
     ) {
@@ -19,8 +21,8 @@ class LokiRouter implements RouterInterface
     public function match(RequestInterface $request): ActionInterface|null
     {
         /** @var HttpRequest $request */
-        $identifier = trim($request->getPathInfo(), '/');
-        if (false === str_starts_with($identifier, 'loki_components/index/html')) {
+        $identifier = trim((string)$request->getPathInfo(), '/');
+        if ($identifier !== self::PATH && false === str_starts_with($identifier, self::PATH.'/')) {
             return null;
         }
 

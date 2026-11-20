@@ -4,6 +4,13 @@
         <resources>
             <resource id="Magento_Backend::admin">
                 <resource id="Loki_Components::index" title="Loki Components" sortOrder="10"/>
+                <resource id="Magento_Backend::stores">
+                    <resource id="Magento_Backend::stores_settings">
+                        <resource id="Magento_Config::config">
+                            <resource id="Loki_Components::configuration" title="Loki Components Configuration" translate="title"/>
+                        </resource>
+                    </resource>
+                </resource>
             </resource>
         </resources>
     </acl>

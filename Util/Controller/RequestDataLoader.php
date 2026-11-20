@@ -15,7 +15,8 @@ class RequestDataLoader
     public function __construct(
         private readonly RequestInterface $request,
         private readonly Ajax $ajax,
-        private readonly AjaxSignature $ajaxSignature
+        private readonly AjaxSignature $ajaxSignature,
+        private readonly int $maximumUpdates = 100
     ) {
     }
 
@@ -87,7 +88,6 @@ class RequestDataLoader
         /** @var HttpRequest $request */
         $request = $this->request;
         $requestUri = (string)$requestData->getRequestUri();
-        $request->setParam('currentUri', $requestUri);
         if ($requestUri !== '') {
             $request->setRequestUri($requestUri);
         }
@@ -99,6 +99,7 @@ class RequestDataLoader
 
         $params = array_merge($this->request->getParams(), (array)$requestData->getParams());
         $this->request->setParams($params);
+        $this->request->setParam('currentUri', $requestUri);
     }
 
     private function sanitize(array $requestData = []): array
@@ -112,6 +113,10 @@ class RequestDataLoader
             if (false === array_key_exists($requiredField, $requestData)) {
                 throw new RuntimeException('No '.$requiredField.' in request');
             }
+        }
+
+        if (false === is_array($requestData['updates']) || count($requestData['updates']) > $this->maximumUpdates) {
+            throw new RuntimeException('Too many updates in request');
         }
 
         if (isset($requestData['targets'])) {

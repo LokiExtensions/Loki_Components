@@ -187,6 +187,31 @@ class RequestDataLoaderTest extends TestCase
         $this->assertSame('live', $httpRequest->getParam('extra'));
     }
 
+    public function testSignedCurrentUriParamDoesNotOverruleRequestUri()
+    {
+        $httpRequest = $this->getHttpRequest();
+        $requestDataLoader = $this->getRequestDataLoader(
+            $this->getSignedRequestData(['request_uri' => '/foo/bar', 'params' => ['currentUri' => 'evil_index']]),
+            $this->getValidHeaders(),
+            $httpRequest
+        );
+
+        $requestDataLoader->mergeRequestParams();
+
+        $this->assertSame('/foo/bar', $httpRequest->getParam('currentUri'));
+    }
+
+    public function testLoadWithTooManyUpdates()
+    {
+        $requestData = $this->getSignedRequestData([]);
+        $requestData['updates'] = array_fill(0, 101, ['blockName' => 'foo', 'update' => 'bar']);
+        $requestDataLoader = $this->getRequestDataLoader($requestData, $this->getValidHeaders());
+
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessage('Too many updates in request');
+        $requestDataLoader->load();
+    }
+
     private function getSignedRequestData(array $request): array
     {
         $requestData = $this->getEmptyRequestData();
